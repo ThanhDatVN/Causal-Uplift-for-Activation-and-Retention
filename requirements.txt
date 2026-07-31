@@ -1,0 +1,24 @@
+# Causal Uplift for Activation and Retention — Python 3.12 (xem muc 6.4-6.5 trong planning/CAUSAL_UPLIFT_PLAN.md)
+# Cai trong .venv:  .venv\Scripts\python.exe -m pip install -r requirements.txt
+#
+# Probabilistic CLV duoc tach khoi moi truong causal mac dinh.
+# Dependency va optional environment duoc dac ta tai:
+# planning/incremental_value_product/03_TECHNICAL_ARCHITECTURE.md
+
+pandas>=2.2,<3
+numpy>=1.26,<3
+scikit-learn>=1.5,<2
+scipy>=1.11
+lightgbm>=4.5
+econml==0.16.0          # pin cung — de pip tu chon se tut ve 0.8.1 (2020)
+scikit-uplift>=0.5.1
+matplotlib>=3.8
+seaborn>=0.13
+jupyterlab
+ipykernel
+psutil                  # cho benchmark harness do RAM
+pytest                   # chay tests/ - doi chieu qini_curve voi sklift
+
+causalml==0.17.0        # optional (doi chieu them ngoai econml+sklift) — da verify cai thanh cong
+                          # 2026-07-21 tren Python 3.12 Windows qua wheel prebuilt cp312-win_amd64,
+                          # KHONG can build C/Cython nhu lo ngai truoc do

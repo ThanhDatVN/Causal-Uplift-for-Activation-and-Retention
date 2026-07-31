@@ -1,0 +1,31 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Data (Criteo ~3GB giai nen, Online Retail II) - khong commit len git
+data/
+
+# Output lon / notebook checkpoint
+.ipynb_checkpoints/
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Prediction arrays are reproducible and make the repository unnecessarily large.
+# Keep compact CSV/JSON/PNG/HTML release artifacts under output/ for review.
+output/**/*.npy
+output/**/*.npz
+output/causal_forest_gate_smoke/
+output/sprint2_smoke/
+output/sprint2_benchmark_*/
+# Legacy root artifacts are superseded by the versioned Sprint 1/Sprint 2 release directories.
+output/qini_comparison.csv
+output/segments_baseline.csv
+output/qini_curve.png
+*.log
+
+# OS
+Thumbs.db
+.DS_Store

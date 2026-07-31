@@ -1,0 +1,142 @@
+{
+  "run_id": "sprint2-local-exact-calibration-v1",
+  "created_utc": "2026-07-31T03:28:21.619669+00:00",
+  "status": "local_complete",
+  "scope": "Untouched complement of Sprint 1 50% sample; final test Sprint 1 was not read or reused.",
+  "data": {
+    "path": "data/criteo-research-uplift-v2.1.csv.gz",
+    "sha256": "2716e1bf0fd157a93b5bf86924d9088419dfbac2022c6cd90030220634f616dc",
+    "schema_contract": {
+      "row_count": 13979592,
+      "column_count": 16,
+      "missing_columns": [],
+      "extra_columns": [],
+      "binary_values": {
+        "treatment": [
+          0,
+          1
+        ],
+        "conversion": [
+          0,
+          1
+        ],
+        "visit": [
+          0,
+          1
+        ],
+        "exposure": [
+          0,
+          1
+        ]
+      },
+      "invalid_binary_columns": {},
+      "missing_cells": 0,
+      "all_features_finite": true,
+      "valid": true
+    },
+    "sprint1_selected_fraction": 0.5,
+    "sprint1_sampling_seed": 42,
+    "sprint2_complement_pool_fraction_used": 1.0
+  },
+  "split": {
+    "protocol": "fit/validation/confirmation = 60/20/20 of Sprint 2 pool",
+    "split_seed": 52,
+    "confirmation_seed": 53,
+    "rows": {
+      "fit": 4193877,
+      "validation": 1397959,
+      "confirmation": 1397959
+    },
+    "source_index_sha256": {
+      "fit": "eb1d34c9db92ce42eabff7266b9c220c50417fef2cdcdb33dd1d348351ef51ac",
+      "validation": "33622532d96c649dab244005942f96467e403e13f6635983c0d349380934098f",
+      "confirmation": "6d846e155171a87d5629cd8275697dcc3cabbfc813ec5f6a0ebd7a1f2c0280be"
+    }
+  },
+  "model": {
+    "release_config_source": "configs/sprint1_release_5models.json",
+    "x_learner_config": {
+      "name": "under7_probability_fixed",
+      "outcome": "classifier",
+      "params": {
+        "n_estimators": 400,
+        "learning_rate": 0.05,
+        "num_leaves": 31,
+        "max_depth": -1,
+        "min_child_samples": 1000,
+        "reg_alpha": 1.0,
+        "reg_lambda": 5.0,
+        "colsample_bytree": 0.9
+      },
+      "cate_params": {
+        "n_estimators": 400,
+        "learning_rate": 0.05,
+        "num_leaves": 31,
+        "max_depth": -1,
+        "min_child_samples": 2500,
+        "reg_alpha": 1.0,
+        "reg_lambda": 10.0,
+        "colsample_bytree": 0.9
+      },
+      "propensity": "fixed",
+      "under": 7.0
+    },
+    "undersampling_factor": 7.0,
+    "base_conversion_rate_by_arm": {
+      "0": 0.001937747285325737,
+      "1": 0.0030893773444539323
+    },
+    "theoretical_negative_keep_probability_by_arm": {
+      "0": 0.14119299190859502,
+      "1": 0.14020089899371216
+    },
+    "realized_negative_keep_probability_by_arm": {
+      "0": 0.14119344696764577,
+      "1": 0.14020101958954725
+    },
+    "tau_isotonic_fit_split": "validation",
+    "method_scope": {
+      "x_renormalized": "paper-recommended calibration pairing for stratified undersampling",
+      "x_tau_isotonic": "method-agnostic post-processing ablation; theoretically sound but not the paper's preferred stratified pairing",
+      "t_local_exact": "direct Eq. 12 scope: restore two arm probabilities then subtract"
+    }
+  },
+  "evaluation": {
+    "confirmation_only": true,
+    "propensity": 0.8500001287591226,
+    "n_boot": 500,
+    "budgets": [
+      0.01,
+      0.05,
+      0.1,
+      0.2,
+      0.3
+    ],
+    "contact_cost_assumptions": [
+      0.0,
+      0.00025,
+      0.0005,
+      0.001
+    ],
+    "value_per_conversion_assumption": 1.0,
+    "monetary_outcome_available": false
+  },
+  "environment": {
+    "python": "3.12.10",
+    "numpy": "2.4.6",
+    "pandas": "2.3.3",
+    "scikit_learn": "1.6.1",
+    "lightgbm": "4.7.0",
+    "logical_cpu_count": 12,
+    "physical_cpu_count": 6,
+    "system_ram_total_gb": 15.192405700683594,
+    "system_ram_available_at_start_gb": 4.276863098144531,
+    "peak_process_rss_gb": 2.740589141845703,
+    "minimum_system_available_ram_gb": 1.8078727722167969
+  },
+  "external_status": {
+    "causal_forest_kaggle": "pending external Kaggle session; local artifacts do not claim completion",
+    "git_release_tag": "not created because repository currently has no commits"
+  },
+  "elapsed_seconds": 395.94475865364075
+}

@@ -1,0 +1,16 @@
+timestamp,tag,script,args,exit_code,wall_time_s,peak_rss_mb,poll_samples,log_file
+2026-07-20 21:24:52,smoke_cf,benchmarks/bench_causal_forest.py,--frac 0.005 --n-estimators 20 --min-samples-leaf 50 --cv 2,1,49.63,2014.0,230,benchmarks/logs/smoke_cf.log
+2026-07-20 21:26:50,smoke_cf,benchmarks/bench_causal_forest.py,--frac 0.005 --n-estimators 20 --min-samples-leaf 50 --cv 2,0,51.26,2098.8,239,benchmarks/logs/smoke_cf.log
+2026-07-20 21:29:53,bench_cf_frac_0.01,benchmarks/bench_causal_forest.py,--frac 0.01 --n-estimators 500 --min-samples-leaf 200 --cv 3,0,126.27,2096.8,574,benchmarks/logs/bench_cf_frac_0.01.log
+2026-07-20 21:30:40,streamB_bgnbd_full,benchmarks/streamB_bgnbd.py,,1,164.43,430.2,747,benchmarks/logs/streamB_bgnbd_full.log
+2026-07-20 21:33:39,bench_cf_frac_0.02,benchmarks/bench_causal_forest.py,--frac 0.02 --n-estimators 500 --min-samples-leaf 200 --cv 3,0,225.16,2097.5,1009,benchmarks/logs/bench_cf_frac_0.02.log
+2026-07-20 21:34:47,streamB_bgnbd_full,benchmarks/streamB_bgnbd.py,,0,203.58,444.1,912,benchmarks/logs/streamB_bgnbd_full.log
+2026-07-20 21:42:27,bench_cf_frac_0.05,benchmarks/bench_causal_forest.py,--frac 0.05 --n-estimators 500 --min-samples-leaf 200 --cv 3,0,528.09,3105.0,2365,benchmarks/logs/bench_cf_frac_0.05.log
+2026-07-20 21:59:59,bench_cf_frac_0.10,benchmarks/bench_causal_forest.py,--frac 0.10 --n-estimators 500 --min-samples-leaf 200 --cv 3,0,1052.48,4796.5,4746,benchmarks/logs/bench_cf_frac_0.10.log
+2026-07-20 22:37:37,bench_cf_frac_0.20,benchmarks/bench_causal_forest.py,--frac 0.20 --n-estimators 500 --min-samples-leaf 200 --cv 3,0,2200.02,8162.6,9882,benchmarks/logs/bench_cf_frac_0.20.log
+2026-07-20 22:38:41,bench_tlearner_frac05,benchmarks/bench_metalearners.py,--frac 0.05 --model tlearner,0,62.76,2134.1,293,benchmarks/logs/bench_tlearner_frac05.log
+2026-07-20 22:39:35,bench_xlearner_frac05,benchmarks/bench_metalearners.py,--frac 0.05 --model xlearner,0,53.82,2106.2,251,benchmarks/logs/bench_xlearner_frac05.log
+2026-07-20 22:40:41,bench_drlearner_frac05,benchmarks/bench_metalearners.py,--frac 0.05 --model drlearner,0,66.17,2188.4,308,benchmarks/logs/bench_drlearner_frac05.log
+2026-07-20 22:41:31,bench_tlearner_frac10,benchmarks/bench_metalearners.py,--frac 0.10 --model tlearner,0,49.54,2170.4,231,benchmarks/logs/bench_tlearner_frac10.log
+2026-07-20 22:42:33,bench_xlearner_frac10,benchmarks/bench_metalearners.py,--frac 0.10 --model xlearner,0,61.87,2187.4,288,benchmarks/logs/bench_xlearner_frac10.log
+2026-07-20 22:43:58,bench_drlearner_frac10,benchmarks/bench_metalearners.py,--frac 0.10 --model drlearner,0,85.29,2174.0,394,benchmarks/logs/bench_drlearner_frac10.log

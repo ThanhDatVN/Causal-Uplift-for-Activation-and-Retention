@@ -1,0 +1,784 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Causal Uplift Modeling — Giải thích chi tiết cho người mới bắt đầu</title>
+<style>
+  :root {
+    --bg: #eef1f5;
+    --surface: #ffffff;
+    --surface-2: #e4e9ef;
+    --ink: #12213a;
+    --ink-muted: #4c5a72;
+    --ink-faint: #7c879c;
+    --line: rgba(18,33,58,0.13);
+    --line-strong: rgba(18,33,58,0.24);
+    --accent: #0e7c7b;
+    --accent-ink: #ffffff;
+    --accent-2: #b9691f;
+    --positive: #2e7d5b;
+    --danger: #b4483a;
+
+    --font-display: Charter, 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-mono: ui-monospace, 'Cascadia Code', 'SF Mono', Consolas, 'Roboto Mono', monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0a111d; --surface: #121b2c; --surface-2: #182338;
+      --ink: #e9edf4; --ink-muted: #a4b0c4; --ink-faint: #6c7890;
+      --line: rgba(233,237,244,0.12); --line-strong: rgba(233,237,244,0.22);
+      --accent: #2fd1c2; --accent-ink: #06201d; --accent-2: #e2a25c;
+      --positive: #52c090; --danger: #e2695c;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0a111d; --surface: #121b2c; --surface-2: #182338;
+    --ink: #e9edf4; --ink-muted: #a4b0c4; --ink-faint: #6c7890;
+    --line: rgba(233,237,244,0.12); --line-strong: rgba(233,237,244,0.22);
+    --accent: #2fd1c2; --accent-ink: #06201d; --accent-2: #e2a25c;
+    --positive: #52c090; --danger: #e2695c;
+  }
+  :root[data-theme="light"] {
+    --bg: #eef1f5; --surface: #ffffff; --surface-2: #e4e9ef;
+    --ink: #12213a; --ink-muted: #4c5a72; --ink-faint: #7c879c;
+    --line: rgba(18,33,58,0.13); --line-strong: rgba(18,33,58,0.24);
+    --accent: #0e7c7b; --accent-ink: #ffffff; --accent-2: #b9691f;
+    --positive: #2e7d5b; --danger: #b4483a;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+  a { color: var(--accent); }
+
+  .page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: clamp(20px, 4vw, 56px) clamp(16px, 4vw, 40px) 80px;
+  }
+
+  /* ---------- Header ---------- */
+  header.hero {
+    max-width: 780px;
+    margin: 0 auto clamp(28px, 5vw, 48px);
+  }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 14px;
+  }
+  .eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--accent); }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(2rem, 4.4vw, 3.1rem);
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    margin: 0 0 0.4em;
+    text-wrap: balance;
+  }
+  h1 em { font-style: normal; color: var(--accent); }
+  .lede {
+    font-size: clamp(1.02rem, 1.6vw, 1.22rem);
+    line-height: 1.6;
+    color: var(--ink-muted);
+    max-width: 62ch;
+    margin: 0 0 20px;
+  }
+  .hero-meta {
+    display: flex; flex-wrap: wrap; gap: 10px 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+  }
+  .hero-meta b { color: var(--ink-muted); font-weight: 600; }
+
+  /* ---------- Layout: TOC + article ---------- */
+  .layout {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 780px);
+    gap: clamp(24px, 4vw, 56px);
+    justify-content: center;
+    align-items: start;
+  }
+  nav.toc {
+    position: sticky;
+    top: clamp(16px, 3vw, 32px);
+    display: flex; flex-direction: column; gap: 2px;
+    font-size: 0.86rem;
+  }
+  nav.toc .toc-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 8px;
+  }
+  nav.toc a {
+    color: var(--ink-muted);
+    text-decoration: none;
+    padding: 6px 0 6px 12px;
+    border-left: 2px solid var(--line);
+    line-height: 1.35;
+    transition: color 140ms, border-color 140ms;
+  }
+  nav.toc a:hover { color: var(--accent); border-color: var(--accent); }
+  nav.toc a.active { color: var(--accent); border-color: var(--accent); font-weight: 600; }
+
+  details.toc-mobile { display: none; }
+
+  article { min-width: 0; }
+  article section { margin-bottom: clamp(36px, 6vw, 60px); scroll-margin-top: 20px; }
+  article section:last-of-type { margin-bottom: 0; }
+
+  .sec-num {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: var(--accent-2);
+    letter-spacing: 0.04em;
+  }
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(1.4rem, 2.4vw, 1.86rem);
+    line-height: 1.2;
+    margin: 0.2em 0 0.5em;
+    text-wrap: balance;
+  }
+  h3 {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 1.02rem;
+    margin: 1.6em 0 0.5em;
+  }
+  p { margin: 0 0 1.05em; max-width: 68ch; }
+  p.tight { margin-bottom: 0.6em; }
+  ul, ol { margin: 0 0 1.05em; padding-left: 1.3em; max-width: 66ch; }
+  li { margin-bottom: 0.4em; }
+  strong { color: var(--ink); }
+  code.kw {
+    font-family: var(--font-mono); font-size: 0.88em;
+    background: var(--surface-2); padding: 1px 6px; border-radius: 4px;
+    color: var(--accent);
+  }
+
+  /* ---------- Callouts ---------- */
+  .box { border-radius: 12px; padding: 16px 20px; margin: 1.3em 0; max-width: 72ch; }
+  .box p:last-child { margin-bottom: 0; }
+  .box-title { font-family: var(--font-mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; display: block; }
+  .box-def { background: color-mix(in srgb, var(--accent) 8%, var(--surface)); border-left: 3px solid var(--accent); }
+  .box-def .box-title { color: var(--accent); }
+  .box-example { background: var(--surface-2); border: 1px dashed var(--line-strong); }
+  .box-example .box-title { color: var(--accent-2); }
+  .box-honest { background: color-mix(in srgb, var(--positive) 9%, var(--surface)); border-left: 3px solid var(--positive); }
+  .box-honest .box-title { color: var(--positive); }
+
+  /* ---------- Tables ---------- */
+  .table-wrap { overflow-x: auto; margin: 1.2em 0; border: 1px solid var(--line); border-radius: 10px; max-width: 100%; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+  th, td { padding: 9px 13px; text-align: left; vertical-align: top; }
+  thead th { color: var(--ink-faint); font-weight: 600; text-transform: uppercase; font-size: 0.68rem; letter-spacing: 0.03em; border-bottom: 1px solid var(--line); background: var(--surface-2); }
+  tbody tr:not(:last-child) td { border-bottom: 1px solid var(--line); }
+  td.num, th.num { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  td code.kw { white-space: nowrap; }
+
+  /* ---------- Quadrant ---------- */
+  .quad { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 1.3em 0; max-width: 72ch; }
+  .quad-cell { border-radius: 12px; padding: 14px 16px; border: 1px solid var(--line); }
+  .quad-cell .qc-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 3px; }
+  .quad-cell .qc-desc { font-size: 0.82rem; line-height: 1.45; opacity: 0.88; }
+  .quad-persuadable { background: color-mix(in srgb, var(--accent) 16%, var(--surface)); border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+  .quad-persuadable .qc-title { color: var(--accent); }
+  .quad-sure { background: color-mix(in srgb, var(--positive) 12%, var(--surface)); }
+  .quad-sure .qc-title { color: var(--positive); }
+  .quad-lost { background: var(--surface-2); }
+  .quad-lost .qc-title { color: var(--ink-faint); }
+  .quad-sleeping { background: color-mix(in srgb, var(--danger) 14%, var(--surface)); border-color: color-mix(in srgb, var(--danger) 45%, var(--line)); }
+  .quad-sleeping .qc-title { color: var(--danger); }
+  @media (max-width: 560px) { .quad { grid-template-columns: 1fr; } }
+
+  /* ---------- Vertical pipeline ---------- */
+  .vpipe { display: flex; flex-direction: column; margin: 1.4em 0; max-width: 72ch; }
+  .vp-step { display: grid; grid-template-columns: 28px 1fr; gap: 14px; position: relative; padding-bottom: 22px; }
+  .vp-step:last-child { padding-bottom: 0; }
+  .vp-dotcol { display: flex; flex-direction: column; align-items: center; }
+  .vp-dot { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; flex: none; }
+  .vp-line { width: 2px; flex: 1; background: var(--line); margin-top: 4px; }
+  .vp-done .vp-dot { background: var(--accent); color: var(--accent-ink); }
+  .vp-planned .vp-dot { background: var(--surface-2); border: 2px dashed var(--accent-2); color: var(--accent-2); }
+  .vp-title { font-weight: 700; font-size: 0.94rem; margin-bottom: 2px; }
+  .vp-status { font-family: var(--font-mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; margin-left: 8px; font-weight: 500; }
+  .vp-done .vp-status { color: var(--accent); }
+  .vp-planned .vp-status { color: var(--accent-2); }
+  .vp-desc { font-size: 0.86rem; color: var(--ink-muted); line-height: 1.5; margin-top: 3px; }
+
+  /* ---------- Formula cards ---------- */
+  .formula-card { background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; margin: 1.1em 0; max-width: 72ch; }
+  .formula-card .f-name { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--accent-2); margin-bottom: 5px; }
+  .formula-card .f-eq { font-family: var(--font-mono); font-size: 1rem; color: var(--accent); margin-bottom: 8px; }
+  .formula-card .f-desc { font-size: 0.86rem; line-height: 1.5; color: var(--ink-muted); }
+
+  /* ---------- Chart ---------- */
+  .chart-wrap { background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin: 1.3em 0; max-width: 72ch; }
+  .chart-wrap canvas { width: 100%; height: auto; display: block; }
+  .chart-legend { display: flex; gap: 18px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-muted); margin-top: 8px; }
+  .chart-legend span { display: flex; align-items: center; gap: 6px; }
+  .swatch { width: 10px; height: 10px; border-radius: 2px; }
+
+  /* ---------- Stat strip ---------- */
+  .stat-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: 10px 16px; margin: 1.2em 0; max-width: 72ch; }
+  .stat { border-left: 2px solid var(--line-strong); padding: 2px 0 2px 10px; }
+  .stat .v { font-family: var(--font-mono); font-size: 1.15rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .stat .k { font-size: 0.72rem; color: var(--ink-faint); }
+
+  /* ---------- Glossary ---------- */
+  dl.glossary { max-width: 72ch; }
+  dl.glossary dt { font-weight: 700; font-family: var(--font-mono); font-size: 0.92rem; color: var(--accent); margin-top: 1em; }
+  dl.glossary dd { margin: 4px 0 0; color: var(--ink-muted); font-size: 0.9rem; line-height: 1.5; }
+
+  footer.doc-footer {
+    max-width: 780px; margin: 60px auto 0; padding-top: 22px; border-top: 1px solid var(--line);
+    font-size: 0.78rem; color: var(--ink-faint); font-family: var(--font-mono); line-height: 1.7;
+  }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: minmax(0, 1fr); }
+    nav.toc { display: none; }
+    details.toc-mobile {
+      display: block; margin: 0 auto 28px; max-width: 780px;
+      background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px;
+    }
+    details.toc-mobile summary { cursor: pointer; font-family: var(--font-mono); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); }
+    details.toc-mobile ul { list-style: none; padding: 10px 0 0; margin: 0; }
+    details.toc-mobile a { color: var(--ink-muted); text-decoration: none; display: block; padding: 5px 0; font-size: 0.9rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div style="margin:16px auto;max-width:1100px;padding:14px 18px;border:2px solid #b4483a;background:#fff1ef;color:#6b2019;border-radius:10px;font:700 14px/1.5 system-ui">
+    HISTORICAL EXPLAINER ONLY — release hiện tại nằm ở
+    <a href="../report/SPRINT_2_FINAL_REPORT.md">SPRINT_2_FINAL_REPORT.md</a> và
+    <a href="../output/dashboard.html">output/dashboard.html</a>.
+    Bốn principal strata bên dưới chỉ là khung counterfactual minh họa, không phải nhãn
+    cá nhân quan sát được. Không dùng số liệu hoặc profit simulator cũ để báo cáo.
+  </div>
+  <div style="margin:16px auto;max-width:1100px;padding:14px 18px;border:1px solid #d39b28;background:#fff7df;color:#604500;border-radius:10px;font:600 14px/1.5 system-ui">
+    Lưu ý phiên bản: trang này là tài liệu giải thích lịch sử. Kết quả Sprint 1 chính thức
+    sau lần chạy lại ngày 29/07/2026 nằm ở
+    <a href="../report/SPRINT_1_FINAL_REPORT.md">report/SPRINT_1_FINAL_REPORT.md</a>.
+    Không dùng các con số cũ trên trang này để báo cáo.
+  </div>
+  <header class="hero">
+    <div class="eyebrow">Tài liệu giải thích kỹ thuật</div>
+    <h1>Causal Uplift Modeling cho <em>Activation &amp; Retention</em></h1>
+    <p class="lede">Giải thích từ đầu, không cần biết trước gì về machine learning hay thống kê: dự án đang giải quyết vấn đề gì, dữ liệu là gì, các mô hình hoạt động ra sao, và vì sao cách đánh giá "đúng/sai" của bài toán này khác hẳn các bài toán dự đoán thông thường.</p>
+    <div class="hero-meta">
+      <span><b>Dành cho</b> người chưa biết gì về uplift modeling / causal inference</span>
+      <span><b>Thời gian đọc</b> ~18–22 phút</span>
+      <span><b>Trạng thái dự án</b> 5 model đã chạy @ holdout 50%</span>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc">
+      <div class="toc-label">Mục lục</div>
+      <a href="#intro">1. Bài toán này để làm gì</a>
+      <a href="#van-de">2. Vì sao "ai sẽ mua" là câu hỏi sai</a>
+      <a href="#du-lieu">3. Bộ dữ liệu Criteo</a>
+      <a href="#ky-thuat">4. Các mô hình uplift hoạt động thế nào</a>
+      <a href="#kien-truc">5. Kiến trúc xử lý (pipeline)</a>
+      <a href="#danh-gia">6. Đánh giá: đo hiệu quả bằng gì, dựa vào đâu</a>
+      <a href="#ket-qua">7. Kết quả hiện tại &amp; kết quả cuối cùng</a>
+      <a href="#thuat-ngu">8. Bảng thuật ngữ nhanh</a>
+    </nav>
+
+    <details class="toc-mobile">
+      <summary>Mục lục</summary>
+      <ul>
+        <li><a href="#intro">1. Bài toán này để làm gì</a></li>
+        <li><a href="#van-de">2. Vì sao "ai sẽ mua" là câu hỏi sai</a></li>
+        <li><a href="#du-lieu">3. Bộ dữ liệu Criteo</a></li>
+        <li><a href="#ky-thuat">4. Các mô hình uplift hoạt động thế nào</a></li>
+        <li><a href="#kien-truc">5. Kiến trúc xử lý (pipeline)</a></li>
+        <li><a href="#danh-gia">6. Đánh giá: đo hiệu quả bằng gì, dựa vào đâu</a></li>
+        <li><a href="#ket-qua">7. Kết quả hiện tại &amp; kết quả cuối cùng</a></li>
+        <li><a href="#thuat-ngu">8. Bảng thuật ngữ nhanh</a></li>
+      </ul>
+    </details>
+
+    <article>
+
+      <section id="intro">
+        <span class="sec-num">01</span>
+        <h2>Bài toán này để làm gì</h2>
+        <p>Bài toán giả định một chiến dịch voucher có ngân sách giới hạn. Decision rule cần
+          chọn tỷ lệ khách hàng được target để tối đa hóa incremental outcome sau chi phí.</p>
+        <p>Response model xếp hạng theo xác suất mua hàng. Uplift model xếp hạng theo chênh
+          lệch outcome kỳ vọng giữa treatment và control. Hai ranking không nhất thiết giống nhau.</p>
+        <p>Một khách hàng có xác suất mua cao trong cả hai potential outcome có response score
+          cao nhưng treatment effect gần 0. Nếu treatment có chi phí, target trường hợp này
+          không tạo incremental value theo estimand đang dùng.</p>
+        <div class="box box-def">
+          <span class="box-title">Định nghĩa nhanh</span>
+          <p><strong>Uplift Modeling</strong> (mô hình hoá hiệu ứng tăng thêm) là một nhánh của <strong>Causal Inference</strong> (suy luận nhân quả) — thay vì dự đoán "ai sẽ mua hàng", nó dự đoán "hành động can thiệp này (voucher, thông báo, cashback…) thực sự làm thay đổi hành vi của ai".</p>
+        </div>
+        <p>Dự án áp dụng hai cách xếp hạng trên Criteo Uplift Prediction Dataset và so sánh
+          chúng bằng Qini, AUUC và policy value trên holdout.</p>
+      </section>
+
+      <section id="van-de">
+        <span class="sec-num">02</span>
+        <h2>Response prediction và uplift trả lời hai câu hỏi khác nhau</h2>
+        <p>Bốn principal strata được định nghĩa bằng cặp potential outcome dưới treatment và
+          control. Dữ liệu không quan sát đồng thời cặp này ở cấp cá nhân:</p>
+        <div class="quad">
+          <div class="quad-cell quad-persuadable">
+            <div class="qc-title">Persuadables</div>
+            <div class="qc-desc">Potential outcome mua chỉ xuất hiện khi có treatment. Trong bài toán
+              tối đa hóa incremental conversion, policy ưu tiên các trường hợp có treatment effect dương;
+              membership của từng cá nhân không quan sát được trực tiếp.</div>
+          </div>
+          <div class="quad-cell quad-sure">
+            <div class="qc-title">Sure Things</div>
+            <div class="qc-desc">Potential outcome mua bằng 1 ở cả treatment và control;
+              individual membership không quan sát được trực tiếp.</div>
+          </div>
+          <div class="quad-cell quad-lost">
+            <div class="qc-title">Lost Causes</div>
+            <div class="qc-desc">Potential outcome mua bằng 0 ở cả treatment và control;
+              treatment không đổi binary outcome trong định nghĩa này.</div>
+          </div>
+          <div class="quad-cell quad-sleeping">
+            <div class="qc-title">Sleeping Dogs</div>
+            <div class="qc-desc">Potential outcome dưới treatment thấp hơn control; membership
+              của từng cá nhân không quan sát được trực tiếp.</div>
+          </div>
+        </div>
+        <div class="box box-example">
+          <span class="box-title">Ví dụ minh hoạ — số liệu giả định, không lấy từ dataset</span>
+          <div class="table-wrap" style="margin:8px 0 0; border:none;">
+            <table>
+              <thead><tr><th>Khách hàng</th><th class="num">P(mua | có voucher)</th><th class="num">P(mua | không voucher)</th><th class="num">Chênh lệch</th><th>Thuộc nhóm</th></tr></thead>
+              <tbody>
+                <tr><td>Chị Hoa</td><td class="num">90%</td><td class="num">88%</td><td class="num">+2%</td><td>Sure Thing</td></tr>
+                <tr><td>Anh Minh</td><td class="num">40%</td><td class="num">5%</td><td class="num">+35%</td><td>Persuadable</td></tr>
+                <tr><td>Chị Lan</td><td class="num">3%</td><td class="num">3%</td><td class="num">0%</td><td>Lost Cause</td></tr>
+                <tr><td>Anh Tuấn</td><td class="num">20%</td><td class="num">45%</td><td class="num">−25%</td><td>Sleeping Dog</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p>Một response model sẽ xếp Chị Hoa (90%) trước Anh Minh (40%) theo xác suất mua.
+          Trong ví dụ giả định, chênh lệch potential outcome của Anh Minh là +35 điểm phần trăm,
+          còn Chị Hoa là +2 điểm phần trăm; hai thứ tự vì vậy khác nhau.</p>
+        <p>Uplift modeling nhắm tới <strong>chênh lệch potential outcome</strong>, thay vì chỉ
+          ước lượng xác suất mua tuyệt đối.</p>
+      </section>
+
+      <section id="du-lieu">
+        <span class="sec-num">03</span>
+        <h2>Bộ dữ liệu Criteo</h2>
+        <p>Trong <strong>thí nghiệm ngẫu nhiên có đối chứng</strong> (Randomized Controlled
+          Trial — RCT), treatment được phân bổ ngẫu nhiên. Với consistency, không có
+          interference và các điều kiện thiết kế phù hợp, chênh lệch outcome trung bình giữa
+          treatment và control nhận diện average treatment effect trong population thí nghiệm.</p>
+        <p>Theo trang dữ liệu của Criteo AI Lab, <strong>Criteo Uplift Prediction Dataset
+          v2.1</strong> được tạo từ một randomized incrementality test: khoảng 85% quan sát
+          thuộc treatment và 15% thuộc control. Dự án sử dụng <code>conversion</code> làm
+          outcome; phạm vi suy luận giới hạn ở treatment, population và thời gian quan sát của
+          thí nghiệm này.</p>
+        <div class="stat-strip">
+          <div class="stat"><div class="v">13.979.592</div><div class="k">dòng dữ liệu</div></div>
+          <div class="stat"><div class="v">16</div><div class="k">cột</div></div>
+          <div class="stat"><div class="v">85% / 15%</div><div class="k">treatment / control</div></div>
+          <div class="stat"><div class="v">0,29%</div><div class="k">conversion rate</div></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Cột</th><th>Kiểu dữ liệu</th><th>Ý nghĩa</th></tr></thead>
+            <tbody>
+              <tr><td><code class="kw">f0 – f11</code></td><td>số thực × 12</td><td>Đặc trưng hành vi khách hàng, đã được <strong>ẩn danh hoá</strong> — Criteo không công bố ý nghĩa gốc của từng cột để bảo vệ dữ liệu thương mại và quyền riêng tư người dùng.</td></tr>
+              <tr><td><code class="kw">treatment</code></td><td>0 hoặc 1</td><td>Chỉ báo được gán vào treatment; provenance của Criteo mô tả dữ liệu là randomized incrementality test.</td></tr>
+              <tr><td><code class="kw">conversion</code></td><td>0 hoặc 1</td><td>Biến mục tiêu chính: khách hàng có mua hàng hay không (0,29% mẫu = 1).</td></tr>
+              <tr><td><code class="kw">visit</code></td><td>0 hoặc 1</td><td>Chỉ báo visit, prevalence 4,70%. Đây là biến sau treatment và không được dùng làm feature X trong release.</td></tr>
+              <tr><td><code class="kw">exposure</code></td><td>0 hoặc 1</td><td>Tín hiệu phụ khác liên quan đến việc tiếp xúc quảng cáo (3,06%).</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Trong file đã kiểm tra, 12 cột f0–f11 không có missing value và conversion rate là
+          0,29%. Outcome hiếm làm tăng phương sai của ước lượng treatment effect và giảm số
+          positive event trong control arm. Dataset được cấp phép <strong>CC BY-NC-SA</strong>.</p>
+        <div class="box box-def">
+          <span class="box-title">Kiểm tra chất lượng "ngẫu nhiên hoá"</span>
+          <p>Mô hình dự đoán treatment từ f0–f11 đạt AUC <strong>0,5098</strong>. Diagnostic
+            này không phát hiện khả năng phân biệt treatment/control đáng kể bằng mô hình đã
+            dùng, nhưng không tự chứng minh randomization. Căn cứ chính cho thiết kế RCT là
+            provenance của Criteo; các balance diagnostic chỉ là kiểm tra bổ sung.</p>
+        </div>
+      </section>
+
+      <section id="ky-thuat">
+        <span class="sec-num">04</span>
+        <h2>Các mô hình uplift hoạt động thế nào</h2>
+        <p>Mục tiêu kỹ thuật của tất cả các mô hình dưới đây là ước lượng một đại lượng gọi là <strong>CATE</strong> (Conditional Average Treatment Effect — hiệu ứng điều trị trung bình có điều kiện) cho từng khách hàng:</p>
+        <div class="formula-card">
+          <div class="f-name">CATE — hiệu ứng nhân quả cá nhân hoá</div>
+          <div class="f-eq">τ̂(x) = E[Y | T=1, X=x] − E[Y | T=0, X=x]</div>
+          <div class="f-desc">CATE là hiệu giữa conditional mean outcome dưới treatment và
+            control. Mỗi đơn vị chỉ quan sát một potential outcome; đây là fundamental problem
+            of causal inference. Các estimator dùng dữ liệu nhóm và các giả định nhận diện để
+            ước lượng đại lượng này.</div>
+        </div>
+        <p>Dự án so sánh sáu phương pháp, gồm một response ranking baseline và năm CATE
+          estimator/challenger. LightGBM được dùng làm base learner trong các meta-learner;
+          mỗi phương pháp có target, bias–variance trade-off và chi phí tính toán khác nhau.</p>
+
+        <h3>Response baseline (không phải uplift model)</h3>
+        <p>Đây là baseline marketing truyền thống: dự đoán <strong>xác suất mua hàng P(mua)</strong>, bỏ qua treatment. Nó trả lời "ai sẽ mua" chứ không phải "ai mua nhờ khuyến mãi". Release mới cho thấy Response có Qini cao nhất (0,1879), nhưng chưa tách được S hoặc X theo paired CI. Score Response không phải CATE và không dùng để xác định nhóm bị treatment gây hại.</p>
+
+        <h3>S-Learner (Single-Model Learner)</h3>
+        <p>S-Learner dùng một outcome model với treatment là feature; CATE bằng chênh lệch
+          prediction khi đặt treatment lần lượt bằng 1 và 0. Khi treatment signal nhỏ,
+          regularization có thể co treatment interaction. Trên release, S-Learner đạt Qini
+          0,1772 và 0,38% score âm; tỷ lệ này không phải principal-stratum prevalence.</p>
+
+        <h3>T-Learner (Two-Model Learner)</h3>
+        <p>T-Learner huấn luyện hai outcome model, một trên treatment và một trên control.
+          CATE bằng hiệu hai prediction. Sai số của cả hai outcome model đi vào hiệu CATE,
+          nên variance có thể tăng khi số positive event trong một arm thấp.</p>
+
+        <h3>X-Learner</h3>
+        <p>X-Learner mở rộng T-Learner bằng cách impute effect cho mỗi arm, huấn luyện hai
+          effect model rồi kết hợp theo propensity. Phương pháp có thể tận dụng arm lớn trong
+          một số cấu trúc bài toán; chênh lệch cỡ mẫu 85/15 không tự bảo đảm X-Learner vượt
+          T-Learner.</p>
+
+        <h3>Causal Forest</h3>
+        <p>Causal Forest dùng tiêu chí chia cây hướng tới heterogeneity của treatment effect.
+          Trong <em>honest splitting</em>, mẫu chọn split và mẫu ước lượng leaf effect được
+          tách nhau để giảm adaptive bias. Inference chỉ được báo cáo khi cấu hình và giả định
+          của estimator hỗ trợ; profile hiện tại dùng <code>inference=False</code>. Benchmark
+          local cho thấy đây là phương pháp dùng nhiều CPU/RAM nhất trong lineup.</p>
+
+        <h3>DR-Learner (Doubly Robust)</h3>
+        <p>Kết hợp outcome nuisance models và propensity trong một pseudo-outcome kiểu AIPW. Tính chất <em>doubly robust</em> nói rằng target trung bình vẫn nhất quán khi một trong hai nhóm nuisance — outcome regression hoặc propensity — được đặc tả đúng, dưới các giả định regularity/positivity thích hợp; nó không bảo đảm CATE hữu hạn mẫu luôn không thiên lệch hay luôn thắng model khác. Với RCT này, project dùng propensity prior của thí nghiệm thay vì học lại từ feature.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Mô hình</th><th>Chạy ở đâu</th><th>Trạng thái</th><th class="num">Chi phí</th></tr></thead>
+            <tbody>
+              <tr><td>Response baseline</td><td>Local</td><td>Đã code</td><td class="num">vài giây</td></tr>
+              <tr><td>S-Learner</td><td>Local</td><td>Đã code</td><td class="num">vài giây</td></tr>
+              <tr><td>T-Learner</td><td>Local</td><td>Đã code</td><td class="num">&lt; 90 giây, ~2,1GB</td></tr>
+              <tr><td>X-Learner</td><td>Local</td><td>Đã code</td><td class="num">&lt; 90 giây, ~2,1GB</td></tr>
+              <tr><td>DR-Learner</td><td>Local</td><td>Đã code</td><td class="num">&lt; 90 giây, ~2,1GB</td></tr>
+              <tr><td>Causal Forest</td><td>Kaggle Free có điều kiện</td><td>Đã benchmark; Sprint 2 preflight 20% → 30%</td><td class="num">50%: budget bảo thủ 24GB, ~4,5 giờ/4 CPU</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.82rem; color:var(--ink-faint);">Năm mô hình release chạy local.
+          Causal Forest chỉ được chạy trên Kaggle sau khi từng resource gate 20% và 30% đạt.</p>
+      </section>
+
+      <section id="kien-truc">
+        <span class="sec-num">05</span>
+        <h2>Kiến trúc xử lý (pipeline)</h2>
+        <p>Toàn bộ quá trình đi từ dữ liệu thô đến một khuyến nghị kinh doanh gồm 5 bước tuần tự:</p>
+        <div class="vpipe">
+          <div class="vp-step vp-done">
+            <div class="vp-dotcol"><div class="vp-dot">1</div><div class="vp-line"></div></div>
+            <div>
+              <span class="vp-title">Dữ liệu thô</span><span class="vp-status">Hoàn thành</span>
+              <div class="vp-desc">Tải bộ dữ liệu Criteo v2.1 (định dạng nén .csv.gz, ~14 triệu dòng), ép kiểu dữ liệu nhẹ hơn (số thực 32-bit thay vì 64-bit) để tiết kiệm RAM khi xử lý.</div>
+            </div>
+          </div>
+          <div class="vp-step vp-done">
+            <div class="vp-dotcol"><div class="vp-dot">2</div><div class="vp-line"></div></div>
+            <div>
+              <span class="vp-title">Tiền xử lý &amp; khám phá dữ liệu (EDA)</span><span class="vp-status">Hoàn thành</span>
+              <div class="vp-desc">Lấy mẫu phân tầng (giữ nguyên tỉ lệ treatment/conversion khi giảm cỡ mẫu để chạy thử nhanh hơn), kiểm tra chất lượng ngẫu nhiên hoá bằng propensity AUC và kiểm định thống kê Kolmogorov–Smirnov.</div>
+            </div>
+          </div>
+          <div class="vp-step vp-done">
+            <div class="vp-dotcol"><div class="vp-dot">3</div><div class="vp-line"></div></div>
+            <div>
+              <span class="vp-title">Mô hình CATE</span><span class="vp-status">5 / 6 đã code</span>
+              <div class="vp-desc">Huấn luyện năm mô hình release — Response, S/T/X-Learner và DR-Learner — trên laptop. Causal Forest là challenger riêng, chỉ chạy sau khi preflight Kaggle đạt.</div>
+            </div>
+          </div>
+          <div class="vp-step vp-done">
+            <div class="vp-dotcol"><div class="vp-dot">4</div><div class="vp-line"></div></div>
+            <div>
+              <span class="vp-title">Đánh giá mô hình</span><span class="vp-status">Hoàn thành</span>
+              <div class="vp-desc">Đo chất lượng dự đoán bằng Qini score và AUUC, kèm khoảng tin cậy bootstrap — chi tiết ở mục 6 bên dưới.</div>
+            </div>
+          </div>
+          <div class="vp-step vp-planned">
+            <div class="vp-dotcol"><div class="vp-dot">5</div></div>
+            <div>
+              <span class="vp-title">Phân khúc khách hàng &amp; ước tính lợi nhuận</span><span class="vp-status">Kế hoạch</span>
+              <div class="vp-desc">Dùng score để tạo nhóm vận hành theo budget và ước tính incremental conversions trên randomized holdout. Bốn principal strata không quan sát được ở cấp cá nhân; profit simulator còn cần giả định margin và treatment cost.</div>
+            </div>
+          </div>
+        </div>
+        <p>Công cụ/thư viện chính được dùng xuyên suốt: <code class="kw">Python 3.12</code>, <code class="kw">pandas</code>/<code class="kw">numpy</code>/<code class="kw">scipy</code> để xử lý dữ liệu, <code class="kw">scikit-learn</code> cho mô hình kiểm tra ngẫu nhiên hoá, <code class="kw">LightGBM</code> làm mô hình nền, <code class="kw">EconML</code> cho các thuật toán uplift, và <code class="kw">scikit-uplift</code> để đối chiếu công thức đánh giá.</p>
+        <div class="box box-honest">
+          <span class="box-title">Nguyên tắc thiết kế</span>
+          <p>Mọi metric tự triển khai phải được đối chiếu số học với
+            <code class="kw">scikit-uplift</code>. Model comparison chỉ được phát hành khi
+            sai số nằm trong tolerance của unit test.</p>
+        </div>
+      </section>
+
+      <section id="danh-gia">
+        <span class="sec-num">06</span>
+        <h2>Đánh giá: đo hiệu quả bằng gì, dựa vào đâu</h2>
+        <p>Phần này xác định metric, đơn vị đo và điều kiện diễn giải.</p>
+        <h3>Vì sao không thể dùng Accuracy hay AUC như bài toán dự đoán thông thường</h3>
+        <p>Với một mô hình phân loại thông thường (ví dụ: "email này có phải spam không"), ta luôn có thể kiểm tra dự đoán đúng hay sai, vì nhãn thật (spam/không spam) luôn quan sát được. Nhưng với CATE thì khác: CATE của một khách hàng là <strong>chênh lệch giữa hai kịch bản song song</strong> — "nếu có khuyến mãi" và "nếu không có khuyến mãi" — mà trên thực tế, mỗi khách hàng chỉ từng trải qua <strong>đúng một</strong> trong hai kịch bản đó. Không ai vừa nhận vừa không nhận khuyến mãi để ta so sánh. Đây gọi là <strong>"vấn đề nền tảng của suy luận nhân quả"</strong> (fundamental problem of causal inference) — không tồn tại "đáp án đúng" của CATE ở cấp độ từng cá nhân để so khớp với dự đoán, nên Accuracy/AUC hoàn toàn không áp dụng được.</p>
+
+        <h3>Cách đánh giá thay thế: so sánh ở cấp độ nhóm</h3>
+        <p>Giải pháp là không so sánh từng cá nhân, mà so sánh <strong>ở cấp độ nhóm</strong>, dựa trên chính cấu trúc RCT của dữ liệu:</p>
+        <ol>
+          <li>Xếp toàn bộ khách hàng theo τ̂(x) (uplift mô hình dự đoán) từ cao xuống thấp.</li>
+          <li>Cắt tại một ngưỡng t (ví dụ: 20% khách hàng được dự đoán uplift cao nhất).</li>
+          <li>Trong top t, đếm conversion quan sát được ở treatment
+            (<code class="kw">Y1(t)</code> trên <code class="kw">N1(t)</code> quan sát) và
+            control (<code class="kw">Y0(t)</code> trên <code class="kw">N0(t)</code> quan sát).</li>
+          <li>Tính chênh lệch conversion rate giữa treatment và control trong top t theo
+            estimator đã chọn.</li>
+        </ol>
+        <div class="formula-card">
+          <div class="f-name">Qini curve</div>
+          <div class="f-eq">Qini(t) = Y₁(t) − Y₀(t) · N₁(t) / N₀(t)</div>
+          <div class="f-desc">Control conversions trong top t được quy đổi về cùng quy mô với
+            treatment rồi trừ khỏi treatment conversions. Qini score là diện tích của observed
+            Qini curve so với random-targeting reference theo convention của implementation
+            hiện tại. Điểm cao hơn biểu thị ranking gain lớn hơn theo metric này.</div>
+        </div>
+        <div class="formula-card">
+          <div class="f-name">Uplift curve (AUUC)</div>
+          <div class="f-eq">U(t) = (Y₁(t)/N₁(t) − Y₀(t)/N₀(t)) · N(t)</div>
+          <div class="f-desc">Đo trực tiếp chênh lệch <em>tỉ lệ</em> mua hàng giữa 2 nhóm tại ngưỡng t, nhân với quy mô dân số đã nhắm tới N(t). <strong>AUUC</strong> = diện tích dưới đường này. Cùng ý nghĩa với Qini score nhưng chuẩn hoá theo cách khác — dự án tính cả hai để đối chiếu chéo, tránh phụ thuộc vào một công thức duy nhất.</div>
+        </div>
+
+        <div class="chart-wrap">
+          <canvas id="qiniDoc" width="680" height="300" role="img" aria-label="Minh hoạ đường Qini: đường mô hình nằm phía trên đường chéo ngẫu nhiên, phần diện tích ở giữa là giá trị gia tăng nhờ nhắm mục tiêu đúng người."></canvas>
+          <div class="chart-legend">
+            <span><i class="swatch" style="background:var(--accent)"></i>Đường Qini của mô hình</span>
+            <span><i class="swatch" style="background:var(--accent-2)"></i>Nhắm mục tiêu ngẫu nhiên (đường chéo)</span>
+          </div>
+        </div>
+        <p>Trục ngang là tỷ lệ population được target theo score giảm dần; trục dọc là
+          cumulative incremental conversions theo Qini convention. Đường chéo là
+          random-targeting reference. Diện tích giữa observed curve và reference được dùng
+          trong Qini score.</p>
+
+        <h3>Kiểm tra implementation của metric</h3>
+        <p>Qini/AUUC được triển khai trong repository và đối chiếu với
+          <code class="kw">scikit-uplift</code>. Unit test yêu cầu đường Qini/Uplift sai lệch
+          dưới <code>1e-9</code> và hai điểm tổng hợp sai lệch dưới <code>1e-6</code>. Metric
+          không được phát hành nếu vượt tolerance.</p>
+
+        <h3>Khoảng bootstrap cho Qini</h3>
+        <p>Point estimate Qini chịu sampling variation, đặc biệt khi conversion rate là
+          0,29%. Dự án resample có hoàn lại, tính lại Qini và báo percentile interval từ phân
+          vị 2,5% đến 97,5%. Model difference dùng cùng bootstrap indices cho hai ranking.</p>
+        <div class="box box-def">
+          <span class="box-title">Cách đọc khoảng tin cậy</span>
+          <p>Nếu CI của chênh lệch Qini không chứa 0, dấu của chênh lệch ổn định theo
+            bootstrap procedure đã chọn. Nếu CI chứa 0, comparison không tách được hai ranking
+            ở mức interval đang báo cáo.</p>
+        </div>
+        <p>Negative-control test đưa một random score độc lập với outcome vào bootstrap. Với
+          data-generating process của test, expected ranking effect bằng 0; interval phải bao
+          phủ 0 theo acceptance criterion. Nếu criterion không đạt, implementation hoặc test
+          fixture phải được kiểm tra lại.</p>
+      </section>
+
+      <section id="ket-qua">
+        <span class="sec-num">07</span>
+        <h2>Kết quả đã chạy và hạng mục dự kiến</h2>
+        <h3>So sánh 5 model trên holdout 50% (tập test 2,1 triệu dòng)</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Model</th><th class="num">Qini</th><th class="num">CI 95%</th><th>Ý nghĩa thống kê</th></tr></thead>
+            <tbody>
+              <tr><td>Response (không dùng treatment)</td><td class="num">0,179</td><td class="num">[0,143–0,218]</td><td>CI không chứa 0</td></tr>
+              <tr><td>S-Learner</td><td class="num">0,177</td><td class="num">[0,141–0,218]</td><td>CI không chứa 0</td></tr>
+              <tr><td>DR-Learner</td><td class="num">0,154</td><td class="num">[0,118–0,190]</td><td>CI không chứa 0</td></tr>
+              <tr><td>T-Learner</td><td class="num">0,142</td><td class="num">[0,107–0,175]</td><td>CI không chứa 0</td></tr>
+              <tr><td>X-Learner</td><td class="num">0,141</td><td class="num">[0,108–0,177]</td><td>CI không chứa 0</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box box-honest">
+          <span class="box-title">Kết quả release</span>
+          <p>Release 29/07/2026 trên mẫu 50% ghi Response Qini 0,1879. Paired CI chứa 0 cho
+            Response–S và Response–X; CI không chứa 0 cho Response–T và Response–DR.
+            X-Learner dùng under-sampling <code>k=7</code>, fixed propensity và rescale
+            <code>1/k</code> vượt baseline trong ablation test. Response là ranking baseline,
+            không phải CATE estimator; score âm không nhận diện principal stratum ở cấp cá
+            nhân. <code class="kw">visit</code> và <code class="kw">exposure</code> không
+            được dùng làm feature.</p>
+        </div>
+        <p>Causal Forest (model thứ 6) chưa phải release result: Sprint 2 sẽ chạy preflight trên Kaggle trước khi ghép vào ma trận. Dashboard hiện tại cũng chưa phải release artifact; cần được chuyển sang đọc bảng <code>sprint1_release</code> và bổ sung giả định cost/margin trước khi mô phỏng lãi ròng.</p>
+
+        <h3>Kết quả cuối cùng dự kiến khi hoàn thành</h3>
+        <p>Kết quả cuối cùng của dự án <strong>không phải là một con số Qini duy nhất</strong>, mà là một bộ 4 sản phẩm gắn liền với quyết định kinh doanh:</p>
+        <ol>
+          <li><strong>Bảng so sánh chính thức 6 model CATE</strong> (Response, S/T/X-Learner, DR-Learner, Causal Forest) — đo trên cùng một tập kiểm tra, kèm khoảng tin cậy bootstrap để xác định model nào tốt hơn <em>có ý nghĩa thống kê</em>, không chỉ đơn thuần điểm số cao hơn.</li>
+          <li><strong>Bảng phân khúc vận hành</strong> — xếp khách theo model score và budget. Không gán bốn principal strata như nhãn thật của từng khách vì không quan sát đồng thời hai potential outcomes.</li>
+          <li><strong>Ước tính incremental value theo kịch bản</strong> cho các policy top-k,
+            với giả định về value per conversion và contact cost. Dataset không có revenue,
+            margin hoặc giá trị đơn hàng quan sát được.</li>
+          <li><strong>Khuyến nghị hành động cụ thể</strong> cho đội marketing: nên/không nên nhắm khuyến mãi vào nhóm nào.</li>
+        </ol>
+        <div class="box box-honest">
+          <span class="box-title">Phạm vi diễn giải monetary value</span>
+          <p>Dataset không có giá trị đơn hàng hoặc margin. Mọi monetary output phải ghi rõ
+            value per conversion và contact cost là input kịch bản; không diễn giải chúng như
+            revenue hoặc profit quan sát được.</p>
+        </div>
+      </section>
+
+      <section id="thuat-ngu">
+        <span class="sec-num">08</span>
+        <h2>Bảng thuật ngữ nhanh</h2>
+        <dl class="glossary">
+          <dt>Treatment / Control</dt>
+          <dd>Nhóm "có can thiệp" (nhận quảng cáo/khuyến mãi) và nhóm "không can thiệp" (đối chứng), dùng để so sánh và đo hiệu ứng nhân quả.</dd>
+          <dt>RCT (Randomized Controlled Trial)</dt>
+          <dd>Thí nghiệm phân bổ treatment ngẫu nhiên. Dưới các giả định thiết kế, chênh lệch
+            outcome giữa các arm nhận diện average treatment effect trong population thí nghiệm.</dd>
+          <dt>CATE (Conditional Average Treatment Effect)</dt>
+          <dd>Hiệu ứng tăng thêm trung bình của một hành động can thiệp, tính riêng cho từng nhóm khách hàng có đặc điểm cụ thể — đại lượng chính mà các mô hình uplift cố gắng ước lượng.</dd>
+          <dt>Propensity (xu hướng được nhận treatment)</dt>
+          <dd>Xác suất một khách hàng được gán treatment. Theo thiết kế RCT được mô tả cho
+            dataset này, propensity xấp xỉ 85% và không được ước lượng lại từ feature trong
+            cấu hình fixed-propensity.</dd>
+          <dt>Qini score / AUUC</dt>
+          <dd>Hai chỉ số đo mức độ hiệu quả của việc xếp hạng khách hàng theo uplift dự đoán, so với việc chọn ngẫu nhiên — dùng thay cho Accuracy/AUC vì CATE không có "đáp án đúng" ở cấp cá nhân.</dd>
+          <dt>Bootstrap CI</dt>
+          <dd>Khoảng được tính từ phân phối resampling để mô tả sampling uncertainty của
+            estimator theo bootstrap procedure đã chọn.</dd>
+          <dt>Persuadables / Sure Things / Lost Causes / Sleeping Dogs</dt>
+          <dd>4 nhóm khách hàng phân loại theo phản ứng với khuyến mãi — chi tiết ở mục 2.</dd>
+          <dt>Response / S / T / X / DR-Learner / Causal Forest</dt>
+          <dd>Lineup 6 phương pháp khác nhau để ước lượng CATE (hoặc, với Response, để làm đối chứng) — chi tiết ở mục 4.</dd>
+        </dl>
+      </section>
+
+    </article>
+  </div>
+
+  <footer class="doc-footer">
+    Nguồn dữ liệu: Criteo Uplift Prediction Dataset v2.1 (Criteo AI Lab), giấy phép CC BY-NC-SA — chỉ dùng cho mục đích nghiên cứu, phi thương mại.<br>
+    Thư viện chính: Python · pandas/numpy/scipy · scikit-learn · LightGBM · EconML · scikit-uplift.<br>
+    Trạng thái tài liệu: phản ánh tiến độ dự án tính đến khi 5 model chạy xong ở holdout 50%.
+  </footer>
+</div>
+
+<script>
+(function () {
+  // scrollspy for TOC
+  var sections = document.querySelectorAll('article section');
+  var links = document.querySelectorAll('nav.toc a');
+  function onScroll() {
+    var pos = window.scrollY + 120;
+    var current = null;
+    sections.forEach(function (s) {
+      if (s.offsetTop <= pos) current = s.id;
+    });
+    links.forEach(function (l) {
+      l.classList.toggle('active', l.getAttribute('href') === '#' + current);
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Qini illustrative chart
+  var canvas = document.getElementById('qiniDoc');
+  if (canvas && canvas.getContext) {
+    var ctx = canvas.getContext('2d');
+    var W = canvas.width, H = canvas.height;
+    var pad = { l: 40, r: 24, t: 20, b: 36 };
+
+    function css(varName) {
+      return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+    }
+    function upliftY(x) { return 1 - Math.pow(1 - x, 2.1); }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      var ink = css('--ink-faint');
+      var line = css('--line');
+      var accent = css('--accent');
+      var accent2 = css('--accent-2');
+      var x0 = pad.l, x1 = W - pad.r, y0 = H - pad.b, y1 = pad.t;
+
+      ctx.strokeStyle = line; ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x0, y0); ctx.lineTo(x1, y0);
+      ctx.moveTo(x0, y0); ctx.lineTo(x0, y1);
+      ctx.stroke();
+
+      ctx.fillStyle = ink;
+      ctx.font = '12px ' + getComputedStyle(document.body).fontFamily;
+      ctx.fillText('% khách hàng được nhắm tới', x0, H - 10);
+      ctx.save();
+      ctx.translate(16, y0);
+      ctx.rotate(-Math.PI / 2);
+      ctx.fillText('% chuyển đổi tích luỹ', 0, 0);
+      ctx.restore();
+
+      ctx.strokeStyle = accent2; ctx.setLineDash([5, 5]); ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+      ctx.setLineDash([]);
+
+      var steps = 80;
+      ctx.strokeStyle = accent; ctx.lineWidth = 3; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+      ctx.beginPath();
+      for (var i = 0; i <= steps; i++) {
+        var fx = i / steps, fy = upliftY(fx);
+        var px = x0 + fx * (x1 - x0), py = y0 - fy * (y0 - y1);
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+
+      ctx.save(); ctx.globalAlpha = 0.12; ctx.fillStyle = accent;
+      ctx.beginPath(); ctx.moveTo(x0, y0);
+      for (var j = 0; j <= steps; j++) {
+        var gx = j / steps, gy = upliftY(gx);
+        ctx.lineTo(x0 + gx * (x1 - x0), y0 - gy * (y0 - y1));
+      }
+      ctx.lineTo(x1, y1); ctx.closePath(); ctx.fill(); ctx.restore();
+    }
+    draw();
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    mq.addEventListener && mq.addEventListener('change', draw);
+  }
+})();
+</script>
+</body>
+</html>

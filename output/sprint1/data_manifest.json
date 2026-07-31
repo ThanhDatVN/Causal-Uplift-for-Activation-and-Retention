@@ -1,0 +1,106 @@
+{
+  "dataset": "Criteo Uplift v2.1 local file",
+  "path": "data/criteo-research-uplift-v2.1.csv.gz",
+  "file_size_bytes": 311422618,
+  "sha256": "2716e1bf0fd157a93b5bf86924d9088419dfbac2022c6cd90030220634f616dc",
+  "python": "3.12.10",
+  "schema_contract": {
+    "row_count": 13979592,
+    "column_count": 16,
+    "missing_columns": [],
+    "extra_columns": [],
+    "binary_values": {
+      "treatment": [
+        0,
+        1
+      ],
+      "conversion": [
+        0,
+        1
+      ],
+      "visit": [
+        0,
+        1
+      ],
+      "exposure": [
+        0,
+        1
+      ]
+    },
+    "invalid_binary_columns": {},
+    "missing_cells": 0,
+    "all_features_finite": true,
+    "valid": true
+  },
+  "feature_policy": {
+    "allowed_pre_treatment_features": [
+      "f0",
+      "f1",
+      "f2",
+      "f3",
+      "f4",
+      "f5",
+      "f6",
+      "f7",
+      "f8",
+      "f9",
+      "f10",
+      "f11"
+    ],
+    "treatment": "treatment",
+    "primary_outcome": "conversion",
+    "excluded_from_features": [
+      "visit",
+      "exposure"
+    ]
+  },
+  "rates": {
+    "treatment": 0.8500001287591226,
+    "conversion": 0.002916680257907384,
+    "visit": 0.046992000911042324,
+    "exposure": 0.03063122299992732
+  },
+  "difference_in_means": {
+    "conversion": {
+      "outcome": "conversion",
+      "treated_mean": 0.0030894610674129645,
+      "control_mean": 0.0019375880152813366,
+      "difference_in_means": 0.0011518730521316279,
+      "standard_error": 3.4371690289992735e-05,
+      "ci_95_low": 0.001084504539163242,
+      "ci_95_high": 0.0012192415651000137,
+      "n_treated": 11882655,
+      "n_control": 2096937
+    },
+    "visit": {
+      "outcome": "visit",
+      "treated_mean": 0.048543360048743316,
+      "control_mean": 0.03820095691954503,
+      "difference_in_means": 0.010342403129198284,
+      "standard_error": 0.00014631645066032718,
+      "ci_95_low": 0.010055622885904043,
+      "ci_95_high": 0.010629183372492525,
+      "n_treated": 11882655,
+      "n_control": 2096937
+    },
+    "exposure": {
+      "outcome": "exposure",
+      "treated_mean": 0.036036727482199896,
+      "control_mean": 0.0,
+      "difference_in_means": 0.036036727482199896,
+      "standard_error": 5.4068732739168384e-05,
+      "ci_95_low": 0.035930752766031124,
+      "ci_95_high": 0.03614270219836867,
+      "n_treated": 11882655,
+      "n_control": 2096937
+    }
+  },
+  "balance_diagnostics": {
+    "sample_fraction": 0.05,
+    "sample_rows": 698980,
+    "holdout_propensity_auc": 0.5073786173054401,
+    "max_abs_smd": 0.04903073608875275,
+    "median_abs_smd": 0.017723051831126213,
+    "interpretation": "Diagnostics describe observed covariate balance; provenance of random assignment comes from the dataset documentation, not from AUC/SMD alone."
+  }
+}

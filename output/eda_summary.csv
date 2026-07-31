@@ -1,0 +1,12 @@
+metric,value
+n_rows_full,13979592
+n_cols_full,16
+treatment_rate,0.8500001287591226
+conversion_rate,0.002916680257907384
+visit_rate,0.046992000911042324
+exposure_rate,0.03063122299992732
+n_missing_f0_f11_total,0
+propensity_auc_5pct_sample,0.5097858596777505
+ks_n_features_significant_5pct,5
+ks_n_features_total,12
+balance_diagnostic_interpretation,"Propensity AUC gần 0,5 trong diagnostic này; kết quả không tự chứng minh random assignment."

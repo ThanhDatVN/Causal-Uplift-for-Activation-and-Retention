@@ -1,0 +1,42 @@
+{
+  "Response": {
+    "top_10_incremental_conversion_estimate": 1754.6830561200734,
+    "top_10_incremental_ci": [
+      1412.4215628922204,
+      2096.944549347926
+    ],
+    "share_of_full_incremental_estimate": 0.7274332292482828
+  },
+  "S-Learner": {
+    "top_10_incremental_conversion_estimate": 1740.9140729651203,
+    "top_10_incremental_ci": [
+      1383.9678423710154,
+      2097.8603035592255
+    ],
+    "share_of_full_incremental_estimate": 0.7217250668283299
+  },
+  "T-Learner": {
+    "top_10_incremental_conversion_estimate": 1508.9270732425643,
+    "top_10_incremental_ci": [
+      1177.6642372924075,
+      1840.1899091927214
+    ],
+    "share_of_full_incremental_estimate": 0.625550973300039
+  },
+  "X-Learner": {
+    "top_10_incremental_conversion_estimate": 1623.6214789030892,
+    "top_10_incremental_ci": [
+      1258.703887690109,
+      1988.5390701160698
+    ],
+    "share_of_full_incremental_estimate": 0.673099458820172
+  },
+  "DR-Learner": {
+    "top_10_incremental_conversion_estimate": 1596.3872618694077,
+    "top_10_incremental_ci": [
+      1261.850142121797,
+      1930.9243816170183
+    ],
+    "share_of_full_incremental_estimate": 0.6618090583266119
+  }
+}

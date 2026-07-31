@@ -1,0 +1,69 @@
+{
+  "evidence": [
+    {
+      "fraction": 0.01,
+      "wall_time_s": 126.27,
+      "peak_rss_mb": 2096.8,
+      "args": "--frac 0.01 --n-estimators 500 --min-samples-leaf 200 --cv 3",
+      "log_file": "benchmarks/logs/bench_cf_frac_0.01.log"
+    },
+    {
+      "fraction": 0.02,
+      "wall_time_s": 225.16,
+      "peak_rss_mb": 2097.5,
+      "args": "--frac 0.02 --n-estimators 500 --min-samples-leaf 200 --cv 3",
+      "log_file": "benchmarks/logs/bench_cf_frac_0.02.log"
+    },
+    {
+      "fraction": 0.05,
+      "wall_time_s": 528.09,
+      "peak_rss_mb": 3105.0,
+      "args": "--frac 0.05 --n-estimators 500 --min-samples-leaf 200 --cv 3",
+      "log_file": "benchmarks/logs/bench_cf_frac_0.05.log"
+    },
+    {
+      "fraction": 0.1,
+      "wall_time_s": 1052.48,
+      "peak_rss_mb": 4796.5,
+      "args": "--frac 0.10 --n-estimators 500 --min-samples-leaf 200 --cv 3",
+      "log_file": "benchmarks/logs/bench_cf_frac_0.10.log"
+    },
+    {
+      "fraction": 0.2,
+      "wall_time_s": 2200.02,
+      "peak_rss_mb": 8162.6,
+      "args": "--frac 0.20 --n-estimators 500 --min-samples-leaf 200 --cv 3",
+      "log_file": "benchmarks/logs/bench_cf_frac_0.20.log"
+    }
+  ],
+  "target": {
+    "fraction": 0.5,
+    "system_ram_gb": 30.0,
+    "cpu_count": 4,
+    "max_ram_utilization": 0.75
+  },
+  "research_profile_500_trees_extrapolation": {
+    "linear_memory_gb": 17.530477171434494,
+    "conservative_memory_gb": 24.0,
+    "local_runtime_hours": 1.5156825778514835,
+    "cpu_scaled_runtime_hours": 4.547047733554451
+  },
+  "decision": {
+    "status": "preflight_required",
+    "reason": "50% chưa được duyệt. Research-profile envelope cần tối thiểu 32.0 GB để giữ peak dưới 75%; target giả định 30.0 GB không đạt gate. Profile kaggle-safe phải benchmark live ở 20% và 30%; GPU không được sử dụng.",
+    "target_meets_research_profile_envelope": false,
+    "minimum_system_ram_for_research_envelope_gb": 32.0,
+    "recommended_profile": "kaggle-safe",
+    "required_preflights": [
+      0.2,
+      0.3
+    ],
+    "fallback": "Phát hành 5 model local; hoãn Causal Forest hoặc giảm forest profile. Không đổi common holdout chỉ để ép đủ model thứ sáu."
+  },
+  "limitations": [
+    "Benchmark mới đo đến 20%; 50% là ngoại suy.",
+    "CPU scaling không tuyến tính hoàn hảo.",
+    "Tài nguyên Kaggle có thể thay đổi; phải đọc RAM/CPU live trước khi chạy.",
+    "Profile kaggle-safe 200 cây cần benchmark riêng ở 20% và 30%."
+  ]
+}

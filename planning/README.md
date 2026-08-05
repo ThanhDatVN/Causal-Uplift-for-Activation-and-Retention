@@ -7,6 +7,7 @@ hướng dẫn thực thi nằm trong `docs/`.
 
 | Tài liệu | Nội dung |
 |---|---|
+| [NEXT_ROUND_PLAN.md](NEXT_ROUND_PLAN.md) | Vòng tiếp theo sau Sprint 3. Phần A hoàn tất Causal Forest (đang chạy); Phần B ba hướng cải tiến kèm ba hướng đã loại và lý do. **Không phải Sprint 4** |
 | [SPRINT_3_EXECUTION_AND_WEB_PLAN.md](SPRINT_3_EXECUTION_AND_WEB_PLAN.md) | Kế hoạch Sprint 3 và bảng trạng thái từng phase, kèm sai lệch so với plan |
 | [RESEARCH_LANDSCAPE_2026.md](RESEARCH_LANDSCAPE_2026.md) | Bối cảnh nghiên cứu, vì sao Response thắng, bài toán lân cận, mức xác minh từng nguồn |
 | [sprints.md](sprints.md) | Lộ trình ba sprint và trạng thái gửi mentor |

@@ -1,0 +1,236 @@
+# Kế hoạch vòng tiếp theo — sau Sprint 3
+
+Trạng thái: **chưa mở**. Tài liệu này đăng ký phạm vi và lý do trước khi chạy bất cứ
+thứ gì, theo quy tắc trong `planning/README.md`.
+
+Dự án có **ba sprint**. Đây không phải Sprint 4. Đây là vòng công việc tiếp nối sau khi
+Sprint 3 đã chốt champion, gồm hai phần tách bạch:
+
+- **Phần A** — hoàn tất hạng mục Causal Forest đang chạy trên Kaggle. Đây là việc *đã
+  cam kết*, chỉ còn chờ kết quả.
+- **Phần B** — vòng cải tiến mới. Chưa cam kết; mở hay không là quyết định riêng.
+
+---
+
+## 1. Vì sao kế hoạch này trông như thế này
+
+Sprint 3 đã trả lời xong câu hỏi "có learner nào tốt hơn Response trên `conversion`
+không". Câu trả lời dứt khoát, và nó định hình toàn bộ phạm vi bên dưới.
+
+Screening 12 candidate, so từng cặp với Response bằng paired percentile bootstrap trên
+cùng OOF rows:
+
+| Outcome | Thách thức có CI chứa 0 | Khoảng cách của thách thức tốt nhất |
+|---|---|---|
+| `conversion` | **0/12** | 8,8% thấp hơn Response |
+| `visit` | **4/6** | 1,9% thấp hơn Response |
+
+Trên `conversion`, mọi CI đều nằm **hoàn toàn dưới 0**. Đây không phải "chưa đủ bằng
+chứng để kết luận" mà là thua có ý nghĩa thống kê. Rank-Learner (ICLR 2026), DR, R, X,
+S, T và ensemble Causal Q-aggregation đều không sống sót.
+
+Số liệu gốc: `output/improvement/screen/paired_comparisons.csv` và
+`output/improvement/screen_visit/paired_comparisons.csv`.
+
+Nút thắt là dữ liệu, không phải model. `conversion rate = 0,002917`; nhánh control chỉ
+có 4.063 conversion. Diễn giải lý thuyết đã có trong `RESEARCH_LANDSCAPE_2026.md`:
+causal bias–variance tradeoff (Fernández-Loría & Provost, JMLR 2022), prognostic
+dominance và counterfactual gradient collapse (VALOR 2026).
+
+**Hệ quả cho kế hoạch:** thêm learner thứ 13 không đổi được kết luận. Dư địa nằm ở
+estimand, ở tầng quyết định, và ở việc chỉ ra giới hạn của champion hiện tại.
+
+---
+
+## 2. Phần A — Hoàn tất Causal Forest
+
+### A.1 Trạng thái
+
+Đang chạy trên Kaggle. Stage 20% đã pass:
+
+| Chỉ số | Giá trị |
+|---|---:|
+| `status` | `passed` |
+| Peak RSS | 5,50 GB |
+| Peak RAM fraction | 0,175 (gate 0,75) |
+| Wall time | 637 s |
+| `score_rows` | 838.776 |
+| `all_finite` / `aligned` | true / true |
+
+Dự phóng 50%: RSS ~13,74 GB tức 43,8% RAM của session 31,35 GB. Còn cách xa gate.
+
+Session Kaggle cấp 31,35 GB RAM và 4 logical CPU. Profile `kaggle-safe` dùng
+`n_estimators=200`, `min_samples_leaf=500`, `max_samples=0,25`, `cv=2`,
+`inference=False`, `model_t=DummyClassifier` — hợp lệ vì Criteo là randomized design.
+
+### A.2 Còn phải làm
+
+1. Stage 30% và 50% trên Kaggle.
+2. Tải zip về, giải nén vào `output/causal_forest/`.
+3. Chấm điểm ở local — **bước này chưa từng chạy**:
+
+   ```powershell
+   .venv\Scripts\python.exe scripts\evaluate_causal_forest.py `
+     --stage-dir output\causal_forest\preflight_0p5 --n-boot 500 --signal dr
+   ```
+
+4. Ghi run vào `output/improvement/registry.csv`, kể cả nếu kết quả kém.
+
+### A.3 Chỉ stage 50% mới so được với bảng release
+
+Ở `frac=0.50, test_size=0.30, seed=42`, holdout trùng khít final test Sprint 1:
+2.096.940 dòng, `Y` và `T` giống hệt từng phần tử (đã kiểm chứng). Stage 20% và 30%
+dùng tập test khác; `evaluate_causal_forest.py` tự phát hiện và in `[mode] standalone`.
+
+### A.4 Ngoài Qini, phải xem độ phân tán điểm CATE
+
+`min_samples_leaf=500` với conversion rate 0,002917 nghĩa là mỗi lá trung bình chứa
+**1,4 conversion**, rồi honest splitting chia đôi tiếp giữa hai nhánh. Ước lượng ở từng
+lá vì thế rất nhiễu.
+
+Nếu điểm CATE gần như hằng số thì model đã **suy biến**, khác hẳn với "xếp hạng kém".
+Hai kết luận này không được viết lẫn lộn. Early-stop rule Sprint 3 đã có ngưỡng
+`constant_score_unique_threshold = 10` cho tình huống tương tự.
+
+### A.5 Cập nhật những file nào khi có kết quả
+
+Các chỗ đang ghi trạng thái "chưa chạy" và phải sửa đồng thời:
+
+| File | Chỗ cần sửa |
+|---|---|
+| `CLAUDE.md` | dòng "Causal Forest Kaggle 20/30/50 remains pending" |
+| `README.md` | mục "Causal Forest — hạng mục còn thiếu duy nhất" |
+| `report/SPRINT_1_FINAL_REPORT.md` | bảng Qini release, thêm dòng Causal Forest nếu stage 50% chạy được |
+| `report/SPRINT_3_FINAL_REPORT.md` | mục trạng thái hạng mục còn thiếu |
+| `report/weekly/WEEK_06.md` | mục việc còn lại |
+| `planning/sprints.md` | quyết định cắt scope, ghi đã hoàn tất |
+| `output/README.md` | thêm `output/causal_forest/` vào bảng artifact |
+| `docs/COMPONENT_REVIEW_GUIDE.md` | checklist "ghi trạng thái chưa chạy" |
+| `output/improvement/registry.csv` | thêm run |
+
+Ba câu **không** được viết:
+
+1. So Qini stage 20% hoặc 30% với `0,187886` của Response — khác tập test.
+2. "Gate pass nghĩa là model tốt" — manifest có sẵn `"quality_not_assessed": true`.
+3. "Causal Forest cho khoảng tin cậy cá nhân" — profile `kaggle-safe` đặt
+   `inference=False`, không gọi `effect_interval()` được.
+
+### A.6 Điều kiện hoàn tất Phần A
+
+- [ ] Stage 50% `passed`, hoặc có lý do tài nguyên ghi rõ vì sao dừng ở 30%
+- [ ] `evaluate_causal_forest.py` đã chạy, có Qini kèm CI 500 bootstrap
+- [ ] Độ phân tán điểm CATE đã kiểm, phân biệt rõ "suy biến" với "xếp hạng kém"
+- [ ] Chín file ở bảng A.5 đã cập nhật đồng bộ
+- [ ] `pytest tests -q` vẫn pass
+
+---
+
+## 3. Phần B — Vòng cải tiến mới
+
+Ba hướng dưới đây xếp theo giá trị kỳ vọng. Không bắt buộc làm cả ba.
+
+### B.1 Vòng `visit` đầy đủ — giá trị cao nhất
+
+**Nội dung.** Chạy lại đúng protocol Sprint 3 với `outcome = visit`: full development
+pool, hai fold seed 101/202, 3-fold cross-fitting, retrospective confirmation, cùng bộ
+metric và cùng promotion rule.
+
+**Căn cứ.** Diemert et al., AdKDD 2018 — chính nhóm tạo dataset — khuyến nghị dùng
+`visit` thay `conversion` vì tín hiệu uplift của `conversion` quá yếu. Screening 20% đã
+xác nhận bằng số: 4/6 thách thức trở nên không phân biệt được với Response.
+
+**Ba điều bắt buộc phát biểu khi báo cáo.**
+
+1. Đây là **estimand khác**, trả lời câu hỏi khác: quảng cáo có gây ra lượt truy cập,
+   không phải có gây ra đơn hàng. Không được trình bày như "đã cải tiến model
+   conversion".
+2. Dùng `visit` làm **outcome** là hợp lệ. Dùng `visit` làm **feature** vẫn là leakage
+   và vẫn bị cấm. Ranh giới này không được nhoè.
+3. Ở screening, ngay trên `visit` cũng **không có model nào thắng** Response — chỉ hoà.
+   Nên kết quả kỳ vọng là *phép so sánh mạnh hơn*, không phải *xếp hạng tốt hơn*.
+
+**Vì sao đáng làm dù nhiều khả năng vẫn không có challenger thắng.** Kết luận thu được
+là: cùng một giao thức, trên `conversion` loại sạch 12 thách thức, trên `visit` cho ra
+hoà. Điều đó chứng minh giao thức **phản ứng đúng với độ mạnh tín hiệu** chứ không phải
+luôn luôn nói không. Đây là bằng chứng mạnh hơn việc tìm được một model nhỉnh hơn 2%.
+
+**Chuẩn bị.** `scripts/run_oof_experiment.py` đã có sẵn cờ `--outcome {conversion,visit}`.
+
+Trước khi chạy phải tạo và đăng ký một file protocol mới trong `configs/`, đặt tên
+next_round_visit_protocol.json, sao theo mẫu `configs/sprint3_improvement_protocol.json`
+với hai thay đổi: `estimand.outcome` thành `visit`, và `estimand.excluded_post_treatment`
+vẫn giữ `visit` — vì nó bị loại ở vai trò **feature**, độc lập với việc nó được dùng làm
+outcome. File này **chưa tồn tại**; tạo nó là hành động mở vòng.
+
+### B.2 Tầng quyết định
+
+Metric chính là `policy_area_dr` trên dải budget 1–30%. Champion đã cố định, dư địa nằm
+ở chỗ **dùng điểm số thế nào**:
+
+- Hiệu chuẩn điểm thành giá trị gia tăng kỳ vọng trên mỗi khách hàng, để chọn budget
+  theo kinh tế thay vì theo phân vị. Break-even hiện có: `0,009059`.
+- Chính sách theo phân khúc thay vì một ngưỡng top-k duy nhất.
+
+Hướng này không đụng vào trần thông tin của `conversion` nên không bị chặn bởi lý do ở
+mục 1.
+
+**Ràng buộc.** Mọi output value/cost vẫn là **kịch bản giả định**, không phải lợi nhuận
+thực. Câu này đã có trong `report/SPRINT_2_FINAL_REPORT.md` và phải giữ.
+
+### B.3 Chỉ ra chỗ Response xếp sai
+
+Chẩn đoán proxy-ordering trong repo **không đạt điều kiện ở mọi mức `beta_max`**
+(`output/improvement/proxy_diagnostic/`). Về lý thuyết không có bảo đảm Response xếp
+hạng đúng, dù thực nghiệm nó thắng. `theta_max = 0,886` đến từ 1.313 dòng, tức 0,023%
+dữ liệu — nền thống kê rất mỏng, phải nói rõ khi trích.
+
+Việc cần làm: xác định *phân khúc nào* Response xếp sai, từ đó thử một chính sách lai —
+xếp theo Response nhưng loại phân khúc có dấu hiệu hiệu ứng âm.
+
+Đây là hướng rủi ro nhất trong ba hướng và cũng là hướng duy nhất có thể cải thiện thật
+sự chất lượng xếp hạng trên `conversion`.
+
+---
+
+## 4. Ba hướng không làm
+
+| Hướng | Lý do loại |
+|---|---|
+| Thêm meta-learner mới trên `conversion` | 12 candidate, 0/12 sống sót. Cái thứ 13 không đổi được kết luận |
+| Tune hyperparameter trên `conversion` | Nút thắt là 4.063 control conversion, không phải dung lượng model |
+| Deep learning cho CATE | Thêm variance, đúng chiều ngược với lập luận bias–variance của Fernández-Loría & Provost |
+
+Ghi ở đây để lần sau không phải tranh luận lại. Nếu muốn mở lại một trong ba, phải nêu
+bằng chứng mới chứ không nêu lại kỳ vọng cũ.
+
+---
+
+## 5. Quy tắc áp dụng cho cả hai phần
+
+Không có ngoại lệ nào so với Sprint 3:
+
+- Đăng ký protocol, metric, gate và promotion rule **trước** khi chạy.
+- Không tune thêm trên test Sprint 1.
+- Không đổi metric sau khi xem kết quả. Metric chính là `policy_area_dr`;
+  Qini/AUUC/AUTOC/calibration là bằng chứng phụ.
+- Mọi claim "A hơn B" phải kèm paired CI.
+- Confirmation Sprint 2 đã bị quan sát ở Sprint 2 và Sprint 3; mọi vòng mới trên tập đó
+  phải gọi là **retrospective confirmation**.
+- Mọi run phải ghi vào `output/improvement/registry.csv`, kể cả run thất bại.
+- Trước khi hiện thực phương pháp mới, đối chiếu `RESEARCH_LANDSCAPE_2026.md`. Nguồn ở
+  mức xác minh `C` không được hiện thực; phải nâng lên `A` trước.
+- Resource gate: `min_available_ram_gb = 2,0`, `max_system_memory_percent = 75`. Ở
+  Sprint 3, RAM khả dụng đã tụt xuống 1,55 GB trong lúc chạy full OOF — gate hiện chỉ
+  kiểm **trước** khi chạy, đây là hạn chế đã biết.
+
+---
+
+## 6. Thứ tự đề nghị
+
+1. **Phần A** — đang chạy, hoàn tất trước. Đây là cam kết cũ.
+2. **B.1** nếu mở vòng mới. Chi phí biết trước, kết luận rõ ràng dù thắng hay hoà.
+3. **B.2** nếu muốn nghiêng về sản phẩm.
+4. **B.3** chỉ khi chấp nhận rủi ro không ra kết quả.
+
+Không chạy song song B.1 và B.3: cả hai đều đụng full development pool và resource gate
+cấm `no_parallel_full_data_runs`.

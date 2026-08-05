@@ -1,0 +1,46 @@
+{
+  "protocol_id": "sprint3-improvement-v1",
+  "stage": "screen",
+  "outcome": "visit",
+  "created_utc": "2026-08-05T01:00:34.678462+00:00",
+  "development_index_sha256": "1eb89c741d84c2bb8726a8b977fd83f514702681407af96753a0cbbe2fbeb157",
+  "pool_fraction": 0.2,
+  "pool_seed": 77,
+  "fold_seed": 101,
+  "n_folds": 3,
+  "propensity": 0.850000044708043,
+  "arm_counts": {
+    "n_rows": 1118367,
+    "n_treated": 950612,
+    "n_control": 167755,
+    "n_conversion_treated": 46207,
+    "n_conversion_control": 6414
+  },
+  "budget_grid": [
+    0.01,
+    0.02,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3
+  ],
+  "n_boot": 200,
+  "nuisance_seconds": 54.01578460000019,
+  "peak_process_rss_gb": 1.1726837158203125,
+  "min_system_available_ram_gb": 3.8977928161621094,
+  "elapsed_seconds": 806.0446445941925,
+  "candidates_completed": [
+    "DR-Binary",
+    "R-Binary",
+    "Response",
+    "S-Under7",
+    "T-Under7",
+    "X-Renormalized"
+  ],
+  "random_policy_area_mean": 0.0010969760566175541,
+  "random_policy_area_std": 0.0001177052034949501,
+  "expected_random_mean_effect": 0.007235108709486725,
+  "scope_note": "Development pool OOF only. Confirmation Sprint 2 khong duoc doc o buoc nay."
+}

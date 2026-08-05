@@ -1,0 +1,86 @@
+name: tests
+
+# Chạy phần test không cần dữ liệu Criteo local.
+#
+# Phạm vi: 98/139 test. Ba file bị loại vì cần
+# data/criteo-research-uplift-v2.1.csv.gz (khoảng 300 MB nén, không commit):
+#   tests/test_data.py       — data contract và split trên dữ liệu thật
+#   tests/test_baselines.py  — fit model trên mẫu Criteo
+#   tests/test_webapp.py     — cần artifact release và champion scorer
+#
+# CI xanh vì thế **không** thay thế được lần chạy đầy đủ trên máy có dữ liệu. Trước khi
+# phát hành phải chạy `pytest tests -q` đầy đủ cộng hai acceptance test trình duyệt.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  data-free-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Show resolved versions
+        run: |
+          python -c "import numpy, scipy, sklearn, lightgbm, econml, pandas; [print(f'{m.__name__:14s} {m.__version__}') for m in (numpy, scipy, sklearn, lightgbm, econml, pandas)]"
+
+      - name: Run data-free tests
+        run: |
+          pytest tests -q \
+            --ignore=tests/test_data.py \
+            --ignore=tests/test_baselines.py \
+            --ignore=tests/test_webapp.py
+
+      - name: Check internal documentation links
+        run: |
+          python - <<'PY'
+          import pathlib, posixpath, re, sys
+
+          # Nam tai lieu huong dan co y khong publish (xem .gitignore). Link tro toi
+          # chung khong phai loi tai lieu — bo qua dung nam duong dan nay, khong noi
+          # long check cho truong hop khac. `pytest tests/test_documentation_integrity.py`
+          # van kiem day du tren may co full working tree.
+          UNPUBLISHED = {
+              'docs/PROJECT_GUIDE.md',
+              'docs/COMPONENT_REVIEW_GUIDE.md',
+              'docs/NOTEBOOK_GUIDE.md',
+              'docs/KAGGLE_RUNBOOK_COMPLETE.md',
+              'docs/WEBAPP.md',
+          }
+
+          docs = [p for p in pathlib.Path('.').rglob('*.md') if '.venv' not in p.parts]
+          broken, skipped = [], 0
+          for p in docs:
+              text = p.read_text(encoding='utf-8', errors='replace')
+              for m in re.finditer(r'\[([^\]]*)\]\(([^)]+)\)', text):
+                  target = m.group(2).split('#')[0].strip()
+                  if not target or target.startswith(('http', 'mailto')):
+                      continue
+                  if (p.parent / target).exists():
+                      continue
+                  resolved = posixpath.normpath((p.parent / target).as_posix())
+                  if resolved in UNPUBLISHED:
+                      skipped += 1
+                      continue
+                  broken.append(f'{p.as_posix()} -> {target}')
+          print(f'{len(docs)} markdown files checked, '
+                f'{len(broken)} broken links, {skipped} unpublished targets skipped')
+          for item in broken:
+              print('  BROKEN', item)
+          sys.exit(1 if broken else 0)
+          PY

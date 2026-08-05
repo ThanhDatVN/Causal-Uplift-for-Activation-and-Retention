@@ -1,0 +1,2 @@
+stage,model_a,model_b,policy_area_difference,policy_area_ci_low,policy_area_ci_high,policy_area_probability_positive,autoc_difference,autoc_ci_low,autoc_ci_high,autoc_probability_positive,n_boot
+smoke,T-Under7,Response,1.812784153436915e-05,-0.0001271184005717597,0.00013842134977667218,0.55,0.0006711857274794605,-0.0006002812896629828,0.0026507934569134956,0.7,20

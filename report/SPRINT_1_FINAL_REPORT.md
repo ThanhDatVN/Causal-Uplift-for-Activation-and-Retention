@@ -4,9 +4,9 @@
 **Bài toán:** Nhắm mục tiêu khuyến mãi bằng hiệu ứng tăng thêm do can thiệp (*Causal Uplift Targeting*)
 **Kết quả chính thức:** `output/sprint1/` và `output/optimization/*sprint1_release*`
 
-> Đây là nguồn kết quả chính thức của Sprint 1. Các báo cáo cũ trong `report/week-01/`,
+> Đây là nguồn kết quả chính thức của Sprint 1. Các báo cáo cũ trong `report/archive/week-01/`,
 > notebook hoặc dashboard có thể chứa kết quả thăm dò trước khi chạy lại và không được
-> dùng để báo cáo mentor/CV.
+> dùng làm kết quả chính thức của dự án.
 
 ## 1. Sprint 1 giải quyết điều gì?
 
@@ -140,7 +140,7 @@ giá trị policy.
 Artifacts:
 
 - `output/optimization/final_test_results_sprint1_release_5models.csv`
-- `output/optimization/qini_comparison_sprint1.csv`
+- `output/qini_comparison_sprint1.csv`
 - `output/sprint1/model_pairwise_bootstrap_release.csv`
 - `output/sprint1/model_qini_bootstrap_draws_release.csv`
 
@@ -194,11 +194,11 @@ trực tiếp** cho `econml.CausalForestDML`; nút thắt là CPU và system RAM
 1. Đọc RAM/CPU live của session.
 2. Chạy profile `kaggle-safe` ở 20%; chỉ tiếp tục nếu peak RAM <75% RAM khả dụng.
 3. Chạy 30%; lặp lại điều kiện.
-4. Mới chạy 50% với `inference=False`, 200 cây, CV=2, `max_samples=0.25`.
+4. Mới chạy 50% với `inference=False`, 200 cây, cross-validation 2-fold, `max_samples=0.25`.
 5. Nếu không đạt, dừng ở 20–30% và báo cáo learning curve; không mua Colab Pro chỉ để
    ép chạy một model chưa chứng minh mang lại thêm giá trị.
 
-Chi tiết: `docs/KAGGLE_CAUSAL_FOREST.md` và
+Chi tiết: `docs/archive/KAGGLE_CAUSAL_FOREST.md` và
 `output/sprint1/causal_forest_feasibility.json`.
 
 ## 9. Definition of Done

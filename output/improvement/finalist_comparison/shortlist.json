@@ -1,0 +1,153 @@
+{
+  "protocol_id": "sprint3-improvement-v1",
+  "created_utc": "2026-08-04T20:31:32.617341+00:00",
+  "run_dirs": [
+    "output\\improvement\\finalist",
+    "output\\improvement\\finalist_seed202"
+  ],
+  "budget_grid": [
+    0.01,
+    0.02,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3
+  ],
+  "n_boot": 200,
+  "shortlist": [
+    "Response",
+    "X-Renormalized",
+    "Ensemble-BestSingle",
+    "Ensemble-QAgg",
+    "Ensemble-RankAverage",
+    "S-Under7"
+  ],
+  "reference_models": [
+    "Response",
+    "X-Renormalized"
+  ],
+  "ranking_by_policy_area_dr": [
+    "Response",
+    "Ensemble-BestSingle",
+    "X-Renormalized",
+    "Ensemble-QAgg",
+    "Ensemble-RankAverage",
+    "S-Under7",
+    "Rank-K2",
+    "Rank-K1",
+    "Rank-K05"
+  ],
+  "ensembles": {
+    "Ensemble-QAgg@seed101": {
+      "method": "causal_q_aggregation",
+      "full_sample_weights": {
+        "X-Renormalized": 0.5,
+        "S-Under7": 0.5
+      },
+      "fold_weights": [
+        {
+          "X-Renormalized": 0.5,
+          "S-Under7": 0.5
+        },
+        {
+          "X-Renormalized": 0.5,
+          "S-Under7": 0.5
+        }
+      ],
+      "candidate_dr_losses": {
+        "X-Renormalized": 0.014482246251341448,
+        "S-Under7": 0.014482345604959018
+      }
+    },
+    "Ensemble-BestSingle@seed101": {
+      "method": "best_single_dr_risk",
+      "full_sample_weights": {
+        "X-Renormalized": 1.0,
+        "S-Under7": 0.0
+      },
+      "fold_weights": [
+        {
+          "X-Renormalized": 1.0,
+          "S-Under7": 0.0
+        },
+        {
+          "X-Renormalized": 1.0,
+          "S-Under7": 0.0
+        }
+      ],
+      "candidate_dr_losses": {
+        "X-Renormalized": 0.014482246251341448,
+        "S-Under7": 0.014482345604959018
+      }
+    },
+    "Ensemble-RankAverage@seed101": {
+      "method": "rank_average",
+      "members": [
+        "Rank-K05",
+        "Rank-K1",
+        "Rank-K2",
+        "Response",
+        "S-Under7",
+        "X-Renormalized"
+      ],
+      "note": "Heuristic thu hang; khong co bao dam ly thuyet cua Q-aggregation. Gop duoc ca ranking score."
+    },
+    "Ensemble-QAgg@seed202": {
+      "method": "causal_q_aggregation",
+      "full_sample_weights": {
+        "X-Renormalized": 0.5,
+        "S-Under7": 0.5
+      },
+      "fold_weights": [
+        {
+          "X-Renormalized": 0.5,
+          "S-Under7": 0.5
+        },
+        {
+          "X-Renormalized": 0.5,
+          "S-Under7": 0.5
+        }
+      ],
+      "candidate_dr_losses": {
+        "X-Renormalized": 0.014607732236579875,
+        "S-Under7": 0.01460846703384879
+      }
+    },
+    "Ensemble-BestSingle@seed202": {
+      "method": "best_single_dr_risk",
+      "full_sample_weights": {
+        "X-Renormalized": 1.0,
+        "S-Under7": 0.0
+      },
+      "fold_weights": [
+        {
+          "X-Renormalized": 1.0,
+          "S-Under7": 0.0
+        },
+        {
+          "X-Renormalized": 1.0,
+          "S-Under7": 0.0
+        }
+      ],
+      "candidate_dr_losses": {
+        "X-Renormalized": 0.014607732236579875,
+        "S-Under7": 0.01460846703384879
+      }
+    },
+    "Ensemble-RankAverage@seed202": {
+      "method": "rank_average",
+      "members": [
+        "Rank-K05",
+        "Rank-K1",
+        "Rank-K2",
+        "Response",
+        "S-Under7",
+        "X-Renormalized"
+      ],
+      "note": "Heuristic thu hang; khong co bao dam ly thuyet cua Q-aggregation. Gop duoc ca ranking score."
+    }
+  },
+  "note": "Shortlist duoc chot trước khi doc confirmation. Khong duoc them candidate sau khi xem ket qua confirmation."
+}

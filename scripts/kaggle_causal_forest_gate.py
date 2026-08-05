@@ -108,9 +108,15 @@ def main():
     stage_dir = args.output_root / f"preflight_{_slug(args.frac)}"
     stage_dir.mkdir(parents=True, exist_ok=True)
     log_path = stage_dir / "train.log"
+    # Đường dẫn tuyệt đối suy ra từ vị trí của chính file này. Dùng đường dẫn
+    # tương đối sẽ hỏng ngay khi gate được gọi từ thư mục khác repo root, đúng
+    # trường hợp mặc định trên Kaggle (`cwd = /kaggle/working`).
+    trainer = Path(__file__).resolve().parent / "train_causal_forest.py"
+    if not trainer.exists():
+        raise FileNotFoundError(f"Không tìm thấy trainer: {trainer}")
     command = [
         sys.executable,
-        "scripts/train_causal_forest.py",
+        str(trainer),
         "--data-path",
         str(args.data_path),
         "--frac",

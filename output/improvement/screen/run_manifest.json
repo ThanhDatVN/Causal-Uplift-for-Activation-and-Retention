@@ -1,0 +1,51 @@
+{
+  "protocol_id": "sprint3-improvement-v1",
+  "stage": "screen",
+  "created_utc": "2026-08-04T18:17:44.901663+00:00",
+  "development_index_sha256": "7a68c9c4452d2b83114ce30a06b5e5fef6b50b089c045eac8601432cc60db3af",
+  "pool_fraction": 0.2,
+  "pool_seed": 77,
+  "fold_seed": 101,
+  "n_folds": 3,
+  "propensity": 0.850000044708043,
+  "arm_counts": {
+    "n_rows": 1118367,
+    "n_treated": 950612,
+    "n_control": 167755,
+    "n_conversion_treated": 2937,
+    "n_conversion_control": 325
+  },
+  "budget_grid": [
+    0.01,
+    0.02,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3
+  ],
+  "n_boot": 300,
+  "nuisance_seconds": 27.667876600000454,
+  "peak_process_rss_gb": 1.2920799255371094,
+  "min_system_available_ram_gb": 3.2494354248046875,
+  "elapsed_seconds": 1353.1797516345978,
+  "candidates_completed": [
+    "DR-Binary",
+    "DR-Binary-MC2",
+    "DR-Regression",
+    "R-Binary",
+    "R-Regression",
+    "Rank-K05",
+    "Rank-K1",
+    "Rank-K2",
+    "Response",
+    "S-Under7",
+    "T-Under7",
+    "X-Renormalized"
+  ],
+  "random_policy_area_mean": 0.00014974086250384052,
+  "random_policy_area_std": 3.233652015414191e-05,
+  "expected_random_mean_effect": 0.000932200502479266,
+  "scope_note": "Development pool OOF only. Confirmation Sprint 2 khong duoc doc o buoc nay."
+}

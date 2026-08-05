@@ -17,7 +17,14 @@ seaborn>=0.13
 jupyterlab
 ipykernel
 psutil                  # cho benchmark harness do RAM
+joblib>=1.4             # luu champion scorer cho web app (di kem scikit-learn)
 pytest                   # chay tests/ - doi chieu qini_curve voi sklift
+
+# Web application (webapp/): API doc artifact release, khong train khi nhan request.
+fastapi>=0.115
+uvicorn[standard]>=0.32
+python-multipart>=0.0.9  # bat buoc cho upload CSV o /api/score/csv
+httpx>=0.27              # fastapi.testclient dung trong tests/test_webapp.py
 
 causalml==0.17.0        # optional (doi chieu them ngoai econml+sklift) — da verify cai thanh cong
                           # 2026-07-21 tren Python 3.12 Windows qua wheel prebuilt cp312-win_amd64,

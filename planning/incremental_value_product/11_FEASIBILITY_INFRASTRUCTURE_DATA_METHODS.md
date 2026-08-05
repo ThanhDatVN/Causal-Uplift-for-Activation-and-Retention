@@ -46,9 +46,9 @@ không được làm trễ data/product/release P0.
 | `lifetimes`, `openpyxl` | Có | BG/NBD/Gamma-Gamma + xlsx |
 | `pymc-marketing` | Chưa có | Week 2 Bayesian challenger, optional |
 | `pyarrow` | Chưa có | P0: parquet artifact/cache |
-| `duckdb` | Chưa có | P0: DA SQL marts local |
+| `duckdb` | Chưa có | P0: SQL marts local |
 | `streamlit` | Chưa có | P0: dashboard Week 4 |
-| `fastapi`, `pydantic` | FastAPI chưa có | Conditional AI Engineer extension |
+| `fastapi`, `pydantic` | FastAPI chưa có | API extension có điều kiện |
 
 Không cài toàn bộ ngay. Tạo optional dependency groups, lock environment, rồi chỉ cài group của phase
 đang làm. Điều này giảm conflict giữa causal environment và Bayesian/app dependencies.
@@ -73,7 +73,7 @@ Không cài toàn bộ ngay. Tạo optional dependency groups, lock environment,
 4. **Colab paid/Pro/Pay-as-you-go:** chỉ mua khi 30% preflight thành công nhưng 50% cần để chốt causal
    challenger và free tier không cấp đủ RAM. Kiểm tra `psutil.virtual_memory()` sau khi runtime khởi động;
    dừng nếu profile không đạt. Không mua vì giả định “Pro = 51 GB”.
-5. **Dedicated cloud:** chỉ cân nhắc khi muốn guaranteed hardware; vượt scope portfolio 5 tuần và không
+5. **Dedicated cloud:** chỉ cân nhắc khi muốn guaranteed hardware; vượt scope dự án 5 tuần và không
    cần thiết cho v1.0.
 
 ### Giao thức chạy thử Causal Forest (Causal Forest Preflight Protocol)
@@ -124,7 +124,7 @@ manifest/hash trong bảng trên là bắt buộc. [Criteo source](https://ailab
 ### Online Retail II
 
 **Phù hợp với:** non-contractual transaction forecasting, RFM, cohort behavior, rolling temporal CLV
-validation, data-quality/SQL portfolio.
+validation và data-quality/SQL analysis.
 
 **Thuộc tính dữ liệu:** UCI ghi 1.067.371 transactions trong hai năm, UK online retailer, có invoice/time/customer
 and unit price; đủ trường dữ liệu cho data engineering và forecasting.
@@ -210,7 +210,7 @@ solver/runtime risk must not break causal release.
 
 ## 7. Khuyến nghị cuối (Final Recommendation)
 
-1. **Không mua Colab Pro hôm nay.** Bắt đầu C1–Week 2 local; đó là phần tạo portfolio value lớn nhất.
+1. **Không mua Colab Pro hôm nay.** Bắt đầu C1–Week 2 local; đó là phần tạo giá trị kỹ thuật lớn nhất.
 2. **Causal forest:** use free Colab preflight first. Nếu free/paid profile không đủ RAM, scope out có lý do
    và tiếp tục roadmap; không dùng Kaggle GPU làm workaround giả.
 3. **Ưu tiên đầu tư:** `pyarrow + duckdb + streamlit` cho P0; PyMC-Marketing và FastAPI sau khi baseline/

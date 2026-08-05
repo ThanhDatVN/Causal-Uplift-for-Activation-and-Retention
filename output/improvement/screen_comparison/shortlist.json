@@ -1,0 +1,158 @@
+{
+  "protocol_id": "sprint3-improvement-v1",
+  "created_utc": "2026-08-04T18:23:47.824218+00:00",
+  "run_dirs": [
+    "output\\improvement\\screen"
+  ],
+  "budget_grid": [
+    0.01,
+    0.02,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3
+  ],
+  "n_boot": 200,
+  "shortlist": [
+    "Response",
+    "X-Renormalized",
+    "Ensemble-QAgg",
+    "Rank-K05",
+    "Rank-K1",
+    "Rank-K2"
+  ],
+  "reference_models": [
+    "Response",
+    "X-Renormalized"
+  ],
+  "ranking_by_policy_area_dr": [
+    "Response",
+    "Ensemble-QAgg",
+    "Rank-K05",
+    "Rank-K1",
+    "X-Renormalized",
+    "Rank-K2",
+    "Ensemble-BestSingle",
+    "S-Under7",
+    "DR-Regression",
+    "DR-Binary-MC2",
+    "DR-Binary",
+    "R-Binary",
+    "Ensemble-RankAverage",
+    "R-Regression",
+    "T-Under7"
+  ],
+  "ensembles": {
+    "Ensemble-QAgg@seed101": {
+      "method": "causal_q_aggregation",
+      "full_sample_weights": {
+        "X-Renormalized": 1.637578961322103e-15,
+        "S-Under7": 0.9999999999999982,
+        "T-Under7": 7.400109746543206e-17,
+        "DR-Regression": 7.802253903623663e-17,
+        "DR-Binary": 0.0,
+        "DR-Binary-MC2": 0.0,
+        "R-Regression": 5.901895496175642e-17,
+        "R-Binary": 3.756865348240244e-17
+      },
+      "fold_weights": [
+        {
+          "X-Renormalized": 0.4967800532823507,
+          "S-Under7": 0.5032199467176492,
+          "T-Under7": 0.0,
+          "DR-Regression": 0.0,
+          "DR-Binary": 0.0,
+          "DR-Binary-MC2": 0.0,
+          "R-Regression": 3.399549701871978e-19,
+          "R-Binary": 0.0
+        },
+        {
+          "X-Renormalized": 1.9428902930940235e-16,
+          "S-Under7": 0.9999999999999998,
+          "T-Under7": 0.0,
+          "DR-Regression": 0.0,
+          "DR-Binary": 1.0494923934268503e-17,
+          "DR-Binary-MC2": 8.49784507443697e-18,
+          "R-Regression": 0.0,
+          "R-Binary": 0.0
+        }
+      ],
+      "candidate_dr_losses": {
+        "X-Renormalized": 0.014814882135528111,
+        "S-Under7": 0.014813311558314552,
+        "T-Under7": 0.014850017177972068,
+        "DR-Regression": 0.01484834069895924,
+        "DR-Binary": 0.014852612128611817,
+        "DR-Binary-MC2": 0.014852957119864446,
+        "R-Regression": 0.014850273473885303,
+        "R-Binary": 0.014854141441877964
+      }
+    },
+    "Ensemble-BestSingle@seed101": {
+      "method": "best_single_dr_risk",
+      "full_sample_weights": {
+        "X-Renormalized": 0.0,
+        "S-Under7": 1.0,
+        "T-Under7": 0.0,
+        "DR-Regression": 0.0,
+        "DR-Binary": 0.0,
+        "DR-Binary-MC2": 0.0,
+        "R-Regression": 0.0,
+        "R-Binary": 0.0
+      },
+      "fold_weights": [
+        {
+          "X-Renormalized": 0.0,
+          "S-Under7": 1.0,
+          "T-Under7": 0.0,
+          "DR-Regression": 0.0,
+          "DR-Binary": 0.0,
+          "DR-Binary-MC2": 0.0,
+          "R-Regression": 0.0,
+          "R-Binary": 0.0
+        },
+        {
+          "X-Renormalized": 0.0,
+          "S-Under7": 1.0,
+          "T-Under7": 0.0,
+          "DR-Regression": 0.0,
+          "DR-Binary": 0.0,
+          "DR-Binary-MC2": 0.0,
+          "R-Regression": 0.0,
+          "R-Binary": 0.0
+        }
+      ],
+      "candidate_dr_losses": {
+        "X-Renormalized": 0.014814882135528111,
+        "S-Under7": 0.014813311558314552,
+        "T-Under7": 0.014850017177972068,
+        "DR-Regression": 0.01484834069895924,
+        "DR-Binary": 0.014852612128611817,
+        "DR-Binary-MC2": 0.014852957119864446,
+        "R-Regression": 0.014850273473885303,
+        "R-Binary": 0.014854141441877964
+      }
+    },
+    "Ensemble-RankAverage@seed101": {
+      "method": "rank_average",
+      "members": [
+        "DR-Binary",
+        "DR-Binary-MC2",
+        "DR-Regression",
+        "R-Binary",
+        "R-Regression",
+        "Rank-K05",
+        "Rank-K1",
+        "Rank-K2",
+        "Response",
+        "S-Under7",
+        "T-Under7",
+        "X-Renormalized"
+      ],
+      "note": "Heuristic thu hang; khong co bao dam ly thuyet cua Q-aggregation. Gop duoc ca ranking score."
+    }
+  },
+  "note": "Shortlist duoc chot trước khi doc confirmation. Khong duoc them candidate sau khi xem ket qua confirmation."
+}

@@ -152,9 +152,9 @@ node scripts\smoke_dashboard_browser.mjs
 
 ## 7. Causal Forest
 
-Profile `kaggle-safe` dùng 200 trees, CV=2, `max_samples=0.25`,
+Profile `kaggle-safe` dùng 200 trees, cross-validation 2-fold, `max_samples=0.25`,
 `inference=False`. Vì inference tắt để giảm tài nguyên, `effect_interval()` không phải
 Definition of Done của profile này. Local 0,1% chỉ là code-path smoke; kết quả nghiên cứu
 chỉ tồn tại sau Kaggle gates 20% → 30% → 50%.
 
-Xem [KAGGLE_CAUSAL_FOREST.md](KAGGLE_CAUSAL_FOREST.md).
+Xem [KAGGLE_CAUSAL_FOREST.md](archive/KAGGLE_CAUSAL_FOREST.md).

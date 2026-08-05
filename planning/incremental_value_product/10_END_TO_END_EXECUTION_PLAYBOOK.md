@@ -5,8 +5,8 @@
 > evidence cụ thể.
 >
 > Các file còn lại trong thư mục này là tài liệu tham chiếu: product (`01`), research (`02`), architecture
-> (`03`), experiment protocol (`04`), schedule (`05`), reading (`06`), portfolio (`07`), source audit
-> (`08`) và release standard (`09`).
+> (`03`), experiment protocol (`04`), schedule (`05`), reading (`06`), source audit (`08`)
+> và feasibility (`11`).
 
 ## 0. Đích đến và định nghĩa thành công
 
@@ -21,15 +21,15 @@ Không phải một dashboard “dự đoán ai sẽ mua”; không phải một
 
 ### Evidence cuối cần có
 
-| Bằng chứng | Ý nghĩa | Đối tượng thấy kỹ năng |
+| Bằng chứng | Ý nghĩa | Giá trị kiểm chứng |
 |---|---|---|
-| Data card + SQL/cleaning audit | Hiểu dữ liệu, grain, limitation và metric | DA, DS |
-| Temporal CLV validation | Biết forecast tương lai mà không leakage | DS |
-| Causal/policy evaluation trên RCT | Biết đo tác động tăng thêm, không nhầm correlation với causation | DS, DA |
-| Semi-synthetic recovery | Có ground truth để test integration iCLV | DS, AI/ML Engineer |
-| Dashboard có scenario + CSV export | Biến analysis thành quyết định sử dụng được | DA, DS |
-| Package, tests, Docker, CI, provenance | Biến model thành software tái lập được | AI/ML Engineer |
-| Report, video, decision log | Giải thích được trade-off và limitation | Cả ba |
+| Data card + SQL/cleaning audit | Hiểu dữ liệu, grain, limitation và metric | Kiểm tra input và data-quality rule |
+| Temporal CLV validation | Forecast tương lai mà không leakage | Kiểm tra khả năng dự báo ngoài thời gian |
+| Causal/policy evaluation trên RCT | Đo tác động tăng thêm, không nhầm correlation với causation | Kiểm tra policy trên holdout |
+| Semi-synthetic recovery | Có ground truth để test integration iCLV | Kiểm tra khả năng khôi phục effect/policy đã biết |
+| Dashboard có scenario + CSV export | Biến analysis thành quyết định sử dụng được | Kiểm tra output theo budget/cost/horizon |
+| Package, tests, Docker, CI, provenance | Biến model thành software tái lập được | Kiểm tra release trên môi trường khác |
+| Report, video, decision log | Giải thích được trade-off và limitation | Kiểm tra claim khớp artifact |
 
 ### Thành công là gì?
 
@@ -63,7 +63,7 @@ application**.
 ## 2. Giai đoạn 0 (Phase 0) — Đóng dự án causal hiện tại (giới hạn 2–3 ngày)
 
 Không bắt đầu probabilistic/iCLV khi causal cũ chưa có release độc lập. Mục tiêu là có một checkpoint
-để recruiter và chính bạn có thể đánh giá causal project mà không phụ thuộc roadmap sau này.
+để causal project có thể được đánh giá độc lập mà không phụ thuộc roadmap sau này.
 
 Trước Day C1, đọc [`11_FEASIBILITY_INFRASTRUCTURE_DATA_METHODS.md`](11_FEASIBILITY_INFRASTRUCTURE_DATA_METHODS.md)
 và qua remote-compute preflight. Causal Forest 50% không được xem là điều kiện release nếu hạ tầng không
@@ -442,7 +442,7 @@ Chỉ chuyển sang causal monetary value nếu bạn trả lời được bằn
 
 > Dashboard có thể được bảo trì/kiểm thử như software; result không phụ thuộc vào notebook state.
 
-### Ngày 24 (Day 24) — Triển khai (Deployment) và mở rộng AI Engineer
+### Ngày 24 (Day 24) — Triển khai (Deployment) và API tùy chọn
 
 **P0 bắt buộc**
 
@@ -468,9 +468,9 @@ Chỉ chuyển sang causal monetary value nếu bạn trả lời được bằn
 | 25 | Freeze model/config/protocol; mở final holdout đúng một lần | Final holdout là confirmatory, không là tuning set | immutable final run | headline đã được xác nhận hoặc negative result |
 | 26 | Bootstrap, paired policy comparison, seed/cutoff/cost/horizon sensitivity | CI không thay effect size; robustness không phải cherry-picking | robustness report | kết quả ổn định hay fragile ở đâu |
 | 27 | Viết technical report, data/model cards, source citations, limitations | Claim phải match evidence level | technical report | reader phân biệt real/forecast/synthetic |
-| 28 | README, architecture diagram, GIF, executive case study, quickstart | Communication là phần của product | public repo docs | recruiter hiểu value trong 15 giây |
+| 28 | README, architecture diagram, GIF, decision case study, quickstart | Communication là phần của product | release docs | người đọc hiểu mục tiêu, evidence và giới hạn |
 | 29 | Record video 2–3 phút, slide 8–10 trang, prep Q&A | Demo kể decision → evidence → limitation → next action | video/deck/script | bạn giải thích được trade-off thay vì đọc code |
-| 30 | Fresh-machine Docker reproduction, release scorecard, tag `v1.0` | “works on my machine” không phải reproducibility | release, checklist, changelog | portfolio artifact có thể review độc lập |
+| 30 | Fresh-machine Docker reproduction, release scorecard, tag `v1.0` | “works on my machine” không phải reproducibility | release, checklist, changelog | release có thể review độc lập |
 
 ## 8. Checklist phát hành cuối (Final Release Checklist)
 
@@ -484,14 +484,14 @@ Chỉ chuyển sang causal monetary value nếu bạn trả lời được bằn
 - [ ] Semi-synthetic truth và real-data evidence tách label rõ.
 - [ ] Mọi candidate không đạt gate được ghi cùng metric và điều kiện dừng.
 
-### Product / DA
+### Product
 
 - [ ] Dashboard 5 screens chạy với sample mode trong dưới 60 giây workflow.
 - [ ] SQL marts, metric dictionary và data-quality audit có trong repo.
 - [ ] Scenario changes dẫn đến policy/action list/export thay đổi có kiểm soát.
 - [ ] KPI có currency, horizon, run ID và limitation ngay trong UI.
 
-### Engineering / AI Engineer
+### Engineering
 
 - [ ] `src/` domain layer tách UI; typed/Pydantic contracts.
 - [ ] Tests: unit, temporal leakage, policy cost/budget, DGP truth, integration smoke.
@@ -499,12 +499,11 @@ Chỉ chuyển sang causal monetary value nếu bạn trả lời được bằn
 - [ ] Artifact manifest, model registry, config và logs có provenance.
 - [ ] Chỉ ghi API/OpenAPI là artifact đã hoàn thành khi FastAPI extension chạy và qua test.
 
-### Portfolio / communication
+### Documentation / communication
 
 - [ ] README có hero statement, screenshot/GIF, architecture, quickstart, result table, limitation.
 - [ ] Case study 1 trang + technical report 10–15 trang.
 - [ ] Video 2–3 phút; slide 8–10 trang; Q&A sheet.
-- [ ] CV dùng metric final trace được; mỗi role dùng bullet khác nhau theo `07`.
 
 ## 9. Mẫu nhật ký quyết định (Decision Log Template, dùng mỗi ngày)
 
@@ -534,7 +533,7 @@ runtime vượt budget; giữ BG/NBD + Gamma-Gamma champion.”
 | Dashboard chậm/chưa ổn | serve precomputed artifacts; không optimize bằng retrain online |
 | Trễ tiến độ | cắt Pareto, FastAPI, Copilot trước; không cắt protocol, tests, app core, report |
 
-## 11. Câu trả lời phỏng vấn cuối dự án
+## 11. Tóm tắt dự án sau khi hoàn thành
 
 > “Tôi bắt đầu từ một causal uplift benchmark và thấy conversion uplift không trả lời được value. Tôi xây
 > forecasting layer có temporal validation trên transaction data, nhưng không fake-join nó với causal
@@ -543,5 +542,5 @@ runtime vượt budget; giữ BG/NBD + Gamma-Gamma champion.”
 > có scenario, action export, provenance, Docker và CI. Kết quả không chỉ là một model tốt hơn mà là một
 > quyết định có thể kiểm tra: target ai, dưới budget nào, dựa trên evidence nào và giới hạn gì.”
 
-Nếu bạn nói được đoạn này, mở dashboard và trỏ được từng câu vào artifact/code/report, dự án đã hoàn
-thành đúng mục tiêu portfolio.
+Khi dashboard, artifact và báo cáo cùng hỗ trợ được từng câu trong phần tóm tắt trên, dự án
+được xem là hoàn thành đúng mục tiêu kỹ thuật.

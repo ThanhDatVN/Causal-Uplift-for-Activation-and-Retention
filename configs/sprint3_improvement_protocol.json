@@ -1,0 +1,198 @@
+{
+  "protocol_id": "sprint3-improvement-v1",
+  "registered_utc": "2026-08-05T00:00:00+00:00",
+  "estimand": {
+    "target": "CATE cua conversion tren benchmark Criteo v2.1",
+    "outcome": "conversion",
+    "treatment": "treatment",
+    "features": ["f0", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11"],
+    "excluded_post_treatment": ["visit", "exposure"],
+    "propensity_mode": "fixed_design_constant",
+    "propensity_sensitivity_mode": "fit_fold_treatment_rate"
+  },
+  "data_roles": {
+    "development": "Sprint 2 fit + validation, dung cho cross-fitting OOF",
+    "confirmation": "Sprint 2 confirmation, retrospective_confirmation only",
+    "sprint1_final_test": "historical evidence, khong tai su dung de chon model"
+  },
+  "cross_fitting": {
+    "n_folds": 3,
+    "primary_fold_seed": 101,
+    "secondary_fold_seed": 202,
+    "stratify_on": ["treatment", "conversion"]
+  },
+  "metrics": {
+    "primary": "policy_area_dr",
+    "primary_budget_grid": [0.01, 0.02, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
+    "primary_definition": "trapezoid mean cua DR gross policy value per customer tren dai budget, chia do rong dai",
+    "secondary": [
+      "autoc_dr",
+      "autoc_dr_adjusted",
+      "policy_area_dr_adjusted",
+      "rate_qini_dr",
+      "qini_score",
+      "auuc_score",
+      "uplift_calibration_error",
+      "doubly_robust_risk"
+    ],
+    "comparators": [
+      "treat_none",
+      "expected_random_stochastic_policy",
+      "random_topk_20_seeds",
+      "response_topk",
+      "x_renormalized_topk"
+    ],
+    "inference": "paired percentile bootstrap tren cung OOF rows, n_boot mac dinh 500"
+  },
+  "promotion_rule": {
+    "condition_1": "policy_area_dr OOF cua challenger > Response o ca hai fold seed",
+    "condition_2": "point estimate tren retrospective confirmation cung dau",
+    "condition_3": "paired 95% CI cua chenh lech policy_area_dr co lower bound > 0",
+    "condition_4": "khong regression ve runtime gate, calibration hoac guardrail",
+    "fallback": "giu Response va phat hanh challenger kem CI"
+  },
+  "early_stop": {
+    "constant_score_unique_threshold": 10,
+    "non_finite_score": true,
+    "dominated_at_every_budget_5_to_20": true,
+    "resource_gate_exceeded": true
+  },
+  "resource_gate": {
+    "min_available_ram_gb": 2.0,
+    "max_system_memory_percent": 75.0,
+    "no_parallel_full_data_runs": true
+  },
+  "candidates": [
+    {
+      "name": "Response",
+      "family": "response",
+      "builder": "response",
+      "is_cate_scale": false,
+      "hypothesis": "champion hien tai; reference cho moi so sanh",
+      "params": {}
+    },
+    {
+      "name": "X-Renormalized",
+      "family": "x_learner",
+      "builder": "x_learner",
+      "is_cate_scale": true,
+      "hypothesis": "cau hinh release Sprint 1/2; reference thu hai",
+      "params": {
+        "outcome": "classifier",
+        "propensity": "fixed",
+        "under": 7.0
+      }
+    },
+    {
+      "name": "S-Under7",
+      "family": "s_learner",
+      "builder": "s_learner",
+      "is_cate_scale": true,
+      "hypothesis": "UpliftBench 2026 bao S-Learner manh tren Criteo visit; kiem tra tren conversion",
+      "params": {
+        "outcome": "classifier",
+        "under": 7.0
+      }
+    },
+    {
+      "name": "T-Under7",
+      "family": "t_learner",
+      "builder": "t_learner",
+      "is_cate_scale": true,
+      "hypothesis": "tach anh huong cua outcome model dang classifier khoi X-Learner imputation",
+      "params": {
+        "outcome": "classifier",
+        "under": 7.0
+      }
+    },
+    {
+      "name": "DR-Regression",
+      "family": "dr_learner",
+      "builder": "dr_learner",
+      "is_cate_scale": true,
+      "hypothesis": "DR baseline Sprint 1 voi final stage duoc kiem soat",
+      "params": {
+        "discrete_outcome": false,
+        "cv": 3
+      }
+    },
+    {
+      "name": "DR-Binary",
+      "family": "dr_learner",
+      "builder": "dr_learner",
+      "is_cate_scale": true,
+      "hypothesis": "nuisance dang classifier phu hop outcome nhi phan hiem hon regressor",
+      "params": {
+        "discrete_outcome": true,
+        "cv": 3
+      }
+    },
+    {
+      "name": "DR-Binary-MC2",
+      "family": "dr_learner",
+      "builder": "dr_learner",
+      "is_cate_scale": true,
+      "hypothesis": "trung binh 2 lan cross-fit giam variance cua pseudo-outcome",
+      "params": {
+        "discrete_outcome": true,
+        "cv": 3,
+        "mc_iters": 2
+      }
+    },
+    {
+      "name": "R-Regression",
+      "family": "r_learner",
+      "builder": "r_learner",
+      "is_cate_scale": true,
+      "hypothesis": "Robinson orthogonal loss giam regularization bias so voi T/X",
+      "params": {
+        "discrete_outcome": false,
+        "cv": 3
+      }
+    },
+    {
+      "name": "R-Binary",
+      "family": "r_learner",
+      "builder": "r_learner",
+      "is_cate_scale": true,
+      "hypothesis": "outcome nuisance nhi phan cho R-Learner tren outcome hiem",
+      "params": {
+        "discrete_outcome": true,
+        "cv": 3
+      }
+    },
+    {
+      "name": "Rank-K1",
+      "family": "rank_learner",
+      "builder": "rank_learner",
+      "is_cate_scale": false,
+      "hypothesis": "toi uu truc tiep thu hang thay vi magnitude (ICLR 2026)",
+      "params": {
+        "kappa_scale": 1.0,
+        "cv": 3
+      }
+    },
+    {
+      "name": "Rank-K05",
+      "family": "rank_learner",
+      "builder": "rank_learner",
+      "is_cate_scale": false,
+      "hypothesis": "kappa nho lam soft target sac hon, gan voi hard ranking",
+      "params": {
+        "kappa_scale": 0.5,
+        "cv": 3
+      }
+    },
+    {
+      "name": "Rank-K2",
+      "family": "rank_learner",
+      "builder": "rank_learner",
+      "is_cate_scale": false,
+      "hypothesis": "kappa lon lam muc tieu muot hon, giam variance khi outcome hiem",
+      "params": {
+        "kappa_scale": 2.0,
+        "cv": 3
+      }
+    }
+  ]
+}

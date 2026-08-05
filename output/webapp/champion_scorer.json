@@ -1,0 +1,35 @@
+{
+  "champion": "Response",
+  "family": "response",
+  "params": {},
+  "is_cate_scale": false,
+  "created_utc": "2026-08-05T09:48:30.887868+00:00",
+  "artifact": "champion_scorer.joblib",
+  "artifact_bytes": 629291,
+  "fitted_utc": "2026-08-05T09:48:25.061597+00:00",
+  "n_rows": 5591836,
+  "propensity": 0.8500000715328561,
+  "seed": 42,
+  "fitted_on": "sprint2 development pool (fit + validation)",
+  "development_index_sha256": "8ff1ffcde973cb58df155f942b3f3cf9f386d64c019f18bf51a4df98aeedd476",
+  "config_hash": "2493f3f82d2d833e",
+  "protocol_id": "sprint3-improvement-v1",
+  "environment": {
+    "python_version": "3.12.10",
+    "numpy_version": "2.4.6",
+    "pandas_version": "2.3.3",
+    "sklearn_version": "1.6.1",
+    "lightgbm_version": "4.7.0",
+    "econml_version": "0.16.0"
+  },
+  "score_summary": {
+    "mean": 0.0029210686841578026,
+    "std": 0.020631284875677662,
+    "min": 4.819179710283155e-05,
+    "max": 0.7891158762680348,
+    "unique_count": 322021
+  },
+  "fit_seconds": 33.97008679999999,
+  "score_percentile_points": 788,
+  "scope_note": "Scorer chi nhan 12 feature tien treatment f0..f11. Score la diem uu tien de xep hang, khong phai xac suat conversion ca nhan."
+}

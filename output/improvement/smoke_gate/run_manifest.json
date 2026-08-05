@@ -1,0 +1,41 @@
+{
+  "protocol_id": "sprint3-improvement-v1",
+  "stage": "smoke",
+  "created_utc": "2026-08-05T00:43:22.518378+00:00",
+  "development_index_sha256": "9964afa32aab221278c0fb2cf33bc367c1a088511d3b1c301294084068468d4e",
+  "pool_fraction": 0.005,
+  "pool_seed": 77,
+  "fold_seed": 101,
+  "n_folds": 3,
+  "propensity": 0.8499946350012518,
+  "arm_counts": {
+    "n_rows": 27959,
+    "n_treated": 23765,
+    "n_control": 4194,
+    "n_conversion_treated": 73,
+    "n_conversion_control": 8
+  },
+  "budget_grid": [
+    0.01,
+    0.02,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3
+  ],
+  "n_boot": 20,
+  "nuisance_seconds": 3.2942139000006136,
+  "peak_process_rss_gb": 0.6436614990234375,
+  "min_system_available_ram_gb": 4.914371490478516,
+  "elapsed_seconds": 6.05206298828125,
+  "candidates_completed": [
+    "Response",
+    "T-Under7"
+  ],
+  "random_policy_area_mean": 5.594358332062641e-05,
+  "random_policy_area_std": 0.00017288084874046467,
+  "expected_random_mean_effect": 0.0007856273303656347,
+  "scope_note": "Development pool OOF only. Confirmation Sprint 2 khong duoc doc o buoc nay."
+}

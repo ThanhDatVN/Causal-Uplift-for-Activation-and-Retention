@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Causal Targeting Lab</title>
+<link rel="stylesheet" href="/app.css">
+</head>
+<body data-palette="#2a78d6,#eb6834,#1baf7a,#eda100,#e87ba4">
+
+<header class="topbar">
+  <div class="wrap topbar-row">
+    <div>
+      <p class="kicker">Causal measurement · decision product</p>
+      <h1>Causal Targeting Lab</h1>
+      <p class="subtitle" id="subtitle">Đang tải artifact…</p>
+    </div>
+    <div class="topbar-side">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Đổi giao diện sáng/tối">
+        <span aria-hidden="true">◐</span> <span id="themeLabel">Tối</span>
+      </button>
+      <dl class="meta-grid" id="metaGrid"></dl>
+    </div>
+  </div>
+</header>
+
+<div class="scope-banner wrap" role="note">
+  <strong>Phạm vi kết luận.</strong>
+  Đây là mô phỏng policy offline từ một randomized experiment. Giá trị và chi phí là
+  <em>input kịch bản của người dùng</em>. Criteo không có doanh thu, biên lợi nhuận hay chi phí
+  liên hệ, nên không con số nào ở đây là profit quan sát được.
+</div>
+
+<nav class="tabs wrap" id="tabs" role="tablist">
+  <button role="tab" class="tab is-active" data-panel="overview">Tổng quan</button>
+  <button role="tab" class="tab" data-panel="models">Model</button>
+  <button role="tab" class="tab" data-panel="policy">Policy</button>
+  <button role="tab" class="tab" data-panel="segments">Phân khúc</button>
+  <button role="tab" class="tab" data-panel="scoring">Chấm điểm</button>
+  <button role="tab" class="tab" data-panel="evidence">Bằng chứng</button>
+</nav>
+
+<main class="wrap" id="main">
+
+  <section class="panel is-active" id="panel-overview" role="tabpanel">
+    <div class="stat-row" id="overviewStats"></div>
+    <div class="grid-2">
+      <article class="card">
+        <p class="eyebrow">Quyết định hiện hành</p>
+        <h2>Champion và luật thay champion</h2>
+        <div id="championBlock"></div>
+      </article>
+      <article class="card">
+        <p class="eyebrow">Trạng thái từng sprint</p>
+        <h2>Đường đi của bằng chứng</h2>
+        <div id="sprintBlock"></div>
+      </article>
+    </div>
+    <article class="card">
+      <p class="eyebrow">Bằng chứng theo mức</p>
+      <h2>Tập dữ liệu nào trả lời câu hỏi nào</h2>
+      <p class="hint">Mỗi mức chỉ được dùng đúng vai trò của nó. Confirmation Sprint 2 đã được
+      quan sát ở Sprint 2 nên kết quả Sprint 3 trên tập đó là retrospective confirmation.</p>
+      <div class="table-scroll"><table id="hierarchyTable"></table></div>
+    </article>
+  </section>
+
+  <section class="panel" id="panel-models" role="tabpanel">
+    <article class="card">
+      <p class="eyebrow">Metric chính đã đăng ký trước</p>
+      <h2>policy_area_dr trên retrospective confirmation</h2>
+      <p class="hint" id="modelChartHint"></p>
+      <figure class="figure">
+        <div class="chart-host"><canvas id="modelBarChart" role="img"
+          aria-label="Biểu đồ cột so sánh policy_area_dr giữa các model"></canvas></div>
+        <figcaption class="figcaption" id="modelBarCaption"></figcaption>
+      </figure>
+      <div class="table-scroll"><table id="modelTable"></table></div>
+    </article>
+    <article class="card">
+      <p class="eyebrow">So sánh có kiểm định</p>
+      <h2>Chênh lệch paired và khoảng tin cậy 95%</h2>
+      <p class="hint">Chỉ khoảng tin cậy của <em>chênh lệch</em> mới tách được hai model. CI của
+      từng model riêng lẻ chồng lấn không có nghĩa là hai model bằng nhau, và ngược lại.</p>
+      <div class="table-scroll"><table id="pairwiseTable"></table></div>
+    </article>
+    <article class="card">
+      <p class="eyebrow">Vòng cải tiến</p>
+      <h2>Kết quả out-of-fold trên development pool</h2>
+      <p class="hint" id="oofHint"></p>
+      <div class="table-scroll"><table id="oofTable"></table></div>
+    </article>
+  </section>
+
+  <section class="panel" id="panel-policy" role="tabpanel">
+    <div class="grid-2">
+      <article class="card">
+        <p class="eyebrow">01 · Kịch bản</p>
+        <h2>Nhắm bao nhiêu phần trăm population?</h2>
+        <div class="budget-display"><span id="budgetText">10</span><small>% population</small></div>
+        <label class="slider-label" for="budgetSlider">Ngân sách</label>
+        <input id="budgetSlider" type="range" min="1" max="30" step="1" value="10">
+        <div class="ticks"><span>1%</span><span>10%</span><span>20%</span><span>30%</span></div>
+        <div class="fields">
+          <label>Quy mô population
+            <input id="audience" type="number" value="1000000" min="1" step="10000"></label>
+          <label>Giá trị / conversion
+            <input id="conversionValue" type="number" value="1" min="0.000001" step="0.1"></label>
+          <label>Chi phí / contact
+            <input id="contactCost" type="number" value="0.0005" min="0" step="0.00025"></label>
+          <label>Model
+            <select id="policyModel"></select></label>
+        </div>
+        <div class="actions">
+          <button class="btn" data-scenario="low">Kịch bản chi phí thấp</button>
+          <button class="btn" data-scenario="high">Kịch bản chi phí cao</button>
+          <button class="btn" data-scenario="none">Không target ai</button>
+          <button class="btn" data-scenario="reset">Về mặc định</button>
+        </div>
+      </article>
+      <article class="card">
+        <p class="eyebrow">02 · Kết quả kịch bản</p>
+        <h2>Giá trị tăng thêm ước lượng</h2>
+        <div class="stat-row" id="policyStats"></div>
+        <div id="policyDetail"></div>
+      </article>
+    </div>
+    <article class="card">
+      <p class="eyebrow">Đường cong ngân sách</p>
+      <h2>Conversion tăng thêm trên mỗi khách hàng theo budget</h2>
+      <p class="hint">Vùng mờ là khoảng tin cậy 95% từ paired bootstrap. Đường xám là policy ngẫu
+      nhiên kỳ vọng <code>π(x)=b</code>, không phải một lần bốc thăm cụ thể.</p>
+      <figure class="figure">
+        <div class="chart-host"><canvas id="budgetChart" role="img"
+          aria-label="Đường cong giá trị policy theo ngân sách cho từng model"></canvas></div>
+        <figcaption class="figcaption" id="budgetCaption"></figcaption>
+      </figure>
+      <details><summary>Xem dạng bảng</summary>
+        <div class="table-scroll"><table id="budgetTable"></table></div></details>
+    </article>
+    <article class="card">
+      <p class="eyebrow">Độ nhạy</p>
+      <h2>Giá trị ròng theo chi phí liên hệ giả định</h2>
+      <p class="hint">Ô âm nghĩa là ở mức chi phí đó, policy không còn tạo giá trị dương trong
+      kịch bản. Đây là ngưỡng hòa vốn, không phải dự báo lợi nhuận.</p>
+      <div class="table-scroll"><table id="sensitivityTable"></table></div>
+    </article>
+  </section>
+
+  <section class="panel" id="panel-segments" role="tabpanel">
+    <article class="card">
+      <p class="eyebrow">Final test Sprint 1 · 2.096.940 dòng</p>
+      <h2>Uplift quan sát theo decile</h2>
+      <p class="hint">Uplift ở đây là chênh lệch tỷ lệ conversion giữa treatment và control
+      <em>trong từng decile</em>, quan sát được trên nhóm. Không dòng nào cho biết một cá nhân
+      thuộc principal stratum nào.</p>
+      <label class="inline-label">Model
+        <select id="decileModel"></select></label>
+      <figure class="figure">
+        <div class="chart-host"><canvas id="decileChart" role="img"
+          aria-label="Biểu đồ cột uplift quan sát theo decile kèm khoảng tin cậy"></canvas></div>
+        <figcaption class="figcaption" id="decileCaption"></figcaption>
+      </figure>
+      <div class="table-scroll"><table id="decileTable"></table></div>
+    </article>
+    <article class="card">
+      <p class="eyebrow">Chẩn đoán dữ liệu</p>
+      <h2>Cân bằng hai nhánh và phân bố score</h2>
+      <p class="hint" id="balanceNote"></p>
+      <div class="grid-2">
+        <div class="table-scroll"><table id="armTable"></table></div>
+        <div class="table-scroll"><table id="balanceTable"></table></div>
+      </div>
+    </article>
+  </section>
+
+  <section class="panel" id="panel-scoring" role="tabpanel">
+    <article class="card">
+      <p class="eyebrow">Batch scoring</p>
+      <h2>Chấm điểm danh sách khách hàng</h2>
+      <p class="hint" id="scoringHint"></p>
+      <div class="grid-2">
+        <div>
+          <h3>Tải CSV</h3>
+          <p class="hint">File cần đủ 12 cột <code>f0</code>…<code>f11</code>, không có ô trống.</p>
+          <input type="file" id="csvInput" accept=".csv,text/csv">
+          <div class="actions">
+            <button class="btn btn-primary" id="scoreCsvBtn" type="button">Chấm điểm file</button>
+            <button class="btn" id="sampleCsvBtn" type="button">Tải CSV mẫu</button>
+          </div>
+        </div>
+        <div>
+          <h3>Nhập một khách hàng</h3>
+          <p class="hint">12 giá trị, phân tách bằng dấu phẩy.</p>
+          <textarea id="manualRows" rows="4"
+            placeholder="12.6,10.06,8.21,4.68,10.28,4.12,0.35,4.68,3.51,0.32,0.0,0.0"></textarea>
+          <div class="actions">
+            <button class="btn btn-primary" id="scoreManualBtn" type="button">Chấm điểm dòng nhập</button>
+          </div>
+        </div>
+      </div>
+      <div id="scoreStatus" class="status-line"></div>
+      <div id="scoreResult"></div>
+    </article>
+  </section>
+
+  <section class="panel" id="panel-evidence" role="tabpanel">
+    <div class="grid-2">
+      <article class="card">
+        <p class="eyebrow">Giới hạn</p>
+        <h2>Điều dữ liệu này không trả lời được</h2>
+        <ul id="limitationList"></ul>
+      </article>
+      <article class="card">
+        <p class="eyebrow">Giả định</p>
+        <h2>Điều kiện để các con số có nghĩa</h2>
+        <ul id="assumptionList"></ul>
+      </article>
+    </div>
+    <article class="card">
+      <p class="eyebrow">Truy nguồn</p>
+      <h2>Artifact sinh ra từng con số</h2>
+      <div class="table-scroll"><table id="artifactTable"></table></div>
+    </article>
+    <article class="card">
+      <p class="eyebrow">Experiment registry</p>
+      <h2>Mọi run, kể cả run bị dừng sớm</h2>
+      <p class="hint" id="registryHint"></p>
+      <div class="table-scroll"><table id="registryTable"></table></div>
+    </article>
+    <article class="card">
+      <p class="eyebrow">Export</p>
+      <h2>Tải dữ liệu gốc</h2>
+      <div class="actions" id="exportActions"></div>
+    </article>
+  </section>
+
+</main>
+
+<footer class="footer wrap">
+  <p id="footerText"></p>
+</footer>
+
+<div class="tooltip" id="tooltip" role="status" aria-live="polite"></div>
+
+<script src="/charts.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+{
+  "run_id": "sprint3-retrospective-confirmation-v1",
+  "protocol_id": "sprint3-improvement-v1",
+  "created_utc": "2026-08-04T21:07:47.541623+00:00",
+  "status": "retrospective_confirmation_complete",
+  "evidence_class": "retrospective_confirmation",
+  "evidence_note": "Confirmation Sprint 2 da duoc quan sat va bao cao o Sprint 2. Ket qua o day khong phai prospective unseen test.",
+  "shortlist_source": "output\\improvement\\finalist_comparison\\shortlist.json",
+  "oof_run_dir": "output\\improvement\\finalist_comparison",
+  "development_rows": 5591836,
+  "confirmation_rows": 1397959,
+  "development_index_sha256": "8ff1ffcde973cb58df155f942b3f3cf9f386d64c019f18bf51a4df98aeedd476",
+  "confirmation_index_sha256": "6d846e155171a87d5629cd8275697dcc3cabbfc813ec5f6a0ebd7a1f2c0280be",
+  "propensity": 0.8500000715328561,
+  "budget_grid": [
+    0.01,
+    0.02,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3
+  ],
+  "n_boot": 500,
+  "main_scenario": {
+    "budget_fraction": 0.1,
+    "contact_cost": 0.0005,
+    "value_per_conversion": 1.0,
+    "monetary_outcome_available": false
+  },
+  "models_evaluated": [
+    "Ensemble-BestSingle",
+    "Ensemble-QAgg",
+    "Ensemble-RankAverage",
+    "Rank-K05",
+    "Rank-K1",
+    "Rank-K2",
+    "Response",
+    "S-Under7",
+    "X-Renormalized"
+  ],
+  "ensemble_weights": {
+    "Ensemble-BestSingle": {
+      "method": "best_single_dr_risk",
+      "weights_learned_on": "development OOF",
+      "weights_applied": {
+        "X-Renormalized": 1.0
+      },
+      "renormalized_because_of_missing_members": false
+    },
+    "Ensemble-QAgg": {
+      "method": "causal_q_aggregation",
+      "weights_learned_on": "development OOF",
+      "weights_applied": {
+        "X-Renormalized": 0.5,
+        "S-Under7": 0.5
+      },
+      "renormalized_because_of_missing_members": false
+    },
+    "Ensemble-RankAverage": {
+      "method": "rank_average",
+      "members": [
+        "Rank-K05",
+        "Rank-K1",
+        "Rank-K2",
+        "Response",
+        "S-Under7",
+        "X-Renormalized"
+      ]
+    }
+  },
+  "champion_reference": "Response",
+  "champion_policy_area_dr": 0.0009123494915144459,
+  "promoted_challengers": [],
+  "final_champion": "Response",
+  "promotion_rule": {
+    "condition_1": "policy_area_dr OOF cua challenger > Response o ca hai fold seed",
+    "condition_2": "point estimate tren retrospective confirmation cung dau",
+    "condition_3": "paired 95% CI cua chenh lech policy_area_dr co lower bound > 0",
+    "condition_4": "khong regression ve runtime gate, calibration hoac guardrail",
+    "fallback": "giu Response va phat hanh challenger kem CI"
+  },
+  "peak_process_rss_gb": 2.8144874572753906,
+  "min_system_available_ram_gb": 1.8274002075195312,
+  "elapsed_seconds": 1703.7838339805603,
+  "random_policy_area_mean": 0.00015124520489073604,
+  "random_policy_area_std": 2.726191484319352e-05
+}

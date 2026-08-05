@@ -41,7 +41,7 @@ hay Y/T của final test Sprint 1.
 | S/T/X learner | Künzel et al. 2019 | Cấu trúc meta-learner |
 | DR policy value | Dudík et al. 2011 | Outcome + propensity correction |
 | Statistical policy learning | Athey & Wager 2021 | Policy value/uncertainty framing |
-| CausalForestDML API | EconML 0.16 docs | CV, honest forest, inference/resource profile |
+| CausalForestDML API | EconML 0.16 docs | cross-validation, honest forest, inference/resource profile |
 | Dataset provenance | Criteo AI Lab | Randomized incrementality source |
 
 Nguồn trực tiếp:
@@ -105,7 +105,7 @@ tương tự confirmation, không phải forecast đã deploy.
 
 - `output/dashboard.html`: app demo self-contained.
 - `output/dashboard_data.json`: schema release.
-- `output/dashboard_screenshot.png`: bằng chứng visual.
+- `output/screenshots/dashboard_screenshot.png`: bằng chứng visual.
 - `scripts/smoke_dashboard_browser.mjs`: replay bốn scenario.
 - `docs/DECISION_CONTRACT.md`: rule, formula và guardrails.
 - data/model cards trong `docs/data_cards/` và `docs/model_cards/`.
@@ -124,7 +124,7 @@ Full local Sprint 2:
 - minimum system available RAM 1,81 GB.
 
 Causal Forest local smoke 0,1% pass. Kaggle run vẫn cần external session/dataset
-attachment; xem `docs/KAGGLE_CAUSAL_FOREST.md`. `inference=False` của safe profile có
+attachment; xem `docs/archive/KAGGLE_CAUSAL_FOREST.md`. `inference=False` của safe profile có
 nghĩa không yêu cầu `effect_interval()`.
 
 ## 8. Quality evidence
@@ -143,7 +143,7 @@ nghĩa không yêu cầu `effect_interval()`.
 - Chưa có production A/B test của learned policy.
 - Chưa có actual monetary outcome hoặc long-term CLV.
 - Report này được tạo trước commit đầu tiên; trạng thái repository hiện tại được ghi trong
-  `report/REPOSITORY_AUDIT_2026-07-31.md`.
+  `report/archive/REPOSITORY_AUDIT_2026-07-31.md`.
 - Random comparator là một ranking cố định bằng seed 42; CI hiện tại chưa tích hợp biến
   thiên qua nhiều random-policy seed.
 - Demo video/GIF thuộc Sprint 3 packaging.
@@ -164,6 +164,6 @@ node scripts\smoke_dashboard_browser.mjs
 
 ## 11. Bàn giao sang Sprint 3
 
-Ưu tiên: clean-run/CI, public README, video 60–90 giây, final report/slides/CV bullets,
+Ưu tiên: clean-run/CI, README, video 60–90 giây, final report/slides,
 link audit và release tag sau khi repository có commit. Incremental CLV chỉ mở sau khi
 causal product được đóng gói; không gắn revenue giả vào Criteo.

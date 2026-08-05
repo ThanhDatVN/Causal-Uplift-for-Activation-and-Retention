@@ -6,7 +6,7 @@ File này phải được freeze trước khi final holdout được mở.
 
 Mỗi run phải ghi rõ: unit of analysis, index date, treatment/action, control, outcome, currency,
 horizon `H`, discount convention, cost definition, data version/hash và exclusion rule. Không có field
-này thì artifact chỉ là exploratory và không được vào README/slide/CV.
+này thì artifact chỉ là exploratory và không được vào README, slide hoặc báo cáo chính.
 
 - **Criteo:** lưu schema/hash của file thực chạy; không kế thừa row count/feature count của version khác.
 - **Online Retail II:** xây `net_revenue` từ transaction theo rule returns đã freeze; `gross_margin_rate`
@@ -183,7 +183,7 @@ output/final/
   customer_scores.parquet
 ```
 
-Mọi headline trong README/slide/CV phải trỏ được về đúng file và run ID.
+Mọi headline trong README, slide và báo cáo phải trỏ được về đúng file và run ID.
 
 ## 10. Quy tắc dừng khi gate không đạt (Stop Rules)
 

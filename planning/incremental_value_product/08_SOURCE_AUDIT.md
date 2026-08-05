@@ -9,7 +9,7 @@ phần phương pháp/kết quả liên quan và lưu note theo template ở `06
 - **Primary paper:** dùng cho claim lý thuyết/phương pháp.
 - **Official dataset page:** dùng cho schema, provenance, license và scope dữ liệu.
 - **Official implementation docs:** dùng cho API/assumption của package; không thay thế paper.
-- Không dùng blog, benchmark thứ ba hoặc Wikipedia làm citation chính cho claim trong report/CV.
+- Không dùng blog, benchmark thứ ba hoặc Wikipedia làm citation chính cho claim trong báo cáo.
 
 ## Sổ đăng ký nguồn (Registry)
 
@@ -34,9 +34,6 @@ phần phương pháp/kết quả liên quan và lưu note theo template ở `06
 | `GoogleRulesML` | [Google Rules of Machine Learning](https://developers.google.com/machine-learning/guides/rules-of-ml/) | Official engineering guidance | baseline-first, data dependency and training-serving-skew guard rails | a substitute for domain validation or a deployment runbook |
 | `StreamlitDocker` | [Streamlit Docker deployment guide](https://docs.streamlit.io/deploy/tutorials/docker) | Official implementation docs | container/health-check deployment pattern for the demo | availability/security SLO achieved without testing it |
 | `FastAPI` | [FastAPI feature documentation](https://fastapi.tiangolo.com/features/) | Official implementation docs | OpenAPI/Pydantic-backed API contract direction | FastAPI itself makes a system production-ready |
-| `MarketDA2026` | [Match Group Data Analyst posting](https://jobs.lever.co/matchgroup/3c12c050-2719-43e6-a69e-fdb971f399a7) | Job-posting snapshot, retrieved 2026-07-29 | current signal for SQL, metric, A/B-test, dashboard and stakeholder communication | universal hiring requirement or salary/market claim |
-| `MarketDS2026` | [HighLevel Experimentation & Causal Inference posting](https://jobs.lever.co/gohighlevel/0129e5bc-74e4-4f7c-9983-891da20542e8) | Job-posting snapshot, retrieved 2026-07-29 | current signal for experiment design, causal rigor, SQL/Python and decision-grade readout | requirements for every DS level/company |
-| `MarketAIE2026` | [OpenGov Applied AI Engineer posting](https://jobs.ashbyhq.com/opengov/1a653285-4ca7-4fa3-ac0a-1712c30d68a6/) | Job-posting snapshot, retrieved 2026-07-29 | current signal for Python API, Docker, CI/CD, reliability/observability and AI workflow integration | this causal project proves deep LLM/agent specialization |
 | `KaggleGPU2026` | [Kaggle efficient GPU usage](https://www.kaggle.com/docs/efficient-gpu-usage) | Official platform documentation, checked 2026-07-29 | free GPU quota is weekly and demand-dependent; GPU benefits GPU-enabled libraries, not generic pandas/scikit-learn workloads | a specific Kaggle GPU/RAM/session is guaranteed |
 | `ColabFAQ2026` | [Google Colab FAQ](https://research.google.com/colaboratory/faq.html) | Official platform documentation, checked 2026-07-29 | free/paid resource, GPU type, high-memory availability and limits are dynamic; paid plans increase availability via compute units | Colab Pro guarantees a specific GPU, RAM profile or uninterrupted run |
 
@@ -50,7 +47,6 @@ phần phương pháp/kết quả liên quan và lưu note theo template ở `06
 | Bayesian CLV appendix | `PyMCMarketingCLV` + primary BTYD source |
 | Long-horizon/projection appendix | `Tran2024` và một limitation statement rõ ràng |
 | Engineering/deployment appendix | `GoogleMLTest2017`, `GoogleRulesML`, `StreamlitDocker`, `FastAPI` |
-| Portfolio positioning note | `MarketDA2026`, `MarketDS2026`, `MarketAIE2026` với retrieval date, không coi là universal rule |
 
 ## Khoảng trống nghiên cứu được giữ có chủ ý (Research Gaps)
 

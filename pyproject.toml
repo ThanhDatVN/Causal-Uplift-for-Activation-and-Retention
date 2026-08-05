@@ -1,0 +1,26 @@
+[project]
+name = "causal-uplift"
+version = "0.3.0"
+description = "Causal uplift measurement and marketing policy optimisation on the Criteo v2.1 randomized benchmark"
+requires-python = ">=3.12"
+readme = "README.md"
+
+# Dependency thực tế được ghim trong requirements.txt. Khối này chỉ khai báo metadata và
+# cấu hình tooling; repo chưa được đóng gói thành distributable vì mọi entrypoint là
+# script trong scripts/ và đều tự thêm repo root vào sys.path.
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers"
+filterwarnings = [
+    # LightGBM/EconML/sklearn phát warning ở mọi lần fit; giữ chúng ở mức mặc định để
+    # không che warning thật của repo, nhưng không biến chúng thành lỗi.
+    "default",
+]
+markers = [
+    "requires_criteo: cần data/criteo-research-uplift-v2.1.csv.gz (khoảng 300 MB nén)",
+    "requires_artifacts: cần artifact trong output/ từ một lần chạy trước",
+]
+
+# Ba file test dưới đây cần file Criteo local. CI công khai chạy phần còn lại
+# (91/132 test, khoảng 15 giây). Xem .github/workflows/tests.yml.

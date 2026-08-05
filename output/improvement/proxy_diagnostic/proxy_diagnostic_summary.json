@@ -1,0 +1,147 @@
+{
+  "created_utc": "2026-08-05T00:40:21.814606+00:00",
+  "oof_file": "D:\\GitHub\\Causal-Uplift-for-Activation-and-Retention\\output\\improvement\\finalist\\oof_scores.npz",
+  "proxy": "Response",
+  "n": 5591836,
+  "beta_max": 0.5984335690736771,
+  "beta_max_source": "max cua plug-in tau = mu1 - mu0 tren development OOF",
+  "global_condition": {
+    "theta_max": 0.885763943195343,
+    "beta_max": 0.5984335690736771,
+    "threshold": 0.20078321546316147,
+    "holds": false,
+    "n": 5591836
+  },
+  "baseline_probability_quantiles": {
+    "q0.5": 8.006975258467719e-05,
+    "q0.9": 0.001536576950456947,
+    "q0.99": 0.03377347346395292,
+    "q0.999": 0.2863899759948255,
+    "q0.9999": 0.6022597266137473,
+    "q1.0": 0.885763943195343
+  },
+  "by_budget": [
+    {
+      "budget_fraction": 0.01,
+      "n_targeted": 55918,
+      "theta_max": 0.885763943195343,
+      "beta_max": 0.5984335690736771,
+      "threshold": 0.20078321546316147,
+      "holds": false,
+      "n": 55918
+    },
+    {
+      "budget_fraction": 0.02,
+      "n_targeted": 111836,
+      "theta_max": 0.885763943195343,
+      "beta_max": 0.5984335690736771,
+      "threshold": 0.20078321546316147,
+      "holds": false,
+      "n": 111836
+    },
+    {
+      "budget_fraction": 0.05,
+      "n_targeted": 279591,
+      "theta_max": 0.885763943195343,
+      "beta_max": 0.5984335690736771,
+      "threshold": 0.20078321546316147,
+      "holds": false,
+      "n": 279591
+    },
+    {
+      "budget_fraction": 0.1,
+      "n_targeted": 559183,
+      "theta_max": 0.885763943195343,
+      "beta_max": 0.5984335690736771,
+      "threshold": 0.20078321546316147,
+      "holds": false,
+      "n": 559183
+    },
+    {
+      "budget_fraction": 0.15,
+      "n_targeted": 838775,
+      "theta_max": 0.885763943195343,
+      "beta_max": 0.5984335690736771,
+      "threshold": 0.20078321546316147,
+      "holds": false,
+      "n": 838775
+    },
+    {
+      "budget_fraction": 0.2,
+      "n_targeted": 1118367,
+      "theta_max": 0.885763943195343,
+      "beta_max": 0.5984335690736771,
+      "threshold": 0.20078321546316147,
+      "holds": false,
+      "n": 1118367
+    },
+    {
+      "budget_fraction": 0.25,
+      "n_targeted": 1397959,
+      "theta_max": 0.885763943195343,
+      "beta_max": 0.5984335690736771,
+      "threshold": 0.20078321546316147,
+      "holds": false,
+      "n": 1397959
+    },
+    {
+      "budget_fraction": 0.3,
+      "n_targeted": 1677550,
+      "theta_max": 0.885763943195343,
+      "beta_max": 0.5984335690736771,
+      "threshold": 0.20078321546316147,
+      "holds": false,
+      "n": 1677550
+    },
+    {
+      "budget_fraction": 1.0,
+      "n_targeted": 5591836,
+      "theta_max": 0.885763943195343,
+      "beta_max": 0.5984335690736771,
+      "threshold": 0.20078321546316147,
+      "holds": false,
+      "n": 5591836
+    }
+  ],
+  "rank_agreement": [
+    {
+      "cate_model": "S-Under7",
+      "spearman_rho": 0.800307571632906,
+      "p_value": 0.0,
+      "n_used": 200000
+    },
+    {
+      "cate_model": "Rank-K05",
+      "spearman_rho": 0.7435674136780992,
+      "p_value": 0.0,
+      "n_used": 200000
+    },
+    {
+      "cate_model": "Rank-K1",
+      "spearman_rho": 0.7097737698474931,
+      "p_value": 0.0,
+      "n_used": 200000
+    },
+    {
+      "cate_model": "Rank-K2",
+      "spearman_rho": 0.7051021126126038,
+      "p_value": 0.0,
+      "n_used": 200000
+    },
+    {
+      "cate_model": "plugin_tau (mu1 - mu0)",
+      "spearman_rho": 0.5604109652536758,
+      "p_value": 0.0,
+      "n_used": 200000
+    },
+    {
+      "cate_model": "X-Renormalized",
+      "spearman_rho": 0.4852971719109962,
+      "p_value": 0.0,
+      "n_used": 200000
+    }
+  ],
+  "source_note": "Bat dang thuc theta_max < (1 - beta_max)/2 lay tu Fernandez-Loria & Loria, arXiv 2206.12532 v7. Day la dieu kien DU, khong phai dieu kien CAN: dieu kien hong khong ket luan proxy xep hang sai.",
+  "extension_note": "Bang theo budget la cach van dung cua repo, ap dung bat dang thuc goc cho tung sub-population top-b. Paper phat bieu cho toan population; mo rong nay chua duoc nguon chung minh.",
+  "not_implemented": "Dieu kien subset cua paper co bien tau_k khong duoc dinh nghia du ro trong ban trich xuat nen khong hien thuc."
+}

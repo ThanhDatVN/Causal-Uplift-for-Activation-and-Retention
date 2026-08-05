@@ -1,5 +1,19 @@
 # Kế hoạch Tổng thể Sản phẩm Giá trị Tăng thêm (Incremental Value Product — Master Plan)
 
+> **Trạng thái 05/08/2026: chưa mở.** Đây là scoping cho hướng phát triển sau causal
+> uplift, không phải công việc đang chạy. Điều kiện dữ liệu chưa đáp ứng: bài toán cần
+> outcome tiền tệ và nhiều thí nghiệm randomized lịch sử có cả surrogate ngắn hạn lẫn
+> outcome dài hạn; Criteo là một snapshot không có cả hai.
+>
+> Trước khi mở, đọc `planning/RESEARCH_LANDSCAPE_2026.md` mục 3.1 và 3.2. Mục đó bổ
+> sung nguồn cho revenue uplift (ZILN loss, value-weighted ranking) và cho long-term
+> causal inference qua surrogate, kèm cảnh báo **surrogate paradox**: ngay cả khi
+> treatment được randomize, confounding giữa surrogate và outcome dài hạn có thể làm
+> kết luận sai **dấu**.
+>
+> Quy tắc đã có và vẫn giữ: không ghép Online Retail II với Criteo rồi gọi là observed
+> incremental CLV.
+
 Thư mục này là **source of record cho hướng phát triển sau causal uplift v0.1**.
 
 ## Mục tiêu chung
@@ -38,9 +52,7 @@ Roadmap năm tuần **chỉ bắt đầu sau khi causal được freeze/tag `cau
 | [`04_EXPERIMENT_PROTOCOL.md`](04_EXPERIMENT_PROTOCOL.md) | Giao thức thí nghiệm (Experiment Protocol): split, baseline, metric, chọn model |
 | [`05_ROADMAP_5_WEEKS.md`](05_ROADMAP_5_WEEKS.md) | Lộ trình 5 tuần (5-Week Roadmap): lịch Day 1–30, tiêu chí hoàn tất, cắt scope |
 | [`06_READING_LIST.md`](06_READING_LIST.md) | Danh mục đọc và học (Reading List) |
-| [`07_PORTFOLIO_CV.md`](07_PORTFOLIO_CV.md) | Định hướng portfolio và CV (Portfolio and CV Direction) |
 | [`08_SOURCE_AUDIT.md`](08_SOURCE_AUDIT.md) | Kiểm tra nguồn và sổ đăng ký trích dẫn (Source Audit) |
-| [`09_COMPETITIVE_PORTFOLIO_EXECUTION.md`](09_COMPETITIVE_PORTFOLIO_EXECUTION.md) | Đặc tả evidence cho DA/DS/AI Engineer |
 | [`10_END_TO_END_EXECUTION_PLAYBOOK.md`](10_END_TO_END_EXECUTION_PLAYBOOK.md) | Sổ tay thực thi đầu-cuối (End-to-End Execution Playbook) |
 | [`11_FEASIBILITY_INFRASTRUCTURE_DATA_METHODS.md`](11_FEASIBILITY_INFRASTRUCTURE_DATA_METHODS.md) | Tính khả thi: hạ tầng, dữ liệu, phương pháp (Feasibility) |
 
@@ -61,8 +73,8 @@ Roadmap năm tuần **chỉ bắt đầu sau khi causal được freeze/tag `cau
 - Giữ nguyên tên thuật toán, API, tên file và biến code: `CausalForestDML`, `BG/NBD`, `run_id`.
 - **Incremental Value Studio** là tên thương hiệu của ứng dụng; mô tả tiếng Việt là *Nền tảng Giá trị
   Tăng thêm*.
-- Khi viết CV/README tiếng Anh, dùng tên tiếng Anh trong ngoặc; khi thuyết trình, dùng tên tiếng Việt
-  trước để bảo vệ mạch lập luận.
+- Khi viết README tiếng Anh, dùng tên tiếng Anh trong ngoặc; trong báo cáo tiếng Việt, ưu tiên
+  tên tiếng Việt để giữ mạch lập luận.
 
 ## Cổng đóng causal trước Day 1
 
@@ -83,7 +95,7 @@ Hard cap 2–3 ngày:
 
 ## Nguyên tắc vận hành
 
-- Mỗi số trong README/slide/CV phải trace về một artifact.
+- Mỗi số trong README, báo cáo, slide và dashboard phải trace về một artifact.
 - Mỗi ngày phải tạo ít nhất một artifact kiểm tra được.
 - Final holdout chỉ mở một lần sau khi freeze protocol/model.
 - Không hy sinh validation và product để chạy thêm model.

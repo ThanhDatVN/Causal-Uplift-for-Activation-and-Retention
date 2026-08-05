@@ -1,4 +1,17 @@
-# Hợp đồng quyết định Sprint 2 (Decision Contract)
+# Hợp đồng quyết định (Decision Contract)
+
+**Cập nhật 05/08/2026.** Hợp đồng vẫn có hiệu lực nguyên văn. Sprint 3 chạy lại quyết
+định chọn model bằng một protocol chặt hơn và giữ nguyên champion; xem
+`report/SPRINT_3_FINAL_REPORT.md`. Hai điểm cần đọc kèm:
+
+1. Metric chính đã đổi từ Qini sang `policy_area_dr` (trung bình DR gross policy value
+   trên dải budget 1–30%). Mục 2 dưới đây mô tả lý do chọn Response theo Qini
+   validation ở Sprint 2; lý do đó vẫn đúng cho lịch sử, nhưng bằng chứng hiện hành là
+   `policy_area_dr` trên development OOF hai fold seed và trên retrospective
+   confirmation.
+2. Trên confirmation Sprint 3, ba model có Qini cao hơn Response nhưng không model nào
+   có paired CI của `policy_area_dr` tách khỏi 0. Quy tắc "giữ champion khi CI chứa 0"
+   ở mục 2 chính là quy tắc đã được áp dụng.
 
 ## 1. Quyết định sản phẩm
 

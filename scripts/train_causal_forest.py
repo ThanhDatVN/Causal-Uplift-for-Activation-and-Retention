@@ -140,6 +140,13 @@ def main():
         else "cate_causal_forest_kaggle_safe.npy"
     )
     np.save(cate_dir / output_name, np.asarray(cate, dtype="float64"))
+    # Hash của Y/T cho phép kiểm chứng sau khi tải artifact về rằng holdout này
+    # đúng là final test Sprint 1. Chỉ đúng khi frac=0.50, test_size=0.30,
+    # seed=42; ở fraction khác holdout là tập khác và không so được với release.
+    import hashlib
+
+    y_hash = hashlib.sha256(Y_test.astype("int8").tobytes()).hexdigest()
+    t_hash = hashlib.sha256(T_test.astype("int8").tobytes()).hexdigest()
     np.savez(
         cate_dir / "holdout_test_yt.npz",
         Y=Y_test,
@@ -147,7 +154,11 @@ def main():
         frac=args.frac,
         seed=args.seed,
         n_test=len(test_df),
+        test_size=args.test_size,
+        y_sha256=y_hash,
+        t_sha256=t_hash,
     )
+    print(f"[holdout] y_sha256={y_hash[:24]} t_sha256={t_hash[:24]}", flush=True)
     print(
         f"[write] {cate_dir / output_name} n={len(cate):,} "
         f"mean={cate.mean():.6f} total_time={time.time() - started:.1f}s",

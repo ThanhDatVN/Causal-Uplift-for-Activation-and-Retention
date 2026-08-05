@@ -13,11 +13,9 @@ The script never reads Sprint 1 final-test predictions.
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import platform
 import sys
-import threading
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -46,6 +44,7 @@ from src.data import (
     validate_criteo_schema,
     xty,
 )
+from src.experiment import ResourceMonitor, sha256_file, sha256_indices
 from src.evaluation import (
     auuc_score,
     paired_qini_bootstrap_matrix,
@@ -73,49 +72,17 @@ MODEL_LABELS = {
 }
 
 
-class _MemorySampler:
-    def __init__(self, interval_seconds: float = 0.25):
-        self.interval_seconds = interval_seconds
-        self.peak_process_rss = 0
-        self.minimum_system_available = psutil.virtual_memory().available
-        self._stop = threading.Event()
-        self._thread = threading.Thread(target=self._run, daemon=True)
-
-    def _run(self):
-        process = psutil.Process()
-        while not self._stop.wait(self.interval_seconds):
-            self.peak_process_rss = max(
-                self.peak_process_rss,
-                process.memory_info().rss,
-            )
-            self.minimum_system_available = min(
-                self.minimum_system_available,
-                psutil.virtual_memory().available,
-            )
-
-    def start(self):
-        self._thread.start()
-
-    def stop(self):
-        self._stop.set()
-        self._thread.join(timeout=2)
-        self.peak_process_rss = max(
-            self.peak_process_rss,
-            psutil.Process().memory_info().rss,
-        )
-
-
-def _sha256_file(path: Path, chunk_size: int = 1024 * 1024) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(chunk_size), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
+# Ba tiện ích dưới đây từng được viết lại trong chính script này vì nó có trước
+# `src/experiment.py`. Sprint 3 tổng quát hóa chúng, nên bản trùng lặp đã được gỡ.
+# Tính tương đương được kiểm chứng trước khi gỡ: `sha256_file` và `sha256_indices`
+# cho cùng digest trên cùng input, và `ResourceMonitor` đo cùng hai đại lượng
+# `peak_process_rss` / `minimum_system_available` như `_MemorySampler` cũ.
+# Output của script vì thế không đổi.
 
 
 def _sha256_indices(frame: pd.DataFrame) -> str:
-    values = np.sort(frame.index.to_numpy(dtype="<i8", copy=True))
-    return hashlib.sha256(values.tobytes()).hexdigest()
+    """Giữ chữ ký nhận DataFrame; phần băm ủy quyền cho ``src.experiment``."""
+    return sha256_indices(frame.index.to_numpy(dtype="int64"))
 
 
 def _jsonable(value):
@@ -222,8 +189,8 @@ def main() -> None:
             f"khả dụng tại gate; hiện có {initial_available_gb:.1f} GB. "
             "Đóng ứng dụng không cần thiết hoặc chạy package trên Kaggle."
         )
-    memory_sampler = _MemorySampler()
-    memory_sampler.start()
+    memory_sampler = ResourceMonitor()
+    memory_sampler.__enter__()
     release_config = json.loads(
         (REPO_ROOT / "configs" / "sprint1_release_5models.json").read_text(
             encoding="utf-8"
@@ -641,7 +608,7 @@ def main() -> None:
         mu1_local_exact=mu1_confirmation.astype("float32"),
     )
 
-    memory_sampler.stop()
+    memory_sampler.__exit__(None, None, None)
     manifest = {
         "run_id": RUN_ID,
         "created_utc": datetime.now(timezone.utc).isoformat(),
@@ -652,7 +619,7 @@ def main() -> None:
         ),
         "data": {
             "path": CRITEO_PATH.relative_to(REPO_ROOT).as_posix(),
-            "sha256": _sha256_file(CRITEO_PATH),
+            "sha256": sha256_file(CRITEO_PATH),
             "schema_contract": schema,
             "sprint1_selected_fraction": 0.50,
             "sprint1_sampling_seed": args.seed,

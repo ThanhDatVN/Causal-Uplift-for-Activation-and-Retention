@@ -17,14 +17,32 @@ htmlcov/
 # Keep compact CSV/JSON/PNG/HTML release artifacts under output/ for review.
 output/**/*.npy
 output/**/*.npz
+# Fitted scorer for the web app: rebuild with scripts/build_champion_scorer.py.
+output/webapp/*.joblib
+# Run logs from the Sprint 3 improvement round.
+output/improvement/*.log
 output/causal_forest_gate_smoke/
 output/sprint2_smoke/
 output/sprint2_benchmark_*/
-# Legacy root artifacts are superseded by the versioned Sprint 1/Sprint 2 release directories.
+# Legacy root artifacts are superseded by the versioned Sprint 1/Sprint 2 release
+# directories. See output/README.md for which directory is authoritative.
 output/qini_comparison.csv
 output/segments_baseline.csv
 output/qini_curve.png
 *.log
+
+# Huong dan chay va huong dan doc: giu o local, chua publish. Repo tren GitHub chi
+# mang tai lieu bao cao (report/, docs/*METHOD*, model_cards) va code.
+# Bo cac dong duoi day khi muon publish chung.
+docs/PROJECT_GUIDE.md
+docs/COMPONENT_REVIEW_GUIDE.md
+docs/NOTEBOOK_GUIDE.md
+docs/KAGGLE_RUNBOOK_COMPLETE.md
+docs/WEBAPP.md
+
+# Stray session directories, not project artifacts.
+outputs/
+.agents/
 
 # OS
 Thumbs.db

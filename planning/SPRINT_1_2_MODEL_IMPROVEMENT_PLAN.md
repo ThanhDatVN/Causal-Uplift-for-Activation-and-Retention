@@ -8,6 +8,23 @@ hàng tăng thêm (*Incremental Customer Lifetime Value*)
 **Điều kiện:** laptop 6 CPU vật lý/12 luồng, RAM 15,19 GB, GPU RTX 3050 4 GB; Kaggle
 Free là compute phụ; Colab Pro chỉ là phương án cuối có điều kiện.
 
+> **Trạng thái 05/08/2026 — kế hoạch này đã được thực hiện.** Kết quả nằm trong
+> `report/SPRINT_3_FINAL_REPORT.md`; phương pháp trong `docs/SPRINT_3_METHOD_GUIDE.md`;
+> kế hoạch thực thi trong `planning/SPRINT_3_EXECUTION_AND_WEB_PLAN.md`.
+>
+> Đã làm: EVAL-01 (RATE/AUTOC + DR policy curve), EVAL-02 (outcome-adjusted
+> evaluation), M-R (R-Learner qua `NonParamDML`), M-DR (DR ablation
+> `discrete_outcome`/`mc_iters`/final learner), M-META (S/T/X ablation), ENS-Q
+> (causal Q-aggregation), cộng thêm Rank-Learner (ICLR 2026) không có trong danh mục
+> ban đầu.
+>
+> Chưa làm: EVAL-03 pROCini — trang paper công khai không cung cấp công thức và repo
+> không tiếp cận được bản đầy đủ; hiện thực từ suy đoán sẽ vi phạm quy tắc không tự
+> chế công thức. M-CF/M-FDR vẫn chờ session Kaggle. AUTO, M-PTONET, M-LTR, M-TAR
+> không chạy.
+>
+> Kết luận: không challenger nào đạt promotion rule; champion giữ nguyên Response.
+
 Tài liệu này là kế hoạch tương lai. Các con số đã chạy nằm trong
 `report/SPRINT_1_FINAL_REPORT.md` và `report/SPRINT_2_FINAL_REPORT.md`.
 
@@ -76,7 +93,7 @@ Hệ quả thực hành: smoke test 0,1–1% chỉ kiểm tra code path. Nó có
 | Sprint 2 `fit + validation` | Development pool; tạo out-of-fold prediction bằng cross-fitting | Không chấm in-sample |
 | Sprint 2 `confirmation` | Retrospective confirmation sau khi khóa shortlist | Không tune, không đổi rule sau khi xem |
 | Sprint 1 final test | Historical evidence | Không tái dùng để chọn model mới |
-| Hillstrom hoặc campaign RCT mới | External validity/portfolio evidence | Không trộn với Criteo rồi gọi là cùng estimand |
+| Hillstrom hoặc campaign RCT mới | Kiểm tra external validity và khả năng dùng lại pipeline | Không trộn với Criteo rồi gọi là cùng estimand |
 
 Tạo 3-fold cross-fitting trên development pool. Mỗi dòng chỉ được chấm bởi model không fit
 trên dòng đó. Chạy thêm seed thứ hai cho finalist; seed thứ ba chỉ khi hai seed đầu cho kết
@@ -168,7 +185,7 @@ vì CPU/RAM runtime chứ không vì nhãn “GPU”.
 |---|---|---|---|
 | M-PTONET | PTONet/PUL (ICML 2025) | PUC implementation đã kiểm chứng; có GPU session | code/deep tuning phức tạp, rare outcome, chỉ 12 feature tabular |
 | M-LTR | LambdaMART/PCG direct ranking | Product chỉ cần top-k và metric PUC/RATE đã ổn | paper báo top-k optimization không generalize ở test trong thí nghiệm đó |
-| M-TAR | TARNet/DragonNet | cần một neural benchmark cho AI Engineer portfolio | representation balancing ít có lợi thế rõ trên RCT constant propensity |
+| M-TAR | TARNet/DragonNet | cần một neural benchmark để kiểm tra representation learning | representation balancing ít có lợi thế rõ trên RCT constant propensity |
 
 Các model deep chỉ được promote nếu thắng P0 trên OOF qua ít nhất hai seed, không chỉ vì
 mới hơn.
@@ -245,7 +262,7 @@ Nếu CI chứa 0, giữ champion đơn giản hơn và phát hành challenger/u
 
 Hillstrom có randomized email campaign và outcome visit/conversion/spend, nhưng quy mô nhỏ
 và khác domain. Dùng nó để kiểm tra pipeline portability, không gộp metric với Criteo. Giá
-trị nhất cho portfolio là chứng minh cùng protocol chạy trên dataset thứ hai và mô tả đúng
+trị thực nghiệm lớn nhất là chứng minh cùng protocol chạy trên dataset thứ hai và mô tả đúng
 khác biệt estimand.
 
 ## 6. Gate hạ tầng
@@ -265,7 +282,7 @@ elapsed time ngay đầu notebook.
 
 Với Causal Forest:
 
-1. `kaggle-safe`, 200 trees, CV=2, `max_samples=0.25`, `inference=False`;
+1. `kaggle-safe`, 200 trees, cross-validation 2-fold, `max_samples=0.25`, `inference=False`;
 2. chạy 20%; tiếp tục khi peak RAM <75% runtime RAM và còn đủ thời gian;
 3. chạy 30%; đánh giá lại cùng gate;
 4. chỉ thử 50% nếu 30% pass và dự báo bảo thủ còn margin;
@@ -368,41 +385,21 @@ Mỗi registry row phải có:
 
 - Full OOF finalist, retrospective confirmation.
 - Dashboard thêm budget-value curve, paired CI, metric agreement và resource panel.
-- Model card, experiment table, CV bullets, demo script.
+- Model card, experiment table, báo cáo kết quả và demo script.
 
 PTONet/deep learning là work package tùy chọn sau release, không nằm trên critical path.
 
-## 9. Thành quả phải show được cho DA, DS và AI Engineer
-
-### Data Analyst
+## 9. Thành quả kỹ thuật cần bàn giao
 
 - data contract, event-rate/balance audit và leakage policy;
+- RCT estimand, CATE meta-learners, R-/DR-Learner và resource-gated Causal Forest;
+- cross-fitting, rare-outcome diagnostics, RATE/Qini/pROCini/PUC và paired uncertainty;
 - bảng policy theo budget, expected random, sensitivity và confidence interval;
-- dashboard giải thích quyết định bằng đơn vị conversion/customer;
-- giới hạn non-uniform sampling và anonymous feature được nêu rõ.
-
-### Data Scientist
-
-- RCT estimand, CATE meta-learners, R-/DR-Learner, Causal Forest;
-- cross-fitting, rare-outcome correction, RATE/Qini/pROCini/PUC;
-- paired uncertainty, model selection khi không có ground-truth CATE;
-- kết quả không cải thiện và quy tắc giữ champion có căn cứ.
-
-### AI Engineer
-
-- one-command experiment runner, config/schema validation, artifact registry;
-- unit + integration tests, deterministic split hash, resource gates;
-- model/data cards, self-contained dashboard, reproducible environment;
+- one-command experiment runner, config/schema validation và artifact registry;
+- model/data cards, dashboard self-contained và môi trường có thể tái lập;
 - Kaggle package có preflight/checkpoint và không phụ thuộc notebook thủ công.
 
-CV không nên ghi “đạt model tốt nhất”. Có thể ghi:
-
-> Xây dựng và kiểm định pipeline causal uplift trên 13,98 triệu quan sát randomized;
-> triển khai cross-fitted R/DR/meta-learners, paired policy evaluation và dashboard
-> budget-aware; thiết kế compute gates cho laptop/Kaggle và model-selection protocol không
-> tune vào holdout.
-
-Chỉ thêm phần trăm cải thiện sau khi challenger đạt promotion rule.
+Mọi tuyên bố cải thiện chỉ được đưa vào báo cáo sau khi challenger đạt promotion rule.
 
 ## 10. Nguồn gốc đã kiểm tra và thứ tự đọc
 
@@ -489,7 +486,7 @@ Chỉ thêm phần trăm cải thiện sau khi challenger đạt promotion rule.
     [NonParamDML](https://www.pywhy.org/EconML/_autosummary/econml.dml.NonParamDML.html),
     [DR-Learner](https://www.pywhy.org/EconML/spec/estimation/dr.html) và
     [RScorer](https://www.pywhy.org/EconML/_autosummary/econml.score.RScorer.html).
-    Đọc parameter contract về discrete outcome/treatment, CV, MC iterations, honesty,
+    Đọc parameter contract về discrete outcome/treatment, cross-validation, MC iterations, honesty,
     inference và scoring trước khi viết wrapper.
 
 15. **Policy learning**

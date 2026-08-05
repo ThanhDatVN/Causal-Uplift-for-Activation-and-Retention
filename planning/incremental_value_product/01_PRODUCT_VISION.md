@@ -7,7 +7,7 @@
 > “Với treatment cost, margin, budget và value horizon hiện tại, nên target ai để tối đa hóa
 > expected incremental net value?”
 
-Sản phẩm không phải một model explorer dành riêng cho data scientist. Model evidence vẫn có,
+Sản phẩm không phải một model explorer dành riêng cho nhóm phát triển mô hình. Model evidence vẫn có,
 nhưng nằm sau quyết định kinh doanh.
 
 ## Người dùng
@@ -24,7 +24,7 @@ Growth/CRM manager cần:
 
 ### Người dùng phụ (Secondary User)
 
-Data scientist/analyst cần:
+Người phân tích và kiểm định mô hình cần:
 
 - kiểm tra randomization/balance;
 - xem temporal CLV calibration;

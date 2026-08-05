@@ -7,7 +7,7 @@ import { pathToFileURL } from "node:url";
 const run = promisify(execFile);
 const repo = path.resolve(import.meta.dirname, "..");
 const html = path.join(repo, "output", "dashboard.html");
-const screenshot = path.join(repo, "output", "dashboard_screenshot.png");
+const screenshot = path.join(repo, "output", "screenshots", "dashboard_screenshot.png");
 const edge = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 const baseUrl = pathToFileURL(html).href;
 

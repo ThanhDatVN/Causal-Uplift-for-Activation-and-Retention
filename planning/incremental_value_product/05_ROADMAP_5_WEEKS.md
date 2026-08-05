@@ -119,14 +119,14 @@ Stack P0: Streamlit + independent `src/` domain layer + Docker. FastAPI/React ch
 
 ## Tuần 5 — Kiểm định, Kể chuyện và Phát hành (Validation, Storytelling and Release)
 
-**Mục tiêu:** biến demo thành portfolio artifact có bằng chứng.
+**Mục tiêu:** biến demo thành release artifact có bằng chứng.
 
 | Ngày (Day) | Việc chính | Artifact/kết quả chạy |
 |---|---|---|
 | Day 25 | Freeze model/config; final holdout một lần | immutable metrics |
 | Day 26 | Bootstrap, seed/cutoff, cost/margin/horizon sensitivity | robustness report |
 | Day 27 | Technical report, data/model cards, source citations, limitations | report |
-| Day 28 | Recruiter case study, architecture, README quickstart | public README |
+| Day 28 | Decision case study, architecture, README quickstart | README |
 | Day 29 | Demo video 2–3 phút, slide 8–10 trang, Q&A | video + deck |
 | Day 30 | Fresh-environment reproduction, clean repo, tag/release | `v1.0` |
 
@@ -139,7 +139,6 @@ Stack P0: Streamlit + independent `src/` domain layer + Docker. FastAPI/React ch
 - no placeholder/TODO trong public docs;
 - headline metrics trace về run/artifact;
 - demo video, slide, model/data cards;
-- CV bullets chỉ dùng số final.
 
 ## Cắt phạm vi nếu trễ (Scope Cut)
 

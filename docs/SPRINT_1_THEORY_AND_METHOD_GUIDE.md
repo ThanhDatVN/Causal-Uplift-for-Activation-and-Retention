@@ -235,5 +235,5 @@ Không thêm model chỉ để tăng số lượng. Thứ tự thử trong Sprin
    policy chỉ vì model phức tạp.
 
 Deep uplift/TARNet/DragonNet chưa ưu tiên trong sáu tuần: dữ liệu tabular 12 feature,
-outcome hiếm và mục tiêu portfolio cần evaluation/policy/deployment chắc hơn là thêm
+outcome hiếm và mục tiêu dự án cần evaluation/policy/deployment chắc hơn là thêm
 neural architecture tốn compute nhưng chưa có hypothesis cụ thể.

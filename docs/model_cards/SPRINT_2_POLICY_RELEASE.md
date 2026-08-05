@@ -1,4 +1,7 @@
-# Model Card — Sprint 2 Response top‑k Policy
+# Model Card — Response top‑k Policy
+
+**Cập nhật 05/08/2026 sau Sprint 3.** Champion không đổi; bằng chứng ủng hộ nó đã được
+mở rộng. Xem mục "Sprint 3 re-evaluation" bên dưới trước khi trích số Sprint 2.
 
 ## Intended use
 
@@ -30,6 +33,36 @@ Tại top 10%, `value_per_conversion=1`, `contact_cost=0,0005`:
 - 500 paired bootstrap resamples.
 
 Đây là conversion-equivalent scenario, không phải actual profit.
+
+## Sprint 3 re-evaluation (05/08/2026)
+
+Champion được đưa qua một vòng thử thách có protocol đăng ký trước với metric chính
+mới `policy_area_dr`, 3-fold cross-fitting trên 5.591.836 dòng ở hai fold seed, và 8
+challenger gồm R-Learner, DR ablation, S/T-Learner ablation, Rank-Learner (ICLR 2026)
+và ba ensemble.
+
+**Kết quả: không challenger nào đạt promotion rule; champion giữ nguyên Response.**
+
+Trên retrospective confirmation (1.397.959 dòng, 500 paired bootstrap):
+
+- Response `policy_area_dr = 0,000912`, AUTOC `0,003823`, Qini `0,192989`;
+- challenger gần nhất là Ensemble-QAgg, chênh lệch `-0,0000011` với CI
+  `[-0,0000563; +0,0000525]`, tức chưa tách khỏi 0;
+- không CI nào của bất kỳ challenger nào có lower bound lớn hơn 0;
+- trên AUTOC, mọi challenger có CI nằm hoàn toàn dưới 0.
+
+Tại top 10%, `value_per_conversion=1`, `contact_cost=0,0005` trên confirmation
+Sprint 3: DR net/customer `0,000856`, 95% CI `[0,000675; 0,001044]`, ΔDR so random
+95% CI `[0,000638; 0,000994]`.
+
+**Cảnh báo diễn giải:** theo Qini, ba model (Ensemble-QAgg `0,209845`, S-Under7
+`0,205904`, X-Renormalized `0,201812`) xếp **trên** Response `0,192989`. Theo metric
+chính đã đăng ký trước và theo AUTOC, Response đứng đầu. Không trích một trong hai
+nhóm số này rời khỏi ngữ cảnh còn lại.
+
+Scorer phục vụ web app được fit trên development pool (Sprint 2 `fit + validation`),
+lưu tại `output/webapp/champion_scorer.joblib`, metadata tại
+`output/webapp/champion_scorer.json`.
 
 ## Known limitations
 

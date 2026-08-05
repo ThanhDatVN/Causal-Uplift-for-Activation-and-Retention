@@ -158,7 +158,7 @@ artifacts/<run_id>/
 
 `data_manifest.json` bắt buộc có source URL/DOI, license, retrieval date, SHA-256, raw row count,
 cleaning rule ID, schema hash và outcome/currency definition. Đây là guard rail cho Criteo version drift
-và cho phép recruiter tái lập đúng artifact.
+và cho phép người kiểm tra tái lập đúng artifact.
 
 ## Môi trường phát triển (Environment)
 
@@ -196,8 +196,8 @@ P1:
 
 Không làm React/Kubernetes nếu app chưa pass product acceptance test.
 
-API tối thiểu nếu mở AI Engineer track chỉ phục vụ artifact đã precompute, không retrain model trong
-request path:
+API tối thiểu, nếu cần tích hợp hệ thống, chỉ phục vụ artifact đã precompute và không
+retrain model trong request path:
 
 ```text
 GET  /health

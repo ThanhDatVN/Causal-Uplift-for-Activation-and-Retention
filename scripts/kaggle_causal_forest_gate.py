@@ -26,7 +26,14 @@ import numpy as np
 import psutil
 
 
-EXPECTED_SHA256 = "2716e1bf0fd157a93b5bf86924d9088419dfbac2022c6cd90030220634f616dc"
+# Criteo v2.1 có hai dạng byte hợp lệ. Kaggle **giải nén** file `.csv.gz` khi upload
+# trực tiếp, nên file mount vào `/kaggle/input` là CSV thô 3.248.115.221 byte chứ không
+# phải bản nén 311.422.618 byte. Nội dung hai bản giống nhau bit-for-bit; chỉ container
+# khác, nên chấp nhận cả hai checksum vẫn giữ nguyên đảm bảo "đúng v2.1, không bị cắt".
+EXPECTED_SHA256 = {
+    "2716e1bf0fd157a93b5bf86924d9088419dfbac2022c6cd90030220634f616dc": "csv.gz",
+    "e4d7c710ca1f38e523309d0f8a0745d1b53e7392d51f20d1088b6cfeaef222ef": "csv",
+}
 STAGES = {
     0.001: None,  # local code-path smoke test only
     0.20: None,
@@ -100,10 +107,13 @@ def main():
             raise RuntimeError(f"Prior gate không pass: {prior_path}")
 
     actual_hash = _sha256(args.data_path)
-    if actual_hash != EXPECTED_SHA256:
+    if actual_hash not in EXPECTED_SHA256:
         raise ValueError(
-            f"Checksum Criteo không khớp: {actual_hash}; expected {EXPECTED_SHA256}"
+            f"Checksum Criteo không khớp: {actual_hash}; chấp nhận một trong "
+            + ", ".join(f"{h} ({kind})" for h, kind in EXPECTED_SHA256.items())
         )
+    data_form = EXPECTED_SHA256[actual_hash]
+    print(f"[data] {args.data_path} dạng {data_form}, checksum khớp", flush=True)
 
     stage_dir = args.output_root / f"preflight_{_slug(args.frac)}"
     stage_dir.mkdir(parents=True, exist_ok=True)
@@ -181,6 +191,9 @@ def main():
         "data": {
             "path": str(args.data_path),
             "sha256": actual_hash,
+            # "csv.gz" hoặc "csv": Kaggle giải nén khi upload trực tiếp. Hai dạng có
+            # nội dung giống nhau; ghi lại để audit biết bản nào đã được dùng.
+            "form": data_form,
         },
         "runtime": {
             "logical_cpus": psutil.cpu_count(),

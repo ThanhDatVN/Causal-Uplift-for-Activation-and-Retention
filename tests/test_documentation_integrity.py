@@ -16,10 +16,13 @@ là đúng chứ không phải lỗi.
 
 from __future__ import annotations
 
+import posixpath
 import re
 from pathlib import Path
 
 import pytest
+
+from tests.repo_state import ignored_paths
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -65,9 +68,20 @@ def is_prospective(path: Path) -> bool:
     return any(relative.startswith(prefix) for prefix in PROSPECTIVE)
 
 
+def repo_relative(path: Path, target: str) -> str:
+    """Đích của một link, quy về đường dẫn tương đối so với repo root."""
+    directory = path.parent.relative_to(REPO_ROOT).as_posix()
+    joined = target if directory == "." else posixpath.join(directory, target)
+    return posixpath.normpath(joined)
+
+
 def test_every_relative_markdown_link_resolves():
-    """Mọi link tương đối trong mọi file .md phải trỏ tới file có thật."""
-    broken = []
+    """Mọi link tương đối trong mọi file .md phải trỏ tới file có thật.
+
+    Ngoại lệ duy nhất: đích bị `.gitignore` loại khỏi repo. Trên máy dev nó vẫn tồn tại
+    nên link bấm được; trên CI nó vắng mặt đúng theo thiết kế, không phải lỗi tài liệu.
+    """
+    absent: dict[str, list[str]] = {}
     checked = 0
     for path in markdown_files():
         text = path.read_text(encoding="utf-8", errors="replace")
@@ -76,10 +90,20 @@ def test_every_relative_markdown_link_resolves():
             if not target or target.startswith(("http://", "https://", "mailto:")):
                 continue
             checked += 1
-            if not (path.parent / target).exists():
-                broken.append(
-                    f"{path.relative_to(REPO_ROOT).as_posix()} -> {target}"
-                )
+            if (path.parent / target).exists():
+                continue
+            resolved = repo_relative(path, target)
+            absent.setdefault(resolved, []).append(
+                f"{path.relative_to(REPO_ROOT).as_posix()} -> {target}"
+            )
+
+    by_design = ignored_paths(absent)
+    broken = sorted(
+        message
+        for resolved, messages in absent.items()
+        if resolved not in by_design
+        for message in messages
+    )
     assert checked > 100, f"Chi kiem duoc {checked} link, nghi ngo regex hong"
     assert not broken, "Link hong:\n" + "\n".join(f"  {b}" for b in broken)
 
@@ -89,7 +113,7 @@ def test_backtick_paths_in_current_docs_exist():
 
     Bỏ qua tài liệu lịch sử và scoping: chúng cố ý nhắc tới file chưa có.
     """
-    missing = []
+    absent: dict[str, list[str]] = {}
     for path in markdown_files():
         if is_prospective(path):
             continue
@@ -100,10 +124,20 @@ def test_backtick_paths_in_current_docs_exist():
                 continue
             if target in DELIBERATELY_ABSENT:
                 continue
-            if not (REPO_ROOT / target).exists():
-                missing.append(
-                    f"{path.relative_to(REPO_ROOT).as_posix()}: {target}"
-                )
+            if (REPO_ROOT / target).exists():
+                continue
+            absent.setdefault(target, []).append(
+                f"{path.relative_to(REPO_ROOT).as_posix()}: {target}"
+            )
+
+    # Đường dẫn bị `.gitignore` loại vắng mặt trên CI là đúng thiết kế, không phải lỗi.
+    by_design = ignored_paths(absent)
+    missing = sorted(
+        message
+        for target, messages in absent.items()
+        if target not in by_design
+        for message in messages
+    )
     assert not missing, "Duong dan khong ton tai:\n" + "\n".join(
         f"  {m}" for m in missing
     )

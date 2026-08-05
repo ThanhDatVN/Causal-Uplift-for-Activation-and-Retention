@@ -5,12 +5,19 @@ import pandas as pd
 
 from scripts.export_dashboard_data import build_payload
 from src.paths import OUTPUT_DIR
+from tests.repo_state import ignored_paths
 
 
 SPRINT2_DIR = OUTPUT_DIR / "sprint2"
 
 
 def test_sprint2_release_artifacts_exist():
+    """Artifact release Sprint 2 phải có mặt.
+
+    `confirmation_predictions.npz` bị `.gitignore` loại (`output/**/*.npz`) vì mảng dự
+    đoán tái tạo lại được và làm repo nặng thêm. Trên máy dev nó tồn tại và được kiểm;
+    trên bản checkout sạch nó vắng mặt đúng thiết kế nên bỏ qua thay vì fail.
+    """
     required = [
         "protocol_manifest.json",
         "calibration_comparison.csv",
@@ -20,7 +27,14 @@ def test_sprint2_release_artifacts_exist():
         "policy_budget_curve.csv",
         "confirmation_predictions.npz",
     ]
-    assert all((SPRINT2_DIR / name).exists() for name in required)
+    absent = [
+        f"output/sprint2/{name}"
+        for name in required
+        if not (SPRINT2_DIR / name).exists()
+    ]
+    by_design = ignored_paths(absent)
+    missing = sorted(p for p in absent if p not in by_design)
+    assert not missing, "Thieu artifact release:\n" + "\n".join(f"  {m}" for m in missing)
 
 
 def test_sprint2_confirmation_is_distinct_and_bootstrap_is_release_size():

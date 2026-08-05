@@ -50,21 +50,14 @@ jobs:
         run: |
           python - <<'PY'
           import pathlib, posixpath, re, sys
+          sys.path.insert(0, '.')
+          from tests.repo_state import ignored_paths
 
-          # Nam tai lieu huong dan co y khong publish (xem .gitignore). Link tro toi
-          # chung khong phai loi tai lieu — bo qua dung nam duong dan nay, khong noi
-          # long check cho truong hop khac. `pytest tests/test_documentation_integrity.py`
-          # van kiem day du tren may co full working tree.
-          UNPUBLISHED = {
-              'docs/PROJECT_GUIDE.md',
-              'docs/COMPONENT_REVIEW_GUIDE.md',
-              'docs/NOTEBOOK_GUIDE.md',
-              'docs/KAGGLE_RUNBOOK_COMPLETE.md',
-              'docs/WEBAPP.md',
-          }
-
+          # Duong dan bi .gitignore loai khoi repo thi vang mat tren CI la dung thiet ke,
+          # khong phai loi tai lieu. Dung chung quy tac voi
+          # tests/test_documentation_integrity.py de khong phai bao tri hai danh sach.
           docs = [p for p in pathlib.Path('.').rglob('*.md') if '.venv' not in p.parts]
-          broken, skipped = [], 0
+          absent = {}
           for p in docs:
               text = p.read_text(encoding='utf-8', errors='replace')
               for m in re.finditer(r'\[([^\]]*)\]\(([^)]+)\)', text):
@@ -74,12 +67,14 @@ jobs:
                   if (p.parent / target).exists():
                       continue
                   resolved = posixpath.normpath((p.parent / target).as_posix())
-                  if resolved in UNPUBLISHED:
-                      skipped += 1
-                      continue
-                  broken.append(f'{p.as_posix()} -> {target}')
+                  absent.setdefault(resolved, []).append(f'{p.as_posix()} -> {target}')
+
+          by_design = ignored_paths(absent)
+          broken = sorted(msg for r, msgs in absent.items()
+                          if r not in by_design for msg in msgs)
+          skipped = sum(len(msgs) for r, msgs in absent.items() if r in by_design)
           print(f'{len(docs)} markdown files checked, '
-                f'{len(broken)} broken links, {skipped} unpublished targets skipped')
+                f'{len(broken)} broken links, {skipped} links to gitignored targets skipped')
           for item in broken:
               print('  BROKEN', item)
           sys.exit(1 if broken else 0)

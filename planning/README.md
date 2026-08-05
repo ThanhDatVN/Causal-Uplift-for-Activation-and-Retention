@@ -8,6 +8,7 @@ hướng dẫn thực thi nằm trong `docs/`.
 | Tài liệu | Nội dung |
 |---|---|
 | [NEXT_ROUND_PLAN.md](NEXT_ROUND_PLAN.md) | Vòng tiếp theo sau Sprint 3. Phần A hoàn tất Causal Forest (đang chạy); Phần B ba hướng cải tiến kèm ba hướng đã loại và lý do. **Không phải Sprint 4** |
+| [MARKET_AND_VALUE_RESEARCH.md](MARKET_AND_VALUE_RESEARCH.md) | Research thị trường 2025–2026 và kế hoạch bốn phase nâng giá trị dự án. Số liệu bốn dataset đã đo tại chỗ; mức xác minh `T` cho nguồn thương mại |
 | [SPRINT_3_EXECUTION_AND_WEB_PLAN.md](SPRINT_3_EXECUTION_AND_WEB_PLAN.md) | Kế hoạch Sprint 3 và bảng trạng thái từng phase, kèm sai lệch so với plan |
 | [RESEARCH_LANDSCAPE_2026.md](RESEARCH_LANDSCAPE_2026.md) | Bối cảnh nghiên cứu, vì sao Response thắng, bài toán lân cận, mức xác minh từng nguồn |
 | [sprints.md](sprints.md) | Lộ trình ba sprint và trạng thái gửi mentor |

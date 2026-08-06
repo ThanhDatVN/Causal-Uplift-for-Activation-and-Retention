@@ -126,6 +126,42 @@ Ba câu **không** được viết:
 
 ---
 
+## 2bis. Phân tích độ nhạy — dữ kiện quyết định hướng đi
+
+Sau khi Causal Forest chạy xong, câu hỏi "có model nào hơn Response trên Criteo
+`conversion` không" trả lời được bằng số học chứ không bằng thêm thí nghiệm.
+
+Từ CI paired bootstrap ở `output/causal_forest_release/cf_paired_comparisons_frac_0.5.csv`,
+với `n = 2.096.940`:
+
+| Metric | Giá trị Response | Chênh lệch CF − Response | Nửa độ rộng CI | MDE tương đối | Số dòng cần để phân biệt |
+|---|---:|---:|---:|---:|---:|
+| `policy_area_dr` | 0,00100516 | `+4,96e-07` | `5,90e-05` | **5,9%** | `2,97e10` = **2.123× toàn bộ Criteo** |
+| Qini | 0,187886 | `−1,32e-02` | `2,39e-02` | 12,7% | `6,85e06` = **3,3× holdout hiện tại** |
+
+Hai kết luận rất khác nhau:
+
+**Trên metric chính, hai model không bao giờ phân biệt được.** CI rộng gấp 119 lần
+chênh lệch. Cần 2.123 lần toàn bộ dataset — con số này không phải "khó", mà là không tồn
+tại. Response và Causal Forest **tương đương về mặt vận hành** trên `policy_area_dr`.
+
+Điều đó đóng hẳn hướng "tìm model tốt hơn trên Criteo `conversion`". Không phải vì đã thử
+hết, mà vì phép đo không đủ phân giải để công nhận kết quả kể cả khi có.
+
+**Trên Qini thì ngược lại — thiếu hụt chỉ là 3,3 lần.** Holdout hiện tại là 15% dữ liệu
+(30% của mẫu 50%). Criteo có 13.979.592 dòng. Đánh giá cross-fitted trên toàn bộ dữ liệu
+cho cỡ mẫu đánh giá gấp khoảng 6,7 lần, tức CI hẹp lại khoảng `sqrt(6,7) ≈ 2,6` lần —
+đủ để CI của chênh lệch Qini loại trừ 0.
+
+Nghĩa là: **một cải tiến về thiết kế đánh giá, không phải về model, có thể giải quyết
+được một so sánh hiện đang hoà.** Rẻ, không cần dữ liệu mới, không cần model mới.
+
+*Giới hạn của ngoại suy này:* nó giả định chênh lệch giữ nguyên khi `n` tăng và CI co
+theo `1/sqrt(n)`. Dùng toàn bộ dữ liệu để đánh giá đòi hỏi cross-fitting, tức model được
+huấn luyện trên tập khác — nên đây là **ước lượng cỡ mẫu**, không phải bảo đảm.
+
+---
+
 ## 3. Phần B — Vòng cải tiến mới
 
 Ba hướng dưới đây xếp theo giá trị kỳ vọng. Không bắt buộc làm cả ba.
@@ -162,6 +198,31 @@ next_round_visit_protocol.json, sao theo mẫu `configs/sprint3_improvement_prot
 với hai thay đổi: `estimand.outcome` thành `visit`, và `estimand.excluded_post_treatment`
 vẫn giữ `visit` — vì nó bị loại ở vai trò **feature**, độc lập với việc nó được dùng làm
 outcome. File này **chưa tồn tại**; tạo nó là hành động mở vòng.
+
+### B.1bis Đánh giá cross-fitted trên toàn bộ dữ liệu — rẻ nhất
+
+**Xuất phát từ mục 2bis.** Đây là hướng duy nhất tăng được độ phân giải của phép đo mà
+không cần dữ liệu mới, model mới, hay estimand mới.
+
+**Nội dung.** Thay holdout đơn 15% bằng đánh giá cross-fitted trên cả 13.979.592 dòng:
+chia K fold, mỗi fold huấn luyện trên phần còn lại rồi chấm trên chính fold đó, ghép lại
+thành một bộ điểm out-of-fold phủ toàn dữ liệu. Bootstrap paired trên bộ điểm đó.
+
+**Lợi ích ước tính.** Cỡ mẫu đánh giá gấp khoảng 6,7 lần, CI hẹp lại khoảng 2,6 lần. Đủ
+để chênh lệch Qini giữa Response và Causal Forest loại trừ 0. **Không** đủ cho
+`policy_area_dr` — ở đó thiếu hụt là 2.123 lần, ngoài tầm với.
+
+**Điều phải phát biểu rõ khi báo cáo.** Kết quả sẽ là: hai model phân biệt được theo
+Qini nhưng vẫn không phân biệt được theo metric chính. Đó không phải mâu thuẫn cần giấu
+— đó là phát hiện. Hai metric có độ nhạy khác nhau hai bậc độ lớn trên cùng bộ dữ liệu.
+
+**Chi phí.** Cao hơn vẻ ngoài: mỗi fold phải fit lại Causal Forest trên ~11 triệu dòng.
+Ở mốc 50% một lần fit mất 25 phút và 12,73 GB. Với K=5, ước tính 2,5–3 giờ và RSS tương
+tự vì mỗi fold chạy tuần tự. Vẫn nằm trong một session Kaggle.
+
+**Rủi ro.** Cross-fitting thay đổi model được đánh giá (huấn luyện trên tập khác holdout
+đơn), nên kết quả **không** đặt cạnh bảng release Sprint 1 được. Phải báo cáo như một
+phép đo riêng, không phải bản cập nhật của bảng cũ.
 
 ### B.2 Tầng quyết định
 

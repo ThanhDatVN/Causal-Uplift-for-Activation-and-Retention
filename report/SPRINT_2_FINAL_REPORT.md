@@ -124,7 +124,7 @@ Full local Sprint 2:
 - minimum system available RAM 1,81 GB.
 
 Causal Forest local smoke 0,1% pass. Kaggle run vẫn cần external session/dataset
-attachment; xem `docs/archive/KAGGLE_CAUSAL_FOREST.md`. `inference=False` của safe profile có
+attachment; xem `docs/KAGGLE_RUNBOOK_COMPLETE.md`. `inference=False` của safe profile có
 nghĩa không yêu cầu `effect_interval()`.
 
 ## 8. Quality evidence

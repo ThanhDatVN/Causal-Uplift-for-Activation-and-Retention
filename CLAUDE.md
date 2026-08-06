@@ -51,8 +51,7 @@ Ba báo cáo sprint là nguồn số duy nhất được phép trích dẫn.
 - `output/sprint1/`, `output/sprint2/`, `output/sprint3/`, `output/improvement/`
 - `output/optimization/*sprint1_release*`
 
-Tài liệu lịch sử, không dùng làm nguồn số: `docs/archive/TUTORIAL.md`,
-`docs/archive/KAGGLE_CAUSAL_FOREST.md`, `docs/archive/COLAB_CAUSAL_FOREST.md`, `planning/RUN_PLAN.md`,
+Tài liệu lịch sử, không dùng làm nguồn số: `docs/KAGGLE_RUNBOOK_COMPLETE.md`, `docs/KAGGLE_RUNBOOK_COMPLETE.md`, `planning/RUN_PLAN.md`,
 `planning/CAUSAL_UPLIFT_PLAN.md`, `report/archive/week-01-*`, `notebooks/`.
 
 Các kết quả trong `report/archive/week-01-*`, notebook, HTML explainer và dashboard có thể là

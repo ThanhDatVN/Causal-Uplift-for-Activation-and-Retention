@@ -7,7 +7,7 @@
 
 > **Historical plan / cập nhật 29/07/2026:** protocol và số liệu thực thi mới nằm ở
 > [`../report/SPRINT_1_FINAL_REPORT.md`](../report/SPRINT_1_FINAL_REPORT.md). Run Causal
-> Forest bằng [`../docs/archive/KAGGLE_CAUSAL_FOREST.md`](../docs/archive/KAGGLE_CAUSAL_FOREST.md);
+> Forest bằng `docs/KAGGLE_RUNBOOK_COMPLETE.md`;
 > các cấu hình Colab Pro, p-value hoặc segmentation cũ bên dưới không còn là chuẩn release.
 
 > Ước lượng CATE (heterogeneous treatment effect) cho activation/retention từ Criteo Uplift
@@ -62,7 +62,7 @@ chỉ có thể là scenario, không phải incremental profit quan sát đượ
 **B. Causal Forest (phương pháp chính — code xong, chưa chạy):**
 - Nền tảng lý thuyết: Wager & Athey (2018, JASA) — honest splitting (1 nửa dữ liệu chọn cấu trúc cây, nửa còn lại ước lượng effect trong leaf) → suy diễn thống kê hợp lệ (asymptotic CI). **Chưa đọc trực tiếp bản gốc paper này** — cần đọc trước khi code `causal_forest.py`.
 - Triển khai lịch sử dùng `econml.dml.CausalForestDML` với `discrete_treatment=True`.
-  Profile release hiện hành nằm trong `docs/archive/KAGGLE_CAUSAL_FOREST.md`; cấu hình cũ
+  Profile release hiện hành nằm trong `docs/KAGGLE_RUNBOOK_COMPLETE.md`; cấu hình cũ
   `inference=True` không phải profile đang dùng.
 - **Nguồn không dùng làm căn cứ:** một ghi chú cũ nêu benchmark “S-Learner Qini ≈0,376,
   Causal Forest chỉ chạy trên 10%” nhưng không có nguồn đã xác minh. Số liệu này không được
@@ -120,7 +120,7 @@ Trạng thái: hoàn thành. `src/data.py` và `notebooks/01_eda_criteo.ipynb`; 
 - Propensity AUC trên sample 5% bằng **0,5098**. Đây là balance diagnostic của model đã dùng;
   không phải kiểm định chứng minh assignment mechanism.
 - Chiến lược sample hiện hành dùng learning curve theo resource gate; xem
-  `docs/archive/KAGGLE_CAUSAL_FOREST.md`.
+  `docs/KAGGLE_RUNBOOK_COMPLETE.md`.
 - **Output:** `01_eda_criteo.ipynb`, `output/eda_summary.csv`. Chi tiết: `report/archive/week-01-*`.
 - Nguồn dataset: link download "chính thức" trên trang Criteo AI Lab đã chết (404) — dùng mirror HuggingFace: https://huggingface.co/datasets/criteo/criteo-uplift/resolve/main/criteo-research-uplift-v2.1.csv.gz. Paper công bố dataset: Diemert et al. (2018), *A Large Scale Benchmark for Uplift Modeling*, AdKDD @ KDD.
 
@@ -142,7 +142,7 @@ thứ tự liệt kê không biểu thị chất lượng.
 - Đã chạy `fit_dr_learner` với `DummyClassifier(strategy="prior")`, LightGBM và
   cross-validation 3-fold.
 - `scripts/train_causal_forest.py` đã có code; cloud run chưa hoàn thành. Trạng thái và
-  profile hiện hành nằm trong `docs/archive/KAGGLE_CAUSAL_FOREST.md`.
+  profile hiện hành nằm trong `docs/KAGGLE_RUNBOOK_COMPLETE.md`.
 
 *Kiến trúc script — trạng thái: đã viết:*
 - `scripts/train_baselines.py` — train 5 model local + đánh giá + lưu CATE (`output/cate/`).

@@ -228,7 +228,7 @@ trực tiếp** cho `econml.CausalForestDML`; nút thắt là CPU và system RAM
 5. Nếu không đạt, dừng ở 20–30% và báo cáo learning curve; không mua Colab Pro chỉ để
    ép chạy một model chưa chứng minh mang lại thêm giá trị.
 
-Chi tiết: `docs/archive/KAGGLE_CAUSAL_FOREST.md` và
+Chi tiết: `docs/KAGGLE_RUNBOOK_COMPLETE.md` và
 `output/sprint1/causal_forest_feasibility.json`.
 
 ## 9. Definition of Done

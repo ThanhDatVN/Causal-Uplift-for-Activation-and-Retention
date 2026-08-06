@@ -157,4 +157,4 @@ Profile `kaggle-safe` dùng 200 trees, cross-validation 2-fold, `max_samples=0.2
 Definition of Done của profile này. Local 0,1% chỉ là code-path smoke; kết quả nghiên cứu
 chỉ tồn tại sau Kaggle gates 20% → 30% → 50%.
 
-Xem [archive/README.md](archive/README.md).
+Xem `_noi-bo/lich-su/docs/`.

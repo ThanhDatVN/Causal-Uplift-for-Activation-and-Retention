@@ -441,7 +441,7 @@ Kiểm thử: 19 test cho API và 23/23 headless-browser acceptance check. Trong
 một test chức năng chấm điểm 2.000 dòng Criteo thật: ở budget 10%, scorer target
 9,9% số dòng và tỷ lệ conversion trong nhóm được target là `0,04545` so với `0,00000`
 ở phần còn lại, tức scorer đã lưu vẫn giữ được sức phân biệt chứ không chỉ trả về
-đúng kiểu dữ liệu. Runbook: `docs/WEBAPP.md`.
+đúng kiểu dữ liệu. Runbook: `_noi-bo/van-hanh/WEBAPP.md`.
 
 ## 10. Bằng chứng chất lượng
 
@@ -474,7 +474,7 @@ một test chức năng chấm điểm 2.000 dòng Criteo thật: ở budget 10%
   dataset thứ hai.
 - **Production A/B test** của learned policy chưa có; mọi kết quả là offline.
 - **Docker, CI đầy đủ, video demo và slide deck** — lệch khỏi kế hoạch gốc của Sprint 3;
-  xem `report/weekly/WEEK_05.md` mục 5.1. CI chạy phần test không cần dữ liệu đã được
+  xem `_noi-bo/bao-cao-tuan/WEEK_05.md` mục 5.1. CI chạy phần test không cần dữ liệu đã được
   thêm sau (`.github/workflows/tests.yml`, 98/139 test); Docker và phần trình bày chưa có.
 - **LICENSE** chưa có; đây là quyết định về quyền sở hữu, không tự chọn thay chủ repo.
 

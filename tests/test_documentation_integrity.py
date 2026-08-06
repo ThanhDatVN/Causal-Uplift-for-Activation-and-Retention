@@ -28,13 +28,10 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 # Tài liệu mô tả cấu trúc dự kiến hoặc liệt kê thứ chưa tồn tại.
 PROSPECTIVE = (
-    "docs/archive",
-    "report/archive",
-    "benchmarks/archive",
-    "planning/incremental_value_product",
-    "planning/CAUSAL_UPLIFT_PLAN.md",
-    "planning/RUN_PLAN.md",
-    "planning/SPRINT_PLAN_6_WEEKS.md",
+    # Toàn bộ tài liệu nội bộ: kế hoạch, lịch sử, hướng dẫn đọc, bài trình bày. Chúng
+    # mô tả cấu trúc dự kiến hoặc trỏ tới bố cục repo ở thời điểm trước, nên đường dẫn
+    # không resolve là đúng chứ không phải lỗi.
+    "_noi-bo",
 )
 
 # Trước 06/08/2026 hai đường dẫn này chỉ tồn tại sau khi chạy Kaggle. Chúng đã tồn tại
@@ -84,6 +81,10 @@ def test_every_relative_markdown_link_resolves():
     absent: dict[str, list[str]] = {}
     checked = 0
     for path in markdown_files():
+        # Tài liệu nội bộ trỏ tới bố cục repo ở thời điểm trước; đó không phải lỗi của
+        # repo public.
+        if is_prospective(path):
+            continue
         text = path.read_text(encoding="utf-8", errors="replace")
         for match in MARKDOWN_LINK.finditer(text):
             target = match.group(2).split("#")[0].strip()
@@ -104,7 +105,9 @@ def test_every_relative_markdown_link_resolves():
         if resolved not in by_design
         for message in messages
     )
-    assert checked > 100, f"Chi kiem duoc {checked} link, nghi ngo regex hong"
+    # Nguong canh bao regex hong. Repo public co khoang 60 link noi bo; dat 40 de bat
+    # duoc truong hop regex hong ma khong bao dong gia khi tai lieu duoc thu gon.
+    assert checked > 40, f"Chi kiem duoc {checked} link, nghi ngo regex hong"
     assert not broken, "Link hong:\n" + "\n".join(f"  {b}" for b in broken)
 
 

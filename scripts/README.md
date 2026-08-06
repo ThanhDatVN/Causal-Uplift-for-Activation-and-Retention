@@ -34,7 +34,7 @@ Mọi script đều tự thêm repo root vào `sys.path`, nên chạy được t
 | `kaggle_causal_forest_gate.py` | Gate tài nguyên và toàn vẹn artifact. **Không** đánh giá chất lượng. |
 | `evaluate_causal_forest.py` | Chấm điểm artifact tải về từ Kaggle. Tự phát hiện có so được với bảng release không. |
 
-Runbook: `docs/KAGGLE_RUNBOOK_COMPLETE.md`.
+Runbook: `_noi-bo/van-hanh/KAGGLE_RUNBOOK_COMPLETE.md`.
 
 ## Tái lập release cũ — vẫn chạy được, đừng đổi đường dẫn
 
@@ -59,7 +59,7 @@ model**, dùng prediction đã đóng băng. Đây là lý do nâng bootstrap t�
 
 | Script | Trạng thái |
 |---|---|
-| `train_baselines.py` | Lần chạy baseline đầu tiên; kết quả ở `report/archive/week-01-baseline-results.md`. Nguồn Sprint 1 chính thức là `evaluate_selected_five_models.py`. |
+| `train_baselines.py` | Lần chạy baseline đầu tiên; kết quả ở `_noi-bo/lich-su/report/week-01-baseline-results.md`. Nguồn Sprint 1 chính thức là `evaluate_selected_five_models.py`. |
 | `build_comparison.py` | Dựng bảng so sánh 6 model theo kế hoạch cũ; Sprint 3 dùng chuỗi `run_oof_experiment` → `compare_improvement_candidates` → `run_sprint3_confirmation`. |
 | `bench_harness.py` | Harness đo runtime/RAM thời kỳ đầu. |
 | `assess_causal_forest_feasibility.py` | Benchmark tài nguyên Causal Forest 1/5/10/20%; đã dùng để ra quyết định không chạy 50% local. |

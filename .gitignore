@@ -32,44 +32,7 @@ output/legacy/qini_curve.png
 # split duoc trich trong report/CAUSAL_FOREST_REPORT.md, nen phai kiem chung duoc.
 !output/causal_forest/preflight_*/train.log
 
-# Huong dan chay va huong dan doc: giu o local, chua publish. Repo tren GitHub chi
-# mang tai lieu bao cao (report/, docs/*METHOD*, model_cards) va code.
-# Bo cac dong duoi day khi muon publish chung.
-docs/COMPONENT_REVIEW_GUIDE.md
-# Ba file doc-xong-xoa: tai lieu hoc, khong phai tai lieu tham chieu cua repo.
-# Xoa chung khong anh huong gi.
-docs/GUIDE_01_BAI_TOAN.md
-docs/GUIDE_02_PHUONG_PHAP.md
-docs/GUIDE_03_KET_QUA.md
-docs/BAI_TRINH_BAY_SPRINT_1_2.md
-docs/NOTEBOOK_GUIDE.md
-docs/KAGGLE_RUNBOOK_COMPLETE.md
-docs/WEBAPP.md
-
-# Stray session directories, not project artifacts.
-outputs/
-.agents/
-
-# OS
-Thumbs.db
-.DS_Store
-
-# --- Khong dua len git: tai lieu noi bo, khung trinh bay, ke hoach, lich su ---
-# Tat ca van con tren may. Repo public chi mang bao cao ket qua va code.
-CLAUDE.md
-planning/CAUSAL_UPLIFT_PLAN.md
-planning/RUN_PLAN.md
-planning/SPRINT_PLAN_6_WEEKS.md
-planning/SPRINT_1_2_MODEL_IMPROVEMENT_PLAN.md
-planning/SPRINT_3_EXECUTION_AND_WEB_PLAN.md
-planning/sprints.md
-planning/NEXT_ROUND_PLAN.md
-planning/MARKET_AND_VALUE_RESEARCH.md
-planning/incremental_value_product/
-report/weekly/
-report/archive/
-docs/archive/
-benchmarks/archive/
-output/product/slides_sprint_1_2.html
-docs/BAI_TRINH_BAY_SPRINT_1_2.docx
-scripts/make_presentation_docx.py
+# --- Tai lieu noi bo ---
+# Huong dan doc, bai trinh bay, runbook van hanh, ke hoach chi tiet, bao cao tuan,
+# va lich su. Tat ca nam trong mot thu muc, khong len git. Xem _noi-bo/README.md.
+_noi-bo/

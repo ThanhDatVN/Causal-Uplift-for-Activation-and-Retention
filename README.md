@@ -218,11 +218,11 @@ Sau đó:
 
 1. [Sprint 3 final report](report/SPRINT_3_FINAL_REPORT.md)
 2. [Sprint 3 method guide](docs/SPRINT_3_METHOD_GUIDE.md)
-3. [Web app runbook](docs/WEBAPP.md)
+3. [Web app runbook](_noi-bo/van-hanh/WEBAPP.md)
 4. [Decision contract](docs/DECISION_CONTRACT.md)
 5. [Sprint 2 final report](report/SPRINT_2_FINAL_REPORT.md)
 6. [Data card](docs/data_cards/CRITEO_V2_1.md) và [model card](docs/model_cards/SPRINT_2_POLICY_RELEASE.md)
-7. [Kế hoạch Sprint 3](planning/SPRINT_3_EXECUTION_AND_WEB_PLAN.md)
+7. Kế hoạch Sprint 3
 8. [Bối cảnh nghiên cứu và bài toán lân cận](planning/RESEARCH_LANDSCAPE_2026.md)
 
 Chỉ mục đầy đủ kèm trạng thái từng tài liệu: [docs/README.md](docs/README.md) và

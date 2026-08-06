@@ -124,7 +124,7 @@ Full local Sprint 2:
 - minimum system available RAM 1,81 GB.
 
 Causal Forest local smoke 0,1% pass. Kaggle run vẫn cần external session/dataset
-attachment; xem `docs/KAGGLE_RUNBOOK_COMPLETE.md`. `inference=False` của safe profile có
+attachment; xem `_noi-bo/van-hanh/KAGGLE_RUNBOOK_COMPLETE.md`. `inference=False` của safe profile có
 nghĩa không yêu cầu `effect_interval()`.
 
 ## 8. Quality evidence
@@ -145,7 +145,7 @@ nghĩa không yêu cầu `effect_interval()`.
 - Chưa có production A/B test của learned policy.
 - Chưa có actual monetary outcome hoặc long-term CLV.
 - Report này được tạo trước commit đầu tiên; trạng thái repository hiện tại được ghi trong
-  `report/archive/repository-audit-2026-07-31.md`.
+  `_noi-bo/lich-su/report/repository-audit-2026-07-31.md`.
 - Random comparator là một ranking cố định bằng seed 42; CI hiện tại chưa tích hợp biến
   thiên qua nhiều random-policy seed.
 - Demo video/GIF thuộc Sprint 3 packaging.

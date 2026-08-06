@@ -217,7 +217,7 @@ snapshot, không có chuỗi thí nghiệm.
 Cảnh báo phải giữ: **surrogate paradox**. Ngay cả khi treatment được randomize,
 confounding giữa surrogate và outcome dài hạn có thể làm kết luận sai **dấu**. Ghép
 Online Retail II với Criteo rồi gọi là incremental CLV sẽ vấp đúng cái bẫy này. Quy
-tắc hiện có trong `planning/sprints.md` là đúng và nên giữ.
+tắc hiện có trong `_noi-bo/ke-hoach/sprints.md` là đúng và nên giữ.
 
 ### 3.3 Policy learning có ràng buộc ngân sách
 

@@ -173,5 +173,5 @@ Diễn giải phải thận trọng vì mục 6.2 — khác tập test, khác si
 mô hình đã có: khi một learner đủ mạnh về mặt dung lượng và được cho đủ dữ liệu, khoảng
 cách với baseline dự đoán outcome thu hẹp về 0. Nó không đảo chiều.
 
-Đây chính là câu hỏi mà Phase 1 trong `planning/MARKET_AND_VALUE_RESEARCH.md` đặt ra: giới
+Đây chính là câu hỏi mà Phase 1 trong `_noi-bo/ke-hoach/MARKET_AND_VALUE_RESEARCH.md` đặt ra: giới
 hạn nằm ở model hay ở tín hiệu. Kết quả này nghiêng về tín hiệu.

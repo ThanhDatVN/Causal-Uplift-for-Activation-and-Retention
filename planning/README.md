@@ -1,38 +1,30 @@
 # Chỉ mục kế hoạch
 
-Thư mục này chứa kế hoạch và tài liệu scoping. Kết quả đã chạy nằm trong `report/`;
-hướng dẫn thực thi nằm trong `docs/`.
-
-## Hiện hành
+Thư mục này chứa tài liệu định hướng nghiên cứu. Kết quả đã chạy nằm ở
+[`../report/`](../report/); phương pháp nằm ở [`../docs/`](../docs/).
 
 | Tài liệu | Nội dung |
 |---|---|
-| [NEXT_ROUND_PLAN.md](NEXT_ROUND_PLAN.md) | Vòng tiếp theo sau Sprint 3. Phần A hoàn tất Causal Forest (đang chạy); Phần B ba hướng cải tiến kèm ba hướng đã loại và lý do. **Không phải Sprint 4** |
-| [MARKET_AND_VALUE_RESEARCH.md](MARKET_AND_VALUE_RESEARCH.md) | Research thị trường 2025–2026 và kế hoạch bốn phase nâng giá trị dự án. Số liệu bốn dataset đã đo tại chỗ; mức xác minh `T` cho nguồn thương mại |
-| [SPRINT_3_EXECUTION_AND_WEB_PLAN.md](SPRINT_3_EXECUTION_AND_WEB_PLAN.md) | Kế hoạch Sprint 3 và bảng trạng thái từng phase, kèm sai lệch so với plan |
-| [RESEARCH_LANDSCAPE_2026.md](RESEARCH_LANDSCAPE_2026.md) | Bối cảnh nghiên cứu, vì sao Response thắng, bài toán lân cận, mức xác minh từng nguồn |
-| [sprints.md](sprints.md) | Lộ trình ba sprint và trạng thái gửi mentor |
-| [SPRINT_1_2_MODEL_IMPROVEMENT_PLAN.md](SPRINT_1_2_MODEL_IMPROVEMENT_PLAN.md) | Kế hoạch vòng cải tiến; đã thực hiện xong ở Sprint 3, có banner ghi mục nào làm mục nào không |
+| [RESEARCH_LANDSCAPE_2026.md](RESEARCH_LANDSCAPE_2026.md) | Bối cảnh nghiên cứu, vì sao baseline dự đoán outcome không bị tách khỏi các CATE learner, các bài toán lân cận, và mức xác minh của từng nguồn |
 
-## Scoping cho bài toán chưa mở
+## Mức xác minh nguồn
 
-| Tài liệu | Trạng thái |
+Mọi nguồn được phân loại trước khi hiện thực:
+
+| Mức | Nghĩa |
 |---|---|
-| [incremental_value_product/](incremental_value_product/) | Kế hoạch sản phẩm Incremental CLV. **Chưa mở.** Điều kiện dữ liệu chưa đáp ứng; xem `RESEARCH_LANDSCAPE_2026.md` mục 3.2 |
+| `A` | Đọc được công thức hoặc số liệu gốc. Được phép hiện thực |
+| `B` | Đọc được tóm tắt hoặc mô tả, chưa đọc công thức. **Chưa** được hiện thực |
+| `C` | Chỉ có metadata |
 
-## Lịch sử
+Quy tắc: nguồn ở mức `C` không được hiện thực; phải nâng lên `A` trước.
 
-| Tài liệu | Trạng thái |
-|---|---|
-| [SPRINT_PLAN_6_WEEKS.md](SPRINT_PLAN_6_WEEKS.md) | Kế hoạch 6 tuần và sổ đăng ký công thức/claim. Là **nguồn của lịch tuần** mà `report/weekly/` bám theo. Mục 4 định nghĩa chuẩn bằng chứng A/B/C vẫn đang dùng |
-| [CAUSAL_UPLIFT_PLAN.md](CAUSAL_UPLIFT_PLAN.md) | Kế hoạch gốc trước Sprint 1 release |
-| [RUN_PLAN.md](RUN_PLAN.md) | Runbook 6 model, thay bằng các runbook theo sprint |
+## Quy tắc cho một vòng cải tiến mới
 
-## Quy tắc
-
-Trước khi hiện thực một phương pháp mới, đối chiếu `RESEARCH_LANDSCAPE_2026.md`. Nguồn
-ở mức xác minh `C` (chỉ có metadata) không được hiện thực; phải nâng lên `A` (đọc được
-công thức) trước.
-
-Mọi vòng cải tiến mới phải đăng ký metric, gate và promotion rule **trước** khi chạy,
-theo mẫu `configs/sprint3_improvement_protocol.json`.
+- Đăng ký metric, gate và promotion rule **trước** khi chạy, theo mẫu
+  `configs/sprint3_improvement_protocol.json`.
+- Không tune thêm trên test Sprint 1.
+- Metric chính là `policy_area_dr`; Qini, AUUC, AUTOC và calibration là bằng chứng phụ.
+  Không đổi kết luận bằng cách chọn metric sau khi xem kết quả.
+- Mọi claim "model A hơn B" phải kèm paired confidence interval.
+- Mọi lần chạy phải ghi vào `output/improvement/registry.csv`, kể cả lần thất bại.

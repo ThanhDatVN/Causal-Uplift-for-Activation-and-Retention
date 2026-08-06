@@ -44,8 +44,7 @@ Nguồn chính: [Sprint 2 report](report/SPRINT_2_FINAL_REPORT.md).
 
 Nguồn: [Sprint 3 report](report/SPRINT_3_FINAL_REPORT.md),
 [method guide](docs/SPRINT_3_METHOD_GUIDE.md).
-Kết quả rà soát code/tài liệu trước lần push đầu tiên:
-[Repository audit 31/07/2026](report/archive/repository-audit-2026-07-31.md).
+
 
 ## Kết quả Sprint 3
 
@@ -96,8 +95,7 @@ node scripts\smoke_webapp_browser.mjs
 ```
 
 Mở `http://127.0.0.1:8000`; OpenAPI docs ở `/docs`. Runbook:
-[WEBAPP.md](docs/WEBAPP.md). Screenshot:
-[webapp_screenshot.png](output/screenshots/webapp_screenshot.png).
+Screenshot: [webapp_screenshot.png](output/screenshots/webapp_screenshot.png).
 
 App có sáu tab: tổng quan release, so sánh model kèm paired CI, budget/policy
 explorer, uplift theo decile và chẩn đoán cân bằng, batch scoring từ CSV, và bảng
@@ -141,10 +139,9 @@ scripts/
   kaggle_causal_forest_gate.py
 webapp/                 API FastAPI + SPA không CDN
 output/                 artifact đã chạy — xem output/README.md
-docs/                   method guide, contract, cards, runbook — xem docs/README.md
-planning/               kế hoạch và scoping — xem planning/README.md
-report/                 Sprint 1/2/3 reports
-report/weekly/          sáu báo cáo tiến độ theo tuần
+docs/                   method guide, decision contract, data/model card
+planning/               bối cảnh nghiên cứu và mức xác minh nguồn
+report/                 bốn báo cáo kết quả
 ```
 
 Mỗi thư mục lớn có `README.md` riêng ghi vai trò và trạng thái từng file:

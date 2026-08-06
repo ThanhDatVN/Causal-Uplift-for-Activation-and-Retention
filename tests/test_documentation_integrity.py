@@ -157,8 +157,13 @@ def test_documented_test_count_matches_reality():
     assert match, "Khong doc duoc so test tu pytest:\n" + result.stdout[-500:]
     actual = int(match.group(1))
     documented = []
+    # CLAUDE.md la tai lieu noi bo, khong nam trong repo public. Tren may dev no ton tai
+    # va van duoc kiem; tren CI thi bo qua.
     for name in ("README.md", "CLAUDE.md"):
-        text = (REPO_ROOT / name).read_text(encoding="utf-8")
+        path = REPO_ROOT / name
+        if not path.exists():
+            continue
+        text = path.read_text(encoding="utf-8")
         documented += [
             (name, int(value))
             for value in re.findall(r"pytest[^\n]*?(\d{2,4})\s*(?:test|/)", text)
@@ -166,7 +171,7 @@ def test_documented_test_count_matches_reality():
         documented += [
             (name, int(value)) for value in re.findall(r"(\d{2,4})/\1\s*pass", text)
         ]
-    assert documented, "Khong tim thay so test nao trong README/CLAUDE.md"
+    assert documented, "Khong tim thay so test nao trong README.md"
     wrong = [(where, value) for where, value in documented if value != actual]
     assert not wrong, (
         f"So test thuc te = {actual}, nhung tai lieu ghi: {wrong}. "

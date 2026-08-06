@@ -20,8 +20,8 @@ docs/
 └── archive/                              lịch sử — một trang, không còn file rời
 ```
 
-Ba file `GUIDE_01_BAI_TOAN.md`, `GUIDE_02_PHUONG_PHAP.md`, `GUIDE_03_KET_QUA.md` là tài
-liệu học tạm thời, không nằm trong repo và không được liệt kê ở đây.
+Tài liệu nội bộ — kế hoạch chi tiết, lịch sử, tài liệu học — được giữ ngoài repo. Repo
+public chỉ mang phương pháp, kết quả và code.
 
 ## Bắt đầu từ đâu
 
@@ -32,13 +32,11 @@ liệu học tạm thời, không nằm trong repo và không được liệt k�
 | Hiểu metric chính hiện hành | [SPRINT_3_METHOD_GUIDE.md](SPRINT_3_METHOD_GUIDE.md) |
 | Xem kết quả mới nhất | [../report/SPRINT_3_FINAL_REPORT.md](../report/SPRINT_3_FINAL_REPORT.md) |
 | Xem kết quả Causal Forest | [../report/CAUSAL_FOREST_REPORT.md](../report/CAUSAL_FOREST_REPORT.md) |
-| Đọc tiến độ theo tuần | [../report/weekly/](../report/weekly/) |
 | Biết quy tắc ra quyết định | [DECISION_CONTRACT.md](DECISION_CONTRACT.md) |
 | Chạy web app | [WEBAPP.md](WEBAPP.md) |
 | Chạy lại Causal Forest trên Kaggle | [KAGGLE_RUNBOOK_COMPLETE.md](KAGGLE_RUNBOOK_COMPLETE.md) |
 | Tự rà soát từng thành phần | [COMPONENT_REVIEW_GUIDE.md](COMPONENT_REVIEW_GUIDE.md) |
-| Biết làm gì tiếp theo | [../planning/NEXT_ROUND_PLAN.md](../planning/NEXT_ROUND_PLAN.md) |
-| Mở hướng nghiên cứu mới | [../planning/RESEARCH_LANDSCAPE_2026.md](../planning/RESEARCH_LANDSCAPE_2026.md) |
+| Hiểu bối cảnh nghiên cứu | [../planning/RESEARCH_LANDSCAPE_2026.md](../planning/RESEARCH_LANDSCAPE_2026.md) |
 
 ## Phương pháp — một tài liệu cho mỗi sprint
 
@@ -64,15 +62,6 @@ liệu học tạm thời, không nằm trong repo và không được liệt k�
 |---|---|
 | [data_cards/CRITEO_V2_1.md](data_cards/CRITEO_V2_1.md) | Nguồn gốc, schema, giới hạn của Criteo v2.1 |
 | [model_cards/SPRINT_2_POLICY_RELEASE.md](model_cards/SPRINT_2_POLICY_RELEASE.md) | Model card champion, có mục cập nhật sau Sprint 3 |
-
-## Lịch sử
-
-[archive/README.md](archive/README.md) — một trang duy nhất. Bốn file stub trước đây đã
-được gộp vào đó; nội dung gốc nằm trong lịch sử git.
-
-Tài liệu lịch sử khác: [`../report/archive/`](../report/archive/),
-[`../planning/RUN_PLAN.md`](../planning/RUN_PLAN.md),
-[`../planning/CAUSAL_UPLIFT_PLAN.md`](../planning/CAUSAL_UPLIFT_PLAN.md), `notebooks/`.
 
 ## Chỉ mục thư mục khác
 

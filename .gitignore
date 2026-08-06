@@ -55,3 +55,20 @@ outputs/
 # OS
 Thumbs.db
 .DS_Store
+
+# --- Khong dua len git: tai lieu noi bo, khung trinh bay, ke hoach, lich su ---
+# Tat ca van con tren may. Repo public chi mang bao cao ket qua va code.
+CLAUDE.md
+planning/CAUSAL_UPLIFT_PLAN.md
+planning/RUN_PLAN.md
+planning/SPRINT_PLAN_6_WEEKS.md
+planning/SPRINT_1_2_MODEL_IMPROVEMENT_PLAN.md
+planning/SPRINT_3_EXECUTION_AND_WEB_PLAN.md
+planning/sprints.md
+planning/NEXT_ROUND_PLAN.md
+planning/MARKET_AND_VALUE_RESEARCH.md
+planning/incremental_value_product/
+report/weekly/
+report/archive/
+docs/archive/
+benchmarks/archive/

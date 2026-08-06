@@ -13,7 +13,7 @@ repo mâu thuẫn với chúng, ưu tiên báo cáo sprint.
 | [SPRINT_1_FINAL_REPORT.md](SPRINT_1_FINAL_REPORT.md) | Nền tảng causal, 5 model, final test 2.096.940 dòng | Response Qini `0,187886` dẫn đầu; chỉ X vượt baseline của chính nó |
 | [SPRINT_2_FINAL_REPORT.md](SPRINT_2_FINAL_REPORT.md) | Policy, calibration, dashboard, confirmation 1.397.959 dòng | Champion Response top-k; X‑Renormalized − Response có CI chứa 0 |
 | [SPRINT_3_FINAL_REPORT.md](SPRINT_3_FINAL_REPORT.md) | Vòng cải tiến có đăng ký trước, web app, ba chẩn đoán bổ sung | Không challenger nào đạt promotion rule; champion giữ nguyên |
-| [CAUSAL_FOREST_REPORT.md](CAUSAL_FOREST_REPORT.md) | Benchmark riêng sau ba sprint; ba stage Kaggle 20/30/50, chấm trên holdout final test Sprint 1 | Hoà với Response — CI chứa 0 trên cả hai metric. **Không** gộp vào bảng release Sprint 1 |
+| [CAUSAL_FOREST_REPORT.md](CAUSAL_FOREST_REPORT.md) | Ba stage Kaggle 20/30/50, chấm trên holdout final test Sprint 1 cùng năm model release | `policy_area_dr` hạng 1/6, Qini hạng 3/6; CI chứa 0 so với Response nên là hoà, champion không đổi |
 
 Đọc theo thứ tự ngược lại nếu chỉ có ít thời gian: Sprint 3 trước, vì nó chứa trạng thái
 hiện hành.

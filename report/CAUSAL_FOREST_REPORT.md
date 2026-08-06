@@ -10,10 +10,14 @@ là *chưa chạy* — không phải *đã cân nhắc và loại bỏ*. Báo c�
 Trên final test Sprint 1, Causal Forest **không phân biệt được với Response** trên cả hai
 metric, và vượt rõ ba trong năm model release theo metric chính.
 
-| | policy_area_dr | Qini |
+| Model | `policy_area_dr` | Qini |
 |---|---:|---:|
-| Causal Forest | **0,001006** | 0,174678 |
-| Response (champion) | 0,001005 | **0,187886** |
+| **Causal Forest** | **0,001006** — hạng 1/6 | 0,174678 — hạng 3/6 |
+| Response (champion) | 0,001005 — hạng 2/6 | **0,187886** — hạng 1/6 |
+| S-Learner | 0,000999 — hạng 3/6 | 0,177204 — hạng 2/6 |
+| X-Learner | 0,000975 — hạng 4/6 | 0,167168 — hạng 4/6 |
+| DR-Learner | 0,000925 — hạng 5/6 | 0,153967 — hạng 5/6 |
+| T-Learner | 0,000897 — hạng 6/6 | 0,142021 — hạng 6/6 |
 | Chênh lệch CF − Response | `+4,96e-07` | `−0,013208` |
 | CI 95% paired bootstrap | `[−0,000060; 0,000058]` | `[−0,036989; 0,010740]` |
 | CI chứa 0 | **có** | **có** |

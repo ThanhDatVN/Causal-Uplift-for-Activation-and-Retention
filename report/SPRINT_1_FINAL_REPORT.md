@@ -133,6 +133,35 @@ Không được kết luận thứ hạng chỉ từ CI riêng lẻ. Paired boot
 - Response so với S và X: CI của chênh lệch chứa 0, chưa đủ bằng chứng phân biệt.
 - S, T, X, DR còn lại cũng có nhiều cặp chưa tách biệt rõ.
 
+### 6.1 Causal Forest — bổ sung 06/08/2026
+
+Causal Forest được lên kế hoạch từ Sprint 1 nhưng phải chờ hạ tầng ngoài mới chạy được
+(cần 12,7 GB RAM ở mốc 50%). Nó chấm trên **đúng cùng holdout** — đã kiểm chứng `Y` và
+`T` giống hệt từng phần tử — nên đặt chung bảng được:
+
+| Model | `policy_area_dr` | Qini |
+|---|---:|---:|
+| **Causal Forest** | **0,001006** | 0,174678 |
+| Response baseline | 0,001005 | **0,187886** |
+| S-Learner baseline | 0,000999 | 0,177204 |
+| X-Learner cải tiến | 0,000975 | 0,167168 |
+| DR-Learner baseline | 0,000925 | 0,153967 |
+| T-Learner baseline | 0,000897 | 0,142021 |
+
+Causal Forest đứng đầu theo `policy_area_dr` và thứ ba theo Qini. Cả hai chênh lệch so
+với Response đều có CI chứa 0 — `[−6,0e-05; 5,8e-05]` và `[−0,0370; 0,0107]` — nên đây
+là **hoà**, không phải thắng. Champion không đổi.
+
+Hai điều phải ghi kèm khi trích bảng này:
+
+- **Xuất xứ khác.** Causal Forest chạy muộn hơn và không đi qua quy trình chọn ứng viên
+  trên validation như năm model kia. Nó so được vì dùng chung holdout, không phải vì
+  cùng quy trình.
+- **`policy_area_dr` là metric của Sprint 3**, được tính bổ sung cho cả sáu model trên
+  holdout này. Cột Qini vẫn là metric của Sprint 1.
+
+Chi tiết, learning curve ba mốc và biểu đồ: `report/CAUSAL_FOREST_REPORT.md`.
+
 Response đứng đầu về ranking không chứng minh nó ước lượng đúng CATE cá nhân. Model
 release cho sản phẩm cần được chọn đồng thời theo ranking, calibration, độ ổn định và
 giá trị policy.

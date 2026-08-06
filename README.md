@@ -185,21 +185,27 @@ Run cần file Criteo v2.1 với SHA‑256:
 Kaggle 20% → 30% → 50% đã chạy và đã chấm điểm. Báo cáo đầy đủ:
 [CAUSAL_FOREST_REPORT.md](report/CAUSAL_FOREST_REPORT.md).
 
-Đây là **benchmark riêng**, không phải thành viên của bộ release Sprint 1. Nó chạy sau
-khi cả ba sprint đã chốt, dùng chung holdout final test Sprint 1 nên so sánh cặp hợp lệ,
-nhưng không đi qua cùng quy trình chọn ứng viên. Bảng release Sprint 1 giữ nguyên năm
-model.
+Chấm trên cùng holdout final test Sprint 1 (2.096.940 dòng, trùng khít đã kiểm chứng
+từng phần tử), nên sáu model đặt chung một bảng được:
 
-So sánh cặp với champion trên 2.096.940 dòng (holdout trùng khít đã kiểm chứng):
+| Model | `policy_area_dr` | Qini |
+|---|---:|---:|
+| **Causal Forest** | **0,001006** | 0,174678 |
+| Response | 0,001005 | **0,187886** |
+| S-Learner | 0,000999 | 0,177204 |
+| X-Learner | 0,000975 | 0,167168 |
+| DR-Learner | 0,000925 | 0,153967 |
+| T-Learner | 0,000897 | 0,142021 |
 
-| | Causal Forest | Response | Chênh lệch | CI 95% |
-|---|---:|---:|---:|---|
-| `policy_area_dr` | 0,001006 | 0,001005 | `+4,96e-07` | `[−6,0e-05; 5,8e-05]` |
-| Qini | 0,174678 | 0,187886 | `−0,013208` | `[−0,0370; 0,0107]` |
+Causal Forest đứng đầu theo metric chính và thứ ba theo Qini. Nhưng chênh lệch so với
+Response có **CI 95% chứa 0 trên cả hai metric** — `[−6,0e-05; 5,8e-05]` và
+`[−0,0370; 0,0107]` — nên đây là **hoà**, không phải thắng. Champion giữ nguyên Response.
 
-CI chứa 0 trên cả hai metric, nên đây là **hoà**. Champion giữ nguyên Response. Causal
-Forest vượt rõ X, DR, T theo metric chính, và không suy biến — 912.579 giá trị điểm phân
-biệt.
+Theo `policy_area_dr`, Causal Forest vượt rõ X, DR, T. Điểm không suy biến: 912.579 giá
+trị phân biệt.
+
+Ghi chú xuất xứ: Causal Forest chạy sau khi ba sprint đã chốt, không đi qua quy trình
+chọn ứng viên trên validation như năm model kia. Nó so được vì dùng chung holdout.
 
 **Notebook để chạy lại:** [`notebooks/kaggle_causal_forest.ipynb`](notebooks/kaggle_causal_forest.ipynb)
 — 23 cell, chạy được `Save & Run All`, không cần restart kernel.

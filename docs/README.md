@@ -11,7 +11,7 @@ docs/
 ├── SPRINT_2_METHOD_AND_PRODUCT_GUIDE.md  undersampling, calibration, policy value
 ├── SPRINT_3_METHOD_GUIDE.md              policy_area_dr, RATE/AUTOC, cross-fitting
 ├── DECISION_CONTRACT.md                  policy phát hành, công thức, guardrail
-├── KAGGLE_RUNBOOK_COMPLETE.md            runbook Causal Forest trên Kaggle
+├── KAGGLE_RUNBOOK_COMPLETE.md            lý do thiết kế + danh mục lỗi Kaggle
 ├── NOTEBOOK_GUIDE.md                     notebook nào chạy ở đâu
 ├── WEBAPP.md                             kiến trúc và kiểm thử web app
 ├── COMPONENT_REVIEW_GUIDE.md             quy trình tự rà soát từng thành phần
@@ -53,7 +53,7 @@ liệu học tạm thời, không nằm trong repo và không được liệt k�
 | Tài liệu | Nội dung |
 |---|---|
 | [DECISION_CONTRACT.md](DECISION_CONTRACT.md) | Hợp đồng quyết định: policy phát hành, công thức, guardrail |
-| [KAGGLE_RUNBOOK_COMPLETE.md](KAGGLE_RUNBOOK_COMPLETE.md) | Runbook Causal Forest: chuẩn bị session, từng cell, danh mục lỗi, cách đọc kết quả |
+| [KAGGLE_RUNBOOK_COMPLETE.md](KAGGLE_RUNBOOK_COMPLETE.md) | Vì sao chia ba mốc, profile `kaggle-safe`, và danh mục 16 lỗi. Bước chạy nằm trong chính notebook |
 | [NOTEBOOK_GUIDE.md](NOTEBOOK_GUIDE.md) | Notebook nào chạy ở đâu, và trạng thái phần code còn lại |
 | [WEBAPP.md](WEBAPP.md) | Kiến trúc, endpoint và kiểm thử web application |
 | [COMPONENT_REVIEW_GUIDE.md](COMPONENT_REVIEW_GUIDE.md) | Quy trình rà soát từng thành phần: đọc gì, chạy lệnh gì, dấu hiệu sai |

@@ -36,13 +36,12 @@ không suy rộng kết quả sang tiêu chí chưa đánh giá.
 
 ## Tài liệu và artifact có hiệu lực
 
-Điểm vào: `docs/PROJECT_GUIDE.md` (hướng dẫn toàn diện), `docs/README.md` và
-`planning/README.md` (chỉ mục có trạng thái từng tài liệu).
+Điểm vào: `docs/README.md` và `planning/README.md` (chỉ mục có trạng thái từng tài liệu).
+Ba báo cáo sprint là nguồn số duy nhất được phép trích dẫn.
 
 - `report/SPRINT_1_FINAL_REPORT.md`
 - `report/SPRINT_2_FINAL_REPORT.md`
 - `report/SPRINT_3_FINAL_REPORT.md`
-- `docs/PROJECT_GUIDE.md`
 - `docs/SPRINT_1_THEORY_AND_METHOD_GUIDE.md`
 - `docs/SPRINT_2_METHOD_AND_PRODUCT_GUIDE.md`
 - `docs/SPRINT_3_METHOD_GUIDE.md`
@@ -143,9 +142,11 @@ dùng `visit` làm **feature** vẫn là leakage và vẫn bị cấm.
   CI [0.000608, 0.000977].
 - All value/cost outputs are assumption scenarios, not actual profit.
 - Causal Forest Kaggle 20/30/50 đã chạy xong và đã chấm điểm — xem
-  `report/CAUSAL_FOREST_REPORT.md`. Ở stage 50%, `policy_area_dr = 0,001006` (hạng 1/6)
-  và Qini `0,174678` (hạng 3/6); chênh lệch so với Response có CI chứa 0 trên **cả hai**
-  metric, nên đây là **hoà**, không phải thắng. Champion giữ nguyên Response.
+  `report/CAUSAL_FOREST_REPORT.md`. Đây là **benchmark riêng chạy sau Sprint 3**, không
+  phải thành viên của bộ release Sprint 1 — nó dùng chung holdout nên so được, nhưng không
+  qua cùng quy trình chọn ứng viên. Không gộp nó vào bảng release Sprint 1.
+  `policy_area_dr = 0,001006`, Qini `0,174678`; chênh lệch so với Response có CI chứa 0
+  trên **cả hai** metric, nên đây là **hoà**. Champion giữ nguyên Response.
 - Resource-gated profile has `inference=False`; do not require or claim `effect_interval()`.
 
 ## Quy tắc khi sửa/chạy

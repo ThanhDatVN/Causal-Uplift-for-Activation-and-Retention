@@ -12,8 +12,8 @@ metric, và vượt rõ ba trong năm model release theo metric chính.
 
 | | policy_area_dr | Qini |
 |---|---:|---:|
-| Causal Forest | **0,001006** — hạng 1/6 | 0,174678 — hạng 3/6 |
-| Response (champion) | 0,001005 — hạng 2/6 | **0,187886** — hạng 1/6 |
+| Causal Forest | **0,001006** | 0,174678 |
+| Response (champion) | 0,001005 | **0,187886** |
 | Chênh lệch CF − Response | `+4,96e-07` | `−0,013208` |
 | CI 95% paired bootstrap | `[−0,000060; 0,000058]` | `[−0,036989; 0,010740]` |
 | CI chứa 0 | **có** | **có** |
@@ -154,7 +154,11 @@ làm repo nặng thêm. Manifest, log và mọi bảng CSV/JSON thì có.
 
 ## 8. Ảnh hưởng tới kết luận chung của dự án
 
-Không đổi champion. Nhưng bổ sung một điểm dữ liệu đáng kể vào lập luận trung tâm.
+Không đổi champion, và **không gộp vào bảng release Sprint 1**. Bảng đó là kết quả của
+một quy trình chọn ứng viên cụ thể trên validation; Causal Forest không đi qua quy trình
+đó. Nó dùng chung holdout nên so sánh cặp hợp lệ, nhưng nó là một benchmark riêng.
+
+Điều nó bổ sung là một điểm dữ liệu đáng kể vào lập luận trung tâm.
 
 Sprint 3 kết luận: không CATE learner nào vượt được Response trên `conversion`, và mọi CI
 đều nằm hoàn toàn dưới 0. Causal Forest là model đầu tiên trong dự án **hoà** với Response

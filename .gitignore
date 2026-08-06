@@ -37,7 +37,6 @@ output/qini_curve.png
 # Huong dan chay va huong dan doc: giu o local, chua publish. Repo tren GitHub chi
 # mang tai lieu bao cao (report/, docs/*METHOD*, model_cards) va code.
 # Bo cac dong duoi day khi muon publish chung.
-docs/PROJECT_GUIDE.md
 docs/COMPONENT_REVIEW_GUIDE.md
 # Ba file doc-xong-xoa: tai lieu hoc, khong phai tai lieu tham chieu cua repo.
 # Xoa chung khong anh huong gi.

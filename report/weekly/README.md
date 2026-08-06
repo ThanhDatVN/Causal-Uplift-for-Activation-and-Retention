@@ -36,7 +36,8 @@ trong mục 5.1 và 6.1 của hai báo cáo đó, không giấu trong phụ lụ
 
 ## Đọc kèm
 
-- Tổng quan toàn dự án: [`../../docs/PROJECT_GUIDE.md`](../../docs/PROJECT_GUIDE.md)
+- Tổng quan toàn dự án: [`../SPRINT_1_FINAL_REPORT.md`](../SPRINT_1_FINAL_REPORT.md) rồi
+  [`../SPRINT_2_FINAL_REPORT.md`](../SPRINT_2_FINAL_REPORT.md)
 - Rà soát từng thành phần: [`../../docs/COMPONENT_REVIEW_GUIDE.md`](../../docs/COMPONENT_REVIEW_GUIDE.md)
 - Số chính thức: `../SPRINT_1_FINAL_REPORT.md`, `../SPRINT_2_FINAL_REPORT.md`,
   `../SPRINT_3_FINAL_REPORT.md`

@@ -7,7 +7,7 @@ hướng dẫn thực thi; tài liệu **Lịch sử** được giữ để truy
 
 | Bạn muốn | Đọc |
 |---|---|
-| Hiểu dự án từ đầu đến cuối | [PROJECT_GUIDE.md](PROJECT_GUIDE.md) |
+| Hiểu dự án từ đầu đến cuối | `GUIDE_01_BAI_TOAN.md` → `GUIDE_02_PHUONG_PHAP.md` → `GUIDE_03_KET_QUA.md` (tài liệu học, không nằm trong repo) |
 | Rà soát và kiểm chứng từng thành phần | [COMPONENT_REVIEW_GUIDE.md](COMPONENT_REVIEW_GUIDE.md) |
 | Đọc tiến độ theo tuần | [../report/weekly/](../report/weekly/) |
 | Xem kết quả mới nhất | [../report/SPRINT_3_FINAL_REPORT.md](../report/SPRINT_3_FINAL_REPORT.md) |
@@ -23,7 +23,6 @@ hướng dẫn thực thi; tài liệu **Lịch sử** được giữ để truy
 | Tài liệu | Nội dung |
 |---|---|
 | [COMPONENT_REVIEW_GUIDE.md](COMPONENT_REVIEW_GUIDE.md) | Quy trình rà soát từng thành phần: đọc gì, chạy lệnh gì để kiểm chứng, dấu hiệu sai |
-| [PROJECT_GUIDE.md](PROJECT_GUIDE.md) | Hướng dẫn toàn diện: trình tự đọc, kiến trúc split, từng module, metric, model, web app, bẫy khi đọc kết quả, thuật ngữ |
 | [NOTEBOOK_GUIDE.md](NOTEBOOK_GUIDE.md) | Chạy notebook nào ở đâu, từng bước trên Kaggle, và bảng trạng thái phần code còn lại |
 | [KAGGLE_RUNBOOK_COMPLETE.md](KAGGLE_RUNBOOK_COMPLETE.md) | Runbook đầy đủ cho Causal Forest trên Kaggle: code dán được, danh mục 15 lỗi, checklist |
 | [WEBAPP.md](WEBAPP.md) | Kiến trúc, endpoint và kiểm thử của web application |

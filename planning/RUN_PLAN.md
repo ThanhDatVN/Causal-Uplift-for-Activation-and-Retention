@@ -8,7 +8,7 @@
 
 | Việc cần làm | Tài liệu hiện hành |
 |---|---|
-| Hiểu toàn bộ dự án | [`../docs/PROJECT_GUIDE.md`](../docs/PROJECT_GUIDE.md) |
+| Hiểu toàn bộ dự án | [`../report/SPRINT_1_FINAL_REPORT.md`](../report/SPRINT_1_FINAL_REPORT.md) |
 | Tái lập Sprint 1 (5 model) | [`../README.md`](../README.md) mục "Chạy lại" |
 | Tái lập Sprint 2 | [`../report/SPRINT_2_FINAL_REPORT.md`](../report/SPRINT_2_FINAL_REPORT.md) mục 10 |
 | Tái lập Sprint 3 | [`../report/SPRINT_3_FINAL_REPORT.md`](../report/SPRINT_3_FINAL_REPORT.md) mục 12 |

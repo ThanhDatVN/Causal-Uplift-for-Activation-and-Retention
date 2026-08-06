@@ -1,7 +1,7 @@
 # Tutorial — đã thay thế
 
 > **Trạng thái: lịch sử.** Tutorial này viết ở thời kỳ Sprint 2. Nó đã được thay bằng
-> [**PROJECT_GUIDE.md**](../PROJECT_GUIDE.md), bao phủ toàn bộ nội dung của nó và bổ sung
+> `report/SPRINT_1_FINAL_REPORT.md`, bao phủ toàn bộ nội dung của nó và bổ sung
 > kiến trúc split, từng module trong `src/`, giao thức chọn model, web app và danh mục
 > bẫy khi đọc kết quả.
 
@@ -22,7 +22,7 @@ vì 4.193.877), không phải vì phương pháp đánh giá đổi.
 ## Nội dung khái niệm vẫn đúng nguyên văn
 
 Ba điểm sau trong tutorial cũ vẫn là quy tắc của dự án và được giữ nguyên trong
-`PROJECT_GUIDE.md`:
+`report/SPRINT_1_FINAL_REPORT.md`:
 
 1. Với cùng một người chỉ quan sát được một trong hai potential outcome. Randomized
    experiment cho phép ước lượng hiệu ứng có điều kiện, nhưng **không** biến principal
@@ -32,4 +32,4 @@ Ba điểm sau trong tutorial cũ vẫn là quy tắc của dự án và đượ
 3. Model A có point estimate cao hơn model B là chưa đủ; phải xem CI của **chênh lệch**
    trên cùng bootstrap resamples.
 
-Đọc [PROJECT_GUIDE.md](../PROJECT_GUIDE.md).
+Đọc `report/SPRINT_1_FINAL_REPORT.md`.

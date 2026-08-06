@@ -185,23 +185,28 @@ Run cần file Criteo v2.1 với SHA‑256:
 Kaggle 20% → 30% → 50% đã chạy và đã chấm điểm. Báo cáo đầy đủ:
 [CAUSAL_FOREST_REPORT.md](report/CAUSAL_FOREST_REPORT.md).
 
-Trên final test Sprint 1 (2.096.940 dòng, holdout trùng khít đã kiểm chứng):
+Đây là **benchmark riêng**, không phải thành viên của bộ release Sprint 1. Nó chạy sau
+khi cả ba sprint đã chốt, dùng chung holdout final test Sprint 1 nên so sánh cặp hợp lệ,
+nhưng không đi qua cùng quy trình chọn ứng viên. Bảng release Sprint 1 giữ nguyên năm
+model.
 
-| | policy_area_dr | Qini |
-|---|---:|---:|
-| Causal Forest | 0,001006 — hạng 1/6 | 0,174678 — hạng 3/6 |
-| Response | 0,001005 — hạng 2/6 | 0,187886 — hạng 1/6 |
+So sánh cặp với champion trên 2.096.940 dòng (holdout trùng khít đã kiểm chứng):
 
-Chênh lệch so với Response có CI 95% chứa 0 trên cả hai metric, nên đây là **hoà**, không
-phải thắng. Champion giữ nguyên Response. Causal Forest vượt rõ X, DR, T theo metric
-chính, và không suy biến — 912.579 giá trị điểm phân biệt.
+| | Causal Forest | Response | Chênh lệch | CI 95% |
+|---|---:|---:|---:|---|
+| `policy_area_dr` | 0,001006 | 0,001005 | `+4,96e-07` | `[−6,0e-05; 5,8e-05]` |
+| Qini | 0,174678 | 0,187886 | `−0,013208` | `[−0,0370; 0,0107]` |
+
+CI chứa 0 trên cả hai metric, nên đây là **hoà**. Champion giữ nguyên Response. Causal
+Forest vượt rõ X, DR, T theo metric chính, và không suy biến — 912.579 giá trị điểm phân
+biệt.
 
 **Notebook để chạy lại:** [`notebooks/kaggle_causal_forest.ipynb`](notebooks/kaggle_causal_forest.ipynb)
 — 23 cell, chạy được `Save & Run All`, không cần restart kernel.
 
 ## Đọc theo thứ tự
 
-Bắt đầu bằng [**PROJECT_GUIDE.md**](docs/PROJECT_GUIDE.md) — hướng dẫn toàn diện, có
+Bắt đầu bằng [**Sprint 1 report**](report/SPRINT_1_FINAL_REPORT.md) — nền tảng và bảng model, có
 trình tự đọc theo thời gian bạn có (15 phút / 1 giờ / nửa ngày), kiến trúc split, giải
 thích từng module, metric, model, web app và danh mục bẫy khi đọc kết quả.
 

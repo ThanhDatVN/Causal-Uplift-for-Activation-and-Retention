@@ -49,8 +49,11 @@ Báo cáo đầy đủ: `report/CAUSAL_FOREST_REPORT.md`.
 ### A.1 Kết quả
 
 Ba stage đều `passed`. Trên final test Sprint 1, Causal Forest **hoà** với Response:
-`policy_area_dr = 0,001006` (hạng 1/6) nhưng CI `[−6,0e-05; 5,8e-05]` chứa 0;
-Qini `0,174678` (hạng 3/6), CI `[−0,0370; 0,0107]` cũng chứa 0. Champion không đổi.
+`policy_area_dr = 0,001006` nhưng CI `[−6,0e-05; 5,8e-05]` chứa 0;
+Qini `0,174678`, CI `[−0,0370; 0,0107]` cũng chứa 0. Champion không đổi.
+
+Đây là **benchmark riêng**, không phải thành viên bộ release Sprint 1. Nó dùng chung
+holdout nên so sánh cặp hợp lệ, nhưng không qua cùng quy trình chọn ứng viên.
 
 | Mốc | Peak RSS | RAM | Fit | Qini | So được với release |
 |---|---:|---:|---:|---:|:---:|
@@ -101,7 +104,7 @@ Các chỗ đang ghi trạng thái "chưa chạy" và phải sửa đồng thờ
 |---|---|
 | `CLAUDE.md` | dòng "Causal Forest Kaggle 20/30/50 remains pending" |
 | `README.md` | mục "Causal Forest — hạng mục còn thiếu duy nhất" |
-| `report/SPRINT_1_FINAL_REPORT.md` | bảng Qini release, thêm dòng Causal Forest nếu stage 50% chạy được |
+| `report/SPRINT_1_FINAL_REPORT.md` | **không sửa.** Causal Forest là benchmark riêng chạy sau, không phải thành viên bộ release Sprint 1; bảng Qini release giữ nguyên năm model |
 | `report/SPRINT_3_FINAL_REPORT.md` | mục trạng thái hạng mục còn thiếu |
 | `report/weekly/WEEK_06.md` | mục việc còn lại |
 | `planning/sprints.md` | quyết định cắt scope, ghi đã hoàn tất |

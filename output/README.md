@@ -21,7 +21,7 @@ output/
 
 | Thư mục | Sprint | Nội dung |
 |---|---|---|
-| `holdout/` | 1 | `final_test_yt.npz` — 2.096.940 dòng `Y` và `T`. Mọi model so với nhau đều chấm trên đúng file này |
+| `holdout/` | 1 | `final_test_yt.npz` — 2.096.940 dòng `Y` và `T`. Mọi model so với nhau đều chấm trên đúng file này. **Đây là mảng duy nhất được commit** (259 KB sau khi nén int8), để ai clone repo cũng tái lập được bảng so sánh cặp |
 | `sprint1/` | 1 | data manifest, balance SMD, arm summary, policy decile, paired bootstrap, score diagnostics |
 | `sprint2/` | 2 | protocol manifest, calibration comparison, paired Qini bootstrap, policy value/sensitivity/budget curve |
 | `sprint3/` | 3 | confirmation metrics, paired comparisons, budget curve, promotion decision, protocol manifest |
@@ -73,6 +73,21 @@ mà chúng nằm trên tập test hoàn toàn khác.
 `0,179299`, còn điểm release `optimization/cate/cate_response_sprint1_release.npy` cho
 `0,187886`. Hai lần chạy khác nhau; chỉ số sau là chính thức. Đây là lý do hai bộ điểm
 được tách hẳn thư mục thay vì để cạnh nhau.
+
+## Cái gì lên git, cái gì không
+
+Repo mang **116 file, 2,3 MB** — toàn bộ CSV, JSON, PNG, HTML và manifest. Đủ để đọc mọi
+kết quả mà không cần chạy lại gì.
+
+Bị chặn: **67 file, 1,67 GB** mảng dự đoán /. Chúng tái tạo lại được từ dữ
+liệu gốc cộng cấu hình đã chốt, và commit chúng làm repo nặng gấp bảy trăm lần.
+
+Ngoại lệ duy nhất là . Nó chỉ chứa hai mảng nhị phân nên nén
+ xuống còn 259 KB — từ 32 MB, nhỏ hơn 126 lần. Giữ nó lại vì không có nó thì không
+ai tái lập được bảng so sánh cặp mà không phải chạy lại toàn bộ pipeline.
+
+Bốn thư mục bị chặn hoàn toàn:  (smoke và benchmark), và ba file trong
+ đã bị thay thế.
 
 ## Script nào ghi ra đâu
 

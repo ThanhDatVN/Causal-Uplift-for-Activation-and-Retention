@@ -96,7 +96,8 @@ def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     cate_dir = OUTPUT_DIR / "legacy" / "first_run_scores"
     cate_dir.mkdir(exist_ok=True)
-    np.savez(OUTPUT_DIR / "holdout" / "final_test_yt.npz", Y=Y_te, T=T_te,
+    np.savez_compressed(OUTPUT_DIR / "holdout" / "final_test_yt.npz",
+             Y=Y_te.astype(np.int8), T=T_te.astype(np.int8),
              frac=args.frac, seed=args.seed, n_test=len(test_df))
     for name, cate in cates.items():
         slug = name.lower().replace("-", "_")

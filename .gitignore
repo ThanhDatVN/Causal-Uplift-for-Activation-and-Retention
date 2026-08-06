@@ -13,10 +13,13 @@ data/
 .coverage
 htmlcov/
 
-# Prediction arrays are reproducible and make the repository unnecessarily large.
-# Keep compact CSV/JSON/PNG/HTML release artifacts under output/ for review.
+# Mang du doan tai tao lai duoc va lam repo nang them 1,7 GB. Giu lai CSV/JSON/PNG/HTML
+# gon nhe duoi output/ de doc duoc truc tiep.
 output/**/*.npy
 output/**/*.npz
+# Ngoai le: holdout dung chung cua Sprint 1, 259 KB sau khi nen int8. Khong co no thi
+# khong ai tai lap duoc bang so sanh cap ma khong phai chay lai toan bo pipeline.
+!output/holdout/final_test_yt.npz
 # Fitted scorer for the web app: rebuild with scripts/build_champion_scorer.py.
 output/product/webapp/*.joblib
 # Run logs from the Sprint 3 improvement round.
@@ -32,7 +35,5 @@ output/legacy/qini_curve.png
 # split duoc trich trong report/CAUSAL_FOREST_REPORT.md, nen phai kiem chung duoc.
 !output/causal_forest/preflight_*/train.log
 
-# --- Tai lieu noi bo ---
-# Huong dan doc, bai trinh bay, runbook van hanh, ke hoach chi tiet, bao cao tuan,
-# va lich su. Tat ca nam trong mot thu muc, khong len git. Xem _noi-bo/README.md.
+# --- Tai lieu  ---
 _noi-bo/

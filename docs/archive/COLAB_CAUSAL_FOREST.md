@@ -2,7 +2,7 @@
 
 > **Trạng thái: lịch sử.** Luồng hiện hành chạy Causal Forest trên **Kaggle**, theo
 > [KAGGLE_RUNBOOK_COMPLETE.md](../KAGGLE_RUNBOOK_COMPLETE.md). File này được giữ vì
-> `report/archive/MENTOR_SPRINT_PLAN_6_WEEKS_AND_EVIDENCE_AUDIT.md` đã trích dẫn nó.
+> `planning/SPRINT_PLAN_6_WEEKS.md` đã trích dẫn nó.
 
 ## Vì sao không chọn Colab
 

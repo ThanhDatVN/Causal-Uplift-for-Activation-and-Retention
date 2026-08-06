@@ -1,7 +1,7 @@
 # Sprint 2 — So sánh 5 model baseline trên holdout 50%
 
 > **Historical / superseded:** đây là lần chạy baseline cũ. Không dùng số liệu trong
-> file này để báo cáo. Xem [`../SPRINT_1_FINAL_REPORT.md`](../../SPRINT_1_FINAL_REPORT.md)
+> file này để báo cáo. Xem [`../SPRINT_1_FINAL_REPORT.md`](../SPRINT_1_FINAL_REPORT.md)
 > cho release 29/07/2026 với split, ablation và paired bootstrap đã chuẩn hóa.
 
 **Trạng thái:** Năm model local đã chạy. Causal Forest chưa có cloud result.
@@ -69,7 +69,7 @@ và không cung cấp dấu treatment effect. Vì vậy:
   rare-outcome correction trong lần chạy này.
 - Causal Forest chưa có cloud artifact và không xuất hiện trong bảng.
 
-Hướng cải tiến: xem [`planning/CAUSAL_UPLIFT_PLAN.md`](../../../planning/CAUSAL_UPLIFT_PLAN.md)
+Hướng cải tiến: xem [`planning/CAUSAL_UPLIFT_PLAN.md`](../../planning/CAUSAL_UPLIFT_PLAN.md)
 mục “Hướng cải tiến model”.
 
 ## 6. Output đã sinh

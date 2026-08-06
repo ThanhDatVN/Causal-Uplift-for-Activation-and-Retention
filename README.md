@@ -45,7 +45,7 @@ Nguồn chính: [Sprint 2 report](report/SPRINT_2_FINAL_REPORT.md).
 Nguồn: [Sprint 3 report](report/SPRINT_3_FINAL_REPORT.md),
 [method guide](docs/SPRINT_3_METHOD_GUIDE.md).
 Kết quả rà soát code/tài liệu trước lần push đầu tiên:
-[Repository audit 31/07/2026](report/archive/REPOSITORY_AUDIT_2026-07-31.md).
+[Repository audit 31/07/2026](report/archive/repository-audit-2026-07-31.md).
 
 ## Kết quả Sprint 3
 

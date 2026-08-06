@@ -34,6 +34,7 @@ PROSPECTIVE = (
     "planning/incremental_value_product",
     "planning/CAUSAL_UPLIFT_PLAN.md",
     "planning/RUN_PLAN.md",
+    "planning/SPRINT_PLAN_6_WEEKS.md",
 )
 
 # Trước 06/08/2026 hai đường dẫn này chỉ tồn tại sau khi chạy Kaggle. Chúng đã tồn tại

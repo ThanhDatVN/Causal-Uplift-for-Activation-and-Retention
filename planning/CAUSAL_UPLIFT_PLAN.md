@@ -112,7 +112,7 @@ chỉ có thể là scenario, không phải incremental profit quan sát đượ
 
 ### GIAI ĐOẠN 0 — Chuẩn bị môi trường
 Trạng thái: hoàn thành. Python 3.12.10 dùng `.venv` riêng; `requirements.txt` đã pin.
-File Criteo local có 311.422.618 byte và 13.979.592 dòng. Chi tiết: `report/archive/week-01/`.
+File Criteo local có 311.422.618 byte và 13.979.592 dòng. Chi tiết: `report/archive/week-01-*`.
 
 ### GIAI ĐOẠN 1 — EDA Criteo Uplift
 Trạng thái: hoàn thành. `src/data.py` và `notebooks/01_eda_criteo.ipynb`; 7/7 test tại mốc này.
@@ -121,7 +121,7 @@ Trạng thái: hoàn thành. `src/data.py` và `notebooks/01_eda_criteo.ipynb`; 
   không phải kiểm định chứng minh assignment mechanism.
 - Chiến lược sample hiện hành dùng learning curve theo resource gate; xem
   `docs/archive/KAGGLE_CAUSAL_FOREST.md`.
-- **Output:** `01_eda_criteo.ipynb`, `output/eda_summary.csv`. Chi tiết: `report/archive/week-01/`.
+- **Output:** `01_eda_criteo.ipynb`, `output/eda_summary.csv`. Chi tiết: `report/archive/week-01-*`.
 - Nguồn dataset: link download "chính thức" trên trang Criteo AI Lab đã chết (404) — dùng mirror HuggingFace: https://huggingface.co/datasets/criteo/criteo-uplift/resolve/main/criteo-research-uplift-v2.1.csv.gz. Paper công bố dataset: Diemert et al. (2018), *A Large Scale Benchmark for Uplift Modeling*, AdKDD @ KDD.
 
 ### GIAI ĐOẠN 2 — Baseline + Causal Forest + DR-Learner + Đánh giá
@@ -130,9 +130,9 @@ Trạng thái: hoàn thành. `src/data.py` và `notebooks/01_eda_criteo.ipynb`; 
 - `src/evaluation.py` (`qini_curve`, `qini_score`, `uplift_curve`, `auuc_score`,
   `bootstrap_ci`, `paired_bootstrap_difference_ci`) — có unit test đối chiếu khớp `sklift`
   (Qini `atol=1e-9`, AUUC lệch <1e-6) và guard NaN cho trường hợp không conversion.
-- Chi tiết đầy đủ: `report/archive/week-01/`.
+- Chi tiết đầy đủ: `report/archive/week-01-*`.
 
-*Lineup 6 model — 5 model local đã chạy @50% (kết quả: `report/archive/week-01/baseline-results.md`):*
+*Lineup 6 model — 5 model local đã chạy @50% (kết quả: `report/archive/week-01-baseline-results.md`):*
 Comparison gồm **Response, S-Learner, T-Learner, X-Learner, DR-Learner và Causal Forest**;
 thứ tự liệt kê không biểu thị chất lượng.
 - Đã chạy `fit_response_baseline` (`ResponseBaseline`, LGBMClassifier dự đoán
@@ -152,7 +152,7 @@ thứ tự liệt kê không biểu thị chất lượng.
 - **Runbook thực thi:** `planning/RUN_PLAN.md`.
 
 *Đánh giá + Segment + Incremental profit:*
-- [x] Qini/AUUC cho 5 model local @50% + bootstrap CI (500 resample) — `report/archive/week-01/baseline-results.md`. Causal Forest chờ Colab.
+- [x] Qini/AUUC cho 5 model local @50% + bootstrap CI (500 resample) — `report/archive/week-01-baseline-results.md`. Causal Forest chờ Colab.
 - [x] Paired bootstrap so sánh vs baseline (T-Learner) — đã có trong ma trận 5 model.
 - [x] Phân đoạn score sơ bộ (`output/segments_baseline.csv`); model dùng cho release phải
   được chọn theo comparison protocol sau khi có trạng thái Causal Forest.
@@ -161,7 +161,7 @@ thứ tự liệt kê không biểu thị chất lượng.
 
 ### Hướng cải tiến model
 
-Kết quả năm model trên mẫu 50% (`report/archive/week-01/baseline-results.md`) cho thấy **Response**
+Kết quả năm model trên mẫu 50% (`report/archive/week-01-baseline-results.md`) cho thấy **Response**
 và **S-Learner** có Qini khoảng 0,177–0,179, còn **T/X-Learner** khoảng 0,141. Diagnostic
 cho thấy uplift score tương quan với xác suất mua nền; T/X ước lượng hiệu của hai outcome
 model nên có thể tăng phương sai khi conversion rate là 0,29%. Đây là giả thuyết giải thích,
@@ -268,7 +268,7 @@ scripts/
 | `data.py` (+ `train_test_holdout`, `xty`) | Đã có | `tests/test_data.py` |
 | `baselines.py` (Response/S/T/X/DR) | Đã chạy @50% | `tests/test_baselines.py` |
 | `evaluation.py` | Đã có | `tests/test_evaluation.py` |
-| `scripts/train_baselines.py` | Đã chạy @50% | `report/archive/week-01/baseline-results.md` |
+| `scripts/train_baselines.py` | Đã chạy @50% | `report/archive/week-01-baseline-results.md` |
 | `scripts/train_causal_forest.py` | Đã viết | cloud run chưa hoàn thành |
 | `scripts/build_comparison.py` | Đã viết | phụ thuộc artifact Causal Forest |
 | `segments.py` / `profit.py` | Chưa triển khai ở mốc kế hoạch này | — |
@@ -364,4 +364,4 @@ Kaggle resource gate 20% và 30% đạt; không giả định trước RAM của
 
 Nhật ký chi tiết theo ngày: xem [`report/`](../report/). Mốc lớn:
 
-- **2026-07-20 → 2026-07-23:** Tuần 1 — môi trường, EDA/randomization check, baseline T/X-Learner, framework đánh giá Qini/AUUC/bootstrap CI với guard edge-case. Chi tiết: `report/archive/week-01/`.
+- **2026-07-20 → 2026-07-23:** Tuần 1 — môi trường, EDA/randomization check, baseline T/X-Learner, framework đánh giá Qini/AUUC/bootstrap CI với guard edge-case. Chi tiết: `report/archive/week-01-*`.

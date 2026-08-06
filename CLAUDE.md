@@ -53,9 +53,9 @@ Ba báo cáo sprint là nguồn số duy nhất được phép trích dẫn.
 
 Tài liệu lịch sử, không dùng làm nguồn số: `docs/archive/TUTORIAL.md`,
 `docs/archive/KAGGLE_CAUSAL_FOREST.md`, `docs/archive/COLAB_CAUSAL_FOREST.md`, `planning/RUN_PLAN.md`,
-`planning/CAUSAL_UPLIFT_PLAN.md`, `report/archive/week-01/`, `notebooks/`.
+`planning/CAUSAL_UPLIFT_PLAN.md`, `report/archive/week-01-*`, `notebooks/`.
 
-Các kết quả trong `report/archive/week-01/`, notebook, HTML explainer và dashboard có thể là
+Các kết quả trong `report/archive/week-01-*`, notebook, HTML explainer và dashboard có thể là
 historical. Không lặp lại claim “top 10% giữ 85% uplift”; release estimate là 72,7%.
 
 ## Causal Forest

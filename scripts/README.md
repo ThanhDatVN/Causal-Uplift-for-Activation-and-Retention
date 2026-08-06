@@ -59,7 +59,7 @@ model**, dùng prediction đã đóng băng. Đây là lý do nâng bootstrap t�
 
 | Script | Trạng thái |
 |---|---|
-| `train_baselines.py` | Lần chạy baseline đầu tiên; kết quả ở `report/archive/week-01/baseline-results.md`. Nguồn Sprint 1 chính thức là `evaluate_selected_five_models.py`. |
+| `train_baselines.py` | Lần chạy baseline đầu tiên; kết quả ở `report/archive/week-01-baseline-results.md`. Nguồn Sprint 1 chính thức là `evaluate_selected_five_models.py`. |
 | `build_comparison.py` | Dựng bảng so sánh 6 model theo kế hoạch cũ; Sprint 3 dùng chuỗi `run_oof_experiment` → `compare_improvement_candidates` → `run_sprint3_confirmation`. |
 | `bench_harness.py` | Harness đo runtime/RAM thời kỳ đầu. |
 | `assess_causal_forest_feasibility.py` | Benchmark tài nguyên Causal Forest 1/5/10/20%; đã dùng để ra quyết định không chạy 50% local. |

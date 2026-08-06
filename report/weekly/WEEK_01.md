@@ -2,7 +2,7 @@
 
 **Sprint:** 1
 **Trọng tâm theo kế hoạch:** EDA, randomization diagnostic, 5 baseline, metric test
-**Deliverable đã chốt:** `report/archive/week-01/`, benchmark, bảng kết quả
+**Deliverable đã chốt:** `report/archive/week-01-*`, benchmark, bảng kết quả
 **Trạng thái:** Đạt
 
 ---

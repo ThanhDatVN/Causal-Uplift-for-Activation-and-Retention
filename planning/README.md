@@ -24,6 +24,7 @@ hướng dẫn thực thi nằm trong `docs/`.
 
 | Tài liệu | Trạng thái |
 |---|---|
+| [SPRINT_PLAN_6_WEEKS.md](SPRINT_PLAN_6_WEEKS.md) | Kế hoạch 6 tuần và sổ đăng ký công thức/claim. Là **nguồn của lịch tuần** mà `report/weekly/` bám theo. Mục 4 định nghĩa chuẩn bằng chứng A/B/C vẫn đang dùng |
 | [CAUSAL_UPLIFT_PLAN.md](CAUSAL_UPLIFT_PLAN.md) | Kế hoạch gốc trước Sprint 1 release |
 | [RUN_PLAN.md](RUN_PLAN.md) | Runbook 6 model, thay bằng các runbook theo sprint |
 

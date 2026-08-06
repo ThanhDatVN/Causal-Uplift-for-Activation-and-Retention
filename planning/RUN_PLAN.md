@@ -27,6 +27,6 @@
   Sprint 3 dùng `run_oof_experiment.py` → `compare_improvement_candidates.py` →
   `run_sprint3_confirmation.py`.
 
-Kết quả 5 model local @50% mà bản cũ tham chiếu (`report/archive/week-01/baseline-results.md`)
+Kết quả 5 model local @50% mà bản cũ tham chiếu (`report/archive/week-01-baseline-results.md`)
 vẫn là bằng chứng lịch sử hợp lệ, nhưng nguồn chính thức của số Sprint 1 là
 `report/SPRINT_1_FINAL_REPORT.md`.

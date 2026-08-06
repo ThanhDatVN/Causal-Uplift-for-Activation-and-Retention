@@ -2,11 +2,11 @@
 
 > **Actual execution update 31/07/2026:** đây là planning snapshot. Kết quả Sprint 2 và
 > trạng thái dashboard/Causal Forest chính thức nằm ở
-> [`SPRINT_2_FINAL_REPORT.md`](../SPRINT_2_FINAL_REPORT.md). Nếu số hoặc trạng thái mâu thuẫn,
+> [`SPRINT_2_FINAL_REPORT.md`](../report/SPRINT_2_FINAL_REPORT.md). Nếu số hoặc trạng thái mâu thuẫn,
 > ưu tiên báo cáo Sprint 2.
 
 > **Cập nhật 29/07/2026:** báo cáo này giữ vai trò kế hoạch 6 tuần. Kết quả thực thi
-> Sprint 1 sau lần chạy lại nằm ở [`SPRINT_1_FINAL_REPORT.md`](../SPRINT_1_FINAL_REPORT.md)
+> Sprint 1 sau lần chạy lại nằm ở [`SPRINT_1_FINAL_REPORT.md`](../report/SPRINT_1_FINAL_REPORT.md)
 > và được ưu tiên nếu có số liệu mâu thuẫn.
 
 **Dự án hiện tại:** *Causal Uplift for Activation and Retention* — **Nhắm mục tiêu khuyến mãi bằng hiệu ứng tăng thêm do can thiệp nhân quả**
@@ -66,7 +66,7 @@ chưa có data/model/result tương ứng.
 | `notebooks/` | `01_eda_criteo.ipynb`, `colab_causal_forest.ipynb` | EDA và run Colab | `02_causal_uplift.ipynb` được nêu ở tài liệu cũ nhưng **chưa tồn tại**; chỉ tạo nếu thực sự cần narrative cuối. |
 | `benchmarks/` | benchmark meta-learner/Causal Forest; kết quả/log | Đo runtime/RAM | **Có.** Dùng để ra quyết định hạ tầng, không suy diễn tốc độ từ GPU. |
 | `output/` | CATE 5 model, CSV comparison, chart, dashboard artifact | Result artifacts | **Có.** Cần thêm `run_manifest.json` và hash input/output trước release. |
-| `report/archive/week-01/` | EDA, daily log, baseline results | Bằng chứng tiến độ tuần 1 | **Có.** Báo cáo này nối tiếp và không ghi lại lịch sử sai khác. |
+| `report/archive/week-01-*` | EDA, daily log, baseline results | Bằng chứng tiến độ tuần 1 | **Có.** Báo cáo này nối tiếp và không ghi lại lịch sử sai khác. |
 | `docs/` | tutorial, explainer, dashboard/Colab concept | Giải thích người dùng | **Có.** Một số câu về dashboard/6 model là future-facing; cần đồng bộ khi release. |
 | `planning/` | causal plan, run plan, roadmap cũ, `incremental_value_product/` | Kế hoạch causal và hướng CLV kế tiếp | **Có.** `planning/sprints.md` là lịch cũ; báo cáo này là mốc mentor mới. |
 | `data/` | Criteo local và Online Retail II local | Input, không commit | Criteo là core causal; Online Retail II chỉ dùng **sau khi causal đóng scope**. |
@@ -90,7 +90,7 @@ chưa có data/model/result tương ứng.
 2. **P1 — làm nếu P0 hoàn tất:** run Causal Forest 50%, tuning có giới hạn, policy sensitivity.
 3. **P2 — sau causal:** probabilistic CLV trên Online Retail II, Hillstrom monetary uplift
    và incremental CLV. Những phần này đã được định hướng tại
-   [`planning/incremental_value_product/README.md`](../../planning/incremental_value_product/README.md)
+   [`planning/incremental_value_product/README.md`](incremental_value_product/README.md)
    và phải được ghi trạng thái “chưa thực hiện” trong release causal.
 
 ---
@@ -185,7 +185,7 @@ Mỗi công thức trong slide/report phải thuộc đúng một trong ba loạ
 | [EconML DRPolicyForest](https://www.pywhy.org/EconML/_autosummary/econml.policy.DRPolicyForest.html), [PyMC-Marketing](https://www.pymc-marketing.io/en/stable/notebooks/clv/clv_quickstart.html) | Official implementation docs | API/formula implementation detail | General theory stronger than paper/assumptions. |
 | `scikit-uplift` docs/code | Implementation reference, đã cross-check bằng unit test | Exact metric behavior used by repo | Claim source paper stated precisely per threshold nếu paper chưa đọc phần đó. |
 
-**Quy tắc link:** chỉ đưa link primary/official vào report chính; package/tutorial links phải gắn nhãn “implementation documentation”. Bài preprint hoặc link không đọc trực tiếp không dùng làm chứng cứ kết luận. Danh mục nguồn mở rộng đã có tại [`planning/incremental_value_product/08_SOURCE_AUDIT.md`](../../planning/incremental_value_product/08_SOURCE_AUDIT.md).
+**Quy tắc link:** chỉ đưa link primary/official vào report chính; package/tutorial links phải gắn nhãn “implementation documentation”. Bài preprint hoặc link không đọc trực tiếp không dùng làm chứng cứ kết luận. Danh mục nguồn mở rộng đã có tại [`planning/incremental_value_product/08_SOURCE_AUDIT.md`](incremental_value_product/08_SOURCE_AUDIT.md).
 
 ---
 
@@ -270,7 +270,7 @@ cho phase probabilistic mà không nhồi một dự án thứ hai vào deadline
 
 | Tuần | Trọng tâm | Deliverable gửi mentor | Câu hỏi cần mentor phản biện |
 |---|---|---|---|
-| 1 — đã qua | EDA, randomization diagnostic, 5 baseline, metric tests | `report/archive/week-01/`, benchmark, result table | Response có Qini cao nhất; policy metric có phù hợp decision objective không? |
+| 1 — đã qua | EDA, randomization diagnostic, 5 baseline, metric tests | `report/archive/week-01-*`, benchmark, result table | Response có Qini cao nhất; policy metric có phù hợp decision objective không? |
 | 2 | Freeze data/run, Causal Forest preflight, correct claims, final 5/6 comparison | Manifest + evidence audit + comparison table | Có chấp nhận release 5 model nếu CF không vượt feasibility gate không? |
 | 3 | Decision contract, decile/policy table, first dashboard | Interactive prototype + scenario table | Assumption cost/value và policy `top-k` nên set/đánh giá thế nào? |
 | 4 | Dashboard acceptance, sensitivity, user-facing explanation | Demo checklist/video draft | Mức chi tiết kỹ thuật và sản phẩm đã đủ để kiểm tra quyết định chưa? |
@@ -314,10 +314,10 @@ Lý do không gộp ngay: Online Retail II hỗ trợ behavioral CLV nhưng khô
 
 Tài liệu implementation/research chi tiết cho phase này nằm ở:
 
-- [`planning/incremental_value_product/01_PRODUCT_VISION.md`](../../planning/incremental_value_product/01_PRODUCT_VISION.md)
-- [`planning/incremental_value_product/02_RESEARCH_DATA_METHODS.md`](../../planning/incremental_value_product/02_RESEARCH_DATA_METHODS.md)
-- [`planning/incremental_value_product/10_END_TO_END_EXECUTION_PLAYBOOK.md`](../../planning/incremental_value_product/10_END_TO_END_EXECUTION_PLAYBOOK.md)
-- [`planning/incremental_value_product/11_FEASIBILITY_INFRASTRUCTURE_DATA_METHODS.md`](../../planning/incremental_value_product/11_FEASIBILITY_INFRASTRUCTURE_DATA_METHODS.md)
+- [`planning/incremental_value_product/01_PRODUCT_VISION.md`](incremental_value_product/01_PRODUCT_VISION.md)
+- [`planning/incremental_value_product/02_RESEARCH_DATA_METHODS.md`](incremental_value_product/02_RESEARCH_DATA_METHODS.md)
+- [`planning/incremental_value_product/10_END_TO_END_EXECUTION_PLAYBOOK.md`](incremental_value_product/10_END_TO_END_EXECUTION_PLAYBOOK.md)
+- [`planning/incremental_value_product/11_FEASIBILITY_INFRASTRUCTURE_DATA_METHODS.md`](incremental_value_product/11_FEASIBILITY_INFRASTRUCTURE_DATA_METHODS.md)
 
 ---
 

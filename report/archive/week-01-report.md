@@ -1,6 +1,6 @@
 # Tuần 1 — Nền tảng dự án: Môi trường, EDA, Baseline Meta-Learner & Framework Đánh giá
 
-> **Historical / superseded:** xem [`../SPRINT_1_FINAL_REPORT.md`](../../SPRINT_1_FINAL_REPORT.md)
+> **Historical / superseded:** xem [`../SPRINT_1_FINAL_REPORT.md`](../SPRINT_1_FINAL_REPORT.md)
 > cho kết quả Sprint 1 sau lần chạy lại ngày 29/07/2026.
 
 **Trạng thái:** Hoàn thành (2026-07-20 đến 2026-07-23)
@@ -82,6 +82,6 @@ T/X/DR-Learner rẻ hơn 12-20 lần (dưới 90s ở sample 10%).
 
 ## 6. Tiếp theo (Sprint 2)
 
-Lineup 6 model (Response, S/T/X-Learner, DR-Learner, Causal Forest). 5 model local đã chạy xong ở holdout 50% — kết quả + đánh giá: [`baseline-results.md`](baseline-results.md). Causal Forest chờ chạy Colab rồi ghép bằng `build_comparison.py`.
+Lineup 6 model (Response, S/T/X-Learner, DR-Learner, Causal Forest). 5 model local đã chạy xong ở holdout 50% — kết quả + đánh giá: [`baseline-results.md`](week-01-baseline-results.md). Causal Forest chờ chạy Colab rồi ghép bằng `build_comparison.py`.
 
 Còn lại: phân đoạn khách hàng chính thức, incremental profit, dashboard sản phẩm; bổ sung test cho S/DR/Response baseline.

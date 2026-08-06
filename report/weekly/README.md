@@ -1,7 +1,7 @@
 # Báo cáo tiến độ theo tuần
 
 Sáu báo cáo tuần bám đúng lịch đã chốt trong
-[`MENTOR_SPRINT_PLAN_6_WEEKS_AND_EVIDENCE_AUDIT.md`](../archive/MENTOR_SPRINT_PLAN_6_WEEKS_AND_EVIDENCE_AUDIT.md)
+[`SPRINT_PLAN_6_WEEKS.md`](../../planning/SPRINT_PLAN_6_WEEKS.md)
 mục 6. Mỗi báo cáo có cùng cấu trúc:
 
 1. Kế hoạch tuần đã chốt trước đó

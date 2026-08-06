@@ -4,7 +4,7 @@
 **Bài toán:** Nhắm mục tiêu khuyến mãi bằng hiệu ứng tăng thêm do can thiệp (*Causal Uplift Targeting*)
 **Kết quả chính thức:** `output/sprint1/` và `output/optimization/*sprint1_release*`
 
-> Đây là nguồn kết quả chính thức của Sprint 1. Các báo cáo cũ trong `report/archive/week-01/`,
+> Đây là nguồn kết quả chính thức của Sprint 1. Các báo cáo cũ trong `report/archive/week-01-*`,
 > notebook hoặc dashboard có thể chứa kết quả thăm dò trước khi chạy lại và không được
 > dùng làm kết quả chính thức của dự án.
 

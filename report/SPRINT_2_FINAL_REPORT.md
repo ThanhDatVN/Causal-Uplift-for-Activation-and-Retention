@@ -145,7 +145,7 @@ nghĩa không yêu cầu `effect_interval()`.
 - Chưa có production A/B test của learned policy.
 - Chưa có actual monetary outcome hoặc long-term CLV.
 - Report này được tạo trước commit đầu tiên; trạng thái repository hiện tại được ghi trong
-  `report/archive/REPOSITORY_AUDIT_2026-07-31.md`.
+  `report/archive/repository-audit-2026-07-31.md`.
 - Random comparator là một ranking cố định bằng seed 42; CI hiện tại chưa tích hợp biến
   thiên qua nhiều random-policy seed.
 - Demo video/GIF thuộc Sprint 3 packaging.

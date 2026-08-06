@@ -53,7 +53,7 @@ from src.policy_evaluation import (
 from src.ranking_metrics import rate_score
 
 RELEASE_MODELS = ["Response", "S-Learner", "T-Learner", "X-Learner", "DR-Learner"]
-RELEASE_HOLDOUT = OUTPUT_DIR / "cate" / "holdout_test_yt.npz"
+RELEASE_HOLDOUT = OUTPUT_DIR / "holdout" / "final_test_yt.npz"
 RELEASE_CATE_DIR = OUTPUT_DIR / "optimization" / "cate"
 
 
@@ -184,7 +184,7 @@ def main() -> None:
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=OUTPUT_DIR / "causal_forest_release",
+        default=OUTPUT_DIR / "causal_forest" / "release",
     )
     args = parser.parse_args()
 

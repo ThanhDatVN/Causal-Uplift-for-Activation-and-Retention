@@ -151,7 +151,7 @@ Artifact:
 | Đường dẫn | Nội dung |
 |---|---|
 | `output/causal_forest/preflight_{0p2,0p3,0p5}/` | manifest, log, điểm CATE, holdout của từng mốc |
-| `output/causal_forest_release/` | bảng metric và so sánh cặp, do `evaluate_causal_forest.py` ghi |
+| `output/causal_forest/release/` | bảng metric và so sánh cặp, do `evaluate_causal_forest.py` ghi |
 | `output/causal_forest/analysis/` | learning curve, histogram, đường ngân sách, năm biểu đồ PNG |
 
 Điểm CATE (`*.npy`) và holdout (`*.npz`) không được commit — chúng tái tạo lại được và

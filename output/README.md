@@ -1,79 +1,91 @@
 # Bố cục artifact
 
-Thư mục này chứa **kết quả đã chạy**, không chứa code. Mỗi thư mục con có một vai trò và
-một mức tin cậy khác nhau; đừng trộn chúng khi trích số.
+Thư mục này chứa **kết quả đã chạy**, không chứa code. Bố cục chia theo **vai trò**, vì
+mỗi nhóm có một mức tin cậy khác nhau và trộn chúng khi trích số là lỗi đã xảy ra thật.
 
-## Artifact release — dùng làm nguồn số chính thức
+```text
+output/
+├── holdout/         tập test chung của Sprint 1 — mọi so sánh model dựa trên đây
+├── sprint1/         nguồn số chính thức
+├── sprint2/
+├── sprint3/
+├── optimization/    tuning và điểm số release của năm model
+├── improvement/     registry, OOF metrics, chẩn đoán — Sprint 3
+├── causal_forest/   ba mốc Kaggle, bảng so sánh, phân tích
+├── product/         dashboard, web app, ảnh chụp
+├── development/     smoke và benchmark — không dùng làm nguồn số
+└── legacy/          artifact đời đầu, số đã bị thay thế
+```
+
+## Nguồn số chính thức
 
 | Thư mục | Sprint | Nội dung |
 |---|---|---|
+| `holdout/` | 1 | `final_test_yt.npz` — 2.096.940 dòng `Y` và `T`. Mọi model so với nhau đều chấm trên đúng file này |
 | `sprint1/` | 1 | data manifest, balance SMD, arm summary, policy decile, paired bootstrap, score diagnostics |
 | `sprint2/` | 2 | protocol manifest, calibration comparison, paired Qini bootstrap, policy value/sensitivity/budget curve |
 | `sprint3/` | 3 | confirmation metrics, paired comparisons, budget curve, promotion decision, protocol manifest |
-| `optimization/` | 1 | kết quả tuning và final test 5 model, gồm `final_test_results_sprint1_release_5models.csv` |
+| `optimization/` | 1 | kết quả tuning và final test năm model. Điểm số release ở `optimization/cate/*_sprint1_release.npy` |
 | `improvement/` | 3 | registry, OOF metrics theo stage, shortlist, chẩn đoán proxy |
-| `causal_forest/` | — | Ba stage Kaggle 20/30/50: manifest, log, điểm CATE, holdout. Chỉ `preflight_0p5` có holdout trùng final test Sprint 1 |
-| `causal_forest_release/` | — | Bảng metric và so sánh cặp Causal Forest với 5 model release, do `evaluate_causal_forest.py` ghi |
-| `causal_forest/analysis/` | — | Learning curve ba stage, histogram điểm, đường ngân sách, năm biểu đồ PNG |
+| `causal_forest/` | — | `preflight_{0p2,0p3,0p5}/` ba mốc Kaggle · `release/` bảng metric và so sánh cặp · `analysis/` learning curve và năm biểu đồ |
 
 Quy tắc: số trong báo cáo phải truy được về một file trong nhóm này.
 
-## Artifact sản phẩm
+## Hai file dễ nhầm nhau
+
+| File | Là gì |
+|---|---|
+| `holdout/final_test_yt.npz` | Final test Sprint 1. Dùng để so **mọi** model với nhau |
+| `causal_forest/preflight_*/holdout_test_yt.npz` | Holdout riêng của từng mốc Kaggle. Chỉ mốc `0p5` trùng khít file trên |
+
+Tên khác nhau là cố ý. Lẫn hai file này thì mốc 20% và 30% sẽ bị đem so với bảng release,
+mà chúng nằm trên tập test hoàn toàn khác.
+
+## Sản phẩm
 
 | Đường dẫn | Nội dung |
 |---|---|
-| `dashboard.html` | Dashboard tĩnh Sprint 2, self-contained, mở trực tiếp bằng trình duyệt |
-| `dashboard_data.json` | Payload của dashboard tĩnh, schema `sprint2-dashboard-v1` |
-| `webapp/` | Champion scorer đã fit (`champion_scorer.joblib`) và metadata cho web app |
-| `screenshots/` | Ảnh chụp bằng chứng của dashboard tĩnh và sáu tab web app |
+| `product/dashboard.html` | Dashboard tĩnh Sprint 2, self-contained, mở trực tiếp bằng trình duyệt |
+| `product/dashboard_data.json` | Payload của dashboard, schema `sprint2-dashboard-v1` |
+| `product/webapp/` | Champion scorer đã fit và metadata cho web app |
+| `product/screenshots/` | Ảnh chụp bằng chứng của dashboard và sáu tab web app |
 
-## Artifact phát triển — **không** dùng làm nguồn số
+## Không dùng làm nguồn số
 
-| Thư mục | Vì sao không dùng |
+| Thư mục | Vì sao |
 |---|---|
+| `development/sprint2_smoke/`, `development/sprint2_benchmark_10pct/` | Chạy thử pipeline Sprint 2 ở mẫu nhỏ |
+| `development/causal_forest_gate_smoke/` | Code-path smoke 0,1%; gate không đánh giá chất lượng |
 | `improvement/smoke/`, `improvement/smoke_gate/` | Mẫu 0,5–1%, quá ít conversion ở control để xếp hạng model |
 | `improvement/screen_visit/` | Outcome `visit` — **estimand khác**, chỉ dùng làm power diagnostic |
-| `sprint2_smoke/`, `sprint2_benchmark_10pct/` | Chạy thử pipeline Sprint 2 ở mẫu nhỏ |
-| `causal_forest_gate_smoke/` | Code-path smoke 0,1% cho Causal Forest; gate không đánh giá chất lượng |
 
-## Artifact lịch sử
+## Artifact đời đầu
 
-`cate/` và các file rời ở gốc (`qini_comparison.csv`, `qini_curve.png`,
-`segments_baseline.csv`, `eda_summary.csv`, `qini_comparison_sprint1.csv`) do các script
-đời đầu sinh ra (`train_baselines.py`, `build_comparison.py`, notebook EDA). Chúng được
-giữ nguyên vị trí vì script sinh ra chúng ghi vào đúng đường dẫn đó và các báo cáo lịch sử
-trích dẫn đúng đường dẫn đó.
+`legacy/` chứa kết quả lần chạy đầu tiên, đã bị thay thế:
 
-Nguồn số Sprint 1 chính thức là `optimization/final_test_results_sprint1_release_5models.csv`,
-không phải `qini_comparison.csv`.
+| Đường dẫn | Đã bị thay bởi |
+|---|---|
+| `legacy/first_run_scores/cate_*.npy` | `optimization/cate/*_sprint1_release.npy` |
+| `legacy/qini_comparison.csv`, `legacy/qini_comparison_sprint1.csv` | `report/SPRINT_1_FINAL_REPORT.md` mục 6 |
+| `legacy/qini_curve.png`, `legacy/segments_baseline.csv`, `legacy/eda_summary.csv` | Artifact tương ứng trong `sprint1/` |
 
-## File không được commit
+**Chỗ dễ trích nhầm nhất:** `legacy/first_run_scores/cate_response.npy` cho Qini
+`0,179299`, còn điểm release `optimization/cate/cate_response_sprint1_release.npy` cho
+`0,187886`. Hai lần chạy khác nhau; chỉ số sau là chính thức. Đây là lý do hai bộ điểm
+được tách hẳn thư mục thay vì để cạnh nhau.
 
-`.gitignore` loại `*.npy` và `*.npz` trong `output/` vì chúng tái lập được và làm repo
-nặng. Cụ thể: prediction array của từng model, cache split, và `webapp/*.joblib`.
-
-Muốn dựng lại:
-
-```powershell
-.venv\Scripts\python.exe scripts\build_champion_scorer.py        # scorer
-.venv\Scripts\python.exe scripts\run_oof_experiment.py --help    # OOF prediction
-```
-
-## Ai ghi vào đâu
+## Script nào ghi ra đâu
 
 | Script | Ghi vào |
 |---|---|
+| `evaluate_selected_five_models.py` | `optimization/` |
+| `build_sprint1_artifacts.py` | `sprint1/` |
 | `run_sprint2_local.py` | `sprint2/` |
-| `run_oof_experiment.py` | `improvement/<stage>/` + `improvement/registry.csv` |
-| `compare_improvement_candidates.py` | `improvement/<stage>_comparison/` |
-| `run_sprint3_confirmation.py` | `sprint3/` + `improvement/registry.csv` |
-| `run_proxy_diagnostic.py` | `improvement/proxy_diagnostic/` |
-| `build_champion_scorer.py` | `webapp/` |
-| `export_dashboard_data.py`, `build_dashboard.py` | `dashboard_data.json`, `dashboard.html` |
+| `run_oof_experiment.py` | `improvement/<stage>/` |
+| `run_sprint3_confirmation.py` | `sprint3/` |
 | `kaggle_causal_forest_gate.py` | `causal_forest/preflight_<frac>/` |
-| `evaluate_causal_forest.py` | `causal_forest_release/` |
+| `evaluate_causal_forest.py` | `causal_forest/release/` |
 | `analyze_causal_forest_release.py` | `causal_forest/analysis/` |
 | `plot_causal_forest_release.py` | `causal_forest/analysis/*.png` |
-| `smoke_*_browser.mjs` | `screenshots/` |
-
-Không script nào ghi đè artifact của sprint khác.
+| `export_dashboard_data.py`, `build_dashboard.py` | `product/` |
+| `build_champion_scorer.py` | `product/webapp/` |

@@ -33,7 +33,7 @@ from src.scoring import fit_persisted_scorer
 
 PROTOCOL_PATH = REPO_ROOT / "configs" / "sprint3_improvement_protocol.json"
 SPRINT3_MANIFEST = OUTPUT_DIR / "sprint3" / "protocol_manifest.json"
-WEBAPP_DIR = OUTPUT_DIR / "webapp"
+WEBAPP_DIR = OUTPUT_DIR / "product" / "webapp"
 
 
 def resolve_champion(explicit: str | None) -> str:

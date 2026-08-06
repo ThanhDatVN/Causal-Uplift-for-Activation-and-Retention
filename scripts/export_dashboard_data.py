@@ -165,7 +165,8 @@ def build_payload(sprint2_dir: Path) -> dict:
 def main():
     sprint2_dir = OUTPUT_DIR / "sprint2"
     payload = build_payload(sprint2_dir)
-    output = OUTPUT_DIR / "dashboard_data.json"
+    output = OUTPUT_DIR / "product" / "dashboard_data.json"
+    output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(
         json.dumps(payload, ensure_ascii=False, indent=2),
         encoding="utf-8",

@@ -22,7 +22,7 @@ import pandas as pd
 
 from src.paths import OUTPUT_DIR, REPO_ROOT
 
-WEBAPP_DIR = OUTPUT_DIR / "webapp"
+WEBAPP_DIR = OUTPUT_DIR / "product" / "webapp"
 SCORER_PATH = WEBAPP_DIR / "champion_scorer.joblib"
 
 SCHEMA_VERSION = "causal-uplift-webapp-v1"
@@ -77,7 +77,7 @@ class ArtifactRepository:
         self.sprint2_dir = output_dir / "sprint2"
         self.sprint3_dir = output_dir / "sprint3"
         self.improvement_dir = output_dir / "improvement"
-        self.webapp_dir = output_dir / "webapp"
+        self.webapp_dir = output_dir / "product" / "webapp"
         self._cache: dict[str, tuple[float, object]] = {}
 
     # ------------------------------------------------------------------ utils

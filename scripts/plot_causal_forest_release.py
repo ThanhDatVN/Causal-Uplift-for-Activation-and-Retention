@@ -33,7 +33,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 REPO = Path(__file__).resolve().parent.parent
-RELEASE_DIR = REPO / "output" / "causal_forest_release"
+RELEASE_DIR = REPO / "output" / "causal_forest" / "release"
 ANALYSIS_DIR = REPO / "output" / "causal_forest" / "analysis"
 
 CF = "Causal Forest"

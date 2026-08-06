@@ -40,7 +40,7 @@ from src.ranking_metrics import autoc_score
 REPO = Path(__file__).resolve().parent.parent
 CF_DIR = REPO / "output" / "causal_forest"
 RELEASE_CATE = REPO / "output" / "optimization" / "cate"
-RELEASE_HOLDOUT = REPO / "output" / "cate" / "holdout_test_yt.npz"
+RELEASE_HOLDOUT = REPO / "output" / "holdout" / "final_test_yt.npz"
 SCORE_NAME = "cate_causal_forest_kaggle_safe.npy"
 STAGES = ("0p2", "0p3", "0p5")
 
@@ -223,7 +223,7 @@ def main() -> None:
     summary = {
         "generated_from": "output/causal_forest/preflight_{0p2,0p3,0p5}",
         "signal": "ipw_constant_propensity",
-        "release_comparison_source": "output/causal_forest_release/ (evaluate_causal_forest.py)",
+        "release_comparison_source": "output/causal_forest/release/ (evaluate_causal_forest.py)",
         "stages_comparable_to_release": curve.loc[
             curve["comparable_to_release"], "stage"
         ].tolist(),

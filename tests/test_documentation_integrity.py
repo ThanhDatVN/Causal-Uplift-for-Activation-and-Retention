@@ -5,7 +5,7 @@ Ba loại lỗi mà test này bắt, cả ba đều đã xảy ra thật trong r
 1. **Link markdown hỏng** — xảy ra mỗi lần di chuyển file vào `archive/`.
 2. **Đường dẫn trong backtick trỏ sai chỗ** — `report/SPRINT_1_FINAL_REPORT.md` từng ghi
    `output/optimization/qini_comparison_sprint1.csv` trong khi script ghi ra
-   `output/qini_comparison_sprint1.csv`.
+   `output/legacy/qini_comparison_sprint1.csv`.
 3. **Số test trong tài liệu lệch số test thật** — xảy ra mỗi lần thêm test mà quên sửa
    README/CLAUDE.md.
 

@@ -46,7 +46,7 @@ def main():
     parser.add_argument("--bins", type=int, default=10)
     args = parser.parse_args()
 
-    holdout = np.load(OUTPUT_DIR / "cate" / "holdout_test_yt.npz")
+    holdout = np.load(OUTPUT_DIR / "holdout" / "final_test_yt.npz")
     y = holdout["Y"].astype("float64")
     t = holdout["T"].astype("float64")
     sprint_dir = OUTPUT_DIR / "sprint1"

@@ -94,9 +94,9 @@ def main():
     # Luu CATE tren tap test + holdout (Y,T) de sau nay ghep Causal Forest (chay Colab)
     # vao cung bang so sanh MA KHONG can train lai baseline. build_comparison.py doc cac file nay.
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    cate_dir = OUTPUT_DIR / "cate"
+    cate_dir = OUTPUT_DIR / "legacy" / "first_run_scores"
     cate_dir.mkdir(exist_ok=True)
-    np.savez(cate_dir / "holdout_test_yt.npz", Y=Y_te, T=T_te,
+    np.savez(OUTPUT_DIR / "holdout" / "final_test_yt.npz", Y=Y_te, T=T_te,
              frac=args.frac, seed=args.seed, n_test=len(test_df))
     for name, cate in cates.items():
         slug = name.lower().replace("-", "_")

@@ -1,7 +1,7 @@
 {
   "generated_from": "output/causal_forest/preflight_{0p2,0p3,0p5}",
   "signal": "ipw_constant_propensity",
-  "release_comparison_source": "output/causal_forest_release/ (evaluate_causal_forest.py)",
+  "release_comparison_source": "output/causal_forest/release/ (evaluate_causal_forest.py)",
   "stages_comparable_to_release": [
     "0p5"
   ],

@@ -18,17 +18,15 @@ htmlcov/
 output/**/*.npy
 output/**/*.npz
 # Fitted scorer for the web app: rebuild with scripts/build_champion_scorer.py.
-output/webapp/*.joblib
+output/product/webapp/*.joblib
 # Run logs from the Sprint 3 improvement round.
 output/improvement/*.log
-output/causal_forest_gate_smoke/
-output/sprint2_smoke/
-output/sprint2_benchmark_*/
+output/development/
 # Legacy root artifacts are superseded by the versioned Sprint 1/Sprint 2 release
 # directories. See output/README.md for which directory is authoritative.
-output/qini_comparison.csv
-output/segments_baseline.csv
-output/qini_curve.png
+output/legacy/qini_comparison.csv
+output/legacy/segments_baseline.csv
+output/legacy/qini_curve.png
 *.log
 # Ngoai le: log train Causal Forest, 1,2 KB moi file. Chung chua fit_time va so dong
 # split duoc trich trong report/CAUSAL_FOREST_REPORT.md, nen phai kiem chung duoc.
@@ -72,6 +70,6 @@ report/weekly/
 report/archive/
 docs/archive/
 benchmarks/archive/
-output/slides_sprint_1_2.html
+output/product/slides_sprint_1_2.html
 docs/BAI_TRINH_BAY_SPRINT_1_2.docx
 scripts/make_presentation_docx.py

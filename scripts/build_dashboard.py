@@ -145,15 +145,16 @@ render();
 
 
 def main():
-    data_path = OUTPUT_DIR / "dashboard_data.json"
+    data_path = OUTPUT_DIR / "product" / "dashboard_data.json"
     if not data_path.exists():
         raise FileNotFoundError(
-            "Thiếu output/dashboard_data.json; chạy scripts/export_dashboard_data.py trước."
+            "Thiếu output/product/dashboard_data.json; chạy scripts/export_dashboard_data.py trước."
         )
     data = json.loads(data_path.read_text(encoding="utf-8"))
     if data.get("schema_version") != "sprint2-dashboard-v1":
         raise ValueError("Dashboard data schema không đúng Sprint 2 release")
-    output = OUTPUT_DIR / "dashboard.html"
+    output = OUTPUT_DIR / "product" / "dashboard.html"
+    output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(
         HTML.replace("__DATA__", json.dumps(data, ensure_ascii=False)),
         encoding="utf-8",

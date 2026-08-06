@@ -103,9 +103,9 @@ tương tự confirmation, không phải forecast đã deploy.
 
 ## 6. Product output
 
-- `output/dashboard.html`: app demo self-contained.
-- `output/dashboard_data.json`: schema release.
-- `output/screenshots/dashboard_screenshot.png`: bằng chứng visual.
+- `output/product/dashboard.html`: app demo self-contained.
+- `output/product/dashboard_data.json`: schema release.
+- `output/product/screenshots/dashboard_screenshot.png`: bằng chứng visual.
 - `scripts/smoke_dashboard_browser.mjs`: replay bốn scenario.
 - `docs/DECISION_CONTRACT.md`: rule, formula và guardrails.
 - data/model cards trong `docs/data_cards/` và `docs/model_cards/`.

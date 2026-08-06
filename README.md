@@ -95,7 +95,7 @@ node scripts\smoke_webapp_browser.mjs
 ```
 
 Mở `http://127.0.0.1:8000`; OpenAPI docs ở `/docs`. Runbook:
-Screenshot: [webapp_screenshot.png](output/screenshots/webapp_screenshot.png).
+Screenshot: [webapp_screenshot.png](output/product/screenshots/webapp_screenshot.png).
 
 App có sáu tab: tổng quan release, so sánh model kèm paired CI, budget/policy
 explorer, uplift theo decile và chẩn đoán cân bằng, batch scoring từ CSV, và bảng

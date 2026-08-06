@@ -170,7 +170,7 @@ giá trị policy.
 Artifacts:
 
 - `output/optimization/final_test_results_sprint1_release_5models.csv`
-- `output/qini_comparison_sprint1.csv`
+- `output/legacy/qini_comparison_sprint1.csv`
 - `output/sprint1/model_pairwise_bootstrap_release.csv`
 - `output/sprint1/model_qini_bootstrap_draws_release.csv`
 

@@ -61,8 +61,8 @@ chính đã đăng ký trước và theo AUTOC, Response đứng đầu. Không 
 nhóm số này rời khỏi ngữ cảnh còn lại.
 
 Scorer phục vụ web app được fit trên development pool (Sprint 2 `fit + validation`),
-lưu tại `output/webapp/champion_scorer.joblib`, metadata tại
-`output/webapp/champion_scorer.json`.
+lưu tại `output/product/webapp/champion_scorer.joblib`, metadata tại
+`output/product/webapp/champion_scorer.json`.
 
 ## Known limitations
 

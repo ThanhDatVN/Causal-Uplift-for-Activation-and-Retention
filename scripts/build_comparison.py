@@ -1,12 +1,12 @@
-"""Ghep tat ca CATE da luu (output/cate/cate_*.npy) thanh bang so sanh cuoi cung + Qini curve
+"""Ghep tat ca CATE da luu (output/legacy/first_run_scores/cate_*.npy) thanh bang so sanh cuoi cung + Qini curve
 + phan khuc — KHONG train lai model. Danh gia moi model tren CUNG holdout Y,T da luu.
 
 Chay sau khi da co du CATE cua ca baseline (train_baselines.py) va Causal Forest
-(train_causal_forest.py tren Colab, tai cate_causal_forest.npy ve output/cate/):
+(train_causal_forest.py tren Colab, tai cate_causal_forest.npy ve output/holdout/):
 
     .venv/Scripts/python.exe scripts/build_comparison.py --n-boot 500
 
-Xuat: output/qini_comparison.csv, output/qini_curve.png, output/segments.csv.
+Xuat: output/legacy/qini_comparison.csv, output/legacy/qini_curve.png, output/segments.csv.
 So sánh cặp dùng percentile CI của chênh lệch Qini; `segments.csv` chỉ là
 score-sign diagnostic, không phải principal-stratum labels.
 """
@@ -46,8 +46,8 @@ def main():
     ap.add_argument("--seed", type=int, default=42)
     args = ap.parse_args()
 
-    cate_dir = OUTPUT_DIR / "cate"
-    yt = np.load(cate_dir / "holdout_test_yt.npz")
+    cate_dir = OUTPUT_DIR / "legacy" / "first_run_scores"
+    yt = np.load(OUTPUT_DIR / "holdout" / "final_test_yt.npz")
     Y_te, T_te = yt["Y"], yt["T"]
     frac, n_test = float(yt["frac"]), int(yt["n_test"])
     print(f"[load] holdout frac={frac} n_test={n_test:,}", flush=True)

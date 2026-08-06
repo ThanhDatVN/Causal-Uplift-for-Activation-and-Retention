@@ -129,7 +129,7 @@ randomized, làm sao kết hợp hai thứ thay vì chọn một. Phương pháp
 của model có sẵn bằng thông tin nhân quả, không train lại từ đầu.
 
 Dữ liệu cần: prediction của model có sẵn trên population đích, và ước lượng hiệu ứng
-từ thí nghiệm randomized. **Repo có cả hai**: `output/webapp/champion_scorer.joblib`
+từ thí nghiệm randomized. **Repo có cả hai**: `output/product/webapp/champion_scorer.joblib`
 và DR signal đã cross-fit trong `output/improvement/finalist/oof_scores.npz`.
 
 Điều kiện trước khi code: nâng nguồn lên mức `A`. Không hiện thực từ abstract.

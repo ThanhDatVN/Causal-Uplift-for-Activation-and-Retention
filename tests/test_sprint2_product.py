@@ -75,7 +75,7 @@ def test_main_response_policy_beats_random_by_paired_ci():
 
 
 def test_dashboard_html_is_self_contained_and_guarded():
-    html = (OUTPUT_DIR / "dashboard.html").read_text(encoding="utf-8")
+    html = (OUTPUT_DIR / "product" / "dashboard.html").read_text(encoding="utf-8")
     assert "sprint2-dashboard-v1" in html
     assert "CAUSAL FOREST PENDING" in html
     assert "actual revenue/profit" in html

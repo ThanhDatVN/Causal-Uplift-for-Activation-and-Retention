@@ -196,7 +196,7 @@ def test_csv_scoring_validates_required_columns(client):
 
 @pytest.mark.skipif(
     get_scorer() is None,
-    reason="Cần output/webapp/champion_scorer.joblib; chạy scripts/build_champion_scorer.py.",
+    reason="Cần output/product/webapp/champion_scorer.joblib; chạy scripts/build_champion_scorer.py.",
 )
 def test_scoring_separates_converters_on_real_confirmation_rows(client):
     """Chấm điểm thật trên dòng Criteo phải tách được nhóm có conversion.

@@ -131,8 +131,8 @@ CI. Champion vẫn là Response vì được chọn trước trên validation.
 
 ## 6. Dashboard
 
-`output/dashboard.html` là self-contained, đọc dữ liệu inlined từ
-`output/dashboard_data.json`. Nó có:
+`output/product/dashboard.html` là self-contained, đọc dữ liệu inlined từ
+`output/product/dashboard_data.json`. Nó có:
 
 - budget checkpoints 0/1/5/10/20/30%;
 - population, value/conversion và cost/contact;

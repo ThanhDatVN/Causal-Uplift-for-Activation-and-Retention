@@ -11,9 +11,10 @@ hướng dẫn thực thi; tài liệu **Lịch sử** được giữ để truy
 | Rà soát và kiểm chứng từng thành phần | [COMPONENT_REVIEW_GUIDE.md](COMPONENT_REVIEW_GUIDE.md) |
 | Đọc tiến độ theo tuần | [../report/weekly/](../report/weekly/) |
 | Xem kết quả mới nhất | [../report/SPRINT_3_FINAL_REPORT.md](../report/SPRINT_3_FINAL_REPORT.md) |
+| Xem kết quả Causal Forest | [../report/CAUSAL_FOREST_REPORT.md](../report/CAUSAL_FOREST_REPORT.md) |
 | Chạy web app | [WEBAPP.md](WEBAPP.md) |
-| Hoàn tất hạng mục còn thiếu | [NOTEBOOK_GUIDE.md](NOTEBOOK_GUIDE.md) rồi [KAGGLE_RUNBOOK_COMPLETE.md](KAGGLE_RUNBOOK_COMPLETE.md) |
-| Biết còn thiếu việc gì | [NOTEBOOK_GUIDE.md](NOTEBOOK_GUIDE.md) mục 4 |
+| Chạy lại Causal Forest trên Kaggle | [NOTEBOOK_GUIDE.md](NOTEBOOK_GUIDE.md) rồi [KAGGLE_RUNBOOK_COMPLETE.md](KAGGLE_RUNBOOK_COMPLETE.md) |
+| Biết làm gì tiếp theo | [../planning/NEXT_ROUND_PLAN.md](../planning/NEXT_ROUND_PLAN.md) |
 | Biết quy tắc ra quyết định | [DECISION_CONTRACT.md](DECISION_CONTRACT.md) |
 | Mở hướng nghiên cứu mới | [../planning/RESEARCH_LANDSCAPE_2026.md](../planning/RESEARCH_LANDSCAPE_2026.md) |
 

@@ -139,7 +139,9 @@ nghĩa không yêu cầu `effect_interval()`.
 
 ## 9. Hạng mục chưa hoàn thành và phạm vi không được suy rộng
 
-- Causal Forest Kaggle 20/30/50 chưa chạy.
+- Causal Forest Kaggle 20/30/50 chưa chạy. *(Cập nhật 06/08/2026: đã chạy xong sau khi
+  báo cáo này chốt. Kết quả và giới hạn diễn giải ở `report/CAUSAL_FOREST_REPORT.md`;
+  kết luận của Sprint 2 giữ nguyên vì nó phản ánh bằng chứng có tại thời điểm chốt.)*
 - Chưa có production A/B test của learned policy.
 - Chưa có actual monetary outcome hoặc long-term CLV.
 - Report này được tạo trước commit đầu tiên; trạng thái repository hiện tại được ghi trong

@@ -39,6 +39,11 @@ output/qini_curve.png
 # Bo cac dong duoi day khi muon publish chung.
 docs/PROJECT_GUIDE.md
 docs/COMPONENT_REVIEW_GUIDE.md
+# Ba file doc-xong-xoa: tai lieu hoc, khong phai tai lieu tham chieu cua repo.
+# Xoa chung khong anh huong gi.
+docs/GUIDE_01_BAI_TOAN.md
+docs/GUIDE_02_PHUONG_PHAP.md
+docs/GUIDE_03_KET_QUA.md
 docs/NOTEBOOK_GUIDE.md
 docs/KAGGLE_RUNBOOK_COMPLETE.md
 docs/WEBAPP.md

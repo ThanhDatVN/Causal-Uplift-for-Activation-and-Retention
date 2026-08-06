@@ -79,15 +79,15 @@ mà chúng nằm trên tập test hoàn toàn khác.
 Repo mang **116 file, 2,3 MB** — toàn bộ CSV, JSON, PNG, HTML và manifest. Đủ để đọc mọi
 kết quả mà không cần chạy lại gì.
 
-Bị chặn: **67 file, 1,67 GB** mảng dự đoán /. Chúng tái tạo lại được từ dữ
+Bị chặn: **67 file, 1,67 GB** mảng dự đoán `.npy` và `.npz`. Chúng tái tạo lại được từ dữ
 liệu gốc cộng cấu hình đã chốt, và commit chúng làm repo nặng gấp bảy trăm lần.
 
-Ngoại lệ duy nhất là . Nó chỉ chứa hai mảng nhị phân nên nén
- xuống còn 259 KB — từ 32 MB, nhỏ hơn 126 lần. Giữ nó lại vì không có nó thì không
+Ngoại lệ duy nhất là `holdout/final_test_yt.npz`. Nó chỉ chứa hai mảng nhị phân nên nén
+`int8` xuống còn 259 KB — từ 32 MB, nhỏ hơn 126 lần. Giữ nó lại vì không có nó thì không
 ai tái lập được bảng so sánh cặp mà không phải chạy lại toàn bộ pipeline.
 
-Bốn thư mục bị chặn hoàn toàn:  (smoke và benchmark), và ba file trong
- đã bị thay thế.
+Ngoài ra chặn hoàn toàn `development/` (smoke và benchmark), và ba file trong `legacy/`
+đã bị thay thế.
 
 ## Script nào ghi ra đâu
 

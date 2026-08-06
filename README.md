@@ -204,8 +204,9 @@ Response có **CI 95% chứa 0 trên cả hai metric** — `[−6,0e-05; 5,8e-05
 Theo `policy_area_dr`, Causal Forest vượt rõ X, DR, T. Điểm không suy biến: 912.579 giá
 trị phân biệt.
 
-Ghi chú xuất xứ: Causal Forest chạy sau khi ba sprint đã chốt, không đi qua quy trình
-chọn ứng viên trên validation như năm model kia. Nó so được vì dùng chung holdout.
+Causal Forest dùng cấu hình cố định thay vì chọn qua validation như bốn meta-learner.
+Chi tiết cấu hình, learning curve ba mốc và năm biểu đồ:
+[CAUSAL_FOREST_REPORT.md](report/CAUSAL_FOREST_REPORT.md).
 
 **Notebook để chạy lại:** [`notebooks/kaggle_causal_forest.ipynb`](notebooks/kaggle_causal_forest.ipynb)
 — 23 cell, chạy được `Save & Run All`, không cần restart kernel.

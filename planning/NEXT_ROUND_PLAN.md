@@ -53,8 +53,7 @@ Ba stage đều `passed`. Trên final test Sprint 1, Causal Forest **hoà** vớ
 Qini `0,174678`, CI `[−0,0370; 0,0107]` cũng chứa 0. Champion không đổi.
 
 Chấm chung bảng với năm model release vì dùng chung holdout (đã kiểm chứng từng phần
-tử). Ghi chú xuất xứ: nó chạy muộn hơn và không qua quy trình chọn ứng viên trên
-validation.
+tử). Cấu hình cố định, không qua ablation validation như bốn meta-learner.
 
 | Mốc | Peak RSS | RAM | Fit | Qini | So được với release |
 |---|---:|---:|---:|---:|:---:|
@@ -104,9 +103,9 @@ Các chỗ đang ghi trạng thái "chưa chạy" và phải sửa đồng thờ
 | File | Chỗ cần sửa |
 |---|---|
 | `CLAUDE.md` | dòng "Causal Forest Kaggle 20/30/50 remains pending" |
-| `README.md` | mục "Causal Forest — hạng mục còn thiếu duy nhất" |
-| `report/SPRINT_1_FINAL_REPORT.md` | bảng Qini release — thêm dòng Causal Forest kèm ghi chú xuất xứ (chạy muộn hơn, không qua chọn ứng viên trên validation) |
-| `report/SPRINT_3_FINAL_REPORT.md` | mục trạng thái hạng mục còn thiếu |
+| `README.md` | mục Causal Forest — bảng sáu model |
+| `report/SPRINT_1_FINAL_REPORT.md` | mục 6.1 — bảng sáu model trên cùng holdout |
+| `report/SPRINT_3_FINAL_REPORT.md` | dòng trạng thái ở đầu báo cáo |
 | `report/weekly/WEEK_06.md` | mục việc còn lại |
 | `planning/sprints.md` | quyết định cắt scope, ghi đã hoàn tất |
 | `output/README.md` | thêm `output/causal_forest/` vào bảng artifact |

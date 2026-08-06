@@ -133,11 +133,11 @@ Không được kết luận thứ hạng chỉ từ CI riêng lẻ. Paired boot
 - Response so với S và X: CI của chênh lệch chứa 0, chưa đủ bằng chứng phân biệt.
 - S, T, X, DR còn lại cũng có nhiều cặp chưa tách biệt rõ.
 
-### 6.1 Causal Forest — bổ sung 06/08/2026
+### 6.1 Causal Forest trên cùng holdout
 
-Causal Forest được lên kế hoạch từ Sprint 1 nhưng phải chờ hạ tầng ngoài mới chạy được
-(cần 12,7 GB RAM ở mốc 50%). Nó chấm trên **đúng cùng holdout** — đã kiểm chứng `Y` và
-`T` giống hệt từng phần tử — nên đặt chung bảng được:
+Ngoài bốn meta-learner và baseline, một thuật toán chuyên dụng được chấm trên **đúng cùng
+holdout** — `Y` và `T` đã kiểm chứng giống hệt từng phần tử. Sáu model vì thế đặt chung
+một bảng:
 
 | Model | `policy_area_dr` | Qini |
 |---|---:|---:|
@@ -154,11 +154,12 @@ là **hoà**, không phải thắng. Champion không đổi.
 
 Hai điều phải ghi kèm khi trích bảng này:
 
-- **Xuất xứ khác.** Causal Forest chạy muộn hơn và không đi qua quy trình chọn ứng viên
-  trên validation như năm model kia. Nó so được vì dùng chung holdout, không phải vì
-  cùng quy trình.
-- **`policy_area_dr` là metric của Sprint 3**, được tính bổ sung cho cả sáu model trên
-  holdout này. Cột Qini vẫn là metric của Sprint 1.
+- **Cách chọn cấu hình khác nhau.** Bốn meta-learner đi qua ablation trên validation
+  (mục 5); Causal Forest dùng cấu hình cố định `n_estimators=200`,
+  `min_samples_leaf=500`, `max_samples=0,25`, `honest=True`, `inference=False`. Nó so
+  được vì dùng chung holdout.
+- **`policy_area_dr` được tính bổ sung** cho cả sáu model trên holdout này, dùng IPW
+  signal với propensity hằng số. Cột Qini là metric gốc của Sprint 1.
 
 Chi tiết, learning curve ba mốc và biểu đồ: `report/CAUSAL_FOREST_REPORT.md`.
 

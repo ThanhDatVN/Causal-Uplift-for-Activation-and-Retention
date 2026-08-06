@@ -146,8 +146,8 @@ dùng `visit` làm **feature** vẫn là leakage và vẫn bị cấm.
   và Qini `0,174678` (hạng 3/6) trên bảng sáu model dùng chung holdout final test
   Sprint 1; chênh lệch so với Response có CI chứa 0 trên **cả hai** metric, nên đây là
   **hoà**, không phải thắng. Champion giữ nguyên Response.
-  Xuất xứ cần ghi kèm: Causal Forest chạy sau khi ba sprint chốt, không qua quy trình
-  chọn ứng viên trên validation như năm model kia.
+  Ghi kèm khi trích: Causal Forest dùng cấu hình cố định, không qua ablation validation
+  như bốn meta-learner; `policy_area_dr` của cả sáu model dùng IPW signal.
 - Resource-gated profile has `inference=False`; do not require or claim `effect_interval()`.
 
 ## Quy tắc khi sửa/chạy

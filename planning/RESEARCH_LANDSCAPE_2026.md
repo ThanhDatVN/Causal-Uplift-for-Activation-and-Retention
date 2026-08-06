@@ -271,7 +271,7 @@ mức `C` — báo rằng tín hiệu xếp hạng uplift **chuyển giao đư�
 dạng dịch chuyển phân phối, nhưng meta-learner cổ điển không hỗ trợ sẵn việc chuyển
 giao giữa các dataset có không gian feature khác nhau.
 
-Liên quan trực tiếp tới hạng mục còn thiếu của repo: chưa có bằng chứng portability.
+Liên quan trực tiếp tới một giới hạn đã biết: repo chưa có bằng chứng portability sang dataset khác.
 Kế hoạch Hillstrom hiện có vẫn đúng hướng. Điều cần thêm: Criteo có 12 feature ẩn
 danh, Hillstrom có feature khác hẳn, nên **không** thể transfer model; chỉ transfer
 được *pipeline* và *protocol*. Phải phát biểu đúng như vậy để không hứa quá.

@@ -4,8 +4,9 @@
 **Protocol:** `sprint3-improvement-v1`, đăng ký trong `configs/sprint3_improvement_protocol.json`
 **Ngày:** 05/08/2026
 **Nguồn số chính thức:** `output/sprint3/`, `output/improvement/`
-**Trạng thái:** hoàn thành. Causal Forest Kaggle đã chạy sau khi báo cáo này chốt; kết
-quả nằm ở `report/CAUSAL_FOREST_REPORT.md`, không thuộc release Sprint 3
+**Trạng thái:** hoàn thành. Kết quả Causal Forest nằm ở `report/CAUSAL_FOREST_REPORT.md`
+và không thuộc release Sprint 3 — nó chấm trên holdout Sprint 1 với IPW signal, còn các
+challenger trong báo cáo này chấm trên confirmation Sprint 2 với DR signal
 
 ## 1. Kết quả điều hành
 

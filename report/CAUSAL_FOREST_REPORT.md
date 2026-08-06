@@ -1,9 +1,10 @@
 # Causal Forest — báo cáo kết quả
 
-Ngày: 06/08/2026. Trạng thái hạng mục: **đã chạy và đã chấm điểm**.
+Ngày: 06/08/2026.
 
-Đây là hạng mục cuối cùng còn thiếu của dự án. Trước ngày này, tài liệu ghi Causal Forest
-là *chưa chạy* — không phải *đã cân nhắc và loại bỏ*. Báo cáo này đóng hạng mục đó.
+Causal Forest là thuật toán chuyên dụng duy nhất trong dự án — nó sửa thẳng tiêu chí chia
+nhánh của cây thay vì ghép các model thông thường như bốn meta-learner. Báo cáo này trình
+bày kết quả của nó trên ba mốc dữ liệu và so sánh với năm model còn lại trên cùng holdout.
 
 ## 1. Kết quả trong một câu
 

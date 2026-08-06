@@ -219,9 +219,24 @@ thành một bộ điểm out-of-fold phủ toàn dữ liệu. Bootstrap paired 
 Qini nhưng vẫn không phân biệt được theo metric chính. Đó không phải mâu thuẫn cần giấu
 — đó là phát hiện. Hai metric có độ nhạy khác nhau hai bậc độ lớn trên cùng bộ dữ liệu.
 
-**Chi phí.** Cao hơn vẻ ngoài: mỗi fold phải fit lại Causal Forest trên ~11 triệu dòng.
-Ở mốc 50% một lần fit mất 25 phút và 12,73 GB. Với K=5, ước tính 2,5–3 giờ và RSS tương
-tự vì mỗi fold chạy tuần tự. Vẫn nằm trong một session Kaggle.
+**Chi phí — đã tính lại, ước tính đầu tiên sai.** Mỗi fold phải fit lại trên `(K−1)/K`
+của toàn bộ dữ liệu. Ngoại suy tuyến tính từ mốc 50% đã đo (train 4.892.857 dòng, fit 25
+phút, peak RSS 12,73 GB) trên session 31,35 GB:
+
+| K | Train mỗi fold | Peak RSS ước | % RAM | Fit mỗi fold | Tổng | Gate 75% |
+|---:|---:|---:|---:|---:|---:|:---:|
+| **2** | 6.989.796 | 18,2 GB | 58,0% | 36 phút | **1,2 giờ** | **đạt** |
+| 3 | 9.319.728 | 24,2 GB | 77,3% | 48 phút | 2,4 giờ | vượt |
+| 5 | 11.183.674 | 29,1 GB | 92,8% | 57 phút | 4,8 giờ | vượt |
+
+**Chỉ K=2 nằm dưới gate.** Ước tính ban đầu ghi "K=5, 2,5–3 giờ, RSS tương tự" là sai ở
+cả ba con số.
+
+K=2 vẫn tốt hơn kỳ vọng ở một điểm: mỗi fold train trên 6,99 triệu dòng, **nhiều hơn** mốc
+50% hiện tại (4,89 triệu), trong khi tập đánh giá phủ toàn bộ 13,98 triệu.
+
+Thời gian và RSS ngoại suy tuyến tính; fit forest scale gần `n log n` nên thực tế cao hơn.
+Chạy mốc thử ở K=2 với 50% dữ liệu trước để đo, giống cách gate ba mốc đã làm.
 
 **Rủi ro.** Cross-fitting thay đổi model được đánh giá (huấn luyện trên tập khác holdout
 đơn), nên kết quả **không** đặt cạnh bảng release Sprint 1 được. Phải báo cáo như một

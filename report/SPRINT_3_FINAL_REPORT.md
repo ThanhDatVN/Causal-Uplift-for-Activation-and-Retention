@@ -4,7 +4,8 @@
 **Protocol:** `sprint3-improvement-v1`, đăng ký trong `configs/sprint3_improvement_protocol.json`
 **Ngày:** 05/08/2026
 **Nguồn số chính thức:** `output/sprint3/`, `output/improvement/`
-**Trạng thái:** hoàn thành local; Causal Forest Kaggle vẫn pending
+**Trạng thái:** hoàn thành. Causal Forest Kaggle đã chạy sau khi báo cáo này chốt; kết
+quả nằm ở `report/CAUSAL_FOREST_REPORT.md`, không thuộc release Sprint 3
 
 ## 1. Kết quả điều hành
 
@@ -418,7 +419,11 @@ trong script. Sáu test trong `tests/test_resource_gate.py` khóa hành vi này.
 run này không bị dừng. Không có run nào thất bại vì bộ nhớ, nhưng biên an toàn hẹp
 hơn mức đã đăng ký và điều này nên được sửa trước khi thêm model nặng hơn.
 
-Causal Forest vẫn chưa chạy trên Kaggle; không có kết quả cloud nào trong release này.
+Causal Forest đã chạy trên Kaggle sau khi Sprint 3 chốt — xem
+`report/CAUSAL_FOREST_REPORT.md`. Kết quả đó **không** thuộc release Sprint 3 và không
+so trực tiếp được với các challenger trong báo cáo này: nó chạy trên final test Sprint 1
+với IPW signal, còn các challenger ở đây chạy trên confirmation Sprint 2 với DR signal
+và cross-fitting. Champion không đổi.
 
 ## 9. Web application
 
@@ -454,11 +459,10 @@ một test chức năng chấm điểm 2.000 dòng Criteo thật: ở budget 10%
 
 ## 11. Hạng mục chưa hoàn thành
 
-- **Causal Forest Kaggle 20/30/50** vẫn pending; cần session và dataset attachment
-  bên ngoài. Runbook đầy đủ và code đã chuẩn bị xong trong
-  `docs/KAGGLE_RUNBOOK_COMPLETE.md`; bước chấm điểm còn thiếu đã được bổ sung bằng
-  `scripts/evaluate_causal_forest.py`, và đã kiểm chứng rằng ở `frac=0.50` holdout
-  trùng khít final test Sprint 1 nên kết quả sẽ so trực tiếp được với bảng release.
+- **Causal Forest Kaggle 20/30/50** — đã hoàn tất sau khi báo cáo này chốt, ngày
+  06/08/2026. Ba stage đều `passed`; ở `frac=0.50` holdout trùng khít final test
+  Sprint 1 như đã dự kiến. Kết quả và giới hạn diễn giải:
+  `report/CAUSAL_FOREST_REPORT.md`.
 - **pROCini (JMLR 2025)** nằm trong P0 của kế hoạch nhưng không được hiện thực:
   trang paper công khai không cung cấp công thức và repo không tiếp cận được bản
   đầy đủ. Hiện thực từ suy đoán sẽ vi phạm quy tắc không tự chế công thức của dự

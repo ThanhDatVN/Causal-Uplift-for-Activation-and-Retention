@@ -180,16 +180,24 @@ Run cần file Criteo v2.1 với SHA‑256:
 2716e1bf0fd157a93b5bf86924d9088419dfbac2022c6cd90030220634f616dc
 ```
 
-## Causal Forest — hạng mục còn thiếu duy nhất
+## Causal Forest — đã chạy xong
 
-Local 0,1% code-path smoke đã pass. Kaggle 20% → 30% → 50% chưa chạy vì cần session và
-dataset attachment bên ngoài. Không có Causal Forest trong release hiện tại.
+Kaggle 20% → 30% → 50% đã chạy và đã chấm điểm. Báo cáo đầy đủ:
+[CAUSAL_FOREST_REPORT.md](report/CAUSAL_FOREST_REPORT.md).
 
-**Notebook soạn sẵn để upload và chạy:** [`notebooks/kaggle_causal_forest.ipynb`](notebooks/kaggle_causal_forest.ipynb)
-— 23 cell, chỉ cần sửa một dòng URL repo.
+Trên final test Sprint 1 (2.096.940 dòng, holdout trùng khít đã kiểm chứng):
 
-Hướng dẫn từng bước và bảng "chạy ở đâu": [NOTEBOOK_GUIDE.md](docs/NOTEBOOK_GUIDE.md).
-Lý do thiết kế và danh mục 15 lỗi: [KAGGLE_RUNBOOK_COMPLETE.md](docs/KAGGLE_RUNBOOK_COMPLETE.md).
+| | policy_area_dr | Qini |
+|---|---:|---:|
+| Causal Forest | 0,001006 — hạng 1/6 | 0,174678 — hạng 3/6 |
+| Response | 0,001005 — hạng 2/6 | 0,187886 — hạng 1/6 |
+
+Chênh lệch so với Response có CI 95% chứa 0 trên cả hai metric, nên đây là **hoà**, không
+phải thắng. Champion giữ nguyên Response. Causal Forest vượt rõ X, DR, T theo metric
+chính, và không suy biến — 912.579 giá trị điểm phân biệt.
+
+**Notebook để chạy lại:** [`notebooks/kaggle_causal_forest.ipynb`](notebooks/kaggle_causal_forest.ipynb)
+— 23 cell, chạy được `Save & Run All`, không cần restart kernel.
 
 ## Đọc theo thứ tự
 

@@ -1,0 +1,13 @@
+[split] frac=0.3 train=2,935,713 test=1,258,164 time=45.4s
+[fit] profile=kaggle-safe n_estimators=200 min_samples_leaf=500 cv=2 max_samples=0.25 inference=False
+/usr/local/lib/python3.12/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMRegressor was fitted with feature names
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMRegressor was fitted with feature names
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMRegressor was fitted with feature names
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMRegressor was fitted with feature names
+  warnings.warn(
+[fit] done fit_time=834.7s
+[holdout] y_sha256=34c3f3b8af84290801500843 t_sha256=7f4ba6aec5b27b49f6dfefac
+[write] /kaggle/working/output/causal_forest/preflight_0p3/cate_causal_forest_kaggle_safe.npy n=1,258,164 mean=0.000957 total_time=901.7s

@@ -30,6 +30,9 @@ output/qini_comparison.csv
 output/segments_baseline.csv
 output/qini_curve.png
 *.log
+# Ngoai le: log train Causal Forest, 1,2 KB moi file. Chung chua fit_time va so dong
+# split duoc trich trong report/CAUSAL_FOREST_REPORT.md, nen phai kiem chung duoc.
+!output/causal_forest/preflight_*/train.log
 
 # Huong dan chay va huong dan doc: giu o local, chua publish. Repo tren GitHub chi
 # mang tai lieu bao cao (report/, docs/*METHOD*, model_cards) va code.

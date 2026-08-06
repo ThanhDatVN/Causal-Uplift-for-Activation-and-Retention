@@ -12,6 +12,9 @@ một mức tin cậy khác nhau; đừng trộn chúng khi trích số.
 | `sprint3/` | 3 | confirmation metrics, paired comparisons, budget curve, promotion decision, protocol manifest |
 | `optimization/` | 1 | kết quả tuning và final test 5 model, gồm `final_test_results_sprint1_release_5models.csv` |
 | `improvement/` | 3 | registry, OOF metrics theo stage, shortlist, chẩn đoán proxy |
+| `causal_forest/` | — | Ba stage Kaggle 20/30/50: manifest, log, điểm CATE, holdout. Chỉ `preflight_0p5` có holdout trùng final test Sprint 1 |
+| `causal_forest_release/` | — | Bảng metric và so sánh cặp Causal Forest với 5 model release, do `evaluate_causal_forest.py` ghi |
+| `causal_forest/analysis/` | — | Learning curve ba stage, histogram điểm, đường ngân sách, năm biểu đồ PNG |
 
 Quy tắc: số trong báo cáo phải truy được về một file trong nhóm này.
 
@@ -69,6 +72,8 @@ Muốn dựng lại:
 | `export_dashboard_data.py`, `build_dashboard.py` | `dashboard_data.json`, `dashboard.html` |
 | `kaggle_causal_forest_gate.py` | `causal_forest/preflight_<frac>/` |
 | `evaluate_causal_forest.py` | `causal_forest_release/` |
+| `analyze_causal_forest_release.py` | `causal_forest/analysis/` |
+| `plot_causal_forest_release.py` | `causal_forest/analysis/*.png` |
 | `smoke_*_browser.mjs` | `screenshots/` |
 
 Không script nào ghi đè artifact của sprint khác.

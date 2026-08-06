@@ -1,0 +1,173 @@
+{
+  "created_utc": "2026-08-05T17:55:35.094648+00:00",
+  "stage_dir": "output\\causal_forest\\preflight_0p5",
+  "mode": "comparable_with_sprint1_release",
+  "fraction": 0.5,
+  "test_size": 0.3,
+  "seed": 42,
+  "holdout_rows": 2096940,
+  "holdout_is_sprint1_final_test": true,
+  "effect_signal": "ipw (propensity = ty le treatment quan sat tren holdout)",
+  "budget_grid": [
+    0.01,
+    0.02,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3
+  ],
+  "n_boot": 500,
+  "metrics": [
+    {
+      "model": "Causal Forest",
+      "n": 2096940,
+      "policy_area_dr": 0.0010056541837682184,
+      "autoc_dr": 0.0037198610209103838,
+      "qini_score": 0.17467757264115724,
+      "auuc_score": 0.00564828651981693,
+      "score_mean": 0.0009798189490605484,
+      "score_std": 0.004482499639079138,
+      "negative_score_fraction": 0.1964681869772144,
+      "unique_score_count": 912579
+    },
+    {
+      "model": "Response",
+      "n": 2096940,
+      "policy_area_dr": 0.0010051582664299587,
+      "autoc_dr": 0.0038131475949968567,
+      "qini_score": 0.18788585912141081,
+      "auuc_score": 0.0060840140369370025,
+      "score_mean": 0.0028588168707672653,
+      "score_std": 0.026244072487699863,
+      "negative_score_fraction": 0.0,
+      "unique_score_count": 152106
+    },
+    {
+      "model": "S-Learner",
+      "n": 2096940,
+      "policy_area_dr": 0.0009989000684067163,
+      "autoc_dr": 0.003728987774049933,
+      "qini_score": 0.1772037237368521,
+      "auuc_score": 0.005740211726659909,
+      "score_mean": 0.0008630887911422806,
+      "score_std": 0.005098194680557646,
+      "negative_score_fraction": 0.003798391942544851,
+      "unique_score_count": 74281
+    },
+    {
+      "model": "X-Learner",
+      "n": 2096940,
+      "policy_area_dr": 0.0009747324078197898,
+      "autoc_dr": 0.003583425564391146,
+      "qini_score": 0.1671680288411912,
+      "auuc_score": 0.005404883402691443,
+      "score_mean": 0.0006159737745441762,
+      "score_std": 0.0023083735042779214,
+      "negative_score_fraction": 0.24152193195799593,
+      "unique_score_count": 569542
+    },
+    {
+      "model": "DR-Learner",
+      "n": 2096940,
+      "policy_area_dr": 0.0009246471125423295,
+      "autoc_dr": 0.0029632534318555503,
+      "qini_score": 0.1539669246378558,
+      "auuc_score": 0.004973543382490081,
+      "score_mean": 0.0009710899772719605,
+      "score_std": 0.01194939141949761,
+      "negative_score_fraction": 0.006528083779221151,
+      "unique_score_count": 63105
+    },
+    {
+      "model": "T-Learner",
+      "n": 2096940,
+      "policy_area_dr": 0.000896822936625735,
+      "autoc_dr": 0.0033082146034381973,
+      "qini_score": 0.1420206254711735,
+      "auuc_score": 0.004591020359793708,
+      "score_mean": 0.0009939135693463482,
+      "score_std": 0.010351214421326327,
+      "negative_score_fraction": 0.5395609793317883,
+      "unique_score_count": 208753
+    }
+  ],
+  "paired_comparisons": [
+    {
+      "model_a": "Causal Forest",
+      "model_b": "Response",
+      "policy_area_difference": 4.959173382597035e-07,
+      "policy_area_ci_low": -5.9533266607848165e-05,
+      "policy_area_ci_high": 5.846239732715336e-05,
+      "policy_area_probability_positive": 0.504,
+      "qini_difference": -0.013208286480253573,
+      "qini_ci_low": -0.036988516316185854,
+      "qini_ci_high": 0.010740291972353945,
+      "n_boot": 500
+    },
+    {
+      "model_a": "Causal Forest",
+      "model_b": "S-Learner",
+      "policy_area_difference": 6.754115361502127e-06,
+      "policy_area_ci_low": -2.0811440184603158e-05,
+      "policy_area_ci_high": 3.6219316755714574e-05,
+      "policy_area_probability_positive": 0.668,
+      "qini_difference": -0.002526151095694845,
+      "qini_ci_low": -0.014981466189316962,
+      "qini_ci_high": 0.009667135550531173,
+      "n_boot": 500
+    },
+    {
+      "model_a": "Causal Forest",
+      "model_b": "T-Learner",
+      "policy_area_difference": 0.00010883124714248344,
+      "policy_area_ci_low": 4.02772918073703e-05,
+      "policy_area_ci_high": 0.0001789916719442073,
+      "policy_area_probability_positive": 1.0,
+      "qini_difference": 0.03265694716998374,
+      "qini_ci_low": 0.004076755719246763,
+      "qini_ci_high": 0.062049421788966795,
+      "n_boot": 500
+    },
+    {
+      "model_a": "Causal Forest",
+      "model_b": "X-Learner",
+      "policy_area_difference": 3.092177594842861e-05,
+      "policy_area_ci_low": 1.2959360107049183e-05,
+      "policy_area_ci_high": 5.341289226180993e-05,
+      "policy_area_probability_positive": 1.0,
+      "qini_difference": 0.007509543799966045,
+      "qini_ci_low": -0.0004614110110770744,
+      "qini_ci_high": 0.014838018688172645,
+      "n_boot": 500
+    },
+    {
+      "model_a": "Causal Forest",
+      "model_b": "DR-Learner",
+      "policy_area_difference": 8.100707122588892e-05,
+      "policy_area_ci_low": 1.598114042927438e-05,
+      "policy_area_ci_high": 0.0001465825122414968,
+      "policy_area_probability_positive": 0.998,
+      "qini_difference": 0.02071064800330144,
+      "qini_ci_low": -0.00640656830153661,
+      "qini_ci_high": 0.04721739955859465,
+      "n_boot": 500
+    }
+  ],
+  "resource_gate": {
+    "logical_cpus": 4,
+    "physical_cpus": 2,
+    "system_ram_total_gb": 31.347740173339844,
+    "system_ram_available_start_gb": 30.302330017089844,
+    "peak_process_tree_rss_gb": 12.72928237915039,
+    "peak_process_tree_ram_fraction": 0.4060669862887341,
+    "minimum_system_available_gb": 4.989997863769531,
+    "wall_seconds": 1591.6245481967926,
+    "exit_code": 0
+  },
+  "gate_status": "passed",
+  "elapsed_seconds": 959.7990372180939,
+  "scope_note": "Causal Forest duoc chay tren Kaggle voi profile kaggle-safe (inference=False). Khong goi effect_interval(); moi khoang tin cay o day den tu holdout bootstrap.",
+  "comparability_note": "So sanh voi bang release chi hop le khi holdout dung bang final test Sprint 1, tuc frac=0.50 test_size=0.30 seed=42."
+}

@@ -142,7 +142,10 @@ dùng `visit` làm **feature** vẫn là leakage và vẫn bị cấm.
 - At budget 10%, value=1, cost=0.0005, Response DR net/customer = 0.000799,
   CI [0.000608, 0.000977].
 - All value/cost outputs are assumption scenarios, not actual profit.
-- Causal Forest Kaggle 20/30/50 remains pending. Local 0.1% is code-path smoke only.
+- Causal Forest Kaggle 20/30/50 đã chạy xong và đã chấm điểm — xem
+  `report/CAUSAL_FOREST_REPORT.md`. Ở stage 50%, `policy_area_dr = 0,001006` (hạng 1/6)
+  và Qini `0,174678` (hạng 3/6); chênh lệch so với Response có CI chứa 0 trên **cả hai**
+  metric, nên đây là **hoà**, không phải thắng. Champion giữ nguyên Response.
 - Resource-gated profile has `inference=False`; do not require or claim `effect_interval()`.
 
 ## Quy tắc khi sửa/chạy

@@ -1,0 +1,54 @@
+{
+  "created_utc": "2026-08-05T16:28:42.669571+00:00",
+  "status": "passed",
+  "scope": "resource_and_artifact_integrity_gate_only",
+  "fraction": 0.2,
+  "profile": "kaggle-safe",
+  "command": [
+    "/usr/bin/python3",
+    "/kaggle/working/repo/scripts/train_causal_forest.py",
+    "--data-path",
+    "/kaggle/input/datasets/datthnh/criteo-uplift-v21/criteo-uplift-v2.1.csv",
+    "--frac",
+    "0.2",
+    "--profile",
+    "kaggle-safe",
+    "--output-dir",
+    "/kaggle/working/output/causal_forest/preflight_0p2",
+    "--seed",
+    "42"
+  ],
+  "data": {
+    "path": "/kaggle/input/datasets/datthnh/criteo-uplift-v21/criteo-uplift-v2.1.csv",
+    "sha256": "e4d7c710ca1f38e523309d0f8a0745d1b53e7392d51f20d1088b6cfeaef222ef",
+    "form": "csv"
+  },
+  "runtime": {
+    "logical_cpus": 4,
+    "physical_cpus": 2,
+    "system_ram_total_gb": 31.347740173339844,
+    "system_ram_available_start_gb": 30.296844482421875,
+    "peak_process_tree_rss_gb": 5.518215179443359,
+    "peak_process_tree_ram_fraction": 0.17603231202408678,
+    "minimum_system_available_gb": 24.93988800048828,
+    "wall_seconds": 574.9599940776825,
+    "exit_code": 0
+  },
+  "artifact_contract": {
+    "score_path": "/kaggle/working/output/causal_forest/preflight_0p2/cate_causal_forest_kaggle_safe.npy",
+    "holdout_path": "/kaggle/working/output/causal_forest/preflight_0p2/holdout_test_yt.npz",
+    "score_rows": 838776,
+    "all_finite": true,
+    "aligned": true
+  },
+  "stop_rule": {
+    "max_ram_fraction": 0.75,
+    "may_continue": true,
+    "quality_not_assessed": true
+  },
+  "limitations": [
+    "Passing this gate does not show that Causal Forest improves Qini.",
+    "GPU selection does not accelerate EconML CausalForestDML itself.",
+    "Kaggle resources and quota must be read live; they are not guaranteed."
+  ]
+}

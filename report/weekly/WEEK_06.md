@@ -225,8 +225,9 @@ conversion nhóm được target `0,04545` so với `0,00000` ở phần còn l�
 
 ## 6. Chưa xong
 
-- **Causal Forest Kaggle 20/30/50** — code và runbook đã chuẩn bị đầy đủ
-  (`docs/KAGGLE_RUNBOOK_COMPLETE.md`), cần session bên ngoài.
+- ~~**Causal Forest Kaggle 20/30/50**~~ — đã hoàn tất ngày 06/08/2026, sau khi tuần 6
+  chốt. Ba stage `passed`, đã chấm điểm, kết quả hoà với Response trên cả hai metric.
+  Xem `report/CAUSAL_FOREST_REPORT.md`.
 - **Docker, CI, video demo, slide deck** — lệch khỏi kế hoạch gốc, xem mục 6.1.
 - **pROCini (JMLR 2025)** — trang paper công khai không có công thức; không hiện thực từ
   suy đoán.

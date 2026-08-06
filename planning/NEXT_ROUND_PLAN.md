@@ -42,39 +42,40 @@ estimand, ở tầng quyết định, và ở việc chỉ ra giới hạn của
 
 ---
 
-## 2. Phần A — Hoàn tất Causal Forest
+## 2. Phần A — Hoàn tất Causal Forest — **ĐÃ XONG 06/08/2026**
 
-### A.1 Trạng thái
+Báo cáo đầy đủ: `report/CAUSAL_FOREST_REPORT.md`.
 
-Đang chạy trên Kaggle. Stage 20% đã pass:
+### A.1 Kết quả
 
-| Chỉ số | Giá trị |
-|---|---:|
-| `status` | `passed` |
-| Peak RSS | 5,50 GB |
-| Peak RAM fraction | 0,175 (gate 0,75) |
-| Wall time | 637 s |
-| `score_rows` | 838.776 |
-| `all_finite` / `aligned` | true / true |
+Ba stage đều `passed`. Trên final test Sprint 1, Causal Forest **hoà** với Response:
+`policy_area_dr = 0,001006` (hạng 1/6) nhưng CI `[−6,0e-05; 5,8e-05]` chứa 0;
+Qini `0,174678` (hạng 3/6), CI `[−0,0370; 0,0107]` cũng chứa 0. Champion không đổi.
 
-Dự phóng 50%: RSS ~13,74 GB tức 43,8% RAM của session 31,35 GB. Còn cách xa gate.
+| Mốc | Peak RSS | RAM | Fit | Qini | So được với release |
+|---|---:|---:|---:|---:|:---:|
+| 20% | 5,52 GB | 17,6% | 8,5 phút | 0,178964 | không |
+| 30% | 7,88 GB | 25,1% | 13,9 phút | 0,175315 | không |
+| 50% | 12,73 GB | 40,6% | 25,0 phút | 0,174678 | **có** |
 
-Session Kaggle cấp 31,35 GB RAM và 4 logical CPU. Profile `kaggle-safe` dùng
-`n_estimators=200`, `min_samples_leaf=500`, `max_samples=0,25`, `cv=2`,
-`inference=False`, `model_t=DummyClassifier` — hợp lệ vì Criteo là randomized design.
+Session Kaggle cấp 31,35 GB RAM và 4 logical CPU — đủ cho cả ba stage trong 48 phút.
+Quyết định không mua Colab Pro ở Sprint 2 vì thế là đúng.
 
-### A.2 Còn phải làm
+Điểm CATE **không suy biến**: 912.579 giá trị phân biệt, cách ngưỡng đăng ký (10) năm
+bậc độ lớn.
 
-1. Stage 30% và 50% trên Kaggle.
-2. Tải zip về, giải nén vào `output/causal_forest/`.
-3. Chấm điểm ở local — **bước này chưa từng chạy**:
+### A.2 Đã làm
 
-   ```powershell
-   .venv\Scripts\python.exe scripts\evaluate_causal_forest.py `
-     --stage-dir output\causal_forest\preflight_0p5 --n-boot 500 --signal dr
-   ```
+1. ✅ Stage 20%, 30%, 50% trên Kaggle.
+2. ✅ Tải zip, giải nén vào `output/causal_forest/`.
+3. ✅ Chấm điểm bằng `evaluate_causal_forest.py` — bước trước đây chưa từng chạy.
+4. ✅ Ghi ba run vào `output/improvement/registry.csv`.
+5. ✅ Learning curve, phân bố điểm, năm biểu đồ (`analyze_` và `plot_causal_forest_release.py`).
 
-4. Ghi run vào `output/improvement/registry.csv`, kể cả nếu kết quả kém.
+Một việc còn để ngỏ: bản chấm điểm dùng **IPW signal**. Chạy thêm
+`--signal dr` sẽ cho ước lượng variance thấp hơn, nhưng phải nạp lại Criteo và fit
+nuisance nên tốn khoảng 16 phút. Kết luận hoà/không hoà nhiều khả năng không đổi vì CI
+hiện tại rộng hơn chênh lệch hai bậc độ lớn.
 
 ### A.3 Chỉ stage 50% mới so được với bảng release
 

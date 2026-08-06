@@ -1,0 +1,15 @@
+{
+  "generated_from": "output/causal_forest/preflight_{0p2,0p3,0p5}",
+  "signal": "ipw_constant_propensity",
+  "release_comparison_source": "output/causal_forest_release/ (evaluate_causal_forest.py)",
+  "stages_comparable_to_release": [
+    "0p5"
+  ],
+  "score_degenerate": false,
+  "min_unique_scores": 374442,
+  "limitations": [
+    "Chỉ stage 50% so được với bảng release; 20% và 30% dùng holdout khác.",
+    "Signal là IPW với propensity hằng số, không phải DR.",
+    "Profile kaggle-safe đặt inference=False nên không có khoảng tin cậy cá nhân."
+  ]
+}

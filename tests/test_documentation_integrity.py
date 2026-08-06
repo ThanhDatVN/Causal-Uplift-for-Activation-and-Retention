@@ -36,11 +36,10 @@ PROSPECTIVE = (
     "planning/RUN_PLAN.md",
 )
 
-# Đường dẫn chỉ tồn tại sau khi chạy Kaggle; runbook trỏ tới chúng là đúng.
-CREATED_BY_FUTURE_RUN = (
-    "output/causal_forest/",
-    "output/causal_forest_release/",
-)
+# Trước 06/08/2026 hai đường dẫn này chỉ tồn tại sau khi chạy Kaggle. Chúng đã tồn tại
+# từ khi Causal Forest chạy xong, nên danh sách miễn trừ này rỗng. Giữ lại cấu trúc vì
+# tình huống "tài liệu trỏ tới artifact của một lần chạy chưa diễn ra" sẽ lặp lại.
+CREATED_BY_FUTURE_RUN: tuple[str, ...] = ()
 
 # Đường dẫn được nhắc tới **đúng vì nó không tồn tại**: tài liệu đang giải thích rằng
 # kế hoạch ban đầu dự kiến file này nhưng hiện thực đặt ở chỗ khác.

@@ -41,11 +41,13 @@ lý?” bằng một ứng dụng chạy được.
 
 **Chưa hoàn thành bên ngoài:**
 
-- Kaggle Causal Forest 20% → 30% → 50%;
+- ~~Kaggle Causal Forest 20% → 30% → 50%~~ — đã hoàn tất 06/08/2026;
 - Git release tag vì repository chưa có commit.
 
-**Quyết định cắt scope:** Causal Forest pending không chặn product release. Không mua
-Colab Pro trước khi Kaggle 20–30% chứng minh nhu cầu/tính khả thi.
+**Quyết định cắt scope (đã giải quyết):** Causal Forest pending không chặn product
+release, và quyết định không mua Colab Pro là đúng — session Kaggle miễn phí cấp 31,35 GB
+RAM và 4 CPU, đủ chạy cả ba stage trong 48 phút với peak RAM 40,6%. Kết quả:
+`report/CAUSAL_FOREST_REPORT.md`.
 
 **Bằng chứng:** `report/SPRINT_2_FINAL_REPORT.md`, `output/sprint2/`,
 `output/dashboard.html`.

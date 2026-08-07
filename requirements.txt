@@ -7,7 +7,8 @@
 
 pandas>=2.2,<3
 numpy>=1.26,<3
-scikit-learn>=1.5,<2
+scikit-learn>=1.5,<1.7   # tran cung cua econml 0.16; de <2 thi pip co the lay 1.9
+shap>=0.38.1,<0.49.0     # rang buoc cung cua econml 0.16
 scipy>=1.11
 lightgbm>=4.5
 econml==0.16.0          # pin cung — de pip tu chon se tut ve 0.8.1 (2020)

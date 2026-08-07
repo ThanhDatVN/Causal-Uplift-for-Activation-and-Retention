@@ -200,7 +200,7 @@ kỳ policy top-k nào.
 
 ### 3.2 Incremental CLV và hiệu ứng dài hạn
 
-Đây là hướng repo đã tuyên bố trong `planning/incremental_value_product/`. Bài toán
+Đây là hướng phát triển đã được scoping nhưng **chưa mở**. Bài toán
 thật nằm ở chỗ: **CLV dự báo không phải CLV tăng thêm**, và outcome dài hạn không
 quan sát được trong cửa sổ thí nghiệm.
 

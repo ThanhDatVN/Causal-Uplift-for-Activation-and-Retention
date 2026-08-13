@@ -1,0 +1,292 @@
+{
+  "run": {
+    "script": "scripts/run_eda_profile.py",
+    "seed": 42,
+    "balance_frac": 0.05,
+    "n_bins": 10,
+    "min_pattern_rows": 20000,
+    "elapsed_seconds": 145.7,
+    "python": "3.12.10",
+    "numpy": "2.4.6",
+    "pandas": "2.3.3"
+  },
+  "source": {
+    "path": "data/criteo-research-uplift-v2.1.csv.gz",
+    "file_size_bytes": 311422618,
+    "sha256": "2716e1bf0fd157a93b5bf86924d9088419dfbac2022c6cd90030220634f616dc",
+    "schema_contract": {
+      "row_count": 13979592,
+      "column_count": 16,
+      "missing_columns": [],
+      "extra_columns": [],
+      "binary_values": {
+        "treatment": [
+          0,
+          1
+        ],
+        "conversion": [
+          0,
+          1
+        ],
+        "visit": [
+          0,
+          1
+        ],
+        "exposure": [
+          0,
+          1
+        ]
+      },
+      "invalid_binary_columns": {},
+      "missing_cells": 0,
+      "all_features_finite": true,
+      "valid": true
+    }
+  },
+  "feature_policy": {
+    "allowed_pre_treatment_features": [
+      "f0",
+      "f1",
+      "f2",
+      "f3",
+      "f4",
+      "f5",
+      "f6",
+      "f7",
+      "f8",
+      "f9",
+      "f10",
+      "f11"
+    ],
+    "primary_outcome": "conversion",
+    "excluded_post_treatment": [
+      "visit",
+      "exposure"
+    ]
+  },
+  "structure": {
+    "sentinel_values": {
+      "f0": 12.616364479064941,
+      "f1": 10.059654235839844,
+      "f2": 8.214383125305176,
+      "f3": 4.679881572723389,
+      "f4": 10.280525207519531,
+      "f5": 4.115453243255615,
+      "f6": 0.29444271326065063,
+      "f7": 4.83381462097168,
+      "f8": 3.971858024597168,
+      "f9": 13.190055847167969,
+      "f10": 5.300374984741211,
+      "f11": -0.16867922246456146
+    },
+    "shared_sentinel_mask_pairs": [
+      {
+        "feature_a": "f0",
+        "feature_b": "f6"
+      },
+      {
+        "feature_a": "f2",
+        "feature_b": "f8"
+      },
+      {
+        "feature_a": "f4",
+        "feature_b": "f10"
+      },
+      {
+        "feature_a": "f5",
+        "feature_b": "f7"
+      }
+    ],
+    "n_distinct_sentinel_patterns": 53,
+    "n_possible_sentinel_patterns": 4096,
+    "median_observed_features_per_row": 2.0,
+    "duplicates": {
+      "n_rows": 13979592,
+      "n_distinct_feature_vectors": 11859441,
+      "n_duplicate_rows": 2120151,
+      "duplicate_row_share": 0.1516604347251336,
+      "n_rows_in_repeated_groups": 3560505,
+      "share_rows_in_repeated_groups": 0.25469305541964316,
+      "max_group_size": 24,
+      "mean_group_size": 1.1787732659574763
+    }
+  },
+  "design": {
+    "design_propensity": 0.8500001287591226,
+    "propensity_auc_linear": 0.5073786173054401,
+    "propensity_auc_tree": 0.5060721290054074,
+    "max_abs_smd": 0.04903073608875275,
+    "median_abs_smd": 0.017723051831126213,
+    "n_features_abs_smd_above_0p1": 0,
+    "overlap": {
+      "min_propensity": 0.8500001287591226,
+      "max_propensity": 0.8500001287591226,
+      "n_occupied_bins": 1,
+      "n_single_arm_bins": 0,
+      "share_rows_in_single_arm_bins": 0.0,
+      "positivity_holds_in_sample": true
+    },
+    "interpretation": "Balance diagnostics mô tả cân bằng quan sát được. Căn cứ cho random assignment đến từ provenance của thí nghiệm, không từ AUC/SMD."
+  },
+  "power": {
+    "minimum_detectable_effect": 9.228077217163973e-05,
+    "observed_ate": 0.0011518730521316279,
+    "ate_over_mde": 12.482264994371475,
+    "alpha": 0.05,
+    "power": 0.8
+  },
+  "prognostic_dominance": {
+    "feature_bins": {
+      "n_strata": 30,
+      "independent_strata": false,
+      "pearson_r": 0.9838401771794731,
+      "pearson_p_value": null,
+      "spearman_rho": 0.9590656284760846,
+      "spearman_p_value": null,
+      "effect_over_baseline_median": 0.5328943429057975,
+      "effect_over_baseline_iqr": 0.23274831887135705,
+      "pooled_risk_ratio": null,
+      "q_additive": null,
+      "q_multiplicative": null,
+      "q_ratio_additive_over_multiplicative": null,
+      "i_squared_additive": null,
+      "i_squared_multiplicative": null,
+      "p_value_additive": null,
+      "p_value_multiplicative": null,
+      "inference_note": "Descriptive only: rows reuse observations across overlapping feature partitions. Inferential summaries are reported per feature."
+    },
+    "feature_bins_by_feature": {
+      "f0": {
+        "n_strata": 8,
+        "independent_strata": true,
+        "pearson_r": 0.9947991121281039,
+        "pearson_p_value": 3.503296535953464e-07,
+        "spearman_rho": 0.9761904761904763,
+        "spearman_p_value": 3.314396026200098e-05,
+        "effect_over_baseline_median": 0.39493734815876147,
+        "effect_over_baseline_iqr": 0.2849420731064012,
+        "pooled_risk_ratio": 1.5643799685529434,
+        "q_additive": 837.7804896449874,
+        "q_multiplicative": 23.074042861577595,
+        "q_ratio_additive_over_multiplicative": 36.308352839200175,
+        "i_squared_additive": 0.9916445893804876,
+        "i_squared_multiplicative": 0.6966288031103448,
+        "p_value_additive": 1.3018052740297862e-176,
+        "p_value_multiplicative": 0.001654724535966536
+      },
+      "f2": {
+        "n_strata": 5,
+        "independent_strata": true,
+        "pearson_r": 0.991219478466113,
+        "pearson_p_value": 0.0009863737346896874,
+        "spearman_rho": 0.9999999999999999,
+        "spearman_p_value": 1.4042654220543602e-24,
+        "effect_over_baseline_median": 0.5962375306814255,
+        "effect_over_baseline_iqr": 0.21094160238508097,
+        "pooled_risk_ratio": 1.584981855549848,
+        "q_additive": 538.3563359167307,
+        "q_multiplicative": 5.493080923538365,
+        "q_ratio_additive_over_multiplicative": 98.00626340854065,
+        "i_squared_additive": 0.9925699769220907,
+        "i_squared_multiplicative": 0.2718112010948853,
+        "p_value_additive": 3.3810941111874206e-115,
+        "p_value_multiplicative": 0.2403383417507419
+      },
+      "f3": {
+        "n_strata": 2,
+        "inference_note": "Fewer than three effective quantile strata; use the feature-level Cochran Q in heterogeneity_by_feature.csv only."
+      },
+      "f6": {
+        "n_strata": 7,
+        "independent_strata": true,
+        "pearson_r": 0.9966554064207673,
+        "pearson_p_value": 1.2403196645573589e-06,
+        "spearman_rho": 0.8928571428571429,
+        "spearman_p_value": 0.006807187408935393,
+        "effect_over_baseline_median": 0.4820589137845903,
+        "effect_over_baseline_iqr": 0.26226350130715237,
+        "pooled_risk_ratio": 1.5107835994687875,
+        "q_additive": 690.4938671982419,
+        "q_multiplicative": 50.8193240786269,
+        "q_ratio_additive_over_multiplicative": 13.587230442693809,
+        "i_squared_additive": 0.9913105672837534,
+        "i_squared_multiplicative": 0.8819346752680753,
+        "p_value_additive": 6.90092555814512e-146,
+        "p_value_multiplicative": 3.2198964550043506e-09
+      },
+      "f8": {
+        "n_strata": 5,
+        "independent_strata": true,
+        "pearson_r": 0.9996417422591227,
+        "pearson_p_value": 8.139615536887668e-06,
+        "spearman_rho": 0.9999999999999999,
+        "spearman_p_value": 1.4042654220543602e-24,
+        "effect_over_baseline_median": 0.6164667224009461,
+        "effect_over_baseline_iqr": 0.03760140309621807,
+        "pooled_risk_ratio": 1.5060422217931664,
+        "q_additive": 779.9960546906108,
+        "q_multiplicative": 3.686453870154387,
+        "q_ratio_additive_over_multiplicative": 211.58437950505126,
+        "i_squared_additive": 0.9948717689327459,
+        "i_squared_multiplicative": 0.0,
+        "p_value_additive": 1.6526593198778495e-167,
+        "p_value_multiplicative": 0.450099196791491
+      },
+      "f9": {
+        "n_strata": 3,
+        "independent_strata": true,
+        "pearson_r": 0.9999981343447053,
+        "pearson_p_value": 0.0012297331792057561,
+        "spearman_rho": 1.0,
+        "spearman_p_value": 0.0,
+        "effect_over_baseline_median": 0.5125457168614943,
+        "effect_over_baseline_iqr": 0.0961446619553209,
+        "pooled_risk_ratio": 1.509439997366776,
+        "q_additive": 663.4015286643565,
+        "q_multiplicative": 5.116627819685992,
+        "q_ratio_additive_over_multiplicative": 129.65600626880646,
+        "i_squared_additive": 0.9969852345622015,
+        "i_squared_multiplicative": 0.6091175534978153,
+        "p_value_additive": 8.794039407758592e-145,
+        "p_value_multiplicative": 0.07743519315185952
+      }
+    },
+    "sentinel_patterns": {
+      "n_strata": 26,
+      "independent_strata": true,
+      "pearson_r": 0.7685836529983153,
+      "pearson_p_value": 4.517721078733675e-06,
+      "spearman_rho": 0.8830769230769231,
+      "spearman_p_value": 2.343844523605759e-09,
+      "effect_over_baseline_median": 0.47486047143386056,
+      "effect_over_baseline_iqr": 0.5996200067471317,
+      "pooled_risk_ratio": 1.4175656477592475,
+      "q_additive": 861.1713776065574,
+      "q_multiplicative": 150.1543381426467,
+      "q_ratio_additive_over_multiplicative": 5.735241407334126,
+      "i_squared_additive": 0.970969773670971,
+      "i_squared_multiplicative": 0.8335046438934719,
+      "p_value_additive": 1.4662275745443907e-165,
+      "p_value_multiplicative": 7.898284186139376e-20
+    }
+  },
+  "artifacts": [
+    "arm_outcome_summary.csv",
+    "average_treatment_effect.csv",
+    "balance_smd.csv",
+    "eda_summary.csv",
+    "effect_by_feature_bin.csv",
+    "effect_by_sentinel_pattern.csv",
+    "feature_profile.csv",
+    "heterogeneity_by_feature.csv",
+    "post_treatment_leakage.csv",
+    "power_analysis.csv",
+    "propensity_overlap_bins.csv",
+    "sample_representativity.csv",
+    "sentinel_mask_agreement.csv",
+    "sentinel_observed_per_row.csv",
+    "sentinel_patterns.csv",
+    "prognostic_dominance.json",
+    "run_manifest.json"
+  ]
+}

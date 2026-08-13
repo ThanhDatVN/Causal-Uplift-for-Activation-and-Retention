@@ -1,0 +1,192 @@
+{
+  "protocol_id": "top-tail-research-v2",
+  "registered_utc": "2026-08-09T00:00:00+00:00",
+  "status": "retrospective_audit_and_future_experiment_design",
+  "research_basis": "planning/LATEST_CAUSAL_RESEARCH_AND_EXPERIMENT_PLAN_2026.md",
+  "estimand": {
+    "target": "conditional intention-to-treat effect of randomized targeting assignment on conversion",
+    "outcome": "conversion",
+    "treatment": "treatment",
+    "propensity": 0.85,
+    "effect_scale": "absolute conversion probability difference",
+    "forbidden_features": ["visit", "exposure"],
+    "population": "released Criteo v2.1 benchmark sample"
+  },
+  "scope_separation": {
+    "retrospective_audit": "Re-evaluate the already observed 1%-2% pattern with paired simultaneous inference; no candidate selection or promotion is allowed.",
+    "synthetic_validation": "Validate estimators and inference against known potential-outcome truth before any new real-data screen.",
+    "future_exploratory_screen": "Requires a newly frozen data role or a new randomized campaign; existing Sprint 2 confirmation is forbidden.",
+    "future_confirmation": "Requires a new randomized campaign and one business-selected hard budget locked before outcomes are read."
+  },
+  "retrospective_audit": {
+    "run_dirs": {
+      "101": "output/improvement/causal_foundation_screen_seed101",
+      "202": "output/improvement/causal_foundation_screen_seed202"
+    },
+    "reference": "Response",
+    "registered_family": [
+      "Response",
+      "Response-Sentinel",
+      "Anchored-R25",
+      "Anchored-R25-Sentinel",
+      "Anchored-Pattern-R",
+      "DINA-CATE-Sentinel"
+    ],
+    "causal_candidates": [
+      "Anchored-R25",
+      "Anchored-R25-Sentinel",
+      "Anchored-Pattern-R",
+      "DINA-CATE-Sentinel"
+    ],
+    "budget_grid": [0.01, 0.02],
+    "bootstrap_replicates": 200,
+    "bootstrap_seed": 260809,
+    "family_definition": "all five registered challengers x two fold seeds x two budgets",
+    "inference": "paired maximum-standardized bootstrap-deviation band over the full 20-cell family",
+    "decision_rule": "diagnostic only; retain Response regardless of the retrospective interval"
+  },
+  "data_processing_contract": {
+    "outcome_is_locked_to_conversion": true,
+    "outer_folds": 3,
+    "outer_fold_seeds": [101, 202],
+    "stratify_on": ["treatment", "conversion"],
+    "known_propensity_only": true,
+    "fit_preprocessing_inside_training_fold": true,
+    "sentinel_flags_from_training_fold_only": true,
+    "no_smote": true,
+    "no_duplicate_positive_events": true,
+    "no_post_treatment_features": true,
+    "report_top_tail_rows_and_positive_events_by_arm": true,
+    "report_top_tail_membership_overlap_across_fold_seeds": true
+  },
+  "synthetic_identification_matrix": {
+    "propensity_values": [0.5, 0.85],
+    "base_rates": [0.002, 0.01, 0.05],
+    "effect_structures": [
+      "null",
+      "constant_risk_difference",
+      "constant_log_odds",
+      "risk_aligned",
+      "risk_anti_aligned",
+      "prognostic_and_causal_support_disjoint",
+      "step_subgroup",
+      "uplift_only_in_top_1_to_2_percent"
+    ],
+    "required_checks": [
+      "true_tau_equals_mu1_minus_mu0_after_probability_clipping",
+      "no_spurious_heterogeneity_under_null_or_constant_effect",
+      "oracle_top_tail_policy_regret",
+      "top_tail_membership_overlap",
+      "clip_fraction_and_boundary_stability",
+      "paired_interval_coverage_on_held_out_replications"
+    ]
+  },
+  "future_experiment_gate": {
+    "business_budget_must_be_one_of": [0.01, 0.02],
+    "primary_budget_must_be_single_and_locked": true,
+    "candidate_family_must_be_locked": true,
+    "minimum_control_events_per_evaluation_tail": 100,
+    "minimum_top_tail_overlap_fraction_across_fold_seeds": 0.75,
+    "paired_95_percent_ci_lower_bound_above_zero": true,
+    "simultaneous_familywise_interval_required_when_more_than_one_candidate": true,
+    "selection_rule": "maximize a simultaneous lower confidence bound over the frozen finite policy family; point estimates cannot select a winner",
+    "evaluation_must_use_factual_randomized_outcomes": true,
+    "model_based_counterfactual_evaluation_forbidden": true,
+    "new_randomized_confirmation_required_for_promotion": true
+  },
+  "method_equivalences": {
+    "racer_cmo": "With the same cross-fitted mu0, mu1 and fixed propensity, the RCT CMO pseudo-outcome is algebraically identical to the existing doubly robust effect signal; do not add a duplicate learner.",
+    "adjusted_signal": "The pooled-outcome adjusted transformed signal remains unbiased but is auxiliary and is not the CMO variance-minimizer when propensity is 0.85."
+  },
+  "future_candidate_specs": [
+    {
+      "name": "Logit-From-Control-Risk",
+      "family": "prognostic_causal_hybrid",
+      "builder": "logit_from_baseline",
+      "is_cate_scale": true,
+      "status": "future_only_not_in_retrospective_family",
+      "params": {
+        "stacker_inner_cv": 2,
+        "stacker_max_iter": 1000,
+        "probability_clip": 0.00001,
+        "baseline_params": {
+          "n_estimators": 200,
+          "num_leaves": 31,
+          "min_child_samples": 250
+        }
+      }
+    },
+    {
+      "name": "Hybrid-Logit-DINA",
+      "family": "prognostic_causal_hybrid",
+      "builder": "hybrid_logit_dina",
+      "is_cate_scale": true,
+      "status": "future_only_not_in_retrospective_family",
+      "params": {
+        "stacker_inner_cv": 2,
+        "stacker_max_iter": 1000,
+        "probability_clip": 0.00001,
+        "baseline_params": {
+          "n_estimators": 200,
+          "num_leaves": 31,
+          "min_child_samples": 250
+        },
+        "effect_params": {
+          "inner_cv": 2,
+          "probability_clip": 0.00001,
+          "effect_clip": 3.0,
+          "feature_augmentation": "sentinel_flags",
+          "sentinel_min_mode_share": 0.05,
+          "nuisance_params": {
+            "n_estimators": 200,
+            "num_leaves": 31,
+            "min_child_samples": 250
+          },
+          "final_params": {
+            "n_estimators": 250,
+            "learning_rate": 0.04,
+            "num_leaves": 15,
+            "min_child_samples": 5000,
+            "reg_lambda": 20.0
+          }
+        }
+      }
+    }
+  ],
+  "model_workstreams": [
+    {
+      "priority": 1,
+      "name": "cross-fitted prognostic-causal hybrid logit",
+      "status": "foundation_implementation_and_synthetic_validation_only",
+      "hypothesis": "Learn how much control-risk and DINA effect information to use, allowing the causal component to shrink to zero instead of imposing a hand-fixed residual weight.",
+      "required_ablations": ["baseline_logit_only", "raw_dina_cate", "hybrid_logit"],
+      "leakage_rule": "Control-risk and CATE inputs to the stacker must be inner-OOF inside every outer training fold."
+    },
+    {
+      "priority": 2,
+      "name": "prognostic pretraining for R-learner",
+      "status": "synthetic_ablation_after_hybrid",
+      "hypothesis": "Use outcome-risk feature support as a soft prior for effect learning when prognostic and causal support overlap.",
+      "mandatory_failure_case": "Must not materially regress when prognostic and causal supports are disjoint."
+    },
+    {
+      "priority": 3,
+      "name": "direct ranking forest",
+      "status": "exploratory_after_hybrid_and_pretraining",
+      "hypothesis": "A ranking objective may align training with allocation better than CATE MSE, but published evidence covers synthetic data and broader budgets rather than rare conversion at 1%-2%.",
+      "extension_warning": "Replacing whole-curve AUTOC with a 1%-2% objective is a new project hypothesis, not a reproduced theorem."
+    },
+    {
+      "priority": 4,
+      "name": "rare-outcome class-flipping sensitivity",
+      "status": "preprint_ablation_not_primary",
+      "hypothesis": "A label-flipping transformation may stabilize modified-outcome training without changing population uplift up to a known scale; evaluation must always use untouched factual labels."
+    },
+    {
+      "priority": 5,
+      "name": "relative-risk causal forest",
+      "status": "deferred_to_kaggle",
+      "hypothesis": "Use log-link relative-risk splitting as a heterogeneity diagnostic while still evaluating absolute ITT policy value."
+    }
+  ]
+}

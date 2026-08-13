@@ -1,0 +1,15 @@
+{
+  // Interpreter tro thang vao .venv cua repo. Duong dan tuong doi de may khac clone ve
+  // van dung duoc; khong hard-code Python toan cuc de tranh lap lai su co venv tro vao
+  // mot ban Python da bi go.
+  "python.defaultInterpreterPath": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+  "python.terminal.activateEnvironment": true,
+
+  // pytest config that su nam o pyproject.toml ([tool.pytest.ini_options]); o day chi
+  // bat test discovery cua VS Code va tro dung thu muc.
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestArgs": ["tests"],
+
+  "python.analysis.typeCheckingMode": "basic"
+}

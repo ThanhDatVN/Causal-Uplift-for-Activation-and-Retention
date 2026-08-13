@@ -22,5 +22,6 @@ markers = [
     "requires_artifacts: cần artifact trong output/ từ một lần chạy trước",
 ]
 
-# Ba file test dưới đây cần file Criteo local. CI công khai chạy phần còn lại
-# (91/132 test, khoảng 15 giây). Xem .github/workflows/tests.yml.
+# Một số test cần file Criteo hoặc release artifact local. CI công khai chạy phần
+# data-free còn lại; số lượng được lấy trực tiếp từ pytest, không hard-code ở đây.
+# Xem .github/workflows/tests.yml.

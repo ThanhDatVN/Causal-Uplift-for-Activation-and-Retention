@@ -1,0 +1,192 @@
+{
+  "protocol_id": "causal-foundation-v1",
+  "registered_utc": "2026-08-09T00:00:00+00:00",
+  "research_basis": "planning/CAUSAL_FOUNDATION_RESEARCH.md",
+  "purpose": "Test natural-parameter, anchored orthogonal residual, and partial-pooling estimators without modifying frozen release protocols.",
+  "estimand": {
+    "target": "CATE of conversion on Criteo v2.1",
+    "outcome": "conversion",
+    "treatment": "treatment",
+    "features_at_decision_time": ["f0", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11"],
+    "excluded_at_decision_time": ["visit", "exposure"],
+    "propensity_mode": "fixed_randomized_design",
+    "propensity_value": 0.85,
+    "primary_effect_scale": "absolute conversion probability difference",
+    "auxiliary_effect_scale": "conditional log odds ratio for DINA internal estimation only"
+  },
+  "data_roles": {
+    "smoke": "2% development; code path only",
+    "screen": "15% development, same source rows for both fold seeds",
+    "finalist": "100% development only for candidates passing screen on both fold seeds",
+    "confirmation": "requires a new randomized campaign; Sprint 2 confirmation is forbidden"
+  },
+  "execution": {
+    "smoke_pool_fraction": 0.01,
+    "smoke_bootstrap_replicates": 30,
+    "screen_pool_fraction": 0.15,
+    "primary_seed_bootstrap_replicates": 200,
+    "secondary_seed_bootstrap_replicates": 100,
+    "cross_seed_comparison_bootstrap_replicates": 200,
+    "process_isolated_component_bootstrap_replicates": 2
+  },
+  "protocol_amendments": [
+    {
+      "field": "execution.smoke_pool_fraction",
+      "from": 0.02,
+      "to": 0.01,
+      "reason": "The first code-path-only attempt hit the preregistered 75% system-memory guard at 75.1%; no selection result was read and no model hyperparameter changed.",
+      "evidence": "output/improvement/causal_foundation_smoke_attempt1/oof_metrics.csv"
+    },
+    {
+      "field": "resource_gate.max_system_memory_percent",
+      "from": 75.0,
+      "to": 80.0,
+      "reason": "The first 15% screen attempt stopped after shared nuisance fitting, before any candidate score existed, at 75.8% system memory with 3.68 GB still available. The independent absolute floor remains 2 GB.",
+      "evidence": "output/improvement/causal_foundation_screen_seed101_attempt1/resource_gate_failure.json"
+    },
+    {
+      "field": "resource_gate.max_system_memory_percent",
+      "from": 80.0,
+      "to": 85.0,
+      "reason": "The first full-development finalist attempt stopped after shared nuisance fitting, before any candidate score existed, at 80.6% system memory with 2.94 GB still available. The independent absolute floor remains 2 GB.",
+      "evidence": "output/improvement/causal_foundation_finalist_seed101_attempt1/resource_gate_failure.json"
+    },
+    {
+      "field": "execution.finalist_process_isolation",
+      "from": false,
+      "to": true,
+      "reason": "The combined full-development run retained a 1.84 GB process high-water mark and stopped at 85.1% during the second candidate. The finalist set was already frozen; each candidate is rerun in a fresh process and deterministic OOF artifacts are merged only after exact contract checks.",
+      "evidence": "output/improvement/causal_foundation_finalist_seed101_combined_attempt2/oof_metrics.csv"
+    },
+    {
+      "field": "resource_gate.max_system_memory_percent",
+      "from": 85.0,
+      "to": 87.0,
+      "reason": "On this approximately 15.2 GB host, 87% used corresponds to the independently retained 2 GB absolute floor. The isolated Sentinel retry stopped before candidate scoring at 85.1% despite 2.26 GB available; aligning the redundant percentage guard avoids contradictory rounding behavior.",
+      "evidence": "output/improvement/causal_foundation_finalist_seed101_sentinel_attempt2/resource_gate_failure.json"
+    }
+  ],
+  "cross_fitting": {
+    "n_folds": 3,
+    "primary_fold_seed": 101,
+    "secondary_fold_seed": 202,
+    "inner_nuisance_folds": 2,
+    "stratify_on": ["treatment", "conversion"]
+  },
+  "metrics": {
+    "primary": "policy_area_dr",
+    "primary_budget_grid": [0.01, 0.02, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
+    "secondary": ["autoc_dr", "qini_score", "auuc_score", "uplift_calibration_error", "doubly_robust_risk"],
+    "inference": "paired bootstrap on identical OOF rows",
+    "scale_rule": "DINA is converted from log odds ratio to absolute CATE before primary evaluation"
+  },
+  "selection_rule": {
+    "screening": "finite nonconstant OOF score and at least 200 control conversions",
+    "advance": "policy_area_dr greater than Response on both registered fold seeds",
+    "advance_reference": "Response",
+    "advance_all_fold_seeds": true,
+    "advance_registered_candidates_only": true,
+    "finalist": "run 100% development OOF for advancing registered candidates plus Response",
+    "promotion": "requires a new randomized confirmation campaign with paired 95% CI lower bound greater than zero"
+  },
+  "locked_hyperparameters": {
+    "anchored_r_residual_shrinkage": 0.25,
+    "anchored_pattern_prior_weight": 1000.0,
+    "dina_probability_clip": 0.00001,
+    "dina_log_odds_effect_clip": 3.0,
+    "sentinel_min_mode_share": 0.05
+  },
+  "early_stop": {
+    "constant_score_unique_threshold": 10,
+    "non_finite_score": true,
+    "dominated_at_every_budget_5_to_20": false,
+    "resource_gate_exceeded": true
+  },
+  "resource_gate": {
+    "min_available_ram_gb": 2.0,
+    "max_system_memory_percent": 87.0,
+    "no_parallel_full_data_runs": true
+  },
+  "causal_forest": {
+    "status": "deferred",
+    "reason": "Complete and validate common theory/experiment foundation before another Kaggle run."
+  },
+  "candidates": [
+    {
+      "name": "Response",
+      "family": "response",
+      "builder": "response",
+      "is_cate_scale": false,
+      "hypothesis": "Frozen champion and mandatory ranking reference.",
+      "params": {}
+    },
+    {
+      "name": "Response-Sentinel",
+      "family": "response",
+      "builder": "response",
+      "is_cate_scale": false,
+      "hypothesis": "Sole advancing challenger from data-optimization-v1.",
+      "params": {
+        "feature_augmentation": "sentinel_flags",
+        "sentinel_min_mode_share": 0.05
+      }
+    },
+    {
+      "name": "Anchored-R25",
+      "family": "anchored_r_learner",
+      "builder": "anchored_r_learner",
+      "is_cate_scale": true,
+      "hypothesis": "Preserve prognostic ranking and learn only a strongly shrunk orthogonal treatment residual.",
+      "params": {
+        "inner_cv": 2,
+        "residual_shrinkage": 0.25,
+        "nuisance_params": {"n_estimators": 200, "num_leaves": 31, "min_child_samples": 250},
+        "final_params": {"n_estimators": 200, "learning_rate": 0.04, "num_leaves": 15, "min_child_samples": 5000, "reg_lambda": 20.0}
+      }
+    },
+    {
+      "name": "Anchored-R25-Sentinel",
+      "family": "anchored_r_learner",
+      "builder": "anchored_r_learner",
+      "is_cate_scale": true,
+      "hypothesis": "Expose structural point masses only to the residual learner while retaining the risk anchor.",
+      "params": {
+        "inner_cv": 2,
+        "residual_shrinkage": 0.25,
+        "feature_augmentation": "sentinel_flags",
+        "sentinel_min_mode_share": 0.05,
+        "nuisance_params": {"n_estimators": 200, "num_leaves": 31, "min_child_samples": 250},
+        "final_params": {"n_estimators": 200, "learning_rate": 0.04, "num_leaves": 15, "min_child_samples": 5000, "reg_lambda": 20.0}
+      }
+    },
+    {
+      "name": "Anchored-Pattern-R",
+      "family": "anchored_pattern_r_learner",
+      "builder": "anchored_pattern_r_learner",
+      "is_cate_scale": true,
+      "hypothesis": "Partial-pool the causal residual across the 53 observed sentinel structures.",
+      "params": {
+        "inner_cv": 2,
+        "pattern_prior_weight": 1000.0,
+        "sentinel_min_mode_share": 0.05,
+        "nuisance_params": {"n_estimators": 200, "num_leaves": 31, "min_child_samples": 250}
+      }
+    },
+    {
+      "name": "DINA-CATE-Sentinel",
+      "family": "binary_dina_learner",
+      "builder": "binary_dina_learner",
+      "is_cate_scale": true,
+      "hypothesis": "Estimate heterogeneous log odds ratio with orthogonal Bernoulli likelihood, then map it back to absolute CATE.",
+      "params": {
+        "inner_cv": 2,
+        "probability_clip": 0.00001,
+        "effect_clip": 3.0,
+        "feature_augmentation": "sentinel_flags",
+        "sentinel_min_mode_share": 0.05,
+        "nuisance_params": {"n_estimators": 200, "num_leaves": 31, "min_child_samples": 250},
+        "final_params": {"n_estimators": 250, "learning_rate": 0.04, "num_leaves": 15, "min_child_samples": 5000, "reg_lambda": 20.0}
+      }
+    }
+  ]
+}

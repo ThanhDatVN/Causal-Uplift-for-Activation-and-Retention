@@ -17,11 +17,13 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import platform
 import subprocess
 import threading
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
+from functools import lru_cache
 from pathlib import Path
 
 import lightgbm
@@ -38,7 +40,7 @@ from src.data import (
     train_test_holdout,
     validate_criteo_schema,
 )
-from src.paths import OUTPUT_DIR
+from src.paths import CRITEO_PATH, OUTPUT_DIR, REPO_ROOT
 
 # Hằng số tái dựng đúng split Sprint 2. Không đổi các seed này: chúng quyết định
 # nội dung của development pool và confirmation.
@@ -51,6 +53,12 @@ SPRINT2_SPLIT_HASHES = {
     "validation": "33622532d96c649dab244005942f96467e403e13f6635983c0d349380934098f",
     "confirmation": "6d846e155171a87d5629cd8275697dcc3cabbfc813ec5f6a0ebd7a1f2c0280be",
 }
+SPRINT3_SPLIT_HASHES = {
+    "development": "8ff1ffcde973cb58df155f942b3f3cf9f386d64c019f18bf51a4df98aeedd476",
+    "confirmation": SPRINT2_SPLIT_HASHES["confirmation"],
+}
+CRITEO_V2_1_SHA256 = "2716e1bf0fd157a93b5bf86924d9088419dfbac2022c6cd90030220634f616dc"
+CACHE_FORMAT_VERSION = 4
 
 IMPROVEMENT_DIR = OUTPUT_DIR / "improvement"
 CACHE_DIR = IMPROVEMENT_DIR / "cache"
@@ -66,6 +74,8 @@ REGISTRY_COLUMNS = [
     "config_hash",
     "config_json",
     "commit_sha",
+    "working_tree_dirty",
+    "working_tree_diff_sha256",
     "data_sha256",
     "development_index_sha256",
     "eval_index_sha256",
@@ -94,6 +104,7 @@ REGISTRY_COLUMNS = [
     "predict_seconds",
     "peak_process_rss_gb",
     "min_system_available_ram_gb",
+    "max_system_memory_percent",
     "python_version",
     "numpy_version",
     "pandas_version",
@@ -104,19 +115,67 @@ REGISTRY_COLUMNS = [
 ]
 
 
-def commit_sha() -> str:
-    """SHA của commit hiện tại; trả ``unknown`` nếu không đọc được."""
+@lru_cache(maxsize=1)
+def git_state() -> dict[str, object]:
+    """Commit và fingerprint của working tree tại lúc process bắt đầu.
+
+    Chỉ lưu SHA của diff/status, không nhúng nội dung thay đổi vào registry. File
+    untracked được băm cả đường dẫn lẫn nội dung để hai run trên hai working tree
+    khác nhau không cùng nhận một provenance giả.
+    """
     try:
-        result = subprocess.run(
+        head = subprocess.run(
             ["git", "rev-parse", "HEAD"],
+            cwd=REPO_ROOT,
             capture_output=True,
             text=True,
             timeout=15,
             check=False,
         )
+        status = subprocess.run(
+            ["git", "status", "--porcelain=v1", "--untracked-files=all"],
+            cwd=REPO_ROOT,
+            capture_output=True,
+            text=True,
+            timeout=30,
+            check=False,
+        )
+        diff = subprocess.run(
+            ["git", "diff", "--binary", "HEAD", "--", "."],
+            cwd=REPO_ROOT,
+            capture_output=True,
+            timeout=60,
+            check=False,
+        )
     except (OSError, subprocess.SubprocessError):
-        return "unknown"
-    return result.stdout.strip() or "unknown"
+        return {
+            "commit_sha": "unknown",
+            "working_tree_dirty": None,
+            "working_tree_diff_sha256": "unknown",
+        }
+
+    status_text = status.stdout if status.returncode == 0 else ""
+    digest = hashlib.sha256(diff.stdout if diff.returncode == 0 else b"")
+    for line in status_text.splitlines():
+        if not line.startswith("?? "):
+            continue
+        relative = line[3:]
+        path = REPO_ROOT / relative
+        digest.update(relative.encode("utf-8", errors="surrogateescape"))
+        if path.is_file():
+            with path.open("rb") as handle:
+                for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                    digest.update(chunk)
+    return {
+        "commit_sha": head.stdout.strip() or "unknown",
+        "working_tree_dirty": bool(status_text.strip()),
+        "working_tree_diff_sha256": digest.hexdigest(),
+    }
+
+
+def commit_sha() -> str:
+    """SHA của commit hiện tại; giữ API cũ cho các caller hiện có."""
+    return str(git_state()["commit_sha"])
 
 
 def config_hash(config: dict) -> str:
@@ -129,7 +188,13 @@ def sha256_indices(index: np.ndarray) -> str:
     return hashlib.sha256(values.tobytes()).hexdigest()
 
 
+@lru_cache(maxsize=8)
 def sha256_file(path: Path, chunk_size: int = 1024 * 1024) -> str:
+    return _sha256_file_uncached(path, chunk_size=chunk_size)
+
+
+def _sha256_file_uncached(path: Path, chunk_size: int = 1024 * 1024) -> str:
+    """Hash file hiện tại; dùng cho cache có thể bị thay ngay trong process."""
     digest = hashlib.sha256()
     with path.open("rb") as handle:
         for chunk in iter(lambda: handle.read(chunk_size), b""):
@@ -163,13 +228,18 @@ class ResourceMonitor:
         self,
         interval_seconds: float = 0.25,
         min_available_gb: float | None = None,
+        max_system_memory_percent: float | None = None,
     ):
         self.interval_seconds = interval_seconds
         self.min_available_gb = min_available_gb
+        self.max_allowed_system_memory_percent = max_system_memory_percent
         self.peak_process_rss = psutil.Process().memory_info().rss
-        self.minimum_system_available = psutil.virtual_memory().available
+        initial_memory = psutil.virtual_memory()
+        self.minimum_system_available = initial_memory.available
+        self.maximum_system_memory_percent = float(initial_memory.percent)
         self.breached = False
         self.breach_available_gb: float | None = None
+        self.breach_memory_percent: float | None = None
         self.breach_utc: str | None = None
         self._stop = threading.Event()
         self._thread = threading.Thread(target=self._run, daemon=True)
@@ -181,17 +251,32 @@ class ResourceMonitor:
                 self.peak_process_rss,
                 process.memory_info().rss,
             )
-            available = psutil.virtual_memory().available
+            memory = psutil.virtual_memory()
+            available = memory.available
             self.minimum_system_available = min(
                 self.minimum_system_available,
                 available,
+            )
+            self.maximum_system_memory_percent = max(
+                self.maximum_system_memory_percent,
+                float(memory.percent),
             )
             if self.min_available_gb is not None and not self.breached:
                 available_gb = available / 2**30
                 if available_gb < self.min_available_gb:
                     self.breached = True
                     self.breach_available_gb = available_gb
+                    self.breach_memory_percent = float(memory.percent)
                     self.breach_utc = datetime.now(timezone.utc).isoformat()
+            if (
+                self.max_allowed_system_memory_percent is not None
+                and not self.breached
+                and memory.percent > self.max_allowed_system_memory_percent
+            ):
+                self.breached = True
+                self.breach_available_gb = available / 2**30
+                self.breach_memory_percent = float(memory.percent)
+                self.breach_utc = datetime.now(timezone.utc).isoformat()
 
     def raise_if_breached(self, context: str = "") -> None:
         """Dừng tại điểm an toàn nếu ngưỡng đã bị vi phạm."""
@@ -200,7 +285,10 @@ class ResourceMonitor:
         where = f" tại {context}" if context else ""
         raise ResourceGateBreached(
             f"RAM khả dụng đã tụt xuống {self.breach_available_gb:.2f} GB "
-            f"(ngưỡng đăng ký {self.min_available_gb:.2f} GB) lúc "
+            f"và hệ thống đang dùng {self.breach_memory_percent:.1f}% RAM "
+            f"(ngưỡng min_available_gb={self.min_available_gb}, "
+            "max_system_memory_percent="
+            f"{self.max_allowed_system_memory_percent}) lúc "
             f"{self.breach_utc}. Dừng{where} để giữ registry và artifact "
             "nhất quán. Giảm --pool-frac hoặc đóng ứng dụng khác rồi chạy lại."
         )
@@ -224,6 +312,77 @@ class ResourceMonitor:
     @property
     def min_system_available_ram_gb(self) -> float:
         return self.minimum_system_available / 2**30
+
+    @property
+    def max_system_memory_percent(self) -> float:
+        return self.maximum_system_memory_percent
+
+
+class FullDataRunLock:
+    """Process lock liên script để cấm hai full-data run chạy song song."""
+
+    def __init__(self, path: Path | None = None):
+        self.path = path or (IMPROVEMENT_DIR / "full_data_run.lock")
+        self.acquired = False
+
+    def acquire(self) -> None:
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        if self.path.exists():
+            try:
+                owner = json.loads(self.path.read_text(encoding="utf-8"))
+                owner_pid = int(owner["pid"])
+                owner_created = owner.get("process_created_at")
+            except (OSError, ValueError, KeyError, json.JSONDecodeError):
+                owner_pid = -1
+                owner_created = None
+            owner_is_live = False
+            if owner_pid > 0 and psutil.pid_exists(owner_pid):
+                # PID có thể được hệ điều hành tái sử dụng. Lock v2 ghi thêm
+                # process create time để không chặn nhầm một process khác.
+                if owner_created is None:
+                    owner_is_live = True  # lock cũ: ưu tiên an toàn
+                else:
+                    try:
+                        owner_is_live = abs(
+                            psutil.Process(owner_pid).create_time()
+                            - float(owner_created)
+                        ) < 1e-3
+                    except (psutil.Error, TypeError, ValueError):
+                        owner_is_live = False
+            if owner_is_live:
+                raise RuntimeError(
+                    f"Full-data run khác đang giữ lock {self.path} (pid={owner_pid})"
+                )
+            self.path.unlink(missing_ok=True)
+
+        payload = json.dumps(
+            {
+                "pid": os.getpid(),
+                "process_created_at": psutil.Process().create_time(),
+                "created_utc": datetime.now(timezone.utc).isoformat(),
+            }
+        ).encode("utf-8")
+        try:
+            descriptor = os.open(self.path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+        except FileExistsError as error:
+            raise RuntimeError(
+                f"Full-data run khác vừa tạo lock {self.path}"
+            ) from error
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(payload)
+        self.acquired = True
+
+    def release(self) -> None:
+        if self.acquired:
+            self.path.unlink(missing_ok=True)
+            self.acquired = False
+
+    def __enter__(self) -> "FullDataRunLock":
+        self.acquire()
+        return self
+
+    def __exit__(self, *exc_info) -> None:
+        self.release()
 
 
 def environment_versions() -> dict[str, str]:
@@ -252,6 +411,7 @@ class SplitArrays:
     outcome: np.ndarray
     source_index: np.ndarray
     name: str
+    auxiliary_outcomes: dict[str, np.ndarray] = field(default_factory=dict)
 
     def __len__(self) -> int:
         return len(self.outcome)
@@ -291,6 +451,10 @@ class SplitArrays:
             outcome=self.outcome[selected],
             source_index=self.source_index[selected],
             name=f"{self.name}@{fraction:g}",
+            auxiliary_outcomes={
+                name: values[selected]
+                for name, values in self.auxiliary_outcomes.items()
+            },
         )
 
 
@@ -298,29 +462,202 @@ def _cache_path(name: str) -> Path:
     return CACHE_DIR / f"{name}.npz"
 
 
-def _write_cache(split: SplitArrays) -> None:
+def _cache_manifest_path(name: str) -> Path:
+    return CACHE_DIR / f"{name}.manifest.json"
+
+
+def _cache_role(name: str) -> str:
+    return "confirmation" if name.startswith("confirmation") else "development"
+
+
+def _cache_outcome(name: str) -> str:
+    return "visit" if name.endswith("_visit") else "conversion"
+
+
+def _validate_cached_split(split: SplitArrays, manifest: dict) -> bool:
+    role = _cache_role(split.name)
+    arrays = manifest.get("arrays", {})
+    expected_rows = int(arrays.get("n_rows", -1))
+    if manifest.get("cache_format_version") != CACHE_FORMAT_VERSION:
+        return False
+    if manifest.get("role") != role or manifest.get("outcome") != _cache_outcome(split.name):
+        return False
+    if manifest.get("features") != FEATURES:
+        return False
+    if manifest.get("data_sha256") != CRITEO_V2_1_SHA256:
+        return False
+    if len(split) != expected_rows or split.X.shape != (expected_rows, len(FEATURES)):
+        return False
+    if not (
+        len(split.treatment) == len(split.outcome) == len(split.source_index) == expected_rows
+    ):
+        return False
+    expected_auxiliary = set(arrays.get("auxiliary_outcomes", []))
+    if set(split.auxiliary_outcomes) != expected_auxiliary:
+        return False
+    if any(
+        len(values) != expected_rows
+        or not set(np.unique(values)).issubset({0, 1})
+        for values in split.auxiliary_outcomes.values()
+    ):
+        return False
+    if manifest.get("source_index_sha256") != split.index_sha256:
+        return False
+    if split.index_sha256 != SPRINT3_SPLIT_HASHES[role]:
+        return False
+    if not np.isfinite(split.X).all():
+        return False
+    if not set(np.unique(split.treatment)).issubset({0, 1}):
+        return False
+    if not set(np.unique(split.outcome)).issubset({0, 1}):
+        return False
+    return True
+
+
+def _write_cache(split: SplitArrays, data_sha256: str) -> None:
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    np.savez(
-        _cache_path(split.name),
-        X=split.X,
-        treatment=split.treatment,
-        outcome=split.outcome,
-        source_index=split.source_index,
+    cache_path = _cache_path(split.name)
+    temporary_path = cache_path.with_suffix(".tmp.npz")
+    payload = {
+        "X": split.X,
+        "treatment": split.treatment,
+        "outcome": split.outcome,
+        "source_index": split.source_index,
+        **{
+            f"auxiliary__{name}": values
+            for name, values in split.auxiliary_outcomes.items()
+        },
+    }
+    np.savez(temporary_path, **payload)
+    temporary_path.replace(cache_path)
+    manifest = {
+        "cache_format_version": CACHE_FORMAT_VERSION,
+        "created_utc": datetime.now(timezone.utc).isoformat(),
+        "role": _cache_role(split.name),
+        "outcome": _cache_outcome(split.name),
+        "features": FEATURES,
+        "data_sha256": data_sha256,
+        "cache_file_sha256": _sha256_file_uncached(cache_path),
+        "source_index_sha256": split.index_sha256,
+        "split_protocol": {
+            "sprint1_selected_fraction": SPRINT1_SELECTED_FRACTION,
+            "sprint1_sampling_seed": SPRINT1_SAMPLING_SEED,
+            "sprint2_split_seed": SPRINT2_SPLIT_SEED,
+            "sprint2_confirmation_seed": SPRINT2_CONFIRMATION_SEED,
+        },
+        "arrays": {
+            "n_rows": len(split),
+            "x_dtype": str(split.X.dtype),
+            "treatment_dtype": str(split.treatment.dtype),
+            "outcome_dtype": str(split.outcome.dtype),
+            "source_index_dtype": str(split.source_index.dtype),
+            "auxiliary_outcomes": sorted(split.auxiliary_outcomes),
+            "auxiliary_dtypes": {
+                name: str(values.dtype)
+                for name, values in split.auxiliary_outcomes.items()
+            },
+        },
+    }
+    manifest_path = _cache_manifest_path(split.name)
+    temporary_manifest = manifest_path.with_suffix(".tmp.json")
+    temporary_manifest.write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2),
+        encoding="utf-8",
     )
+    temporary_manifest.replace(manifest_path)
 
 
-def _read_cache(name: str) -> SplitArrays | None:
-    path = _cache_path(name)
-    if not path.exists():
+@lru_cache(maxsize=2)
+def _load_binary_source_column(column: str) -> np.ndarray:
+    """Đọc một cột auxiliary từ nguồn thay vì dựng lại toàn DataFrame."""
+    if column not in {"conversion", "visit"}:
+        raise ValueError(f"Cột auxiliary không hỗ trợ: {column}")
+    frame = pd.read_csv(CRITEO_PATH, usecols=[column], dtype={column: "int8"})
+    values = frame[column].to_numpy(dtype="int8")
+    if not set(np.unique(values)).issubset({0, 1}):
+        raise ValueError(f"Cột nguồn {column} không còn nhị phân")
+    return values
+
+
+def _upgrade_v3_conversion_cache(
+    name: str,
+    path: Path,
+    manifest: dict,
+) -> SplitArrays | None:
+    """Nâng cache v3 bằng cách đọc riêng cột visit (~14 MB).
+
+    V3 đã có file hash và split hash nhưng chưa lưu auxiliary outcome. Đọc lại
+    toàn bộ bảng 14 triệu dòng chỉ để lấy ``visit`` sẽ tốn hàng GB; đường nâng
+    cấp này vẫn kiểm tra data SHA, cache SHA và source index trước khi ghi v4.
+    """
+    if (
+        manifest.get("cache_format_version") != 3
+        or manifest.get("outcome") != "conversion"
+        or manifest.get("role") != _cache_role(name)
+        or manifest.get("features") != FEATURES
+        or manifest.get("data_sha256") != CRITEO_V2_1_SHA256
+        or manifest.get("cache_file_sha256") != _sha256_file_uncached(path)
+    ):
         return None
-    with np.load(path) as payload:
-        return SplitArrays(
-            X=payload["X"],
-            treatment=payload["treatment"],
-            outcome=payload["outcome"],
-            source_index=payload["source_index"],
-            name=name,
-        )
+    if not CRITEO_PATH.exists() or sha256_file(CRITEO_PATH) != CRITEO_V2_1_SHA256:
+        return None
+    try:
+        with np.load(path) as payload:
+            source_index = payload["source_index"]
+            split = SplitArrays(
+                X=payload["X"],
+                treatment=payload["treatment"],
+                outcome=payload["outcome"],
+                source_index=source_index,
+                name=name,
+                auxiliary_outcomes={
+                    "visit": _load_binary_source_column("visit")[source_index]
+                },
+            )
+    except (OSError, ValueError, KeyError, IndexError):
+        return None
+    role = _cache_role(name)
+    if split.index_sha256 != SPRINT3_SPLIT_HASHES[role]:
+        return None
+    _write_cache(split, data_sha256=CRITEO_V2_1_SHA256)
+    return split
+
+
+def _read_cache(name: str, verify_hashes: bool = True) -> SplitArrays | None:
+    path = _cache_path(name)
+    manifest_path = _cache_manifest_path(name)
+    if not path.exists() or not manifest_path.exists():
+        return None
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        if verify_hashes and manifest.get("cache_format_version") == 3:
+            return _upgrade_v3_conversion_cache(name, path, manifest)
+        if manifest.get("cache_format_version") != CACHE_FORMAT_VERSION:
+            return None
+        expected_cache_sha256 = manifest.get("cache_file_sha256")
+        if not expected_cache_sha256 or (
+            _sha256_file_uncached(path) != expected_cache_sha256
+        ):
+            return None
+        with np.load(path) as payload:
+            auxiliary = {
+                key.removeprefix("auxiliary__"): payload[key]
+                for key in payload.files
+                if key.startswith("auxiliary__")
+            }
+            split = SplitArrays(
+                X=payload["X"],
+                treatment=payload["treatment"],
+                outcome=payload["outcome"],
+                source_index=payload["source_index"],
+                name=name,
+                auxiliary_outcomes=auxiliary,
+            )
+    except (OSError, ValueError, KeyError, json.JSONDecodeError):
+        return None
+    if verify_hashes and not _validate_cached_split(split, manifest):
+        return None
+    return split
 
 
 def build_sprint3_splits(
@@ -350,13 +687,28 @@ def build_sprint3_splits(
     suffix = "" if outcome == "conversion" else f"_{outcome}"
     names = (f"development{suffix}", f"confirmation{suffix}")
     if use_cache:
-        cached = {name: _read_cache(name) for name in names}
+        cached = {
+            name: _read_cache(name, verify_hashes=verify_hashes) for name in names
+        }
         if all(value is not None for value in cached.values()):
+            if verify_hashes and CRITEO_PATH.exists():
+                observed_data_sha256 = sha256_file(CRITEO_PATH)
+                if observed_data_sha256 != CRITEO_V2_1_SHA256:
+                    raise ValueError(
+                        "SHA-256 data nguồn không khớp Criteo v2.1 đã đăng ký: "
+                        f"{observed_data_sha256}"
+                    )
             return {
                 "development": cached[names[0]],
                 "confirmation": cached[names[1]],
             }  # type: ignore[return-value]
 
+    data_sha256 = sha256_file(CRITEO_PATH)
+    if verify_hashes and data_sha256 != CRITEO_V2_1_SHA256:
+        raise ValueError(
+            "SHA-256 data nguồn không khớp Criteo v2.1 đã đăng ký: "
+            f"{data_sha256}"
+        )
     full = load_criteo_full(dtype_f32=True)
     schema = validate_criteo_schema(full)
     if not schema["valid"]:
@@ -416,8 +768,13 @@ def build_sprint3_splits(
             outcome=frame[outcome].to_numpy(dtype="int8"),
             source_index=frame.index.to_numpy(dtype="int64"),
             name=cache_name,
+            auxiliary_outcomes={
+                column: frame[column].to_numpy(dtype="int8")
+                for column in ("conversion", "visit")
+                if column != outcome
+            },
         )
-        _write_cache(split)
+        _write_cache(split, data_sha256=data_sha256)
         splits[role] = split
     return splits
 
@@ -466,11 +823,32 @@ def _migrate_registry_schema(path: Path, defaults: dict[str, object]) -> None:
         existing[column] = defaults.get(column)
     extra = [column for column in existing.columns if column not in REGISTRY_COLUMNS]
     existing = existing[REGISTRY_COLUMNS + extra]
-    existing.to_csv(path, index=False)
+    temporary = path.with_suffix(".tmp.csv")
+    existing.to_csv(temporary, index=False)
+    temporary.replace(path)
     print(
         f"[registry] migrated schema, added columns: {missing}",
         flush=True,
     )
+
+
+def _registry_identity_keys(frame: pd.DataFrame) -> pd.Series:
+    """Canonicalize identity fields across CSV int/float round-trips."""
+    numeric_fold = pd.to_numeric(frame["fold_seed"], errors="coerce")
+
+    def format_fold(value: float) -> str:
+        if pd.isna(value):
+            return "<none>"
+        if float(value).is_integer():
+            return str(int(value))
+        return format(float(value), ".17g")
+
+    fold = numeric_fold.map(format_fold)
+    outcome = frame["outcome"].astype(object).where(
+        frame["outcome"].notna(),
+        "<none>",
+    )
+    return frame["run_id"].astype(str) + "|" + fold + "|" + outcome.astype(str)
 
 
 def append_registry(
@@ -478,19 +856,41 @@ def append_registry(
     path: Path = REGISTRY_PATH,
     schema_defaults: dict[str, object] | None = None,
 ) -> Path:
-    """Ghi thêm dòng vào registry, giữ nguyên thứ tự cột đã đăng ký."""
+    """Upsert theo ``(run_id, fold_seed, outcome)`` và ghi atomically.
+
+    ``outcome`` là một phần của identity vì power diagnostic dùng lại stage/run
+    label với estimand ``visit``. Bỏ cột này khỏi khóa sẽ làm một estimand ghi đè
+    estimand kia.
+    """
     path.parent.mkdir(parents=True, exist_ok=True)
     if path.exists():
         _migrate_registry_schema(
             path,
             schema_defaults or {"outcome": "conversion"},
         )
-    frame = pd.DataFrame(
+    incoming = pd.DataFrame(
         [RegistryRow(values=row).to_series() for row in rows],
         columns=REGISTRY_COLUMNS,
     )
-    header = not path.exists()
-    frame.to_csv(path, mode="a", header=header, index=False)
+    if path.exists():
+        existing = pd.read_csv(path)
+        if incoming.empty:
+            frame = existing
+        else:
+            existing_keys = _registry_identity_keys(existing)
+            incoming_keys = _registry_identity_keys(incoming)
+            existing = existing.loc[~existing_keys.isin(set(incoming_keys))]
+            frame = pd.concat([existing, incoming], ignore_index=True)
+    else:
+        frame = incoming
+    # A prior implementation stringified 101.0 and 101 differently when a CSV
+    # column also contained missing seeds.  Clean any such historical duplicate
+    # globally, retaining the latest attempt for each identity.
+    identity = _registry_identity_keys(frame)
+    frame = frame.loc[~identity.duplicated(keep="last")].reset_index(drop=True)
+    temporary = path.with_suffix(".tmp.csv")
+    frame.to_csv(temporary, index=False)
+    temporary.replace(path)
     return path
 
 
@@ -502,12 +902,15 @@ def base_registry_fields(
     data_sha256: str | None = None,
 ) -> dict:
     evaluation = evaluation or development
+    state = git_state()
     fields = {
         "run_id": run_id,
         "created_utc": datetime.now(timezone.utc).isoformat(),
         "status": status,
-        "commit_sha": commit_sha(),
-        "data_sha256": data_sha256 or "not_recomputed",
+        "commit_sha": state["commit_sha"],
+        "working_tree_dirty": state["working_tree_dirty"],
+        "working_tree_diff_sha256": state["working_tree_diff_sha256"],
+        "data_sha256": data_sha256 or CRITEO_V2_1_SHA256,
         "development_index_sha256": development.index_sha256,
         "eval_index_sha256": evaluation.index_sha256,
     }

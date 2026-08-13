@@ -1,0 +1,7 @@
+# Optional cross-check environment. Install only when CausalML is needed:
+#   .venv\Scripts\python.exe -m pip install -r requirements-optional.txt
+-r requirements.txt
+
+# Verified on Python 3.12/Windows with a prebuilt wheel. It is not imported by
+# the release pipeline, API, notebooks, or the default test suite.
+causalml==0.17.0

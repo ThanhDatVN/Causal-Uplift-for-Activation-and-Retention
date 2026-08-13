@@ -27,7 +27,8 @@ def test_meta_declares_estimand_and_excluded_columns(client):
     assert payload["data"]["outcome"] == "conversion"
     assert set(payload["data"]["excluded_post_treatment"]) == {"visit", "exposure"}
     assert payload["champion"]
-    assert payload["causal_forest"]["release_result_available"] is False
+    assert payload["causal_forest"]["release_result_available"] is True
+    assert payload["causal_forest"]["status"] == "released"
 
 
 def test_models_endpoint_returns_a_comparison_table(client):
@@ -98,12 +99,33 @@ def test_simulate_rejects_invalid_inputs(client):
     assert client.post("/api/policy/simulate", json={"budget_fraction": 1.5}).status_code == 422
     assert client.post("/api/policy/simulate", json={"audience": 0}).status_code == 422
     assert (
+        client.post("/api/policy/simulate", json={"budget_fraction": 0.31}).status_code
+        == 422
+    )
+    assert (
         client.post(
             "/api/policy/simulate",
             json={"value_per_conversion": 0},
         ).status_code
         == 422
     )
+
+
+def test_score_rejects_budget_outside_evidence_grid(client):
+    response = client.post(
+        "/api/score",
+        json={"rows": [[0.0] * 12], "budget_fraction": 0.31},
+    )
+    assert response.status_code == 422
+
+
+def test_simulate_warns_outside_cost_sensitivity_grid(client):
+    payload = client.post(
+        "/api/policy/simulate",
+        json={"contact_cost": 0.002, "value_per_conversion": 1.0},
+    ).json()
+    assert payload["outside_sensitivity_grid"] is True
+    assert "0,001" in payload["guardrail_warning"]
 
 
 def test_deciles_and_diagnostics_carry_scope_notes(client):
@@ -138,6 +160,10 @@ def test_export_index_and_download(client):
     response = client.get(f"/api/export/{available[0]}.csv")
     assert response.status_code == 200
     assert response.headers["content-type"].startswith("text/csv")
+    header = response.text.splitlines()[0]
+    assert "run_id" in header
+    assert "monetary_outcome_available" in header
+    assert "assumptions_json" in header
     assert client.get("/api/export/not_a_dataset.csv").status_code == 404
 
 
@@ -194,6 +220,14 @@ def test_csv_scoring_validates_required_columns(client):
     assert "thiếu cột" in response.json()["detail"]
 
 
+def test_csv_scoring_rejects_non_csv_content_type(client):
+    response = client.post(
+        "/api/score/csv",
+        files={"file": ("bad.json", b"{}", "application/json")},
+    )
+    assert response.status_code == 415
+
+
 @pytest.mark.skipif(
     get_scorer() is None,
     reason="Cần output/product/webapp/champion_scorer.joblib; chạy scripts/build_champion_scorer.py.",
@@ -224,9 +258,8 @@ def test_scoring_separates_converters_on_real_confirmation_rows(client):
     scores = np.asarray(payload["scores"])
     targeted = np.asarray(payload["targeted"])
 
-    assert payload["threshold_basis"] == "population_reference"
-    assert 0.05 <= targeted.mean() <= 0.16
-    np.testing.assert_array_equal(targeted, scores >= payload["score_threshold"])
+    assert payload["threshold_basis"] == "uploaded_batch_exact_top_k"
+    assert targeted.sum() == int(np.floor(len(rows) * 0.10))
 
     outcome = confirmation.outcome[rows]
     assert outcome[targeted].mean() > 5 * max(outcome[~targeted].mean(), 1e-6)
@@ -248,3 +281,5 @@ def test_repository_simulate_raises_for_out_of_range_budget():
     repository = get_repository()
     with pytest.raises(ValueError):
         repository.simulate(budget_fraction=-0.1)
+    with pytest.raises(ValueError, match="evidence grid"):
+        repository.simulate(budget_fraction=0.8)

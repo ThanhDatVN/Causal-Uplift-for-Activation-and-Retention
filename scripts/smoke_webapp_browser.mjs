@@ -7,10 +7,12 @@ import { spawn, execFile } from "node:child_process";
 import { createServer } from "node:net";
 import path from "node:path";
 import { promisify } from "node:util";
-import { existsSync } from "node:fs";
+import { existsSync, mkdtempSync, rmSync, statSync } from "node:fs";
+import { tmpdir } from "node:os";
 
 const run = promisify(execFile);
 const repo = path.resolve(import.meta.dirname, "..");
+const screenshotDir = mkdtempSync(path.join(tmpdir(), "causal-uplift-web-smoke-"));
 const python = path.join(repo, ".venv", "Scripts", "python.exe");
 const chromeCandidates = [
   "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
@@ -170,24 +172,29 @@ try {
       modelsDom.includes('class="panel is-active" id="panel-models"'),
   );
 
-  await screenshot(base, path.join(repo, "output", "screenshots", "webapp_screenshot.png"));
+  const mainScreenshot = path.join(screenshotDir, "webapp_screenshot.png");
+  await screenshot(base, mainScreenshot);
   for (const tab of ["models", "policy", "segments", "scoring", "evidence"]) {
     await screenshot(
       `${base}?tab=${tab}`,
-      path.join(repo, "output", "screenshots", `webapp_screenshot_${tab}.png`),
+      path.join(screenshotDir, `webapp_screenshot_${tab}.png`),
     );
   }
-  check("screenshot written", existsSync(path.join(repo, "output", "screenshots", "webapp_screenshot.png")));
+  check("screenshot written", existsSync(mainScreenshot) && statSync(mainScreenshot).size > 0);
   check(
     "per-tab screenshots written",
     ["models", "policy", "segments", "evidence"].every((tab) =>
-      existsSync(path.join(repo, "output", "screenshots", `webapp_screenshot_${tab}.png`)),
+      {
+        const file = path.join(screenshotDir, `webapp_screenshot_${tab}.png`);
+        return existsSync(file) && statSync(file).size > 0;
+      },
     ),
   );
 } catch (error) {
   check("acceptance run completed without exception", false, String(error));
 } finally {
   server.kill();
+  rmSync(screenshotDir, { recursive: true, force: true });
 }
 
 const passed = checks.filter((c) => c.pass).length;

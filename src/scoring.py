@@ -90,9 +90,15 @@ def _fit_estimator(family: str, context: FitContext):
         elif family == "t_learner":
             model = TLearner(models=outcome_model)
         else:
+            propensity_setting = params.get("propensity", "fixed")
+            if propensity_setting not in {"fixed", "estimated"}:
+                raise ValueError(
+                    "propensity phải là 'fixed' hoặc 'estimated', nhận "
+                    f"{propensity_setting!r}"
+                )
             propensity_model = (
                 DummyClassifier(strategy="prior")
-                if params.get("propensity", "fixed") == "fixed"
+                if propensity_setting == "fixed"
                 else LGBMClassifier(**lgbm_params(context.seed, params.get("params")))
             )
             model = XLearner(

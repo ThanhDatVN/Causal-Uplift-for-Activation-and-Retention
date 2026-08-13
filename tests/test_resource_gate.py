@@ -64,3 +64,14 @@ def test_threshold_of_zero_never_breaches():
     with ResourceMonitor(interval_seconds=0.01, min_available_gb=0.0) as monitor:
         time.sleep(0.05)
     assert monitor.breached is False
+
+
+def test_memory_percent_threshold_is_enforced():
+    with ResourceMonitor(
+        interval_seconds=0.01,
+        max_system_memory_percent=0.0,
+    ) as monitor:
+        time.sleep(0.05)
+    assert monitor.breached is True
+    assert monitor.breach_memory_percent is not None
+    assert monitor.max_system_memory_percent > 0

@@ -1,0 +1,138 @@
+{
+  "protocol_id": "data-optimization-v1",
+  "registered_utc": "2026-08-09T00:00:00+00:00",
+  "purpose": "Resolve failure modes observed in Sprint 3 without modifying its frozen protocol or artifacts.",
+  "estimand": {
+    "target": "CATE of conversion on Criteo v2.1",
+    "outcome": "conversion",
+    "treatment": "treatment",
+    "features_at_decision_time": ["f0", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11"],
+    "excluded_at_decision_time": ["visit", "exposure"],
+    "propensity_mode": "fixed_randomized_design",
+    "propensity_value": 0.85
+  },
+  "problem_to_intervention": [
+    {
+      "problem": "rare conversion and few control positives",
+      "evidence": "conversion rate 0.2917%; development control has 1625 positives",
+      "intervention": "funnel factorization through visit as auxiliary training outcome",
+      "leakage_guard": "visit is never an input to predict; scoring uses f0..f11 only"
+    },
+    {
+      "problem": "sentinel-like point masses and only 53 observed structural patterns",
+      "evidence": "6/12 features have mode_share > 0.9; sentinel-pattern effect heterogeneity is significant",
+      "intervention": "fold-local sentinel flags plus sentinel count",
+      "leakage_guard": "mode values are fit from X_train of each OOF fold without treatment or outcome"
+    },
+    {
+      "problem": "prognostic dominance makes Response hard to beat",
+      "evidence": "descriptive corr(p0,tau)=0.984 and within-feature Pearson 0.991-1.000",
+      "intervention": "retain Response as mandatory reference; only promote on policy_area_dr across both fold seeds"
+    },
+    {
+      "problem": "metric disagreement",
+      "evidence": "three challengers beat Response by Qini but not by policy_area_dr/AUTOC",
+      "intervention": "keep policy_area_dr primary and report Qini only as secondary"
+    }
+  ],
+  "cross_fitting": {
+    "n_folds": 3,
+    "primary_fold_seed": 101,
+    "secondary_fold_seed": 202,
+    "stratify_on": ["treatment", "conversion"]
+  },
+  "metrics": {
+    "primary": "policy_area_dr",
+    "primary_budget_grid": [0.01, 0.02, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
+    "secondary": ["autoc_dr", "qini_score", "auuc_score", "uplift_calibration_error", "doubly_robust_risk"],
+    "inference": "paired bootstrap on the same OOF rows"
+  },
+  "selection_rule": {
+    "screening": "candidate must be finite/nonconstant and evaluated on at least 200 control conversions",
+    "advance": "policy_area_dr greater than Response on both fold seeds",
+    "advance_reference": "Response",
+    "advance_all_fold_seeds": true,
+    "promotion": "requires a new randomized confirmation campaign; retrospective Sprint 2 confirmation cannot promote this iteration"
+  },
+  "early_stop": {
+    "constant_score_unique_threshold": 10,
+    "non_finite_score": true,
+    "dominated_at_every_budget_5_to_20": false,
+    "resource_gate_exceeded": true
+  },
+  "resource_gate": {
+    "min_available_ram_gb": 2.0,
+    "max_system_memory_percent": 75.0,
+    "no_parallel_full_data_runs": true
+  },
+  "candidates": [
+    {
+      "name": "Response",
+      "family": "response",
+      "builder": "response",
+      "is_cate_scale": false,
+      "hypothesis": "frozen champion and mandatory reference",
+      "params": {}
+    },
+    {
+      "name": "Response-Sentinel",
+      "family": "response",
+      "builder": "response",
+      "is_cate_scale": false,
+      "hypothesis": "explicit fold-local point-mass flags make structural patterns easier for trees",
+      "params": {
+        "feature_augmentation": "sentinel_flags",
+        "sentinel_min_mode_share": 0.05
+      }
+    },
+    {
+      "name": "S-Under7",
+      "family": "s_learner",
+      "builder": "s_learner",
+      "is_cate_scale": true,
+      "hypothesis": "best simple CATE reference from Sprint 3",
+      "params": {"outcome": "classifier", "under": 7.0}
+    },
+    {
+      "name": "S-Sentinel-Under7",
+      "family": "s_learner",
+      "builder": "s_learner",
+      "is_cate_scale": true,
+      "hypothesis": "sentinel flags expose the strongest observed structural moderator",
+      "params": {
+        "outcome": "classifier",
+        "under": 7.0,
+        "feature_augmentation": "sentinel_flags",
+        "sentinel_min_mode_share": 0.05
+      }
+    },
+    {
+      "name": "X-Renormalized",
+      "family": "x_learner",
+      "builder": "x_learner",
+      "is_cate_scale": true,
+      "hypothesis": "frozen CATE reference from Sprint 3",
+      "params": {"outcome": "classifier", "propensity": "fixed", "under": 7.0}
+    },
+    {
+      "name": "Funnel-S",
+      "family": "funnel_s_learner",
+      "builder": "funnel_s_learner",
+      "is_cate_scale": true,
+      "hypothesis": "higher-prevalence visit auxiliary outcome reduces rare-conversion estimation noise",
+      "params": {"params": {"min_child_samples": 250}}
+    },
+    {
+      "name": "Funnel-S-Sentinel",
+      "family": "funnel_s_learner",
+      "builder": "funnel_s_learner",
+      "is_cate_scale": true,
+      "hypothesis": "combine funnel factorization with fold-local structural flags",
+      "params": {
+        "feature_augmentation": "sentinel_flags",
+        "sentinel_min_mode_share": 0.05,
+        "params": {"min_child_samples": 250}
+      }
+    }
+  ]
+}

@@ -9,24 +9,20 @@ pandas>=2.2,<3
 numpy>=1.26,<3
 scikit-learn>=1.5,<1.7   # tran cung cua econml 0.16; de <2 thi pip co the lay 1.9
 shap>=0.38.1,<0.49.0     # rang buoc cung cua econml 0.16
-scipy>=1.11
-lightgbm>=4.5
+scipy>=1.11,<2
+lightgbm>=4.5,<5
 econml==0.16.0          # pin cung — de pip tu chon se tut ve 0.8.1 (2020)
 scikit-uplift>=0.5.1
-matplotlib>=3.8
-seaborn>=0.13
-jupyterlab
-ipykernel
-psutil                  # cho benchmark harness do RAM
-joblib>=1.4             # luu champion scorer cho web app (di kem scikit-learn)
-pytest                   # chay tests/ - doi chieu qini_curve voi sklift
+matplotlib>=3.8,<4
+seaborn>=0.13,<1
+jupyterlab>=4,<5
+ipykernel>=6,<7
+psutil>=6,<8            # cho benchmark harness do RAM
+joblib>=1.4,<2          # luu champion scorer cho web app (di kem scikit-learn)
+pytest>=8,<10           # chay tests/ - doi chieu qini_curve voi sklift
 
 # Web application (webapp/): API doc artifact release, khong train khi nhan request.
-fastapi>=0.115
-uvicorn[standard]>=0.32
-python-multipart>=0.0.9  # bat buoc cho upload CSV o /api/score/csv
-httpx>=0.27              # fastapi.testclient dung trong tests/test_webapp.py
-
-causalml==0.17.0        # optional (doi chieu them ngoai econml+sklift) — da verify cai thanh cong
-                          # 2026-07-21 tren Python 3.12 Windows qua wheel prebuilt cp312-win_amd64,
-                          # KHONG can build C/Cython nhu lo ngai truoc do
+fastapi>=0.115,<1
+uvicorn[standard]>=0.32,<1
+python-multipart>=0.0.9,<1  # bat buoc cho upload CSV o /api/score/csv
+httpx>=0.27,<1               # fastapi.testclient dung trong tests/test_webapp.py

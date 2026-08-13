@@ -20,9 +20,10 @@ mục tiêu. ``nu = 0`` cho stacking thuần; paper dùng ``nu = 1/2`` làm mặ
 Hai ràng buộc protocol:
 
 1. Weights chỉ được học trên prediction out-of-fold, tức trên dữ liệu mà từng
-   candidate không được fit. Hàm :func:`cross_fitted_ensemble_score` còn tách
-   thêm một lớp nữa để bản thân điểm ensemble cũng là out-of-sample so với
-   bước học weights.
+   candidate không được fit. :func:`cross_fitted_weight_ensemble_score` tách
+   thêm holdout cho **bước học weights**. Đây không phải nested cross-fitting
+   của base model: base prediction có thể đến từ model đã thấy một dòng thuộc
+   weight-holdout khác. Kết quả vì vậy được gắn nhãn rõ là weight-stage OOS.
 2. DR loss chỉ có nghĩa cho score có scale CATE. Score chỉ dùng để xếp hạng
    (Response, Rank-Learner) không được đưa vào Q-aggregation; với chúng chỉ có
    :func:`rank_average_score`, một heuristic không có bảo đảm lý thuyết nào ở
@@ -90,6 +91,8 @@ def doubly_robust_losses(
 ) -> dict[str, float]:
     """DR loss ``mean((Γ − f_m)²)`` cho từng model; nhỏ hơn là tốt hơn."""
     signal = np.asarray(effect_signal, dtype="float64").ravel()
+    if not np.isfinite(signal).all():
+        raise ValueError("effect_signal phải hữu hạn")
     names, matrix = _prediction_matrix(predictions_by_model)
     if matrix.shape[0] != len(signal):
         raise ValueError("prediction và effect_signal phải có cùng độ dài")
@@ -162,6 +165,8 @@ def causal_q_aggregation(
     if not 0 <= nu < 1:
         raise ValueError("nu phải nằm trong [0, 1)")
     signal = np.asarray(effect_signal, dtype="float64").ravel()
+    if not np.isfinite(signal).all():
+        raise ValueError("effect_signal phải hữu hạn")
     names, matrix = _prediction_matrix(predictions_by_model)
     if matrix.shape[0] != len(signal):
         raise ValueError("prediction và effect_signal phải có cùng độ dài")
@@ -195,6 +200,11 @@ def causal_q_aggregation(
         constraints=[{"type": "eq", "fun": lambda w: float(np.sum(w) - 1.0)}],
         options={"maxiter": 500, "ftol": 1e-12},
     )
+    if not result.success or not np.isfinite(result.x).all():
+        raise RuntimeError(
+            "SLSQP không hội tụ cho causal Q-aggregation: "
+            f"status={result.status}, message={result.message}"
+        )
     weights = np.clip(result.x, 0.0, None)
     total = weights.sum()
     weights = (
@@ -245,7 +255,7 @@ ENSEMBLE_METHODS = {
 }
 
 
-def cross_fitted_ensemble_score(
+def cross_fitted_weight_ensemble_score(
     predictions_by_model: dict[str, np.ndarray],
     effect_signal,
     method: str = "causal_q_aggregation",
@@ -253,11 +263,12 @@ def cross_fitted_ensemble_score(
     seed: int = 42,
     **method_kwargs,
 ) -> dict:
-    """Điểm ensemble out-of-sample so với chính bước học weights.
+    """Điểm ensemble out-of-sample so với riêng bước học weights.
 
     Dữ liệu OOF được chia thành ``n_splits`` phần. Weights học trên phần bù rồi
-    chấm phần còn lại. Nếu học weights trên toàn bộ rồi chấm lại trên chính nó,
-    ước lượng sẽ lạc quan vì weights đã thấy đúng những dòng đó.
+    chấm phần còn lại. Base prediction đã là OOF theo fold riêng của từng run,
+    nhưng phép chia ở đây không refit base model theo outer fold; vì vậy output
+    **không** được gọi là fully nested stacking.
     """
     if method not in ENSEMBLE_METHODS:
         raise KeyError(
@@ -266,6 +277,8 @@ def cross_fitted_ensemble_score(
     if n_splits < 2:
         raise ValueError("n_splits phải >= 2")
     signal = np.asarray(effect_signal, dtype="float64").ravel()
+    if not np.isfinite(signal).all():
+        raise ValueError("effect_signal phải hữu hạn")
     names, matrix = _prediction_matrix(predictions_by_model)
     n = len(signal)
     if matrix.shape[0] != n:
@@ -303,4 +316,11 @@ def cross_fitted_ensemble_score(
         "full_sample_weights": full_weights.as_dict(),
         "full_sample_objective": full_weights.objective_value,
         "n_splits": int(n_splits),
+        "validation_scope": "weight_stage_oos_base_models_not_nested",
+        "nested_base_models": False,
     }
+
+
+def cross_fitted_ensemble_score(*args, **kwargs) -> dict:
+    """Backward-compatible alias; xem :func:`cross_fitted_weight_ensemble_score`."""
+    return cross_fitted_weight_ensemble_score(*args, **kwargs)

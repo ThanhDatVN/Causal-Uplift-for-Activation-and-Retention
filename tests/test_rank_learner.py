@@ -98,3 +98,17 @@ def test_rank_learner_rejects_mismatched_lengths():
 def test_predict_before_fit_raises():
     with pytest.raises(RuntimeError):
         RankLearner().predict(np.zeros((4, 3)))
+
+
+@pytest.mark.parametrize(
+    "kwargs",
+    [
+        {"kappa_scale": 0},
+        {"n_folds": 1},
+        {"hessian_floor": 0},
+        {"label_clip_epsilon": 0.5},
+    ],
+)
+def test_rank_learner_rejects_invalid_hyperparameters(kwargs):
+    with pytest.raises(ValueError):
+        RankLearner(**kwargs)

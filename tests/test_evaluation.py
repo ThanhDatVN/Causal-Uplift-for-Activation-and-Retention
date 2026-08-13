@@ -191,6 +191,13 @@ def test_transformed_outcome_mse_prefers_true_effect():
     )
 
 
+def test_transformed_outcome_validates_shapes_and_binary_treatment():
+    with pytest.raises(ValueError, match="cùng shape"):
+        transformed_outcome([0, 1], [1])
+    with pytest.raises(ValueError, match="chỉ gồm 0/1"):
+        transformed_outcome([0, 1], [0, 2])
+
+
 def test_uplift_calibration_error_small_for_large_calibrated_sample():
     rng = np.random.default_rng(19)
     n = 200_000

@@ -37,7 +37,9 @@ from lightgbm import LGBMClassifier
 from src.candidates import FitContext, candidate_from_dict, lgbm_params
 from src.evaluation import auuc_score, qini_score, uplift_calibration_error
 from src.experiment import (
+    FullDataRunLock,
     ResourceMonitor,
+    REGISTRY_COLUMNS,
     append_registry,
     base_registry_fields,
     build_sprint3_splits,
@@ -83,6 +85,82 @@ def fit_full_development_nuisance(development, seed: int) -> dict:
     return models
 
 
+def aggregate_ensemble_entries(name: str, entries: dict[str, dict]) -> dict:
+    """Gộp ensemble definition qua fold seeds thay vì phụ thuộc insertion order."""
+    if not entries:
+        raise ValueError(f"Không có ensemble entry cho {name}")
+    ordered = [(key, entries[key]) for key in sorted(entries)]
+    methods = {entry["method"] for _, entry in ordered}
+    if len(methods) != 1:
+        raise ValueError(f"{name} có method không nhất quán qua seeds: {methods}")
+    method = methods.pop()
+    if method == "rank_average":
+        member_sets = [tuple(entry["members"]) for _, entry in ordered]
+        if any(members != member_sets[0] for members in member_sets[1:]):
+            raise ValueError(f"{name} có members không nhất quán qua seeds")
+        return {
+            "method": method,
+            "members": list(member_sets[0]),
+            "source_entries": [key for key, _ in ordered],
+            "aggregation": "identical_across_seeds",
+        }
+
+    members = sorted(
+        {
+            member
+            for _, entry in ordered
+            for member in entry.get("full_sample_weights", {})
+        }
+    )
+    weights = {
+        member: float(
+            np.mean(
+                [
+                    entry.get("full_sample_weights", {}).get(member, 0.0)
+                    for _, entry in ordered
+                ]
+            )
+        )
+        for member in members
+    }
+    total = sum(weights.values())
+    if not np.isfinite(total) or total <= 0:
+        raise ValueError(f"{name} có tổng weight không hợp lệ qua seeds")
+    return {
+        "method": method,
+        "full_sample_weights": {
+            member: weight / total for member, weight in weights.items()
+        },
+        "source_entries": [key for key, _ in ordered],
+        "aggregation": "mean_weights_across_seeds",
+    }
+
+
+def promotion_guardrail(
+    score: np.ndarray,
+    *,
+    is_cate_scale: bool,
+    calibration_error: float,
+    monitor: ResourceMonitor,
+    protocol: dict,
+) -> dict[str, bool]:
+    """Machine-check condition 4 của promotion rule đã đăng ký."""
+    minimum_unique = int(protocol["early_stop"]["constant_score_unique_threshold"])
+    score_passed = bool(
+        np.isfinite(score).all() and np.unique(score).size >= minimum_unique
+    )
+    calibration_passed = bool(
+        not is_cate_scale or np.isfinite(calibration_error)
+    )
+    resource_passed = bool(not monitor.breached)
+    return {
+        "resource_gate_passed": resource_passed,
+        "score_guardrail_passed": score_passed,
+        "calibration_guardrail_passed": calibration_passed,
+        "condition_4": bool(resource_passed and score_passed and calibration_passed),
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--shortlist", type=Path, required=True)
@@ -102,6 +180,7 @@ def main() -> None:
     args = parser.parse_args()
 
     protocol = json.loads(PROTOCOL_PATH.read_text(encoding="utf-8"))
+    gate = protocol["resource_gate"]
     shortlist_payload = json.loads(args.shortlist.read_text(encoding="utf-8"))
     budgets = np.asarray(protocol["metrics"]["primary_budget_grid"], dtype="float64")
     costs = [float(value) for value in args.costs.split(",") if value.strip()]
@@ -146,19 +225,23 @@ def main() -> None:
     splits = build_sprint3_splits()
     development = splits["development"]
     confirmation = splits["confirmation"]
-    propensity = float(development.treatment.mean())
+    propensity = float(protocol["estimand"]["propensity_value"])
     print(
         f"[data] development={len(development):,} confirmation={len(confirmation):,} "
         f"propensity={propensity:.6f}",
         flush=True,
     )
 
-    with ResourceMonitor() as monitor:
+    with ResourceMonitor(
+        min_available_gb=float(gate["min_available_ram_gb"]),
+        max_system_memory_percent=float(gate["max_system_memory_percent"]),
+    ) as monitor:
         print("[nuisance] fitting mu0/mu1 on full development", flush=True)
         nuisance_models = fit_full_development_nuisance(development, seed=args.seed)
         mu0 = nuisance_models[0].predict_proba(confirmation.X)[:, 1]
         mu1 = nuisance_models[1].predict_proba(confirmation.X)[:, 1]
         del nuisance_models
+        monitor.raise_if_breached("sau khi fit nuisance confirmation")
         dr_signal = doubly_robust_effect_signal(
             confirmation.outcome,
             confirmation.treatment,
@@ -192,27 +275,11 @@ def main() -> None:
             propensity=propensity,
             seed=args.seed,
             params={},
+            outcome_name=protocol["estimand"]["outcome"],
+            auxiliary_outcomes=development.auxiliary_outcomes,
         )
         for name in base_models:
             spec = specs_by_name[name]
-            print(f"[refit] {name} on full development", flush=True)
-            context = FitContext(
-                X=development_full.X,
-                treatment=development_full.treatment,
-                outcome=development_full.outcome,
-                propensity=propensity,
-                seed=args.seed,
-                params=spec.params,
-            )
-            fit_started = time.perf_counter()
-            predict = spec.build(context)
-            fit_seconds = time.perf_counter() - fit_started
-            predict_started = time.perf_counter()
-            score = np.asarray(predict(confirmation.X), dtype="float64").ravel()
-            predict_seconds = time.perf_counter() - predict_started
-            confirmation_scores[name] = score
-            del context, predict
-
             row = base_registry_fields(
                 run_id=f"{RUN_ID}-{name}",
                 status="retrospective_confirmation",
@@ -221,6 +288,7 @@ def main() -> None:
             )
             row.update(
                 {
+                    "outcome": protocol["estimand"]["outcome"],
                     "candidate": name,
                     "candidate_family": spec.family,
                     "config_hash": config_hash(spec.as_config()),
@@ -232,15 +300,66 @@ def main() -> None:
                     "fold_seed": None,
                     "n_folds": None,
                     "pool_fraction": 1.0,
+                }
+            )
+            try:
+                monitor.raise_if_breached(f"trước khi refit {name}")
+                print(f"[refit] {name} on full development", flush=True)
+                context = FitContext(
+                    X=development_full.X,
+                    treatment=development_full.treatment,
+                    outcome=development_full.outcome,
+                    propensity=propensity,
+                    seed=args.seed,
+                    params=spec.params,
+                    outcome_name=protocol["estimand"]["outcome"],
+                    auxiliary_outcomes=development.auxiliary_outcomes,
+                )
+                fit_started = time.perf_counter()
+                predict = spec.build(context)
+                fit_seconds = time.perf_counter() - fit_started
+                predict_started = time.perf_counter()
+                score = np.asarray(
+                    predict(confirmation.X),
+                    dtype="float64",
+                ).ravel()
+                predict_seconds = time.perf_counter() - predict_started
+                monitor.raise_if_breached(f"sau khi predict {name}")
+                del context, predict
+            except Exception as error:  # registry phải tồn tại cả khi refit lỗi
+                row.update(
+                    {
+                        "status": "failed",
+                        "failure_reason": f"{type(error).__name__}: {error}",
+                        "peak_process_rss_gb": monitor.peak_process_rss_gb,
+                        "min_system_available_ram_gb": (
+                            monitor.min_system_available_ram_gb
+                        ),
+                        "max_system_memory_percent": (
+                            monitor.max_system_memory_percent
+                        ),
+                    }
+                )
+                registry_rows.append(row)
+                append_registry([row])
+                raise
+
+            confirmation_scores[name] = score
+            row.update(
+                {
                     "fit_seconds": fit_seconds,
                     "predict_seconds": predict_seconds,
                     "peak_process_rss_gb": monitor.peak_process_rss_gb,
                     "min_system_available_ram_gb": (
                         monitor.min_system_available_ram_gb
                     ),
+                    "max_system_memory_percent": (
+                        monitor.max_system_memory_percent
+                    ),
                 }
             )
             registry_rows.append(row)
+            append_registry([row])
             print(f"  fit={fit_seconds:.1f}s predict={predict_seconds:.1f}s", flush=True)
 
         ensemble_weights_used: dict[str, dict] = {}
@@ -253,7 +372,7 @@ def main() -> None:
             if not entries:
                 print(f"[skip] không tìm thấy weights cho {name}", flush=True)
                 continue
-            entry = next(iter(entries.values()))
+            entry = aggregate_ensemble_entries(name, entries)
             if entry["method"] == "rank_average":
                 members = [
                     member
@@ -271,6 +390,8 @@ def main() -> None:
                 ensemble_weights_used[name] = {
                     "method": entry["method"],
                     "members": members,
+                    "source_entries": entry["source_entries"],
+                    "aggregation": entry["aggregation"],
                 }
                 continue
             weights = entry["full_sample_weights"]
@@ -295,6 +416,8 @@ def main() -> None:
                 "weights_learned_on": "development OOF",
                 "weights_applied": applied,
                 "renormalized_because_of_missing_members": total < 0.999,
+                "source_entries": entry["source_entries"],
+                "aggregation": entry["aggregation"],
             }
             print(f"[ensemble] {name} weights={applied}", flush=True)
 
@@ -367,6 +490,46 @@ def main() -> None:
         ascending=False,
     )
     metrics.to_csv(output_dir / "confirmation_metrics.csv", index=False)
+    metrics_by_model = metrics.set_index("model").to_dict(orient="index")
+    registry_by_candidate = {row["candidate"]: row for row in registry_rows}
+    for name in confirmation_scores:
+        if name not in registry_by_candidate:
+            row = base_registry_fields(
+                run_id=f"{RUN_ID}-{name}",
+                status="retrospective_confirmation",
+                development=development,
+                evaluation=confirmation,
+            )
+            row.update(
+                {
+                    "outcome": protocol["estimand"]["outcome"],
+                    "candidate": name,
+                    "candidate_family": "ensemble",
+                    "config_hash": config_hash(ensemble_weights_used.get(name, {})),
+                    "config_json": json.dumps(
+                        ensemble_weights_used.get(name, {}),
+                        ensure_ascii=False,
+                        sort_keys=True,
+                    ),
+                    "pool_fraction": 1.0,
+                    "peak_process_rss_gb": monitor.peak_process_rss_gb,
+                    "min_system_available_ram_gb": (
+                        monitor.min_system_available_ram_gb
+                    ),
+                    "max_system_memory_percent": (
+                        monitor.max_system_memory_percent
+                    ),
+                }
+            )
+            registry_rows.append(row)
+            registry_by_candidate[name] = row
+        registry_by_candidate[name].update(
+            {
+                key: value
+                for key, value in metrics_by_model[name].items()
+                if key in REGISTRY_COLUMNS and key != "run_id"
+            }
+        )
     print(
         metrics[
             ["model", "policy_area_dr", "autoc_dr", "qini_score"]
@@ -465,8 +628,14 @@ def main() -> None:
                 "gross_value_per_customer": float(
                     expected_random["gross_value_per_customer"][budget_index]
                 ),
-                "ci_low": float(random_sensitivity["value_min"][budget_index]),
-                "ci_high": float(random_sensitivity["value_max"][budget_index]),
+                "ci_low": np.nan,
+                "ci_high": np.nan,
+                "sensitivity_low": float(
+                    random_sensitivity["value_min"][budget_index]
+                ),
+                "sensitivity_high": float(
+                    random_sensitivity["value_max"][budget_index]
+                ),
                 "break_even_contact_cost": None,
             }
         )
@@ -614,6 +783,15 @@ def main() -> None:
         condition_1 = bool(n_seeds >= 2 and len(seeds_won) == n_seeds)
         condition_2 = bool(comparison["policy_area_difference"] > 0)
         condition_3 = bool(comparison["policy_area_ci_low"] > 0)
+        metric = metrics_by_model[name]
+        guardrail = promotion_guardrail(
+            confirmation_scores[name],
+            is_cate_scale=bool(metric["is_cate_scale"]),
+            calibration_error=float(metric["uplift_calibration_error"]),
+            monitor=monitor,
+            protocol=protocol,
+        )
+        condition_4 = guardrail["condition_4"]
         decision_rows.append(
             {
                 "run_id": RUN_ID,
@@ -624,12 +802,20 @@ def main() -> None:
                 "condition_1_oof_wins_all_seeds": condition_1,
                 "condition_2_confirmation_same_sign": condition_2,
                 "condition_3_paired_ci_lower_bound_positive": condition_3,
+                "condition_4_operational_guardrails_passed": condition_4,
+                "resource_gate_passed": guardrail["resource_gate_passed"],
+                "score_guardrail_passed": guardrail["score_guardrail_passed"],
+                "calibration_guardrail_passed": guardrail[
+                    "calibration_guardrail_passed"
+                ],
                 "confirmation_policy_area_difference": comparison[
                     "policy_area_difference"
                 ],
                 "confirmation_ci_low": comparison["policy_area_ci_low"],
                 "confirmation_ci_high": comparison["policy_area_ci_high"],
-                "promoted": bool(condition_1 and condition_2 and condition_3),
+                "promoted": bool(
+                    condition_1 and condition_2 and condition_3 and condition_4
+                ),
             }
         )
     decisions = pd.DataFrame(decision_rows)
@@ -688,6 +874,8 @@ def main() -> None:
         "promotion_rule": protocol["promotion_rule"],
         "peak_process_rss_gb": monitor.peak_process_rss_gb,
         "min_system_available_ram_gb": monitor.min_system_available_ram_gb,
+        "max_system_memory_percent": monitor.max_system_memory_percent,
+        "resource_gate_passed": not monitor.breached,
         "elapsed_seconds": time.time() - started,
         "random_policy_area_mean": random_sensitivity["policy_area_mean"],
         "random_policy_area_std": random_sensitivity["policy_area_std"],
@@ -709,6 +897,5 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
-
-
+    with FullDataRunLock():
+        main()

@@ -14,6 +14,14 @@ def transformed_outcome(y_true, treatment, propensity: float | None = None) -> n
     """
     y_true = np.asarray(y_true, dtype="float64")
     treatment = np.asarray(treatment, dtype="float64")
+    if y_true.shape != treatment.shape:
+        raise ValueError("y_true và treatment phải có cùng shape")
+    if y_true.size == 0 or not np.isfinite(y_true).all():
+        raise ValueError("y_true phải không rỗng và hữu hạn")
+    if not np.isfinite(treatment).all() or not set(np.unique(treatment)).issubset(
+        {0.0, 1.0}
+    ):
+        raise ValueError("treatment phải hữu hạn và chỉ gồm 0/1")
     p = float(np.mean(treatment) if propensity is None else propensity)
     if not 0 < p < 1:
         raise ValueError(f"propensity phải nằm trong (0, 1), nhận được {p}")

@@ -3,13 +3,16 @@
 __pycache__/
 *.pyc
 
-# Data (Criteo ~3GB giai nen, Online Retail II) - khong commit len git
+# Data (Criteo ~3GB giai nen, Online Retail II) 
 data/
 
 # Output lon / notebook checkpoint
 .ipynb_checkpoints/
 *.egg-info/
 .pytest_cache/
+output/.pytest-*/
+# Thu muc tam do pytest tao ra; mot so bi khoa quyen nen git khong doc duoc.
+output/pytest_tmp_*/
 .coverage
 htmlcov/
 
@@ -24,6 +27,8 @@ output/**/*.npz
 output/product/webapp/*.joblib
 # Run logs from the Sprint 3 improvement round.
 output/improvement/*.log
+output/improvement/full_data_run.lock
+output/improvement/cache/
 output/development/
 # Legacy root artifacts are superseded by the versioned Sprint 1/Sprint 2 release
 # directories. See output/README.md for which directory is authoritative.

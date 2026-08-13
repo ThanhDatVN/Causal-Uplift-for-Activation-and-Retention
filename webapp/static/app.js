@@ -574,6 +574,7 @@
     ].join("");
 
     el("policyDetail").innerHTML = `
+      ${result.guardrail_warning ? `<p class="status-line warning">${result.guardrail_warning}</p>` : ""}
       <p class="hint" style="margin-top:14px">
         Model <code>${result.model}</code> · mức bằng chứng
         <code>${result.evidence_class}</code> · nguồn <code>${result.source}</code>.

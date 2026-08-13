@@ -13,7 +13,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from fastapi import FastAPI, File, HTTPException, Query, UploadFile
-from fastapi.responses import FileResponse, JSONResponse, Response
+from fastapi.responses import JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
@@ -25,6 +25,14 @@ from webapp.service import (
 )
 
 STATIC_DIR = Path(__file__).resolve().parent / "static"
+MAX_JSON_SCORE_ROWS = 200_000
+MAX_UPLOAD_BYTES = 25 * 1024 * 1024
+ALLOWED_CSV_CONTENT_TYPES = {
+    "text/csv",
+    "application/csv",
+    "application/vnd.ms-excel",
+    "application/octet-stream",
+}
 
 app = FastAPI(
     title="Causal Targeting Lab",
@@ -37,7 +45,7 @@ app = FastAPI(
 
 
 class SimulateRequest(BaseModel):
-    budget_fraction: float = Field(0.10, ge=0.0, le=1.0)
+    budget_fraction: float = Field(0.10, ge=0.0, le=0.30)
     audience: int = Field(1_000_000, ge=1)
     value_per_conversion: float = Field(1.0, gt=0.0)
     contact_cost: float = Field(0.0005, ge=0.0)
@@ -47,9 +55,10 @@ class SimulateRequest(BaseModel):
 class ScoreRequest(BaseModel):
     rows: list[list[float]] = Field(
         ...,
+        max_length=MAX_JSON_SCORE_ROWS,
         description=f"Mỗi dòng là {len(FEATURES)} giá trị theo thứ tự f0..f11.",
     )
-    budget_fraction: float = Field(0.10, ge=0.0, le=1.0)
+    budget_fraction: float = Field(0.10, ge=0.0, le=0.30)
 
 
 def _repository():
@@ -60,7 +69,13 @@ def _repository():
 def health() -> dict:
     repository = _repository()
     statuses = repository.artifact_status()
-    required = {"sprint2_manifest", "sprint2_metrics", "sprint2_policy"}
+    required = {
+        "sprint3_manifest",
+        "sprint3_metrics",
+        "sprint3_budget_curve",
+        "champion_scorer",
+        "causal_forest_summary",
+    }
     missing = [
         status.name
         for status in statuses
@@ -164,11 +179,14 @@ def _score_matrix(matrix: np.ndarray, budget_fraction: float) -> dict:
         grid = np.asarray(reference["values"], dtype="float64")
         quantiles = np.asarray(reference["quantiles"], dtype="float64")
         percentile = np.interp(scores, grid, quantiles) * 100.0
-        population_threshold = float(
-            np.interp(1.0 - budget_fraction, quantiles, grid)
+        order = np.argsort(-scores, kind="mergesort")
+        n_target = int(np.floor(len(scores) * budget_fraction))
+        targeted = np.zeros(len(scores), dtype=bool)
+        targeted[order[:n_target]] = True
+        population_threshold = (
+            float(scores[order[n_target - 1]]) if n_target > 0 else float("inf")
         )
-        targeted = scores >= population_threshold
-        threshold_basis = "population_reference"
+        threshold_basis = "uploaded_batch_exact_top_k"
     else:
         order = np.argsort(-scores, kind="mergesort")
         percentile = np.empty(len(scores), dtype="float64")
@@ -222,10 +240,20 @@ def score_json(request: ScoreRequest) -> dict:
 @app.post("/api/score/csv")
 async def score_csv(
     file: UploadFile = File(...),
-    budget_fraction: float = Query(0.10, ge=0.0, le=1.0),
+    budget_fraction: float = Query(0.10, ge=0.0, le=0.30),
     max_rows: int = Query(200_000, ge=1, le=1_000_000),
 ) -> dict:
-    raw = await file.read()
+    if file.content_type not in ALLOWED_CSV_CONTENT_TYPES:
+        raise HTTPException(
+            status_code=415,
+            detail=f"Content-Type không được hỗ trợ cho CSV: {file.content_type}",
+        )
+    raw = await file.read(MAX_UPLOAD_BYTES + 1)
+    if len(raw) > MAX_UPLOAD_BYTES:
+        raise HTTPException(
+            status_code=413,
+            detail=f"CSV vượt giới hạn {MAX_UPLOAD_BYTES // 2**20} MiB",
+        )
     try:
         frame = pd.read_csv(io.BytesIO(raw))
     except Exception as error:  # noqa: BLE001 - mọi lỗi parse đều là lỗi input
@@ -270,6 +298,14 @@ EXPORTABLE = {
     "sprint2_policy_budget_curve": ("sprint2", "policy_budget_curve.csv"),
     "sprint1_policy_deciles": ("sprint1", "policy_deciles_release.csv"),
     "sprint1_pairwise_bootstrap": ("sprint1", "model_pairwise_bootstrap_release.csv"),
+    "causal_forest_metrics": (
+        "causal_forest/release",
+        "cf_metrics_frac_0.5.csv",
+    ),
+    "causal_forest_paired_comparisons": (
+        "causal_forest/release",
+        "cf_paired_comparisons_frac_0.5.csv",
+    ),
     "improvement_registry": ("improvement", "registry.csv"),
 }
 
@@ -302,10 +338,24 @@ def export_csv(dataset: str) -> Response:
             status_code=404,
             detail=f"Artifact chưa tồn tại: {directory}/{filename}",
         )
-    return FileResponse(
-        path,
+    frame = pd.read_csv(path)
+    if "run_id" not in frame.columns:
+        frame.insert(0, "run_id", "historical_artifact_without_run_id")
+    if "monetary_outcome_available" not in frame.columns:
+        frame["monetary_outcome_available"] = False
+    if "assumptions_json" not in frame.columns:
+        frame["assumptions_json"] = json.dumps(
+            {
+                "outcome": "conversion",
+                "monetary_values": "user_supplied_scenario_only",
+                "causal_scope": "offline_randomized_benchmark",
+            },
+            ensure_ascii=False,
+        )
+    return Response(
+        content=frame.to_csv(index=False),
         media_type="text/csv",
-        filename=f"{dataset}.csv",
+        headers={"Content-Disposition": f'attachment; filename="{dataset}.csv"'},
     )
 
 

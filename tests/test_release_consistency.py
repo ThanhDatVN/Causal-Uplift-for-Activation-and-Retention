@@ -20,6 +20,11 @@ SPRINT2_DIR = OUTPUT_DIR / "sprint2"
 PREDICTIONS = SPRINT2_DIR / "confirmation_predictions.npz"
 BUDGET_CURVE = SPRINT2_DIR / "policy_budget_curve.csv"
 CALIBRATION = SPRINT2_DIR / "calibration_comparison.csv"
+SPRINT3_DIR = OUTPUT_DIR / "sprint3"
+REGISTRY = OUTPUT_DIR / "improvement" / "registry.csv"
+CRITEO_V2_1_SHA256 = (
+    "2716e1bf0fd157a93b5bf86924d9088419dfbac2022c6cd90030220634f616dc"
+)
 
 # Xác suất gán treatment trên toàn bộ Criteo v2.1, đúng giá trị Sprint 2 đã dùng
 # (``protocol_manifest.json`` → ``evaluation.propensity``).
@@ -152,3 +157,43 @@ def test_full_budget_policy_value_equals_doubly_robust_ate(sprint2):
     assert curve["gross_value_per_customer"][0] == pytest.approx(
         float(np.mean(signal))
     )
+
+
+def test_sprint3_registry_preserves_estimands_and_confirmation_metrics():
+    registry = pd.read_csv(REGISTRY)
+    identity = ["run_id", "fold_seed", "outcome"]
+    assert not registry.duplicated(identity).any()
+    assert {"conversion", "visit"} <= set(registry["outcome"])
+
+    sprint3 = registry["run_id"].astype(str).str.startswith("sprint3-")
+    assert (registry.loc[sprint3, "data_sha256"] == CRITEO_V2_1_SHA256).all()
+
+    confirmation = registry.loc[
+        registry["status"] == "retrospective_confirmation"
+    ].set_index("candidate")
+    released = pd.read_csv(SPRINT3_DIR / "confirmation_metrics.csv").set_index(
+        "model"
+    )
+    assert set(confirmation.index) == set(released.index)
+    assert confirmation["policy_area_dr"].notna().all()
+
+
+def test_expected_random_range_is_sensitivity_not_confidence_interval():
+    curve = pd.read_csv(SPRINT3_DIR / "policy_budget_curve.csv")
+    random_rows = curve["model"] == "Expected random (stochastic policy)"
+    random_curve = curve.loc[random_rows]
+    assert not random_curve.empty
+    assert random_curve[["ci_low", "ci_high"]].isna().all().all()
+    assert random_curve[["sensitivity_low", "sensitivity_high"]].notna().all().all()
+    assert (
+        random_curve["sensitivity_low"] <= random_curve["sensitivity_high"]
+    ).all()
+
+
+def test_historical_promotion_fails_unobserved_resource_guardrail():
+    decision = pd.read_csv(SPRINT3_DIR / "promotion_decision.csv")
+    assert not decision["condition_4_operational_guardrails_passed"].astype(bool).any()
+    assert not decision["promoted"].astype(bool).any()
+    assert set(decision["condition_4_evaluation"]) == {
+        "conservative_fail_historical_max_memory_percent_not_recorded"
+    }

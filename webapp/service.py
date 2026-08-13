@@ -25,7 +25,7 @@ from src.paths import OUTPUT_DIR, REPO_ROOT
 WEBAPP_DIR = OUTPUT_DIR / "product" / "webapp"
 SCORER_PATH = WEBAPP_DIR / "champion_scorer.joblib"
 
-SCHEMA_VERSION = "causal-uplift-webapp-v1"
+SCHEMA_VERSION = "causal-uplift-webapp-v2"
 
 
 def _clean(value):
@@ -77,6 +77,7 @@ class ArtifactRepository:
         self.sprint2_dir = output_dir / "sprint2"
         self.sprint3_dir = output_dir / "sprint3"
         self.improvement_dir = output_dir / "improvement"
+        self.causal_forest_dir = output_dir / "causal_forest" / "release"
         self.webapp_dir = output_dir / "product" / "webapp"
         self._cache: dict[str, tuple[float, object]] = {}
 
@@ -123,6 +124,10 @@ class ArtifactRepository:
             "sprint3_promotion": self.sprint3_dir / "promotion_decision.csv",
             "improvement_registry": self.improvement_dir / "registry.csv",
             "champion_scorer": self.webapp_dir / "champion_scorer.joblib",
+            "causal_forest_summary": self.causal_forest_dir
+            / "cf_summary_frac_0.5.json",
+            "causal_forest_metrics": self.causal_forest_dir
+            / "cf_metrics_frac_0.5.csv",
         }
         return [
             ArtifactStatus(name=name, path=_relative(path), available=path.exists())
@@ -134,6 +139,9 @@ class ArtifactRepository:
         sprint2 = self.json(self.sprint2_dir / "protocol_manifest.json") or {}
         sprint3 = self.json(self.sprint3_dir / "protocol_manifest.json") or {}
         scorer_meta = self.json(self.webapp_dir / "champion_scorer.json") or {}
+        causal_forest = self.json(
+            self.causal_forest_dir / "cf_summary_frac_0.5.json"
+        )
         champion = (
             sprint3.get("final_champion")
             or scorer_meta.get("champion")
@@ -190,9 +198,18 @@ class ArtifactRepository:
                     },
                 },
                 "causal_forest": {
-                    "status": "pending_external_kaggle_session",
-                    "local_smoke": "code path only at 0.1 percent",
-                    "release_result_available": False,
+                    "status": "released" if causal_forest else "unavailable",
+                    "release_result_available": causal_forest is not None,
+                    "source": (
+                        _relative(
+                            self.causal_forest_dir / "cf_summary_frac_0.5.json"
+                        )
+                        if causal_forest
+                        else None
+                    ),
+                    "scope_note": (
+                        causal_forest.get("scope_note") if causal_forest else None
+                    ),
                 },
                 "artifacts": [
                     {
@@ -235,6 +252,14 @@ class ArtifactRepository:
             )
             payload["sources"]["sprint3_confirmation"] = _relative(
                 self.sprint3_dir / "confirmation_metrics.csv"
+            )
+        causal_forest = self.csv(
+            self.causal_forest_dir / "cf_metrics_frac_0.5.csv"
+        )
+        if causal_forest is not None:
+            payload["causal_forest_final_test"] = _records(causal_forest)
+            payload["sources"]["causal_forest_final_test"] = _relative(
+                self.causal_forest_dir / "cf_metrics_frac_0.5.csv"
             )
 
         oof = self.csv(self.improvement_dir / "screen" / "oof_metrics.csv")
@@ -300,6 +325,15 @@ class ArtifactRepository:
             payload["promotion_decision"] = _records(promotion)
             payload["sources"]["promotion_decision"] = _relative(
                 self.sprint3_dir / "promotion_decision.csv"
+            )
+        causal_forest = self.csv(
+            self.causal_forest_dir / "cf_paired_comparisons_frac_0.5.csv"
+        )
+        if causal_forest is not None:
+            payload["causal_forest_final_test"] = _records(causal_forest)
+            payload["sources"]["causal_forest_final_test"] = _relative(
+                self.causal_forest_dir
+                / "cf_paired_comparisons_frac_0.5.csv"
             )
         return payload
 
@@ -454,6 +488,10 @@ class ArtifactRepository:
                 "candidate",
                 "candidate_family",
                 "config_hash",
+                "commit_sha",
+                "working_tree_dirty",
+                "working_tree_diff_sha256",
+                "data_sha256",
                 "pool_fraction",
                 "fold_seed",
                 "n_rows",
@@ -523,8 +561,15 @@ class ArtifactRepository:
         low = subset["ci_low"].astype("float64").to_numpy()
         high = subset["ci_high"].astype("float64").to_numpy()
 
+        minimum_budget = float(budgets.min())
+        maximum_budget = float(budgets.max())
         if budget_fraction == 0:
             gross = gross_low = gross_high = 0.0
+        elif not minimum_budget <= budget_fraction <= maximum_budget:
+            raise ValueError(
+                "budget_fraction nằm ngoài evidence grid đã đánh giá: "
+                f"[{minimum_budget}, {maximum_budget}] hoặc đúng 0 cho treat-none"
+            )
         else:
             gross = float(np.interp(budget_fraction, budgets, values))
             gross_low = float(np.interp(budget_fraction, budgets, low))
@@ -540,6 +585,8 @@ class ArtifactRepository:
             if budget_fraction > 0
             else None
         )
+        cost_value_ratio = contact_cost / value_per_conversion
+        outside_sensitivity_grid = cost_value_ratio > 0.001
         return _clean(
             {
                 "model": selected,
@@ -571,6 +618,17 @@ class ArtifactRepository:
                     else "non_positive_scenario_value"
                 ),
                 "is_monetary_observation": False,
+                "monetary_outcome_available": False,
+                "evidence_budget_min": minimum_budget,
+                "evidence_budget_max": maximum_budget,
+                "cost_value_ratio": cost_value_ratio,
+                "outside_sensitivity_grid": outside_sensitivity_grid,
+                "guardrail_warning": (
+                    "contact_cost / conversion_value vượt 0,001; kịch bản nằm "
+                    "ngoài sensitivity grid đã kiểm tra."
+                    if outside_sensitivity_grid
+                    else None
+                ),
                 "interpretation": (
                     "Conversion-equivalent scenario. Value va cost la input gia "
                     "dinh cua nguoi dung, khong phai doanh thu hay chi phi quan sat."
@@ -592,6 +650,9 @@ class ArtifactRepository:
 
     def evidence(self) -> dict:
         sprint3 = self.json(self.sprint3_dir / "protocol_manifest.json") or {}
+        causal_forest_available = (
+            self.causal_forest_dir / "cf_summary_frac_0.5.json"
+        ).exists()
         return _clean(
             {
                 "limitations": [
@@ -599,7 +660,12 @@ class ArtifactRepository:
                     "Criteo có conversion nhưng không có revenue, margin hay contact cost.",
                     "Không quan sát được principal stratum của từng cá nhân.",
                     "Response là ranking policy score, không phải calibrated CATE.",
-                    "Causal Forest chưa có kết quả cloud; không nằm trong release.",
+                    (
+                        "Causal Forest đã có artifact Kaggle; so với Response vẫn "
+                        "không tách biệt thống kê trên final test Sprint 1."
+                        if causal_forest_available
+                        else "Causal Forest chưa có artifact release."
+                    ),
                     "Confirmation Sprint 2 đã được quan sát nên kết quả Sprint 3 trên "
                     "tập đó là retrospective confirmation.",
                 ],

@@ -1,7 +1,7 @@
 """Rank-Learner: pairwise Neyman-orthogonal ranking cho treatment effect.
 
 Nguồn phương pháp: *Rank-Learner: Orthogonal Ranking of Treatment Effects*,
-ICLR 2026, arXiv 2602.03517. Các thành phần được lấy từ bản HTML của paper:
+ICML 2026, arXiv 2602.03517. Các thành phần được lấy từ bản HTML v2 của paper:
 
 - doubly robust score
   ``φ(W) = T/e·(Y − μ₁) − (1−T)/(1−e)·(Y − μ₀) + μ₁ − μ₀``;
@@ -11,11 +11,10 @@ ICLR 2026, arXiv 2602.03517. Các thành phần được lấy từ bản HTML c
 - pseudo-label ``t̃ = t_τ + ω_τ·Δ_η``;
 - mục tiêu ``L = E[ℓ(p_g(X, X′), t̃)]`` với ``p_g(X, X′) = σ(g(X) − g(X′))``.
 
-Hai lựa chọn hiện thực **không** lấy từ paper và được ghi rõ ở đây vì repo chỉ
-đọc được phần mô tả thuật toán, không đọc được appendix hiện thực:
+Hai lựa chọn hiện thực khác paper được ghi rõ:
 
-1. ``ℓ`` được chọn là squared loss trên xác suất ``σ(g_i − g_j)``. Paper viết
-   ``ℓ`` tổng quát và không cố định dạng trong phần đọc được.
+1. Paper dùng feed-forward neural network/Adam; repo dùng LightGBM custom
+   objective. Objective vẫn là binary cross-entropy như Equation 17/58.
 2. Paper dùng "một tập con ngẫu nhiên các cặp rút đều ở mỗi epoch". Ở đây tập
    con đó là một **ghép cặp hoàn hảo ngẫu nhiên**: mỗi vòng boosting xáo trộn
    toàn bộ chỉ số rồi ghép các vị trí liền kề. Cách này giữ đúng tính "rút đều"
@@ -114,6 +113,7 @@ class RankLearner:
         rank_params: dict | None = None,
         nuisance_params: dict | None = None,
         hessian_floor: float = 1e-6,
+        label_clip_epsilon: float = 1e-6,
     ):
         self.kappa_scale = float(kappa_scale)
         self.n_folds = int(n_folds)
@@ -121,13 +121,18 @@ class RankLearner:
         self.rank_params = rank_params
         self.nuisance_params = nuisance_params
         self.hessian_floor = float(hessian_floor)
+        self.label_clip_epsilon = float(label_clip_epsilon)
+        if self.kappa_scale <= 0:
+            raise ValueError("kappa_scale phải > 0")
+        if self.n_folds < 2:
+            raise ValueError("n_folds phải >= 2")
+        if self.hessian_floor <= 0:
+            raise ValueError("hessian_floor phải > 0")
+        if not 0 < self.label_clip_epsilon < 0.5:
+            raise ValueError("label_clip_epsilon phải nằm trong (0, 0.5)")
 
     def _pairwise_objective(self, _y_true, y_pred):
-        """Gradient/Hessian của squared loss trên ``σ(g_i − g_j)``.
-
-        Gauss–Newton Hessian ``2·(σ′)²`` luôn không âm nên LightGBM không cần
-        clip; thêm ``hessian_floor`` để dòng có σ′ rất nhỏ vẫn có trọng số hữu hạn.
-        """
+        """Gradient/Hessian của binary cross-entropy pairwise trong paper."""
         n = len(y_pred)
         order = self._rng.permutation(n)
         n_pairs = n // 2
@@ -142,11 +147,18 @@ class RankLearner:
         weight = soft_target * (1.0 - soft_target) / self._kappa
         correction = (self._residual[left]) - (self._residual[right])
         pseudo_label = soft_target + weight * correction
+        pseudo_label = np.clip(
+            pseudo_label,
+            self.label_clip_epsilon,
+            1.0 - self.label_clip_epsilon,
+        )
 
         residual = probability - pseudo_label
-        scale = 2.0 / max(n_pairs, 1)
-        pair_gradient = scale * residual * derivative
-        pair_hessian = scale * derivative**2
+        # LightGBM kỳ vọng gradient/hessian theo từng observation và tự cộng
+        # chúng khi tính split gain. Chuẩn hóa theo số pair ở đây sẽ làm
+        # ``reg_lambda`` lấn át toàn bộ tín hiệu trên sample lớn.
+        pair_gradient = residual
+        pair_hessian = derivative
 
         gradient = np.zeros(n, dtype="float64")
         hessian = np.full(n, self.hessian_floor, dtype="float64")

@@ -2,7 +2,7 @@ name: tests
 
 # Chạy phần test không cần dữ liệu Criteo local.
 #
-# Phạm vi: 98/139 test. Ba file bị loại vì cần
+# Ba file bị loại vì cần
 # data/criteo-research-uplift-v2.1.csv.gz (khoảng 300 MB nén, không commit):
 #   tests/test_data.py       — data contract và split trên dữ liệu thật
 #   tests/test_baselines.py  — fit model trên mẫu Criteo

@@ -103,6 +103,8 @@ def dr_policy_value_curve(
     )
     if weight is not None and len(weight) != len(signal):
         raise ValueError("sample_weight phải có cùng độ dài với effect_signal")
+    if weight is not None and np.any(weight < 0):
+        raise ValueError("sample_weight không được âm")
     grid = _validate_budgets(budgets)
     order = np.argsort(ranking, kind="mergesort")[::-1]
     q, cumulative_value = _cumulative_value_curve(signal, ranking, order, weight)
@@ -316,6 +318,207 @@ def policy_area_difference_summary(
     }
 
 
+def paired_policy_difference_band(
+    bootstrap_result: dict,
+    reference: str,
+    candidates: list[str] | tuple[str, ...] | None = None,
+    alpha: float = 0.05,
+) -> dict:
+    """Simultaneous paired bootstrap band over candidate-by-budget differences.
+
+    The input must come from :func:`paired_policy_area_bootstrap`, so every model
+    and every budget shares the same resampled rows.  We first construct paired
+    differences against ``reference`` and then use one maximum standardized
+    bootstrap-deviation critical value for the full registered family.  This is
+    deliberately stricter than reading separate percentile intervals after choosing
+    an attractive model or budget.
+
+    Scores are treated as fixed out-of-fold prioritization rules.  Consequently the
+    band quantifies evaluation-sample uncertainty; it does not include uncertainty
+    from refitting a learner on a new training sample.
+    """
+    if not 0 < alpha < 1:
+        raise ValueError("alpha phải nằm trong (0, 1)")
+
+    names = list(bootstrap_result.get("model_names", []))
+    if reference not in names:
+        raise ValueError(f"reference {reference!r} phải nằm trong model_names")
+    selected = (
+        [name for name in names if name != reference]
+        if candidates is None
+        else list(candidates)
+    )
+    if not selected:
+        raise ValueError("candidates phải chứa ít nhất một model khác reference")
+    if len(set(selected)) != len(selected):
+        raise ValueError("candidates không được lặp")
+    unknown = [name for name in selected if name not in names]
+    if unknown:
+        raise ValueError(f"Candidate không có trong model_names: {unknown}")
+    if reference in selected:
+        raise ValueError("reference không được xuất hiện trong candidates")
+
+    observed_curve = np.asarray(
+        bootstrap_result.get("observed_curve"),
+        dtype="float64",
+    )
+    curve_draws = np.asarray(
+        bootstrap_result.get("curve_draws"),
+        dtype="float64",
+    )
+    budgets = _validate_budgets(bootstrap_result.get("budget_fraction"))
+    expected_observed_shape = (len(names), len(budgets))
+    if observed_curve.shape != expected_observed_shape:
+        raise ValueError(
+            "observed_curve phải có shape "
+            f"{expected_observed_shape}, nhận được {observed_curve.shape}"
+        )
+    if (
+        curve_draws.ndim != 3
+        or curve_draws.shape[1:] != expected_observed_shape
+        or curve_draws.shape[0] < 2
+    ):
+        raise ValueError(
+            "curve_draws phải có shape (n_boot, n_models, n_budgets) với n_boot >= 2"
+        )
+    if not np.isfinite(observed_curve).all() or not np.isfinite(curve_draws).all():
+        raise ValueError("observed_curve và curve_draws phải hữu hạn")
+
+    reference_index = names.index(reference)
+    candidate_indices = np.asarray(
+        [names.index(name) for name in selected],
+        dtype="int64",
+    )
+    observed_difference = (
+        observed_curve[candidate_indices] - observed_curve[reference_index]
+    )
+    difference_draws = (
+        curve_draws[:, candidate_indices, :]
+        - curve_draws[:, reference_index : reference_index + 1, :]
+    )
+    standard_error = difference_draws.std(axis=0, ddof=1)
+    centered = difference_draws - observed_difference[None, :, :]
+    standardized = np.zeros_like(centered)
+    positive_se = standard_error > 0
+    standardized[:, positive_se] = (
+        np.abs(centered[:, positive_se]) / standard_error[positive_se]
+    )
+    max_deviation = standardized.reshape(len(standardized), -1).max(axis=1)
+    critical_value = float(np.quantile(max_deviation, 1 - alpha))
+    margin = critical_value * standard_error
+
+    return {
+        "reference": reference,
+        "candidate_names": selected,
+        "budget_fraction": budgets,
+        "observed_difference": observed_difference,
+        "difference_draws": difference_draws,
+        "standard_error": standard_error,
+        "pointwise_ci_low": np.quantile(difference_draws, alpha / 2, axis=0),
+        "pointwise_ci_high": np.quantile(
+            difference_draws,
+            1 - alpha / 2,
+            axis=0,
+        ),
+        "simultaneous_ci_low": observed_difference - margin,
+        "simultaneous_ci_high": observed_difference + margin,
+        "critical_value": critical_value,
+        "max_abs_studentized_deviation": max_deviation,
+        "family_size": int(observed_difference.size),
+        "simultaneous_coverage_fraction": float(
+            np.mean(max_deviation <= critical_value)
+        ),
+        "alpha": float(alpha),
+        "n_boot": int(curve_draws.shape[0]),
+        "scope": "conditional_on_fixed_oof_scores",
+        "method": "paired_max_standardized_bootstrap_deviation",
+    }
+
+
+def _hard_top_indices(score, budget: float) -> np.ndarray:
+    ranking = _as_float_array(score, "score")
+    n_target = int(np.floor(len(ranking) * float(budget)))
+    if n_target == 0:
+        return np.empty(0, dtype="int64")
+    order = np.argsort(-ranking, kind="mergesort")
+    return order[:n_target]
+
+
+def top_tail_event_support(outcome, treatment, score, budgets) -> list[dict]:
+    """Count arm-specific rows and positive events under exact hard top-k cuts.
+
+    This diagnostic uses the same ``floor(n * budget)`` convention as
+    :func:`src.policy.top_budget_policy`.  ``boundary_tie_size`` makes an otherwise
+    hidden source of arbitrary membership instability visible.
+    """
+    y = np.asarray(outcome).ravel()
+    t = np.asarray(treatment).ravel()
+    ranking = _as_float_array(score, "score")
+    if not (len(y) == len(t) == len(ranking)):
+        raise ValueError("outcome, treatment và score phải có cùng độ dài")
+    if not set(np.unique(y)).issubset({0, 1}):
+        raise ValueError("outcome phải là nhị phân")
+    if not set(np.unique(t)).issubset({0, 1}):
+        raise ValueError("treatment phải là nhị phân")
+
+    rows = []
+    for budget in _validate_budgets(budgets):
+        selected = _hard_top_indices(ranking, float(budget))
+        selected_t = t[selected]
+        selected_y = y[selected]
+        treated = selected_t == 1
+        control = ~treated
+        boundary_tie_size = (
+            int(np.sum(ranking == ranking[selected[-1]])) if len(selected) else 0
+        )
+        rows.append(
+            {
+                "budget_fraction": float(budget),
+                "target_count": int(len(selected)),
+                "treated_count": int(treated.sum()),
+                "control_count": int(control.sum()),
+                "treated_events": int(np.sum(selected_y[treated] == 1)),
+                "control_events": int(np.sum(selected_y[control] == 1)),
+                "total_events": int(np.sum(selected_y == 1)),
+                "boundary_tie_size": boundary_tie_size,
+            }
+        )
+    return rows
+
+
+def top_tail_overlap(score_a, score_b, budgets) -> list[dict]:
+    """Membership overlap between two rankings at registered hard budgets."""
+    first = _as_float_array(score_a, "score_a")
+    second = _as_float_array(score_b, "score_b")
+    if len(first) != len(second):
+        raise ValueError("score_a và score_b phải có cùng độ dài")
+
+    rows = []
+    for budget in _validate_budgets(budgets):
+        index_a = _hard_top_indices(first, float(budget))
+        index_b = _hard_top_indices(second, float(budget))
+        membership_a = np.zeros(len(first), dtype=bool)
+        membership_b = np.zeros(len(first), dtype=bool)
+        membership_a[index_a] = True
+        membership_b[index_b] = True
+        intersection = int(np.sum(membership_a & membership_b))
+        union = int(np.sum(membership_a | membership_b))
+        target_count = int(len(index_a))
+        rows.append(
+            {
+                "budget_fraction": float(budget),
+                "target_count": target_count,
+                "intersection_count": intersection,
+                "union_count": union,
+                "overlap_fraction": (
+                    float(intersection / target_count) if target_count else 1.0
+                ),
+                "jaccard": float(intersection / union) if union else 1.0,
+            }
+        )
+    return rows
+
+
 def doubly_robust_risk(
     effect_signal,
     cate_prediction,
@@ -337,4 +540,6 @@ def doubly_robust_risk(
     weight = _as_float_array(sample_weight, "sample_weight")
     if len(weight) != len(signal):
         raise ValueError("sample_weight phải có cùng độ dài với effect_signal")
+    if np.any(weight < 0) or weight.sum() <= 0:
+        raise ValueError("sample_weight phải không âm và có tổng > 0")
     return float(np.average(residual, weights=weight))

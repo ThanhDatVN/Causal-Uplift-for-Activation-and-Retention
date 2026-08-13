@@ -3,11 +3,14 @@ import { execFile } from "node:child_process";
 import path from "node:path";
 import { promisify } from "node:util";
 import { pathToFileURL } from "node:url";
+import { mkdtempSync, rmSync, statSync } from "node:fs";
+import { tmpdir } from "node:os";
 
 const run = promisify(execFile);
 const repo = path.resolve(import.meta.dirname, "..");
 const html = path.join(repo, "output", "product", "dashboard.html");
-const screenshot = path.join(repo, "output", "screenshots", "dashboard_screenshot.png");
+const screenshotDir = mkdtempSync(path.join(tmpdir(), "causal-uplift-dashboard-smoke-"));
+const screenshot = path.join(screenshotDir, "dashboard_screenshot.png");
 const edge = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 const baseUrl = pathToFileURL(html).href;
 
@@ -73,6 +76,7 @@ const checks = [
   [none.includes('id="budgetText">0</span>'), "treat-none budget"],
   [none.includes("<b>Treat-none:</b>"), "treat-none explanation"],
   [initial.includes("CAUSAL FOREST PENDING"), "Causal Forest status guard"],
+  [statSync(screenshot).size > 0, "fresh screenshot written"],
 ];
 const failed = checks.filter(([passed]) => !passed).map(([, label]) => label);
 console.log(JSON.stringify({
@@ -81,4 +85,5 @@ console.log(JSON.stringify({
   failed,
   screenshot,
 }, null, 2));
+rmSync(screenshotDir, { recursive: true, force: true });
 if (failed.length) process.exitCode = 1;

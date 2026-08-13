@@ -1,6 +1,15 @@
 {
   "protocol_id": "sprint3-improvement-v1",
   "registered_utc": "2026-08-05T00:00:00+00:00",
+  "integrity_revision": {
+    "revised_utc": "2026-08-09T00:00:00+00:00",
+    "scope": "machine-readable clarification only",
+    "changes": [
+      "record fixed randomized-design propensity value 0.85",
+      "expand pre-existing condition 4 into explicit resource, score and calibration checks"
+    ],
+    "decision_impact": "none; every challenger already failed OOF wins and paired-CI conditions"
+  },
   "estimand": {
     "target": "CATE cua conversion tren benchmark Criteo v2.1",
     "outcome": "conversion",
@@ -8,7 +17,7 @@
     "features": ["f0", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11"],
     "excluded_post_treatment": ["visit", "exposure"],
     "propensity_mode": "fixed_design_constant",
-    "propensity_sensitivity_mode": "fit_fold_treatment_rate"
+    "propensity_value": 0.85
   },
   "data_roles": {
     "development": "Sprint 2 fit + validation, dung cho cross-fitting OOF",
@@ -48,7 +57,12 @@
     "condition_1": "policy_area_dr OOF cua challenger > Response o ca hai fold seed",
     "condition_2": "point estimate tren retrospective confirmation cung dau",
     "condition_3": "paired 95% CI cua chenh lech policy_area_dr co lower bound > 0",
-    "condition_4": "khong regression ve runtime gate, calibration hoac guardrail",
+    "condition_4": "khong vi pham resource gate; score huu han/khong suy bien; calibration huu han neu la CATE-scale",
+    "condition_4_checks": {
+      "require_resource_gate_passed": true,
+      "require_finite_nonconstant_score": true,
+      "require_finite_calibration_for_cate_scale": true
+    },
     "fallback": "giu Response va phat hanh challenger kem CI"
   },
   "early_stop": {
@@ -166,7 +180,7 @@
       "family": "rank_learner",
       "builder": "rank_learner",
       "is_cate_scale": false,
-      "hypothesis": "toi uu truc tiep thu hang thay vi magnitude (ICLR 2026)",
+      "hypothesis": "toi uu truc tiep thu hang thay vi magnitude (ICML 2026)",
       "params": {
         "kappa_scale": 1.0,
         "cv": 3

@@ -12,11 +12,14 @@ from src.policy_evaluation import (
     doubly_robust_risk,
     dr_policy_value_curve,
     expected_random_policy_value,
+    paired_policy_difference_band,
     paired_policy_area_bootstrap,
     policy_area,
     policy_area_difference_summary,
     policy_area_from_scores,
     random_topk_sensitivity,
+    top_tail_event_support,
+    top_tail_overlap,
 )
 from tests.synthetic_rct import make_synthetic_rct
 
@@ -163,6 +166,96 @@ def test_paired_bootstrap_separates_oracle_from_random():
     assert result["curve_ci_low"].shape == result["observed_curve"].shape
 
 
+def test_simultaneous_policy_band_is_zero_for_identical_scores():
+    data = make_synthetic_rct(n=30_000, seed=291)
+    signal = _oracle_signal(data)
+    score = data.X[:, 0]
+    bootstrap = paired_policy_area_bootstrap(
+        {"reference": score, "copy": score.copy()},
+        signal,
+        budgets=[0.01, 0.02, 0.05],
+        n_boot=40,
+        seed=61,
+    )
+
+    band = paired_policy_difference_band(bootstrap, reference="reference")
+
+    assert band["candidate_names"] == ["copy"]
+    assert band["family_size"] == 3
+    np.testing.assert_allclose(band["observed_difference"], 0.0, atol=1e-12)
+    np.testing.assert_allclose(band["simultaneous_ci_low"], 0.0, atol=1e-12)
+    np.testing.assert_allclose(band["simultaneous_ci_high"], 0.0, atol=1e-12)
+
+
+def test_simultaneous_policy_band_covers_registered_family_jointly():
+    data = make_synthetic_rct(n=80_000, seed=292)
+    signal = _oracle_signal(data)
+    rng = np.random.default_rng(62)
+    bootstrap = paired_policy_area_bootstrap(
+        {
+            "reference": rng.random(len(signal)),
+            "oracle": data.tau,
+            "reversed": -data.tau,
+        },
+        signal,
+        budgets=[0.01, 0.02, 0.05, 0.10],
+        n_boot=80,
+        seed=63,
+    )
+
+    band = paired_policy_difference_band(
+        bootstrap,
+        reference="reference",
+        candidates=["oracle", "reversed"],
+        alpha=0.10,
+    )
+
+    assert band["observed_difference"].shape == (2, 4)
+    assert band["simultaneous_ci_low"].shape == (2, 4)
+    assert band["critical_value"] >= 0
+    assert band["family_size"] == 8
+    # Every simultaneous interval uses one shared family-wise critical value.
+    positive_se = band["standard_error"] > 0
+    margins = (
+        band["simultaneous_ci_high"] - band["observed_difference"]
+    )[positive_se]
+    np.testing.assert_allclose(
+        margins / band["standard_error"][positive_se],
+        band["critical_value"],
+    )
+
+
+def test_top_tail_event_support_and_overlap_use_exact_hard_budget():
+    outcome = np.array([1, 0, 1, 1, 0, 0, 1, 0], dtype="int8")
+    treatment = np.array([1, 0, 0, 1, 0, 1, 0, 1], dtype="int8")
+    score_a = np.arange(8, dtype="float64")
+    score_b = np.array([7, 5, 0, 1, 2, 3, 4, 6], dtype="float64")
+
+    support = top_tail_event_support(
+        outcome,
+        treatment,
+        score_a,
+        budgets=[0.25, 0.50],
+    )
+    assert support[0] == {
+        "budget_fraction": 0.25,
+        "target_count": 2,
+        "treated_count": 1,
+        "control_count": 1,
+        "treated_events": 0,
+        "control_events": 1,
+        "total_events": 1,
+        "boundary_tie_size": 1,
+    }
+
+    overlap = top_tail_overlap(score_a, score_b, budgets=[0.25, 0.50])
+    assert overlap[0]["target_count"] == 2
+    assert overlap[0]["intersection_count"] == 1
+    assert overlap[0]["overlap_fraction"] == pytest.approx(0.5)
+    assert overlap[0]["jaccard"] == pytest.approx(1 / 3)
+    assert overlap[1]["overlap_fraction"] == pytest.approx(0.5)
+
+
 def test_doubly_robust_risk_prefers_true_cate_over_constant():
     data = make_synthetic_rct(n=200_000, seed=30)
     signal = _oracle_signal(data)
@@ -191,7 +284,23 @@ def test_input_validation():
         dr_policy_value_curve(signal, signal, budgets=[0.2, 0.1])
     with pytest.raises(ValueError):
         dr_policy_value_curve(signal, signal, budgets=[1.5])
+    with pytest.raises(ValueError, match="không được âm"):
+        dr_policy_value_curve(signal, signal, sample_weight=[1.0, -1.0, 1.0])
     with pytest.raises(ValueError):
         policy_area([0.1, 0.2], [1.0])
     with pytest.raises(ValueError):
         paired_policy_area_bootstrap({"a": signal}, signal, n_boot=1)
+    with pytest.raises(ValueError, match="reference"):
+        paired_policy_difference_band(
+            {
+                "model_names": ["a"],
+                "observed_curve": np.ones((1, 1)),
+                "curve_draws": np.ones((2, 1, 1)),
+                "budget_fraction": np.array([0.1]),
+            },
+            reference="missing",
+        )
+    with pytest.raises(ValueError):
+        top_tail_event_support([0, 1], [0], [0.0, 1.0], budgets=[0.5])
+    with pytest.raises(ValueError):
+        top_tail_overlap([0.0, 1.0], [0.0], budgets=[0.5])

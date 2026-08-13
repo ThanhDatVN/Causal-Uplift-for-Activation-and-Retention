@@ -4,7 +4,7 @@ import pytest
 from src.ensemble import (
     best_single_by_dr_risk,
     causal_q_aggregation,
-    cross_fitted_ensemble_score,
+    cross_fitted_weight_ensemble_score,
     doubly_robust_losses,
     rank_average_score,
     softmax_dr_risk_ensemble,
@@ -110,10 +110,13 @@ def test_softmax_ensemble_gives_more_weight_to_lower_loss():
 
 def test_cross_fitted_ensemble_returns_complete_out_of_fold_score():
     _, signal, predictions = _fixture(n=40_000, seed=53)
-    result = cross_fitted_ensemble_score(predictions, signal, n_splits=2, seed=9)
+    result = cross_fitted_weight_ensemble_score(
+        predictions, signal, n_splits=2, seed=9
+    )
     assert np.isfinite(result["score"]).all()
     assert len(result["fold_weights"]) == 2
     assert set(result["full_sample_weights"]) == set(predictions)
+    assert result["nested_base_models"] is False
     # Điểm cross-fitted phải kém hơn hoặc bằng điểm học-và-chấm trên cùng dữ liệu.
     in_sample = causal_q_aggregation(predictions, signal).predict(predictions)
     assert doubly_robust_risk(signal, result["score"]) >= doubly_robust_risk(
@@ -140,6 +143,6 @@ def test_input_validation():
     with pytest.raises(ValueError):
         doubly_robust_losses({"a": np.array([1.0, np.inf, 3.0])}, signal)
     with pytest.raises(KeyError):
-        cross_fitted_ensemble_score({"a": signal}, signal, method="unknown")
+        cross_fitted_weight_ensemble_score({"a": signal}, signal, method="unknown")
     with pytest.raises(KeyError):
         causal_q_aggregation({"a": signal}, signal).predict({"b": signal})

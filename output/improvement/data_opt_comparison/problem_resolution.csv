@@ -1,0 +1,5 @@
+problem_id,evidence_before,intervention,models,mean_policy_area_delta_vs_response,verdict,next_action
+rare_conversion,conversion_rate=0.2917%; development control positives=1625,factor P(conversion) through auxiliary visit outcome,Funnel-S; Funnel-S-Sentinel,-4.644777462159996e-05,rejected_at_screen,Do not use funnel for conversion policy; collect more control conversions or a new randomized campaign.
+sentinel_structure,53 patterns; 6/12 features have mode_share>0.9,fold-local sentinel flags and sentinel count,Response-Sentinel; S-Sentinel-Under7,2.5434104196000312e-06,advance_not_promote,Evaluate Response-Sentinel in a new randomized confirmation campaign.
+prognostic_dominance,"corr(p0,tau)=0.983840; Response is the frozen reference",require every fold seed to beat Response,all challengers vs Response,2.5434104196000312e-06,champion_held,Keep Response until paired confirmation CI is strictly above zero.
+metric_disagreement,DR-risk ensembles can prefer models with weaker policy value,policy_area_dr primary; Qini and DR risk secondary,Ensemble-QAgg vs Response,-3.3791500983999974e-05,primary_metric_guard_worked,Do not promote by DR risk or Qini alone.

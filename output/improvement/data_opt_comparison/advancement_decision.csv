@@ -1,0 +1,10 @@
+model,reference,fold_seeds,n_fold_seeds,min_policy_area_delta,mean_policy_area_delta,advance,reason
+Response-Sentinel,Response,101;202,2,2.0519639841327366e-06,2.543410419632015e-06,True,beats_reference_on_every_fold_seed
+X-Renormalized,Response,101;202,2,-3.6042456698309505e-05,-2.2722488120723993e-05,False,does_not_beat_reference_on_every_fold_seed
+Ensemble-RankAverage,Response,101;202,2,-5.993664786969649e-05,-3.220615383465412e-05,False,does_not_beat_reference_on_every_fold_seed
+Ensemble-QAgg,Response,101;202,2,-6.675984718551402e-05,-3.3791500983972435e-05,False,does_not_beat_reference_on_every_fold_seed
+Funnel-S-Sentinel,Response,101;202,2,-6.302030329979251e-05,-4.644777462155865e-05,False,does_not_beat_reference_on_every_fold_seed
+Funnel-S,Response,101;202,2,-7.042984221770454e-05,-5.070570033587985e-05,False,does_not_beat_reference_on_every_fold_seed
+S-Under7,Response,101;202,2,-7.359094434296353e-05,-5.21180402484261e-05,False,does_not_beat_reference_on_every_fold_seed
+Ensemble-BestSingle,Response,101;202,2,-9.006279242247217e-05,-5.879141749910884e-05,False,does_not_beat_reference_on_every_fold_seed
+S-Sentinel-Under7,Response,101;202,2,-9.274187708541485e-05,-6.736533589566193e-05,False,does_not_beat_reference_on_every_fold_seed

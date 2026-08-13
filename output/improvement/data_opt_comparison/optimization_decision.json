@@ -1,0 +1,64 @@
+{
+  "protocol_id": "data-optimization-v1",
+  "created_utc": "2026-08-09T08:18:05.697135+00:00",
+  "evidence_scope": {
+    "stage": "development_oof_screen",
+    "confirmation_read": false,
+    "pool_fraction": 0.15,
+    "n_rows": 838776,
+    "n_conversion_control": 244,
+    "fold_seeds": [
+      101,
+      202
+    ],
+    "primary_seed_bootstrap_replicates": 100
+  },
+  "current_champion": "Response",
+  "screening_winner": "Response-Sentinel",
+  "advances_to_new_confirmation": true,
+  "promoted": false,
+  "promotion_decision": "hold_response_champion",
+  "metrics": {
+    "response_policy_area_dr_mean": 0.0008544727265997,
+    "response_sentinel_policy_area_dr_mean": 0.0008570161370193,
+    "mean_difference": 2.5434104196000312e-06,
+    "relative_difference": 0.002976584670784417,
+    "per_seed": {
+      "101": {
+        "response": 0.0008567794266366,
+        "challenger": 0.0008588313906207,
+        "difference": 2.0519639840999937e-06
+      },
+      "202": {
+        "response": 0.0008521660265628,
+        "challenger": 0.000855200883418,
+        "difference": 3.0348568551999237e-06
+      }
+    },
+    "primary_seed_paired_ci_95": [
+      -8.105830562446755e-06,
+      1.2925148742319906e-05
+    ],
+    "primary_seed_probability_positive": 0.7,
+    "funnel_best_mean_difference_vs_response": -4.644777462159996e-05,
+    "s_sentinel_difference_vs_s": -1.524729564730007e-05,
+    "qagg_difference_vs_response": -3.3791500983999974e-05
+  },
+  "decision_reasons": [
+    "Response-Sentinel beats Response by point estimate on both registered fold seeds.",
+    "The observed mean gain is small and the paired 95% interval crosses zero.",
+    "The protocol requires a new randomized confirmation campaign for promotion.",
+    "No previously observed Sprint 2 confirmation data were used for this decision."
+  ],
+  "next_step": "Freeze Response-Sentinel as the sole advancing challenger and score it against Response on a new randomized confirmation campaign.",
+  "input_sha256": {
+    "configs\\data_optimization_protocol_v1.json": "fb00b9b78b3151ae8c0e2d19796bf39f11bda859d6022111ce2a93de929031d9",
+    "output\\eda\\run_manifest.json": "80990f5fcaa8013432a344bfb21b70ab19ded2841c3c570c6c78b822ab18b2ba",
+    "output\\improvement\\data_opt_comparison\\candidate_aggregate.csv": "d1d7b792dfcae1a984658c34646c3b3494285c97c43922f3bb56a4d897077c84",
+    "output\\improvement\\data_opt_comparison\\candidate_ranking.csv": "96037aa89501a816f111ca2b2d6214e0d2ca83dc3e72b4d541d01fff558e6e7b",
+    "output\\improvement\\data_opt_comparison\\paired_comparisons.csv": "74d0ad221ab3ccbfd5fe32873cd08c7c3b8ce1e6e212a7bb99279b161d38757c",
+    "output\\improvement\\data_opt_comparison\\advancement_decision.csv": "275babbe2e6af2be08a77d105ab312e4196e02f2b7743fbaa8c9f7ba459f203c",
+    "output\\improvement\\data_opt_screen_seed101\\run_manifest.json": "3fbb2f9a5eecf1e5bc0b624dfe6062ba111d2c10770c72e1cf813156590cc8fa",
+    "output\\improvement\\data_opt_screen_seed202\\run_manifest.json": "dae631e8fb1b77dd04bafce682a94764f2fbf6271d8e732a86f05297da387f2f"
+  }
+}

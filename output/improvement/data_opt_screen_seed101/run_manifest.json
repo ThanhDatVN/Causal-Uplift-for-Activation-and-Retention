@@ -1,0 +1,50 @@
+{
+  "protocol_id": "data-optimization-v1",
+  "protocol_path": "configs/data_optimization_protocol_v1.json",
+  "stage": "screen",
+  "outcome": "conversion",
+  "created_utc": "2026-08-09T08:03:35.106609+00:00",
+  "development_index_sha256": "2f9a75e0b5572f108993310af120552d129982dc2d4d2016ee2ed0f7a020806a",
+  "pool_fraction": 0.15,
+  "pool_seed": 77,
+  "fold_seed": 101,
+  "n_folds": 3,
+  "propensity": 0.85,
+  "arm_counts": {
+    "n_rows": 838776,
+    "n_treated": 712960,
+    "n_control": 125816,
+    "n_conversion_treated": 2203,
+    "n_conversion_control": 244
+  },
+  "budget_grid": [
+    0.01,
+    0.02,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3
+  ],
+  "n_boot": 200,
+  "nuisance_seconds": 23.783612800005358,
+  "peak_process_rss_gb": 0.6330413818359375,
+  "min_system_available_ram_gb": 4.31427001953125,
+  "max_system_memory_percent": 71.6,
+  "resource_gate_passed": true,
+  "elapsed_seconds": 336.5991325378418,
+  "candidates_completed": [
+    "Funnel-S",
+    "Funnel-S-Sentinel",
+    "Response",
+    "Response-Sentinel",
+    "S-Sentinel-Under7",
+    "S-Under7",
+    "X-Renormalized"
+  ],
+  "random_policy_area_mean": 0.0001526624920026996,
+  "random_policy_area_std": 4.488477305961499e-05,
+  "expected_random_mean_effect": 0.0009888601421262715,
+  "scope_note": "Development pool OOF only. Confirmation Sprint 2 khong duoc doc o buoc nay."
+}

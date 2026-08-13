@@ -1,0 +1,211 @@
+{
+  "protocol_id": "data-optimization-v1",
+  "created_utc": "2026-08-09T08:17:59.876542+00:00",
+  "run_dirs": [
+    "output\\improvement\\data_opt_screen_seed101",
+    "output\\improvement\\data_opt_screen_seed202"
+  ],
+  "budget_grid": [
+    0.01,
+    0.02,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3
+  ],
+  "n_boot": 100,
+  "shortlist": [
+    "Response",
+    "X-Renormalized",
+    "Response-Sentinel"
+  ],
+  "reference_models": [
+    "Response",
+    "X-Renormalized"
+  ],
+  "advance_reference": "Response",
+  "advance_all_fold_seeds": true,
+  "ranking_by_policy_area_dr": [
+    "Response-Sentinel",
+    "Response",
+    "X-Renormalized",
+    "Ensemble-RankAverage",
+    "Ensemble-QAgg",
+    "Funnel-S-Sentinel",
+    "Funnel-S",
+    "S-Under7",
+    "Ensemble-BestSingle",
+    "S-Sentinel-Under7"
+  ],
+  "ensembles": {
+    "Ensemble-QAgg@seed101": {
+      "method": "causal_q_aggregation",
+      "full_sample_weights": {
+        "S-Under7": 4.510281037539697e-17,
+        "S-Sentinel-Under7": 4.098284211995206e-17,
+        "X-Renormalized": 0.0,
+        "Funnel-S": 0.5197438995585089,
+        "Funnel-S-Sentinel": 0.480256100441491
+      },
+      "fold_weights": [
+        {
+          "S-Under7": 0.23788736710981698,
+          "S-Sentinel-Under7": 0.3045538700972497,
+          "X-Renormalized": 2.380702100666882e-16,
+          "Funnel-S": 0.457558762792933,
+          "Funnel-S-Sentinel": 1.3355925349569257e-16
+        },
+        {
+          "S-Under7": 1.1275702593849246e-17,
+          "S-Sentinel-Under7": 3.7513395167998453e-17,
+          "X-Renormalized": 2.0816681711721685e-17,
+          "Funnel-S": 0.4970044644795472,
+          "Funnel-S-Sentinel": 0.5029955355204528
+        }
+      ],
+      "candidate_dr_losses": {
+        "S-Under7": 0.014574401229619527,
+        "S-Sentinel-Under7": 0.014574928232860768,
+        "X-Renormalized": 0.014578209984701617,
+        "Funnel-S": 0.01456209222547963,
+        "Funnel-S-Sentinel": 0.014562899496490806
+      },
+      "validation_scope": "weight_stage_oos_base_models_not_nested",
+      "nested_base_models": false
+    },
+    "Ensemble-BestSingle@seed101": {
+      "method": "best_single_dr_risk",
+      "full_sample_weights": {
+        "S-Under7": 0.0,
+        "S-Sentinel-Under7": 0.0,
+        "X-Renormalized": 0.0,
+        "Funnel-S": 1.0,
+        "Funnel-S-Sentinel": 0.0
+      },
+      "fold_weights": [
+        {
+          "S-Under7": 0.0,
+          "S-Sentinel-Under7": 1.0,
+          "X-Renormalized": 0.0,
+          "Funnel-S": 0.0,
+          "Funnel-S-Sentinel": 0.0
+        },
+        {
+          "S-Under7": 0.0,
+          "S-Sentinel-Under7": 0.0,
+          "X-Renormalized": 0.0,
+          "Funnel-S": 0.0,
+          "Funnel-S-Sentinel": 1.0
+        }
+      ],
+      "candidate_dr_losses": {
+        "S-Under7": 0.014574401229619527,
+        "S-Sentinel-Under7": 0.014574928232860768,
+        "X-Renormalized": 0.014578209984701617,
+        "Funnel-S": 0.01456209222547963,
+        "Funnel-S-Sentinel": 0.014562899496490806
+      },
+      "validation_scope": "weight_stage_oos_base_models_not_nested",
+      "nested_base_models": false
+    },
+    "Ensemble-RankAverage@seed101": {
+      "method": "rank_average",
+      "members": [
+        "Funnel-S",
+        "Funnel-S-Sentinel",
+        "Response",
+        "Response-Sentinel",
+        "S-Sentinel-Under7",
+        "S-Under7",
+        "X-Renormalized"
+      ],
+      "note": "Heuristic thu hang; khong co bao dam ly thuyet cua Q-aggregation. Gop duoc ca ranking score."
+    },
+    "Ensemble-QAgg@seed202": {
+      "method": "causal_q_aggregation",
+      "full_sample_weights": {
+        "S-Under7": 0.06477216262955475,
+        "S-Sentinel-Under7": 0.2306671738990906,
+        "X-Renormalized": 0.0169124736820079,
+        "Funnel-S": 0.6876481897893468,
+        "Funnel-S-Sentinel": 0.0
+      },
+      "fold_weights": [
+        {
+          "S-Under7": 0.3823087466935726,
+          "S-Sentinel-Under7": 0.4184497222010992,
+          "X-Renormalized": 8.326672684688674e-17,
+          "Funnel-S": 0.19924153110532813,
+          "Funnel-S-Sentinel": 4.910777762277383e-17
+        },
+        {
+          "S-Under7": 1.9949319973733282e-17,
+          "S-Sentinel-Under7": 0.0,
+          "X-Renormalized": 4.163336342344337e-17,
+          "Funnel-S": 0.5267225606678974,
+          "Funnel-S-Sentinel": 0.47327743933210265
+        }
+      ],
+      "candidate_dr_losses": {
+        "S-Under7": 0.014531958316657708,
+        "S-Sentinel-Under7": 0.014531180552630361,
+        "X-Renormalized": 0.014534082160227984,
+        "Funnel-S": 0.014528010404692817,
+        "Funnel-S-Sentinel": 0.014531177100012917
+      },
+      "validation_scope": "weight_stage_oos_base_models_not_nested",
+      "nested_base_models": false
+    },
+    "Ensemble-BestSingle@seed202": {
+      "method": "best_single_dr_risk",
+      "full_sample_weights": {
+        "S-Under7": 0.0,
+        "S-Sentinel-Under7": 0.0,
+        "X-Renormalized": 0.0,
+        "Funnel-S": 1.0,
+        "Funnel-S-Sentinel": 0.0
+      },
+      "fold_weights": [
+        {
+          "S-Under7": 0.0,
+          "S-Sentinel-Under7": 1.0,
+          "X-Renormalized": 0.0,
+          "Funnel-S": 0.0,
+          "Funnel-S-Sentinel": 0.0
+        },
+        {
+          "S-Under7": 0.0,
+          "S-Sentinel-Under7": 0.0,
+          "X-Renormalized": 0.0,
+          "Funnel-S": 1.0,
+          "Funnel-S-Sentinel": 0.0
+        }
+      ],
+      "candidate_dr_losses": {
+        "S-Under7": 0.014531958316657708,
+        "S-Sentinel-Under7": 0.014531180552630361,
+        "X-Renormalized": 0.014534082160227984,
+        "Funnel-S": 0.014528010404692817,
+        "Funnel-S-Sentinel": 0.014531177100012917
+      },
+      "validation_scope": "weight_stage_oos_base_models_not_nested",
+      "nested_base_models": false
+    },
+    "Ensemble-RankAverage@seed202": {
+      "method": "rank_average",
+      "members": [
+        "Funnel-S",
+        "Funnel-S-Sentinel",
+        "Response",
+        "Response-Sentinel",
+        "S-Sentinel-Under7",
+        "S-Under7",
+        "X-Renormalized"
+      ],
+      "note": "Heuristic thu hang; khong co bao dam ly thuyet cua Q-aggregation. Gop duoc ca ranking score."
+    }
+  },
+  "note": "Shortlist duoc chot trước khi doc confirmation. Khong duoc them candidate sau khi xem ket qua confirmation."
+}

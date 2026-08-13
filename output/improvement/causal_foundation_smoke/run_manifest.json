@@ -1,0 +1,49 @@
+{
+  "protocol_id": "causal-foundation-v1",
+  "protocol_path": "configs/causal_foundation_protocol_v1.json",
+  "stage": "smoke",
+  "outcome": "conversion",
+  "created_utc": "2026-08-09T10:43:42.293500+00:00",
+  "development_index_sha256": "b033a1e8094e514df085e28e808c818582ed6393095203741c1df5acf3312595",
+  "pool_fraction": 0.01,
+  "pool_seed": 77,
+  "fold_seed": 101,
+  "n_folds": 3,
+  "propensity": 0.85,
+  "arm_counts": {
+    "n_rows": 55919,
+    "n_treated": 47531,
+    "n_control": 8388,
+    "n_conversion_treated": 147,
+    "n_conversion_control": 16
+  },
+  "budget_grid": [
+    0.01,
+    0.02,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3
+  ],
+  "n_boot": 30,
+  "nuisance_seconds": 2.353763999999501,
+  "peak_process_rss_gb": 0.28562164306640625,
+  "min_system_available_ram_gb": 3.7995986938476562,
+  "max_system_memory_percent": 75.0,
+  "resource_gate_passed": true,
+  "elapsed_seconds": 20.908753156661987,
+  "candidates_completed": [
+    "Anchored-Pattern-R",
+    "Anchored-R25",
+    "Anchored-R25-Sentinel",
+    "DINA-CATE-Sentinel",
+    "Response",
+    "Response-Sentinel"
+  ],
+  "random_policy_area_mean": 0.0001899150584988057,
+  "random_policy_area_std": 9.068218383560861e-05,
+  "expected_random_mean_effect": 0.0009559677559070625,
+  "scope_note": "Development pool OOF only. Confirmation Sprint 2 khong duoc doc o buoc nay."
+}

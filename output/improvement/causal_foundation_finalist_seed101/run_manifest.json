@@ -1,0 +1,49 @@
+{
+  "protocol_id": "causal-foundation-v1",
+  "protocol_path": "configs/causal_foundation_protocol_v1.json",
+  "stage": "finalist",
+  "outcome": "conversion",
+  "created_utc": "2026-08-09T11:27:51.881802+00:00",
+  "development_index_sha256": "8ff1ffcde973cb58df155f942b3f3cf9f386d64c019f18bf51a4df98aeedd476",
+  "pool_fraction": 1.0,
+  "pool_seed": 77,
+  "fold_seed": 101,
+  "n_folds": 3,
+  "propensity": 0.85,
+  "arm_counts": {
+    "n_rows": 5591836,
+    "n_treated": 4753061,
+    "n_control": 838775,
+    "n_conversion_treated": 14684,
+    "n_conversion_control": 1625
+  },
+  "budget_grid": [
+    0.01,
+    0.02,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3
+  ],
+  "n_boot": 2,
+  "nuisance_seconds": 123.7904458000121,
+  "peak_process_rss_gb": 1.7913131713867188,
+  "min_system_available_ram_gb": 2.0155715942382812,
+  "max_system_memory_percent": 86.7,
+  "resource_gate_passed": true,
+  "elapsed_seconds": 566.4254140853882,
+  "candidates_completed": [
+    "Response",
+    "Response-Sentinel"
+  ],
+  "random_policy_area_mean": 0.00015170282373042906,
+  "random_policy_area_std": 1.6671819759317983e-05,
+  "expected_random_mean_effect": 0.0009788353726894598,
+  "scope_note": "Process-isolated deterministic OOF runs merged after exact manifest, source-index, nuisance-signal and outcome checks.",
+  "component_run_dirs": [
+    "output\\improvement\\causal_foundation_finalist_seed101_response",
+    "output\\improvement\\causal_foundation_finalist_seed101_sentinel"
+  ]
+}

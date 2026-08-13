@@ -1,0 +1,59 @@
+{
+  "protocol_id": "causal-foundation-v1",
+  "reference": "Response",
+  "screen_n_rows": 838776,
+  "screen_control_conversions": 244,
+  "full_n_rows": 5591836,
+  "full_control_conversions": 1625,
+  "screen_advancing_candidates": [
+    "Response-Sentinel"
+  ],
+  "causal_candidates_advancing": [],
+  "full_advancing_candidates": [],
+  "decision": "retain_response",
+  "new_randomized_confirmation_required_for_promotion": true,
+  "sprint2_confirmation_read": false,
+  "causal_forest_executed": false,
+  "all_stage_source_hashes": [
+    "2f9a75e0b5572f108993310af120552d129982dc2d4d2016ee2ed0f7a020806a",
+    "8ff1ffcde973cb58df155f942b3f3cf9f386d64c019f18bf51a4df98aeedd476"
+  ],
+  "resource_gate_passed_for_completed_runs": true,
+  "protocol_amendments": [
+    {
+      "field": "execution.smoke_pool_fraction",
+      "from": 0.02,
+      "to": 0.01,
+      "reason": "The first code-path-only attempt hit the preregistered 75% system-memory guard at 75.1%; no selection result was read and no model hyperparameter changed.",
+      "evidence": "output/improvement/causal_foundation_smoke_attempt1/oof_metrics.csv"
+    },
+    {
+      "field": "resource_gate.max_system_memory_percent",
+      "from": 75.0,
+      "to": 80.0,
+      "reason": "The first 15% screen attempt stopped after shared nuisance fitting, before any candidate score existed, at 75.8% system memory with 3.68 GB still available. The independent absolute floor remains 2 GB.",
+      "evidence": "output/improvement/causal_foundation_screen_seed101_attempt1/resource_gate_failure.json"
+    },
+    {
+      "field": "resource_gate.max_system_memory_percent",
+      "from": 80.0,
+      "to": 85.0,
+      "reason": "The first full-development finalist attempt stopped after shared nuisance fitting, before any candidate score existed, at 80.6% system memory with 2.94 GB still available. The independent absolute floor remains 2 GB.",
+      "evidence": "output/improvement/causal_foundation_finalist_seed101_attempt1/resource_gate_failure.json"
+    },
+    {
+      "field": "execution.finalist_process_isolation",
+      "from": false,
+      "to": true,
+      "reason": "The combined full-development run retained a 1.84 GB process high-water mark and stopped at 85.1% during the second candidate. The finalist set was already frozen; each candidate is rerun in a fresh process and deterministic OOF artifacts are merged only after exact contract checks.",
+      "evidence": "output/improvement/causal_foundation_finalist_seed101_combined_attempt2/oof_metrics.csv"
+    },
+    {
+      "field": "resource_gate.max_system_memory_percent",
+      "from": 85.0,
+      "to": 87.0,
+      "reason": "On this approximately 15.2 GB host, 87% used corresponds to the independently retained 2 GB absolute floor. The isolated Sentinel retry stopped before candidate scoring at 85.1% despite 2.26 GB available; aligning the redundant percentage guard avoids contradictory rounding behavior.",
+      "evidence": "output/improvement/causal_foundation_finalist_seed101_sentinel_attempt2/resource_gate_failure.json"
+    }
+  ]
+}

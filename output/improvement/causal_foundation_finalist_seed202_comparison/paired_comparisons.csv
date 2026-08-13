@@ -1,0 +1,2 @@
+model_a,model_b,fold_seed,policy_area_difference,policy_area_ci_low,policy_area_ci_high,policy_area_probability_positive,autoc_difference,autoc_ci_low,autoc_ci_high,n_boot
+Response-Sentinel,Response,202,-2.0750000967533714e-06,-6.1864899140838025e-06,1.2671272813936773e-06,0.09,9.475848956273444e-06,-1.148865478374497e-05,2.3224689029064663e-05,100

@@ -1,0 +1,2 @@
+model,reference,fold_seeds,n_fold_seeds,min_policy_area_delta,mean_policy_area_delta,advance,reason
+Response-Sentinel,Response,101;202,2,-2.0750000967533714e-06,-4.3101475293141683e-07,False,does_not_beat_reference_on_every_fold_seed

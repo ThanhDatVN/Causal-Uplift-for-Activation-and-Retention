@@ -1,0 +1,190 @@
+{
+  "protocol_id": "causal-foundation-v1",
+  "created_utc": "2026-08-09T10:59:24.609533+00:00",
+  "run_dirs": [
+    "output\\improvement\\causal_foundation_screen_seed101",
+    "output\\improvement\\causal_foundation_screen_seed202"
+  ],
+  "budget_grid": [
+    0.01,
+    0.02,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3
+  ],
+  "n_boot": 200,
+  "shortlist": [
+    "Response",
+    "Response-Sentinel"
+  ],
+  "reference_models": [
+    "Response"
+  ],
+  "advance_reference": "Response",
+  "advance_all_fold_seeds": true,
+  "ranking_by_policy_area_dr": [
+    "Response-Sentinel",
+    "Response",
+    "Anchored-Pattern-R",
+    "DINA-CATE-Sentinel",
+    "Ensemble-RankAverage",
+    "Anchored-R25-Sentinel",
+    "Anchored-R25",
+    "Ensemble-QAgg",
+    "Ensemble-BestSingle"
+  ],
+  "ensembles": {
+    "Ensemble-QAgg@seed101": {
+      "method": "causal_q_aggregation",
+      "full_sample_weights": {
+        "Anchored-R25": 0.3335894171733024,
+        "Anchored-R25-Sentinel": 0.33191344667570427,
+        "Anchored-Pattern-R": 0.3344971361509934,
+        "DINA-CATE-Sentinel": 2.7755575615628914e-17
+      },
+      "fold_weights": [
+        {
+          "Anchored-R25": 0.0,
+          "Anchored-R25-Sentinel": 0.0,
+          "Anchored-Pattern-R": 0.6749953935935228,
+          "DINA-CATE-Sentinel": 0.3250046064064771
+        },
+        {
+          "Anchored-R25": 0.5167736228630225,
+          "Anchored-R25-Sentinel": 0.48322637713697747,
+          "Anchored-Pattern-R": 0.0,
+          "DINA-CATE-Sentinel": 7.806255641895631e-17
+        }
+      ],
+      "candidate_dr_losses": {
+        "Anchored-R25": 0.014573676172057844,
+        "Anchored-R25-Sentinel": 0.014573781573671469,
+        "Anchored-Pattern-R": 0.014574052193585834,
+        "DINA-CATE-Sentinel": 0.01461410468131357
+      },
+      "validation_scope": "weight_stage_oos_base_models_not_nested",
+      "nested_base_models": false
+    },
+    "Ensemble-BestSingle@seed101": {
+      "method": "best_single_dr_risk",
+      "full_sample_weights": {
+        "Anchored-R25": 1.0,
+        "Anchored-R25-Sentinel": 0.0,
+        "Anchored-Pattern-R": 0.0,
+        "DINA-CATE-Sentinel": 0.0
+      },
+      "fold_weights": [
+        {
+          "Anchored-R25": 0.0,
+          "Anchored-R25-Sentinel": 0.0,
+          "Anchored-Pattern-R": 1.0,
+          "DINA-CATE-Sentinel": 0.0
+        },
+        {
+          "Anchored-R25": 1.0,
+          "Anchored-R25-Sentinel": 0.0,
+          "Anchored-Pattern-R": 0.0,
+          "DINA-CATE-Sentinel": 0.0
+        }
+      ],
+      "candidate_dr_losses": {
+        "Anchored-R25": 0.014573676172057844,
+        "Anchored-R25-Sentinel": 0.014573781573671469,
+        "Anchored-Pattern-R": 0.014574052193585834,
+        "DINA-CATE-Sentinel": 0.01461410468131357
+      },
+      "validation_scope": "weight_stage_oos_base_models_not_nested",
+      "nested_base_models": false
+    },
+    "Ensemble-RankAverage@seed101": {
+      "method": "rank_average",
+      "members": [
+        "Anchored-Pattern-R",
+        "Anchored-R25",
+        "Anchored-R25-Sentinel",
+        "DINA-CATE-Sentinel",
+        "Response",
+        "Response-Sentinel"
+      ],
+      "note": "Heuristic thu hang; khong co bao dam ly thuyet cua Q-aggregation. Gop duoc ca ranking score."
+    },
+    "Ensemble-QAgg@seed202": {
+      "method": "causal_q_aggregation",
+      "full_sample_weights": {
+        "Anchored-R25": 0.29579960392178434,
+        "Anchored-R25-Sentinel": 0.2896630504184303,
+        "Anchored-Pattern-R": 0.2942368079346036,
+        "DINA-CATE-Sentinel": 0.12030053772518173
+      },
+      "fold_weights": [
+        {
+          "Anchored-R25": 0.08280933229428457,
+          "Anchored-R25-Sentinel": 0.066110405371763,
+          "Anchored-Pattern-R": 0.07023962993554098,
+          "DINA-CATE-Sentinel": 0.7808406323984115
+        },
+        {
+          "Anchored-R25": 0.3318678090440306,
+          "Anchored-R25-Sentinel": 0.33327363103488544,
+          "Anchored-Pattern-R": 0.33485855992108393,
+          "DINA-CATE-Sentinel": 0.0
+        }
+      ],
+      "candidate_dr_losses": {
+        "Anchored-R25": 0.01452777850134562,
+        "Anchored-R25-Sentinel": 0.014528033760678077,
+        "Anchored-Pattern-R": 0.014528298638465893,
+        "DINA-CATE-Sentinel": 0.014551721103734302
+      },
+      "validation_scope": "weight_stage_oos_base_models_not_nested",
+      "nested_base_models": false
+    },
+    "Ensemble-BestSingle@seed202": {
+      "method": "best_single_dr_risk",
+      "full_sample_weights": {
+        "Anchored-R25": 1.0,
+        "Anchored-R25-Sentinel": 0.0,
+        "Anchored-Pattern-R": 0.0,
+        "DINA-CATE-Sentinel": 0.0
+      },
+      "fold_weights": [
+        {
+          "Anchored-R25": 0.0,
+          "Anchored-R25-Sentinel": 0.0,
+          "Anchored-Pattern-R": 0.0,
+          "DINA-CATE-Sentinel": 1.0
+        },
+        {
+          "Anchored-R25": 0.0,
+          "Anchored-R25-Sentinel": 1.0,
+          "Anchored-Pattern-R": 0.0,
+          "DINA-CATE-Sentinel": 0.0
+        }
+      ],
+      "candidate_dr_losses": {
+        "Anchored-R25": 0.01452777850134562,
+        "Anchored-R25-Sentinel": 0.014528033760678077,
+        "Anchored-Pattern-R": 0.014528298638465893,
+        "DINA-CATE-Sentinel": 0.014551721103734302
+      },
+      "validation_scope": "weight_stage_oos_base_models_not_nested",
+      "nested_base_models": false
+    },
+    "Ensemble-RankAverage@seed202": {
+      "method": "rank_average",
+      "members": [
+        "Anchored-Pattern-R",
+        "Anchored-R25",
+        "Anchored-R25-Sentinel",
+        "DINA-CATE-Sentinel",
+        "Response",
+        "Response-Sentinel"
+      ],
+      "note": "Heuristic thu hang; khong co bao dam ly thuyet cua Q-aggregation. Gop duoc ca ranking score."
+    }
+  },
+  "note": "Shortlist duoc chot trước khi doc confirmation. Khong duoc them candidate sau khi xem ket qua confirmation."
+}

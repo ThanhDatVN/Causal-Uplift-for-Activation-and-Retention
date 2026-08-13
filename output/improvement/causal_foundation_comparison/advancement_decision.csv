@@ -1,0 +1,9 @@
+model,reference,fold_seeds,n_fold_seeds,min_policy_area_delta,mean_policy_area_delta,advance,reason
+Response-Sentinel,Response,101;202,2,2.0519639841327366e-06,2.543410419632015e-06,True,beats_reference_on_every_fold_seed
+Anchored-Pattern-R,Response,101;202,2,-1.480024715285952e-05,-2.907132487615677e-06,False,does_not_beat_reference_on_every_fold_seed
+DINA-CATE-Sentinel,Response,101;202,2,-2.033452966424443e-05,-4.768006232495198e-06,False,does_not_beat_reference_on_every_fold_seed
+Ensemble-RankAverage,Response,101;202,2,-1.9930532828079653e-05,-1.0923657681195722e-05,False,diagnostic_ensemble_not_eligible
+Anchored-R25-Sentinel,Response,101;202,2,-3.634847268018683e-05,-2.383936190652287e-05,False,does_not_beat_reference_on_every_fold_seed
+Anchored-R25,Response,101;202,2,-4.3010952178236116e-05,-2.5556203497300158e-05,False,does_not_beat_reference_on_every_fold_seed
+Ensemble-QAgg,Response,101;202,2,-4.506183820551541e-05,-3.202929043682822e-05,False,diagnostic_ensemble_not_eligible
+Ensemble-BestSingle,Response,101;202,2,-6.498629503264128e-05,-5.0438816559967735e-05,False,diagnostic_ensemble_not_eligible

@@ -1,0 +1,34 @@
+{
+  "protocol_id": "causal-foundation-v1",
+  "created_utc": "2026-08-09T11:51:20.867138+00:00",
+  "run_dirs": [
+    "output\\improvement\\causal_foundation_finalist_seed101",
+    "output\\improvement\\causal_foundation_finalist_seed202"
+  ],
+  "budget_grid": [
+    0.01,
+    0.02,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3
+  ],
+  "n_boot": 200,
+  "shortlist": [
+    "Response"
+  ],
+  "reference_models": [
+    "Response"
+  ],
+  "advance_reference": "Response",
+  "advance_all_fold_seeds": true,
+  "ranking_by_policy_area_dr": [
+    "Response",
+    "Response-Sentinel"
+  ],
+  "ensembles": {},
+  "ensembles_enabled": false,
+  "note": "Shortlist duoc chot trước khi doc confirmation. Khong duoc them candidate sau khi xem ket qua confirmation."
+}

@@ -28,6 +28,11 @@ ranking/policy nhưng không thể gán ý nghĩa kinh doanh cho từng `f0`–`
   thực tế đã được quảng cáo tiếp cận; cả hai trường không được coi là baseline covariate
   trước treatment trong pipeline này.
 
+Protocol `data-optimization-v1` dùng `visit` theo một vai trò hẹp hơn: auxiliary training
+outcome để factorize joint probability, không phải feature của người cần score. Cache giữ nó
+theo `source_index`; `predict(X)` vẫn chỉ nhận `f0..f11`. Không diễn giải mô hình conditional
+qua `visit` như direct hoặc mediated causal effect.
+
 ## Quality contract
 
 - không missing;
@@ -39,6 +44,29 @@ ranking/policy nhưng không thể gán ý nghĩa kinh doanh cho từng `f0`–`
 
 Balance AUC/SMD là diagnostic, không tự chứng minh randomization. Identification dựa vào
 provenance randomized incrementality test của nguồn Criteo.
+
+## Cấu trúc feature — điều mà "không missing" không nói ra
+
+Contract "không missing" đúng về mặt cú pháp. Chẩn đoán đầy đủ ở `output/eda/` cho thấy cấu
+trúc thật khác hẳn ấn tượng của một bảng 12 biến liên tục:
+
+| Quan sát | Số đo |
+|---|---|
+| Đặc trưng có hơn 90% khối lượng ở đúng một giá trị | 6/12 (`f1` 0,988 · `f11` 0,986 · `f4` và `f10` 0,957 · `f5` và `f7` 0,947) |
+| Đặc trưng không cắt được thành hai bin phân vị | 6/12 — cùng sáu đặc trưng trên |
+| Cặp có mask "nằm ở mode" trùng khít **đúng 1,00** | 4 — `(f0, f6)`, `(f2, f8)`, `(f4, f10)`, `(f5, f7)` |
+| Cặp có `|Spearman| > 0,99` | 2 — `(f4, f10)` `+0,999`, `(f5, f7)` `−0,999`; `|Pearson|` chỉ `0,66` và `0,75` |
+| Số pattern "ở mode / khác mode" khác nhau | 53 trên 4.096 khả năng; pattern lớn nhất chiếm 43,6% số dòng |
+| Trung vị số đặc trưng khác giá trị mode trên mỗi dòng | **2 trên 12** |
+
+Bốn cặp mask trùng khít tuyệt đối là bằng chứng rằng point mass **có thể** là mã của giá trị
+không quan sát được với một cơ chế mã hóa dùng chung. Criteo **không** công bố quy trình mã hoá
+giá trị thiếu, nên đây là suy luận từ cấu trúc quan sát được, không phải một tính chất được
+nguồn xác nhận. Không dùng nó để hoàn nguyên giá trị gốc.
+
+Cách dùng đúng: giải thích vì sao không gian covariate hiệu dụng hẹp hơn con số 12 rất
+nhiều. Champion không dùng feature phái sinh; protocol data optimization chỉ kiểm tra cờ
+sentinel fold-local như một ablation, chưa đưa nó vào release.
 
 ## Sprint 2 split
 

@@ -38,7 +38,7 @@ Tại top 10%, `value_per_conversion=1`, `contact_cost=0,0005`:
 
 Champion được đưa qua một vòng thử thách có protocol đăng ký trước với metric chính
 mới `policy_area_dr`, 3-fold cross-fitting trên 5.591.836 dòng ở hai fold seed, và 8
-challenger gồm R-Learner, DR ablation, S/T-Learner ablation, Rank-Learner (ICLR 2026)
+challenger gồm R-Learner, DR ablation, S/T-Learner ablation, Rank-Learner (ICML 2026)
 và ba ensemble.
 
 **Kết quả: không challenger nào đạt promotion rule; champion giữ nguyên Response.**
@@ -70,10 +70,11 @@ lưu tại `output/product/webapp/champion_scorer.joblib`, metadata tại
 - Confirmation là offline RCT replay, chưa có production policy deployment.
 - Population shift, treatment version change và interference chưa được kiểm tra.
 - Rare control conversions làm calibration bins nhiễu.
-- Causal Forest chưa có Kaggle release artifact.
-- “Random top-k” hiện là một ranking ngẫu nhiên cố định bằng seed 42; paired bootstrap
-  phản ánh bất định lấy mẫu có điều kiện trên ranking đó, chưa tích hợp biến thiên qua nhiều
-  random-policy seed.
+- Causal Forest đã có artifact Kaggle nhưng dùng final test Sprint 1 và IPW signal;
+  không so trực tiếp với retrospective confirmation Sprint 3 dùng DR signal.
+- Expected-random trong artifact Sprint 3 là policy kỳ vọng giải tích `π(x)=b`;
+  dải sensitivity bổ sung dùng 20 random-ranking seed và không được trình bày như
+  bootstrap confidence interval.
 - Confirmation đã được dùng để lập báo cáo Sprint 2; các vòng phát triển model sau không
   được gọi nó là holdout chưa quan sát.
 

@@ -9,6 +9,8 @@ docs/
 ├── SPRINT_1_THEORY_AND_METHOD_GUIDE.md   lý thuyết nền, sáu model, metric
 ├── SPRINT_2_METHOD_AND_PRODUCT_GUIDE.md  undersampling, calibration, policy value
 ├── SPRINT_3_METHOD_GUIDE.md              policy_area_dr, RATE/AUTOC, cross-fitting
+├── CAUSAL_FOUNDATION_METHOD_GUIDE.md     DINA, Anchored R, partial pooling, experiment gate
+├── TOP_TAIL_POLICY_INFERENCE_GUIDE.md     hard top-k, paired/simultaneous CI, event support
 ├── DECISION_CONTRACT.md                  policy phát hành, công thức, guardrail
 ├── data_cards/                           nguồn gốc, schema, giới hạn dữ liệu
 └── model_cards/                          model card champion
@@ -21,9 +23,11 @@ docs/
 | Hiểu lý thuyết nền và sáu model | [SPRINT_1_THEORY_AND_METHOD_GUIDE.md](SPRINT_1_THEORY_AND_METHOD_GUIDE.md) |
 | Hiểu cách biến xếp hạng thành quyết định | [SPRINT_2_METHOD_AND_PRODUCT_GUIDE.md](SPRINT_2_METHOD_AND_PRODUCT_GUIDE.md) |
 | Hiểu metric chính hiện hành | [SPRINT_3_METHOD_GUIDE.md](SPRINT_3_METHOD_GUIDE.md) |
+| Hiểu inference cho policy 1–2% | [TOP_TAIL_POLICY_INFERENCE_GUIDE.md](TOP_TAIL_POLICY_INFERENCE_GUIDE.md) |
 | Biết quy tắc ra quyết định | [DECISION_CONTRACT.md](DECISION_CONTRACT.md) |
-| Xem kết quả mới nhất | [../report/SPRINT_3_FINAL_REPORT.md](../report/SPRINT_3_FINAL_REPORT.md) |
+| Xem kết quả mới nhất | [../report/CAUSAL_FOUNDATION_EXPERIMENT_REPORT.md](../report/CAUSAL_FOUNDATION_EXPERIMENT_REPORT.md) |
 | Xem kết quả Causal Forest | [../report/CAUSAL_FOREST_REPORT.md](../report/CAUSAL_FOREST_REPORT.md) |
+| Đọc deep research sau thí nghiệm | [../planning/CAUSAL_DEEP_RESEARCH_2026.md](../planning/CAUSAL_DEEP_RESEARCH_2026.md) |
 | Hiểu bối cảnh nghiên cứu | [../planning/RESEARCH_LANDSCAPE_2026.md](../planning/RESEARCH_LANDSCAPE_2026.md) |
 
 ## Phương pháp — một tài liệu cho mỗi sprint
@@ -33,6 +37,8 @@ docs/
 | [SPRINT_1_THEORY_AND_METHOD_GUIDE.md](SPRINT_1_THEORY_AND_METHOD_GUIDE.md) | Uplift khác dự đoán thế nào, vì sao cần RCT, sáu model, outcome hiếm, metric, paired bootstrap |
 | [SPRINT_2_METHOD_AND_PRODUCT_GUIDE.md](SPRINT_2_METHOD_AND_PRODUCT_GUIDE.md) | Undersampling và khôi phục xác suất, calibration, policy value IPW/DR |
 | [SPRINT_3_METHOD_GUIDE.md](SPRINT_3_METHOD_GUIDE.md) | Vì sao đổi metric chính, `policy_area_dr`, RATE/AUTOC, cross-fitting, Rank-Learner, Q-aggregation |
+| [CAUSAL_FOUNDATION_METHOD_GUIDE.md](CAUSAL_FOUNDATION_METHOD_GUIDE.md) | Binary DINA, risk-anchored R-Learner, sentinel partial pooling, synthetic validation và failure modes |
+| [TOP_TAIL_POLICY_INFERENCE_GUIDE.md](TOP_TAIL_POLICY_INFERENCE_GUIDE.md) | Exact hard-k, factual DR value, paired bootstrap, simultaneous family band, support/overlap và giới hạn frozen-score inference |
 
 ## Hợp đồng và thẻ
 

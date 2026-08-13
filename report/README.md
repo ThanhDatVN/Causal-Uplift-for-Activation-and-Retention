@@ -5,7 +5,7 @@ nghiên cứu ở [`../planning/`](../planning/).
 
 ## Nguồn số chính thức
 
-Bốn báo cáo dưới đây là nguồn duy nhất được phép trích dẫn. Nếu một tài liệu khác trong
+Bảy báo cáo dưới đây là nguồn duy nhất được phép trích dẫn. Nếu một tài liệu khác trong
 repo mâu thuẫn với chúng, ưu tiên báo cáo.
 
 | Báo cáo | Phạm vi | Kết luận chính |
@@ -14,15 +14,25 @@ repo mâu thuẫn với chúng, ưu tiên báo cáo.
 | [SPRINT_2_FINAL_REPORT.md](SPRINT_2_FINAL_REPORT.md) | Policy, calibration, dashboard, confirmation 1.397.959 dòng | Champion Response top-k; X‑Renormalized − Response có CI chứa 0 |
 | [SPRINT_3_FINAL_REPORT.md](SPRINT_3_FINAL_REPORT.md) | Vòng cải tiến có đăng ký trước, web app, ba chẩn đoán bổ sung | Không challenger nào đạt promotion rule; champion giữ nguyên |
 | [CAUSAL_FOREST_REPORT.md](CAUSAL_FOREST_REPORT.md) | Thuật toán chuyên dụng trên ba mốc dữ liệu, chấm cùng holdout Sprint 1 | `policy_area_dr` hạng 1/6, Qini hạng 3/6; CI chứa 0 so với Response nên là hoà |
+| [DATA_OPTIMIZATION_REPORT.md](DATA_OPTIMIZATION_REPORT.md) | Quay lại từ EDA, sentinel/funnel ablation, OOF hai seed và gate từng vấn đề | Response-Sentinel đi tiếp nhưng chưa được promote; champion vẫn là Response |
+| [CAUSAL_FOUNDATION_EXPERIMENT_REPORT.md](CAUSAL_FOUNDATION_EXPERIMENT_REPORT.md) | DINA, Anchored R, Pattern R; synthetic tests, screen hai seed và full finalist | Không causal learner qua screen; Response-Sentinel không ổn định ở full; giữ Response |
+| [TOP_TAIL_RESEARCH_V2_REPORT.md](TOP_TAIL_RESEARCH_V2_REPORT.md) | Paired simultaneous audit của phát hiện hậu nghiệm ở hard budget 1–2%, event support và membership overlap | 16/16 causal point delta dương nhưng 0/16 lower bound vượt 0; không promote, giữ Response |
 
-Đọc Sprint 3 trước nếu chỉ có ít thời gian — nó chứa trạng thái hiện hành.
+Đọc Causal Foundation trước nếu chỉ có ít thời gian — nó chứa trạng thái hiện hành; đọc Data
+Optimization để xem giả thuyết EDA đứng trước vòng này.
 
-## Cách đọc bốn báo cáo cùng nhau
+## Cách đọc bảy báo cáo cùng nhau
 
 Sprint 1 dựng nền tảng đo lường và cho ra một bảng xếp hạng. Sprint 2 biến bảng xếp hạng
 đó thành một quyết định ngân sách có khoảng tin cậy. Sprint 3 đóng băng giao thức chọn
 model trước khi chạy, rồi thử mười hai ứng viên dưới giao thức đó. Báo cáo Causal Forest
 bổ sung một thuật toán chuyên dụng ngoài họ meta-learner, chấm trên cùng holdout Sprint 1.
+Data Optimization lấy failure mode từ EDA và kết quả model để thử hai can thiệp mới mà không
+sửa artifact đã phát hành.
+Causal Foundation tiếp tục từ đó bằng estimator cho binary outcome hiếm, risk anchor và partial
+pooling; finalist được chạy full-development trước khi quyết định giữ champion.
+Top-Tail Research v2 kiểm định riêng tín hiệu 1–2% bằng familywise band và giữ nguyên quyết định vì
+không có lower bound dương.
 
 Kết luận xuyên suốt: **không phương pháp nhân quả nào tách được khỏi baseline dự đoán
 outcome** trên bộ dữ liệu này. Bối cảnh nghiên cứu giải thích vì sao đây là chế độ đã được

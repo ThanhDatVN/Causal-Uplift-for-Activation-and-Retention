@@ -1,5 +1,15 @@
 # Bối cảnh nghiên cứu và các bài toán lân cận
 
+> **Cập nhật 2026-08-09:** Sau kết quả `causal-foundation-v1`, phần phân tích sâu hơn về
+> estimand assignment/exposure, information bound 85/15, hard-budget top-tail, direct policy
+> learning, model selection và forest/shrinkage nằm ở
+> [CAUSAL_DEEP_RESEARCH_2026.md](CAUSAL_DEEP_RESEARCH_2026.md). Tài liệu hiện tại giữ vai trò
+> landscape/scoping lịch sử.
+>
+> Ledger nguồn peer-reviewed/preprint đến 2026-08-09, gồm hybrid prognostic–causal, PoLeCe,
+> pretraining, RACER/CMO, direct ranking, Rank-Learner 2026, rare-outcome sampling và winner's curse,
+> nằm ở [LATEST_CAUSAL_RESEARCH_AND_EXPERIMENT_PLAN_2026.md](LATEST_CAUSAL_RESEARCH_AND_EXPERIMENT_PLAN_2026.md).
+
 **Ngày rà soát:** 05/08/2026
 **Mục đích:** đặt kết quả Sprint 3 vào đúng bối cảnh nghiên cứu, và xác định bài toán
 lân cận nào đáng mở tiếp, với lý do và điều kiện cụ thể.

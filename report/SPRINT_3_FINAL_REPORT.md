@@ -8,6 +8,15 @@
 và không thuộc release Sprint 3 — nó chấm trên holdout Sprint 1 với IPW signal, còn các
 challenger trong báo cáo này chấm trên confirmation Sprint 2 với DR signal
 
+**Rà soát integrity 09/08/2026.** Artifact lịch sử đã được migrate sang schema v2 mà
+không fit lại model: registry được de-duplicate theo `(run_id, fold_seed, outcome)`, metric
+confirmation/ensemble được điền đầy đủ, data SHA-256 được chuẩn hóa, và expected-random
+được tách khỏi dải sensitivity qua 20 random-ranking seed. Lần chạy lịch sử không ghi
+`max_system_memory_percent`, nên condition 4 của promotion được đánh dấu **không đủ bằng
+chứng/không đạt** theo hướng bảo thủ. Quyết định champion không đổi vì mọi challenger đã
+trượt cả điều kiện OOF và paired CI trước khi xét condition 4. Run mới ghi thêm trạng thái
+working tree, hash diff, cache manifest và resource gate liên tục.
+
 ## 1. Kết quả điều hành
 
 Sprint 3 chạy một vòng cải tiến model có đăng ký trước metric, gate và promotion
@@ -22,7 +31,7 @@ rule, rồi áp rule đúng một lần.
   và trên confirmation.
 - Không challenger nào có `oof_seeds_won = 2`, nên điều kiện 1 của promotion rule
   hỏng với tất cả. Điều kiện 2 cũng hỏng vì mọi chênh lệch trên confirmation đều âm.
-- Số test tăng từ 51 lên **139**, toàn bộ pass.
+- Bộ kiểm thử hiện có **188 test**; kết quả rà soát đầy đủ được ghi ở mục 10.
 - Web application có API và giao diện, 23/23 headless-browser acceptance pass.
 
 Phát hiện đáng chú ý nhất là **metric bất đồng**: trên confirmation, Qini xếp
@@ -212,7 +221,7 @@ conversion-equivalent scenario, không phải doanh thu hay lợi nhuận quan s
 
 ## 7. Điều học được về từng phương pháp
 
-### Rank-Learner (ICLR 2026)
+### Rank-Learner (ICML 2026)
 
 Là challenger CATE-style mạnh nhất ở screening 20% (`0,000698` so với
 X-Renormalized `0,000693`), nhưng **tụt hạng khi có nhiều dữ liệu hơn**: ở full
@@ -394,7 +403,8 @@ docstring của `src/proxy_diagnostic.py`.
 Mục 8 ghi nhận resource gate chỉ được kiểm tra **trước khi chạy**, và ở các stage full-data
 RAM khả dụng đã tụt xuống 1,55 GB — dưới ngưỡng 2,0 GB đã đăng ký — mà không có gì dừng lại.
 
-`ResourceMonitor` nay nhận `min_available_gb`, bật cờ khi vi phạm, và runner gọi
+`ResourceMonitor` nay nhận cả `min_available_gb` và
+`max_system_memory_percent`, bật cờ khi vi phạm, và runner gọi
 `raise_if_breached()` tại **điểm dừng an toàn**: giữa hai fold và giữa hai candidate.
 
 Vì sao không dừng ngay lập tức: một thread nền không thể ngắt an toàn một lệnh fit LightGBM
@@ -414,11 +424,12 @@ trong script. Sáu test trong `tests/test_resource_gate.py` khóa hành vi này.
 | Full OOF seed 202 | 5.591.836 | 3.067 giây | 3,21 GB | 1,60 GB |
 | Retrospective confirmation | 1.397.959 | 1.704 giây | 2,81 GB | 1,83 GB |
 
-**Quan sát cần ghi:** ở các stage full-data, RAM khả dụng của hệ thống tụt xuống
-1,55–1,83 GB, tức dưới ngưỡng 2,0 GB đã đăng ký trong `resource_gate`. Gate hiện
-được kiểm tra **trước khi chạy**, không kiểm tra liên tục trong lúc chạy, nên các
-run này không bị dừng. Không có run nào thất bại vì bộ nhớ, nhưng biên an toàn hẹp
-hơn mức đã đăng ký và điều này nên được sửa trước khi thêm model nặng hơn.
+**Quan sát cần ghi:** ở các stage full-data lịch sử, RAM khả dụng của hệ thống tụt
+xuống 1,55–1,83 GB, tức dưới ngưỡng 2,0 GB đã đăng ký trong `resource_gate`. Runner
+khi đó chỉ kiểm tra trước lúc chạy, nên các run không bị dừng. Hiện tại gate được
+kiểm tra ở các điểm dừng an toàn giữa fold/candidate và còn giới hạn phần trăm bộ
+nhớ toàn hệ thống. Do artifact cũ không ghi chỉ số phần trăm này, condition 4 lịch
+sử không được suy diễn là pass; migration v2 đánh dấu fail bảo thủ.
 
 Causal Forest đã chạy trên Kaggle sau khi Sprint 3 chốt — xem
 `report/CAUSAL_FOREST_REPORT.md`. Kết quả đó **không** thuộc release Sprint 3 và không
@@ -437,7 +448,7 @@ có slider và input value/cost, đường cong ngân sách có CI, lưới đ�
 phí, uplift theo decile, chẩn đoán cân bằng, batch scoring từ CSV hoặc JSON,
 experiment registry, bảng giới hạn/giả định và export CSV.
 
-Kiểm thử: 19 test cho API và 23/23 headless-browser acceptance check. Trong đó có
+Kiểm thử: 21 test cho API/integration và 23/23 headless-browser acceptance check. Trong đó có
 một test chức năng chấm điểm 2.000 dòng Criteo thật: ở budget 10%, scorer target
 9,9% số dòng và tỷ lệ conversion trong nhóm được target là `0,04545` so với `0,00000`
 ở phần còn lại, tức scorer đã lưu vẫn giữ được sức phân biệt chứ không chỉ trả về
@@ -445,7 +456,8 @@ một test chức năng chấm điểm 2.000 dòng Criteo thật: ở budget 10%
 
 ## 10. Bằng chứng chất lượng
 
-- 139/139 pytest pass, tăng từ 51 ở đầu Sprint 3.
+- 188 test được collect sau integrity review; lệnh full-suite và acceptance checks
+  là bằng chứng phát hành, không dùng con số hard-code trong CI để thay thế kết quả chạy.
 - Synthetic-truth test cho mọi metric mới: score oracle phải thắng random và thắng
   ranking đảo ngược; bất biến với biến đổi đơn điệu tăng; score hằng số cho RATE
   bằng 0; giá trị hữu hạn trên mẫu rare-outcome.
@@ -475,7 +487,7 @@ một test chức năng chấm điểm 2.000 dòng Criteo thật: ở budget 10%
 - **Production A/B test** của learned policy chưa có; mọi kết quả là offline.
 - **Docker, CI đầy đủ, video demo và slide deck** — lệch khỏi kế hoạch gốc của Sprint 3;
   xem `_noi-bo/bao-cao-tuan/WEEK_05.md` mục 5.1. CI chạy phần test không cần dữ liệu đã được
-  thêm sau (`.github/workflows/tests.yml`, 98/139 test); Docker và phần trình bày chưa có.
+  thêm sau (`.github/workflows/tests.yml`); Docker và phần trình bày chưa có.
 - **LICENSE** chưa có; đây là quyết định về quyền sở hữu, không tự chọn thay chủ repo.
 
 ### Ba hạng mục đã hoàn thành sau khi bản đầu của báo cáo này được viết

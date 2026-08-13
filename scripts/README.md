@@ -1,10 +1,20 @@
 # Chỉ mục script
 
-27 script, nhóm theo vai trò. Không script nào được di chuyển khỏi thư mục này: các lệnh
+Các script được nhóm theo vai trò. Không script nào được di chuyển khỏi thư mục này: các lệnh
 tái lập trong `report/SPRINT_1|2|3_FINAL_REPORT.md` trích dẫn đúng đường dẫn hiện tại, và
 đổi đường dẫn sẽ làm lệnh trong báo cáo lịch sử không chạy được nữa.
 
 Mọi script đều tự thêm repo root vào `sys.path`, nên chạy được từ bất kỳ thư mục nào.
+
+## Đang dùng — phân tích dữ liệu
+
+| Script | Vai trò |
+|---|---|
+| `run_eda_profile.py` | Đóng băng toàn bộ chẩn đoán dữ liệu vào `output/eda/`: toàn vẹn nguồn, cardinality/sentinel, cân bằng, ATE kèm CI, công suất, heterogeneity theo tầng, prognostic dominance. Phần trình bày ở `notebooks/01_eda_criteo.ipynb`. |
+
+`audit_criteo.py` sinh manifest và balance SMD cho Sprint 1 và vẫn là nguồn của
+`output/sprint1/data_manifest.json`; `run_eda_profile.py` không ghi đè lên nó, mà mở rộng
+phạm vi chẩn đoán và ghi sang thư mục riêng.
 
 ## Đang dùng — vòng cải tiến Sprint 3
 
@@ -14,6 +24,53 @@ Mọi script đều tự thêm repo root vào `sys.path`, nên chạy được t
 | `compare_improvement_candidates.py` | Dựng ensemble, xếp hạng, chốt shortlist. Không đọc confirmation. |
 | `run_sprint3_confirmation.py` | Retrospective confirmation + áp promotion rule. Chạy **đúng một lần**. |
 | `run_proxy_diagnostic.py` | Chẩn đoán khi nào proxy xếp hạng đúng theo CATE. |
+| `migrate_release_artifacts_v2.py` | Migration idempotent cho registry/provenance, condition 4 và random-policy uncertainty của artifact lịch sử; không fit model. |
+
+## Đang dùng — data optimization v1
+
+| Script | Vai trò |
+|---|---|
+| `run_oof_experiment.py --protocol configs/data_optimization_protocol_v1.json` | Chạy bảy candidate EDA-driven; lưu protocol path và auxiliary outcome provenance. |
+| `compare_improvement_candidates.py --protocol configs/data_optimization_protocol_v1.json` | Áp gate thắng Response trên từng fold seed; sinh `advancement_decision.csv`. |
+| `analyze_data_optimization.py` | Gộp EDA, hai seed OOF, paired bootstrap và gate thành `problem_resolution.csv` + `optimization_decision.json`; không fit model, không đọc confirmation. |
+
+## Đang dùng — causal foundation v1
+
+| Script | Vai trò |
+|---|---|
+| `run_oof_experiment.py --protocol configs/causal_foundation_protocol_v1.json` | Chạy Response/Sentinel, Binary DINA, Anchored R25 và Anchored Pattern R theo cùng OOF contract. |
+| `compare_improvement_candidates.py --no-ensembles` | So sánh finalist hai model mà không tạo diagnostic ensemble; contract check bắt buộc cùng source rows/protocol. |
+| `merge_oof_runs.py` | Ghép candidate chạy process-isolated; từ chối nếu source, outcome, treatment, nuisance hoặc DR signal khác từng phần tử. |
+| `analyze_causal_foundation.py` | Sinh `hypothesis_outcomes.csv`, `budget_deltas.csv` và `analysis_summary.json`; không fit model, không đọc confirmation. |
+
+## Đang dùng — top-tail research v2
+
+| Script | Vai trò |
+|---|---|
+| `analyze_top_tail_evidence.py` | Audit hậu nghiệm hard budget 1%/2% trên frozen OOF: một simultaneous band cho 20 cells, event support, membership overlap và provenance hashes. Không fit model, không chọn/promotion candidate; từ chối ghi đè output chính thức. |
+
+Full finalist phải chạy tách process trên máy RAM hạn chế, sau đó ghép:
+
+```powershell
+.venv\Scripts\python.exe scripts\run_oof_experiment.py `
+  --protocol configs\causal_foundation_protocol_v1.json --pool-frac 1 `
+  --fold-seed 101 --stage finalist --n-boot 2 --candidates Response `
+  --output-dir output\improvement\causal_foundation_finalist_seed101_response
+.venv\Scripts\python.exe scripts\run_oof_experiment.py `
+  --protocol configs\causal_foundation_protocol_v1.json --pool-frac 1 `
+  --fold-seed 101 --stage finalist --n-boot 2 --candidates Response-Sentinel `
+  --output-dir output\improvement\causal_foundation_finalist_seed101_sentinel
+.venv\Scripts\python.exe scripts\merge_oof_runs.py `
+  --run-dir output\improvement\causal_foundation_finalist_seed101_response `
+  --run-dir output\improvement\causal_foundation_finalist_seed101_sentinel `
+  --output-dir output\improvement\causal_foundation_finalist_seed101 `
+  --allow-legacy-manifests
+```
+
+`n-boot=2` ở component chỉ hoàn thiện local artifact. Paired inference chính thức chạy một lần sau
+khi ghép: 200 draw cho seed 101 và 100 draw cho seed 202.
+Flag legacy chỉ tái lập artifact lịch sử trước manifest schema v2; merged output bị gắn
+`legacy_diagnostic_not_eligible_for_advancement`. Run mới không được dùng flag này.
 
 ## Đang dùng — sản phẩm
 
@@ -24,7 +81,7 @@ Mọi script đều tự thêm repo root vào `sys.path`, nên chạy được t
 | `smoke_webapp_browser.mjs` | Acceptance headless cho web app, 23 check. |
 | `export_dashboard_data.py` | Dựng payload cho dashboard tĩnh Sprint 2. |
 | `build_dashboard.py` | Dựng `dashboard.html` self-contained. |
-| `smoke_dashboard_browser.mjs` | Acceptance headless cho dashboard tĩnh, 11 check. |
+| `smoke_dashboard_browser.mjs` | Acceptance headless cho dashboard tĩnh, 12 check. Screenshot tạm được tạo mới và kiểm tra kích thước trong mỗi run. |
 
 ## Đang dùng — Causal Forest
 

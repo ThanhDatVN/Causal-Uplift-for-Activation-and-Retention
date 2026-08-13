@@ -121,7 +121,7 @@ Vì confirmation Sprint 2 đã được quan sát và báo cáo ở Sprint 2, m�
 trên tập đó phải gọi là **retrospective confirmation**, không phải prospective test.
 Muốn có bằng chứng hoàn toàn mới cần một randomized campaign log mới.
 
-## 6. Rank-Learner (ICLR 2026)
+## 6. Rank-Learner (ICML 2026)
 
 Nguồn: *Rank-Learner: Orthogonal Ranking of Treatment Effects*, arXiv 2602.03517.
 Ý tưởng: xếp hạng treatment effect là bài toán dễ hơn ước lượng chính xác CATE, nên
@@ -138,12 +138,12 @@ t̃         = t_τ + ω_τ·Δ_η
 L         = E[ ℓ( σ(g(X) − g(X′)), t̃ ) ]
 ```
 
-Hai lựa chọn hiện thực **không** lấy từ paper, vì repo chỉ đọc được phần mô tả
-thuật toán chứ không đọc được appendix hiện thực:
+Hai lựa chọn hiện thực khác paper được ghi rõ:
 
-1. `ℓ` được chọn là squared loss trên xác suất `σ(g_i − g_j)`. Gradient
-   `2(σ(d) − t̃)·σ′(d)` và Gauss–Newton Hessian `2·σ′(d)²` được đưa vào LightGBM
-   qua custom objective.
+1. Paper dùng mạng feed-forward/Adam; repo dùng LightGBM custom objective. Loss
+   vẫn là binary cross-entropy của paper: với `p=σ(g_i−g_j)`, gradient theo
+   pair difference là `p−t̃` và Hessian là `p(1−p)`. Pseudo-label được clip vào
+   `(10⁻⁶, 1−10⁻⁶)` để objective hữu hạn.
 2. Paper dùng "một tập con ngẫu nhiên các cặp rút đều ở mỗi epoch". Ở đây tập con
    đó là **ghép cặp hoàn hảo ngẫu nhiên**: mỗi vòng boosting xáo trộn toàn bộ chỉ
    số rồi ghép các vị trí liền kề. Cách này giữ tính rút đều theo từng cặp, cho mỗi
@@ -186,9 +186,11 @@ mặc định của paper. Tối ưu bằng SLSQP với ràng buộc `Σw = 1, w
 
 Hai ràng buộc protocol:
 
-1. Weights chỉ học trên prediction out-of-fold. `cross_fitted_ensemble_score` còn
-   tách thêm một lớp nữa để bản thân điểm ensemble cũng là out-of-sample so với
-   bước học weights.
+1. Weights chỉ học trên prediction out-of-fold. `cross_fitted_weight_ensemble_score`
+   tách thêm một lớp để điểm ensemble là out-of-sample so với **bước học weights**.
+   Base predictions không được refit theo lớp ngoài này, vì vậy đây không phải
+   fully nested stacking; artifact ghi rõ `validation_scope` và
+   `nested_base_models=false`.
 2. DR loss chỉ có nghĩa cho score có scale CATE. Response và Rank-Learner không
    được đưa vào Q-aggregation; với chúng chỉ có `rank_average_score`, một heuristic
    không có bảo đảm lý thuyết nào ở đây.
@@ -217,3 +219,16 @@ Promotion rule được khóa trước khi chạy confirmation:
 4. không regression về runtime gate, calibration hoặc guardrail.
 
 Không đạt điều kiện 3 thì giữ champion đơn giản hơn và phát hành challenger kèm CI.
+
+## 9. Phụ lục sau Sprint 3 — data optimization v1
+
+Protocol `configs/data_optimization_protocol_v1.json` là vòng development riêng, không sửa
+protocol Sprint 3 đã đóng băng. Nó thêm hai giả thuyết trực tiếp từ EDA:
+
+1. cờ sentinel và sentinel count được fit chỉ trên `X_train` của từng fold;
+2. funnel factorization dùng `visit` làm auxiliary outcome, nhưng không đưa `visit` vào input
+   lúc scoring.
+
+Gate shortlist cũng được siết lại: top-N không đủ điều kiện đi tiếp. Challenger phải thắng
+Response theo `policy_area_dr` trên từng fold seed đã đăng ký. Kết quả và giới hạn suy luận nằm
+trong `report/DATA_OPTIMIZATION_REPORT.md`; champion chưa thay đổi.

@@ -78,12 +78,29 @@
     "condition_1": "policy_area_dr OOF cua challenger > Response o ca hai fold seed",
     "condition_2": "point estimate tren retrospective confirmation cung dau",
     "condition_3": "paired 95% CI cua chenh lech policy_area_dr co lower bound > 0",
-    "condition_4": "khong regression ve runtime gate, calibration hoac guardrail",
+    "condition_4": "khong vi pham resource gate; score huu han/khong suy bien; calibration huu han neu la CATE-scale",
+    "condition_4_checks": {
+      "require_resource_gate_passed": true,
+      "require_finite_nonconstant_score": true,
+      "require_finite_calibration_for_cate_scale": true
+    },
     "fallback": "giu Response va phat hanh challenger kem CI"
   },
   "peak_process_rss_gb": 2.8144874572753906,
   "min_system_available_ram_gb": 1.8274002075195312,
   "elapsed_seconds": 1703.7838339805603,
   "random_policy_area_mean": 0.00015124520489073604,
-  "random_policy_area_std": 2.726191484319352e-05
+  "random_policy_area_std": 2.726191484319352e-05,
+  "resource_gate_passed": false,
+  "max_system_memory_percent": null,
+  "resource_gate_evaluation": "historical run did not capture max memory percent; conservative fail",
+  "protocol_integrity_revision": {
+    "revised_utc": "2026-08-09T00:00:00+00:00",
+    "scope": "machine-readable clarification only",
+    "changes": [
+      "record fixed randomized-design propensity value 0.85",
+      "expand pre-existing condition 4 into explicit resource, score and calibration checks"
+    ],
+    "decision_impact": "none; every challenger already failed OOF wins and paired-CI conditions"
+  }
 }

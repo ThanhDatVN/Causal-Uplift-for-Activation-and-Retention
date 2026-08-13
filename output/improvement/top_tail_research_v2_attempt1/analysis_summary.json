@@ -1,0 +1,33 @@
+{
+  "protocol_id": "top-tail-research-v2",
+  "analysis_kind": "post_hoc_retrospective_audit_not_model_selection",
+  "source_population_sha256": "2f9a75e0b5572f108993310af120552d129982dc2d4d2016ee2ed0f7a020806a",
+  "n_rows": 838776,
+  "fold_seeds": [
+    101,
+    202
+  ],
+  "budgets": [
+    0.01,
+    0.02
+  ],
+  "registered_challengers": [
+    "Response-Sentinel",
+    "Anchored-R25",
+    "Anchored-R25-Sentinel",
+    "Anchored-Pattern-R",
+    "DINA-CATE-Sentinel"
+  ],
+  "family_size": 20,
+  "n_boot": 200,
+  "critical_value": 3.111821397822424,
+  "all_causal_point_differences_positive": true,
+  "any_causal_simultaneous_lower_bound_positive": false,
+  "all_causal_simultaneous_lower_bounds_positive": false,
+  "minimum_causal_overlap_fraction": 0.6130916895194944,
+  "minimum_control_events_in_causal_tail": 84,
+  "inference_scope": "conditional_on_fixed_oof_scores",
+  "training_uncertainty_in_interval": false,
+  "decision": "retain_response_and_carry_hypothesis_to_new_preregistered_data",
+  "promotion_allowed": false
+}

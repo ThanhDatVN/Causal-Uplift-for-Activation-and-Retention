@@ -1,0 +1,55 @@
+{
+  "analysis_schema_version": 2,
+  "protocol_id": "top-tail-research-v2",
+  "protocol_path": "configs/top_tail_research_protocol_v2.json",
+  "protocol_sha256": "f2ee916a6574eab27a215a27dde2ee966629eaa8cf512dc82971222914c00881",
+  "created_utc": "2026-08-09T15:14:59.249228+00:00",
+  "code_state": {
+    "commit_sha": "336d7770de8534b785eec89c980536d9ba06996a",
+    "working_tree_dirty": true,
+    "working_tree_diff_sha256": "6225685780f5151ebce919bc656ec9c9f8c35e8b61ddd614c636937634e947d1"
+  },
+  "input_artifacts": {
+    "101": {
+      "run_dir": "output/improvement/causal_foundation_screen_seed101",
+      "manifest_sha256": "1fc331217f1f2dece6f9139dfa66039ee8c7ace547bc1542c26d0031ae0f82a7",
+      "oof_scores_sha256": "0931f3586fd3359f5446381d66b32c358f4e879fa45196861dabcc41431ed7f4"
+    },
+    "202": {
+      "run_dir": "output/improvement/causal_foundation_screen_seed202",
+      "manifest_sha256": "09087b621cab93ee2491a4f9ee8ffa06e1dbc995197d637987222084ec3e9d6a",
+      "oof_scores_sha256": "549184c6fcfcf5f5c2fb8343e958b4250de060e0cd010840363e79bdca51003f"
+    }
+  },
+  "analysis_kind": "post_hoc_retrospective_audit_not_model_selection",
+  "source_population_sha256": "2f9a75e0b5572f108993310af120552d129982dc2d4d2016ee2ed0f7a020806a",
+  "n_rows": 838776,
+  "fold_seeds": [
+    101,
+    202
+  ],
+  "budgets": [
+    0.01,
+    0.02
+  ],
+  "registered_challengers": [
+    "Response-Sentinel",
+    "Anchored-R25",
+    "Anchored-R25-Sentinel",
+    "Anchored-Pattern-R",
+    "DINA-CATE-Sentinel"
+  ],
+  "family_size": 20,
+  "n_boot": 200,
+  "bootstrap_seed": 260809,
+  "critical_value": 3.111821397822424,
+  "all_causal_point_differences_positive": true,
+  "any_causal_simultaneous_lower_bound_positive": false,
+  "all_causal_simultaneous_lower_bounds_positive": false,
+  "minimum_causal_overlap_fraction": 0.6130916895194944,
+  "minimum_control_events_in_causal_tail": 84,
+  "inference_scope": "conditional_on_fixed_oof_scores",
+  "training_uncertainty_in_interval": false,
+  "decision": "retain_response_and_carry_hypothesis_to_new_preregistered_data",
+  "promotion_allowed": false
+}

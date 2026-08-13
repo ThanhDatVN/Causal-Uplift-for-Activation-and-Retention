@@ -126,6 +126,7 @@ tích thay vì đọc code:
 | [`01_eda_criteo.ipynb`](notebooks/01_eda_criteo.ipynb) | Phân tích dữ liệu: toàn vẹn nguồn, cardinality và sentinel value, cân bằng covariate (SMD + Love plot), propensity tuyến tính và phi tuyến, overlap, bằng chứng số cho leakage hậu can thiệp, ATE/risk ratio kèm CI, MDE, heterogeneity theo tầng và chẩn đoán prognostic dominance | 25/25 code cell, 9 biểu đồ |
 | [`02_modeling_and_evaluation.ipynb`](notebooks/02_modeling_and_evaluation.ipynb) | Baseline Response so với 8 challenger: estimand, protocol đăng ký trước, OOF hai fold seed, paired bootstrap, bất đồng metric, promotion rule, threats to validity | 18/18 code cell, 5 biểu đồ |
 | [`causal_forest.ipynb`](notebooks/causal_forest.ipynb) | Chạy `CausalForestDML` ba stage 20→30→50% trên Kaggle. Bản notebook Kaggle trả về sau `Save & Run All`, 53,2 phút, không exception | 10/10 code cell |
+| [`causal_forest_rare_outcome.ipynb`](notebooks/causal_forest_rare_outcome.ipynb) | Cấu hình `rare-outcome` trên split Sprint 2/3, đăng ký trước ở `configs/causal_forest_rare_outcome_protocol_v1.json`. Sửa `min_samples_leaf` cho outcome hiếm | chưa chạy |
 
 Notebook `02` **đọc lại artifact đã đóng băng** trong `output/`, không huấn luyện lại —
 chạy vài giây và không cần file dữ liệu 13,98 triệu dòng. Việc huấn luyện nằm ở
@@ -301,7 +302,7 @@ py -3.12 -m venv .venv
 ```
 
 ```powershell
-.venv\Scripts\python.exe -m pytest tests -q          # 258 test
+.venv\Scripts\python.exe -m pytest tests -q          # 268 test
 node scripts\smoke_webapp_browser.mjs                # 23 acceptance check
 ```
 
@@ -320,34 +321,16 @@ Sprint 2:
   --pool-frac 1.0 --n-boot 500 --output-dir output\sprint2
 ```
 
-Sprint 3 (lệnh đầy đủ trong [báo cáo](report/SPRINT_3_FINAL_REPORT.md) mục 12):
+Sprint 3:
 
 ```powershell
 .venv\Scripts\python.exe scripts\run_oof_experiment.py --pool-frac 0.20 --stage screen `
   --n-boot 300 --output-dir output\improvement\screen
 ```
 
-Data optimization v1 (toàn bộ lệnh trong
-[báo cáo](report/DATA_OPTIMIZATION_REPORT.md) mục 9):
-
-```powershell
-.venv\Scripts\python.exe scripts\run_oof_experiment.py `
-  --protocol configs\data_optimization_protocol_v1.json `
-  --pool-frac 0.15 --fold-seed 101 --stage screen `
-  --output-dir output\improvement\data_opt_screen_seed101
-.venv\Scripts\python.exe scripts\analyze_data_optimization.py
-```
-
-Causal foundation v1 (full process-isolated commands ở
-[script index](scripts/README.md)):
-
-```powershell
-.venv\Scripts\python.exe scripts\run_oof_experiment.py `
-  --protocol configs\causal_foundation_protocol_v1.json `
-  --pool-frac 0.15 --fold-seed 101 --stage screen --n-boot 200 `
-  --output-dir output\improvement\causal_foundation_screen_seed101
-.venv\Scripts\python.exe scripts\analyze_causal_foundation.py
-```
+Lệnh đầy đủ của cả bảy vòng — Sprint 1–3, data optimization, causal foundation, top-tail và
+Causal Forest — nằm trong một runbook duy nhất:
+[docs/REPRODUCTION.md](docs/REPRODUCTION.md).
 
 Run cần file Criteo v2.1 với SHA‑256:
 

@@ -452,7 +452,8 @@ Kiểm thử: 21 test cho API/integration và 23/23 headless-browser acceptance 
 một test chức năng chấm điểm 2.000 dòng Criteo thật: ở budget 10%, scorer target
 9,9% số dòng và tỷ lệ conversion trong nhóm được target là `0,04545` so với `0,00000`
 ở phần còn lại, tức scorer đã lưu vẫn giữ được sức phân biệt chứ không chỉ trả về
-đúng kiểu dữ liệu. Runbook: `_noi-bo/van-hanh/WEBAPP.md`.
+đúng kiểu dữ liệu. Lệnh chạy và acceptance test:
+[`../docs/REPRODUCTION.md`](../docs/REPRODUCTION.md) mục 9.
 
 ## 10. Bằng chứng chất lượng
 
@@ -486,49 +487,20 @@ một test chức năng chấm điểm 2.000 dòng Criteo thật: ở budget 10%
   dataset thứ hai.
 - **Production A/B test** của learned policy chưa có; mọi kết quả là offline.
 - **Docker, CI đầy đủ, video demo và slide deck** — lệch khỏi kế hoạch gốc của Sprint 3;
-  xem `_noi-bo/bao-cao-tuan/WEEK_05.md` mục 5.1. CI chạy phần test không cần dữ liệu đã được
-  thêm sau (`.github/workflows/tests.yml`); Docker và phần trình bày chưa có.
+  đổi lấy một vòng cải tiến có đăng ký trước và một web application. CI chạy phần test không cần
+  dữ liệu đã được thêm sau (`.github/workflows/tests.yml`); Docker và phần trình bày chưa có.
 - **LICENSE** chưa có; đây là quyết định về quyền sở hữu, không tự chọn thay chủ repo.
 
-### Ba hạng mục đã hoàn thành sau khi bản đầu của báo cáo này được viết
+Ba hạng mục từng được ghi là chưa làm — resource gate kiểm tra liên tục, power diagnostic
+bằng outcome `visit` và diagnostic đánh giá proxy utility — đã được thực hiện sau đó; kết
+quả và bằng chứng ở mục 7bis.
 
-Bản đầu ghi ba mục dưới đây là chưa làm. Chúng đã được thực hiện, kết quả ở mục 7bis:
+Hướng nghiên cứu còn mở, kèm bằng chứng số cho hướng đã đóng:
+[`../planning/README.md`](../planning/README.md).
 
-| Hạng mục | Trạng thái | Bằng chứng |
-|---|---|---|
-| Resource gate kiểm tra liên tục | **Đã làm** | `src/experiment.py::ResourceMonitor`, `tests/test_resource_gate.py` |
-| Power diagnostic bằng outcome `visit` | **Đã làm** | `output/improvement/screen_visit/`, mục 7bis.1 |
-| Diagnostic đánh giá proxy utility | **Đã làm** | `src/proxy_diagnostic.py`, `output/improvement/proxy_diagnostic/`, mục 7bis.2 |
+## 12. Tái lập
 
-### Hướng tiếp theo còn lại
-
-Xếp theo tỷ lệ giá trị trên chi phí trong `planning/RESEARCH_LANDSCAPE_2026.md` mục 5:
-
-1. **causal post-processing** của Response bằng dữ liệu randomized (arXiv 2406.09567);
-   repo đã có sẵn cả hai thành phần đầu vào mà phương pháp yêu cầu. **Chặn ở mức nguồn
-   `B`** — mới đọc được abstract và mô tả phương pháp, chưa đọc được công thức.
-2. **mở rộng `src/policy.py` sang ràng buộc ngân sách không đồng nhất** theo cấu trúc
-   knapsack (arXiv 2605.12235); top-k hiện tại là trường hợp riêng khi chi phí đồng nhất.
-   **Chặn ở mức nguồn `B`.**
-3. **ForestDRLearner (M-FDR)** trong kế hoạch P1 chưa hiện thực; sẽ cần chạy trên Kaggle
-   như Causal Forest vì cùng đặc tính tài nguyên.
-
-Cả ba đều yêu cầu nâng nguồn lên mức xác minh `A` (đọc được công thức) trước khi code,
-theo quy tắc nguồn của dự án.
-
-## 12. Lệnh tái lập
-
-```powershell
-.venv\Scripts\python.exe scripts\run_oof_experiment.py --pool-frac 0.01 --stage smoke --n-boot 50 --output-dir output\improvement\smoke
-.venv\Scripts\python.exe scripts\run_oof_experiment.py --pool-frac 0.20 --stage screen --n-boot 300 --output-dir output\improvement\screen
-.venv\Scripts\python.exe scripts\run_oof_experiment.py --pool-frac 1.0 --stage finalist --fold-seed 101 --n-boot 200 --candidates "Response,X-Renormalized,S-Under7,Rank-K05,Rank-K1,Rank-K2" --output-dir output\improvement\finalist
-.venv\Scripts\python.exe scripts\run_oof_experiment.py --pool-frac 1.0 --stage finalist --fold-seed 202 --n-boot 200 --candidates "Response,X-Renormalized,S-Under7,Rank-K05,Rank-K1,Rank-K2" --output-dir output\improvement\finalist_seed202
-.venv\Scripts\python.exe scripts\compare_improvement_candidates.py --run-dir output\improvement\finalist --run-dir output\improvement\finalist_seed202 --n-boot 200 --shortlist-size 4 --output-dir output\improvement\finalist_comparison
-.venv\Scripts\python.exe scripts\run_sprint3_confirmation.py --shortlist output\improvement\finalist_comparison\shortlist.json --oof-run-dir output\improvement\finalist_comparison --n-boot 500
-.venv\Scripts\python.exe scripts\build_champion_scorer.py
-.venv\Scripts\python.exe -m pytest tests -q
-node scripts\smoke_webapp_browser.mjs
-```
+Lệnh đầy đủ: [`../docs/REPRODUCTION.md`](../docs/REPRODUCTION.md) mục 4.
 
 ## 13. Phạm vi suy luận
 

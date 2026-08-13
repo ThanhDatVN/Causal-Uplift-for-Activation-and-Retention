@@ -109,18 +109,14 @@ không bị một tie block lớn chi phối; vấn đề chính là rare-event 
 
 Kết luận phù hợp là “carry-forward hypothesis”, không phải “causal model thắng Response”.
 
-## 7. Hành động nghiên cứu tiếp theo
+## 7. Ràng buộc với vòng sau
 
-Thứ tự đã khóa trong research plan:
+Không model mới nào được thêm hồi tố vào 20-cell family này; muốn kiểm định thêm thì phải
+đăng ký một protocol mới.
 
-1. hybrid control-risk + DINA với shrinkage học bằng inner-OOF stacker;
-2. baseline-logit-only và raw DINA là ablation bắt buộc;
-3. synthetic matrix gồm constant-log-odds, aligned/anti-aligned và disjoint-support;
-4. direct-ranking objective sau khi hybrid có kết quả;
-5. rare-outcome class flipping chỉ là sensitivity;
-6. relative-risk/event-aware causal forest để vòng Kaggle sau.
-
-Không model mới nào được thêm hồi tố vào 20-cell family này.
+Thứ tự thực thi đã khóa và trạng thái từng bước:
+[`../planning/LATEST_CAUSAL_RESEARCH_AND_EXPERIMENT_PLAN_2026.md`](../planning/LATEST_CAUSAL_RESEARCH_AND_EXPERIMENT_PLAN_2026.md)
+mục 9.
 
 ## 8. Artifact và provenance
 
@@ -135,14 +131,9 @@ Summary lưu protocol SHA, input manifest/NPZ SHA, bootstrap seed và code state
 được ghi đè. Các thư mục `top_tail_research_v2_attempt*` là audit trail của lần sinh artifact trước khi
 provenance guard hoàn chỉnh, không phải nguồn số ưu tiên.
 
-Lệnh tái lập:
-
-```powershell
-.venv\Scripts\python.exe scripts\analyze_top_tail_evidence.py
-```
-
-Khi official artifact đã tồn tại, lệnh phải từ chối ghi đè. Muốn chạy sensitivity phải dùng protocol và
-output namespace mới.
+Lệnh tái lập: [`../docs/REPRODUCTION.md`](../docs/REPRODUCTION.md) mục 7. Khi artifact chính
+thức đã tồn tại, lệnh phải từ chối ghi đè; muốn chạy sensitivity phải dùng protocol và output
+namespace mới.
 
 ## 9. Kiểm thử
 

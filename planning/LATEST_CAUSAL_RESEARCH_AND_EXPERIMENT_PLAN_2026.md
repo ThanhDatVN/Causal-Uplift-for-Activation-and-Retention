@@ -240,17 +240,69 @@ Chi tiết và đường dẫn artifact nằm ở
 
 ## 9. Thứ tự thực thi
 
+Thứ tự này được khoá trước và **không đổi sau khi xem kết quả**. Cột trạng thái cập nhật
+12/08/2026.
+
 ```text
-research ledger + estimand lock
-  -> synthetic truth/inference tests
-  -> hybrid Eq.2/Eq.3 structural implementation
-  -> smoke code path (không chọn model)
-  -> frozen future screen
-  -> PoLeCe/max-bootstrap family gate
-  -> one locked business budget
-  -> new randomized confirmation
-  -> causal-forest Kaggle ablations
+[xong]  research ledger + estimand lock
+[xong]  synthetic truth/inference tests
+[xong]  hybrid Eq.2/Eq.3 structural implementation   <- src/hybrid.py + tests/test_hybrid.py
+[chưa]  smoke code path (không chọn model)           <- BƯỚC KẾ TIẾP
+[chưa]  frozen future screen
+[chưa]  PoLeCe/max-bootstrap family gate
+[chưa]  one locked business budget
+[chưa]  new randomized confirmation
+[chưa]  causal-forest Kaggle ablations
 ```
+
+Ba bước đầu đã xong. `src/hybrid.py` có test pass nhưng **không có dòng nào trong
+`output/improvement/registry.csv`** — đó là ranh giới giữa "đã hiện thực" và "đã chạy", và tài
+liệu này không được viết lẫn hai trạng thái đó.
 
 Không chạy lại Causal Forest trong vòng nền tảng này. Đó là trì hoãn có chủ đích để tránh dùng screen đã
 đọc như một tuning loop, không phải kết luận rằng forest không thể cải thiện.
+
+## 10. Trạng thái 12/08/2026 và điều chỉnh hướng
+
+Sau năm vòng cải tiến, kế hoạch cần một điều chỉnh về **trọng số ưu tiên**, không phải về thứ tự
+đã khoá ở mục 9.
+
+### 10.1 Một hướng đã đóng, có bằng chứng số
+
+Hướng "tìm model tốt hơn trên Criteo `conversion`" **đã đóng**. Không phải vì đã thử hết cách, mà
+vì phép đo không đủ phân giải để công nhận một cải tiến kể cả khi cải tiến đó có thật:
+
+| Metric | Chênh lệch CF − Response | Nửa độ rộng CI | Số dòng cần để phân biệt |
+|---|---:|---:|---:|
+| `policy_area_dr` | `+4,96e-07` | `5,90e-05` | `2,97e10` — **2.123× toàn bộ Criteo** |
+| Qini | `−1,32e-02` | `2,39e-02` | `6,85e06` — **3,3× holdout hiện tại** |
+
+Trên metric chính, CI rộng gấp **119 lần** chênh lệch cần đo. Con số 2.123× không phải "khó" mà
+là không tồn tại.
+
+Dòng thứ hai chỉ ra chỗ vẫn còn dư địa: trên Qini, thiếu hụt chỉ `3,3` lần — nằm trong tầm với.
+Nhưng đó là cải tiến về **thiết kế đánh giá**, không phải về model.
+
+### 10.2 Ba hướng còn mở, xếp theo giá trị trên chi phí
+
+**Ưu tiên 1 — external validity trên dataset thứ hai.** Trả lời câu còn bỏ ngỏ quan trọng nhất:
+Response thắng *vì outcome hiếm* hay *nói chung*? Đây là hướng duy nhất biến kết quả từ "đúng
+trên một dataset" thành một phát biểu có phạm vi rộng hơn.
+
+Điều kiện tiên quyết chưa làm: đọc mã nguồn `uplift-bench` để nâng claim "benchmark công khai
+không có baseline Response" từ mức xác minh `B` lên `A`. Nếu hoá ra họ **có** baseline outcome
+thì luận điểm định vị của hướng này sụp — nên kiểm **trước** khi chạy, không phải sau.
+
+**Ưu tiên 2 — cross-fitted evaluation trên toàn bộ dữ liệu.** Nới chính giới hạn ở mục 10.1:
+thiếu hụt trên Qini chỉ `3,3` lần. Chi phí thấp, và nó cải thiện độ phân giải cho mọi vòng sau
+chứ không chỉ cho một model. Hướng này nằm **ngoài** thứ tự đã khoá ở mục 9; muốn mở phải quyết
+định nó đứng ở đâu trong thứ tự đó.
+
+**Ưu tiên 3 — M1 hybrid theo đúng thứ tự mục 9.** Đã code, chưa chạy. Tiêu chí dừng đặt trước:
+nếu hệ số của `g̃` gần 0 và hybrid không vượt baseline-logit trên synthetic/holdout, kết luận hợp
+lý là **CATE signal chưa nhận diện được**, không phải tiếp tục tăng độ sâu forest.
+
+### 10.3 Điều không nên làm
+
+Thêm một meta-learner thứ mười ba vào cùng tập dữ liệu cũ. Mục 10.1 đã cho bằng chứng số rằng
+hướng đó không đi tới đâu. Muốn mở lại phải nêu **bằng chứng mới**, không phải nêu lại kỳ vọng cũ.

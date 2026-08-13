@@ -33,6 +33,19 @@ phần bù:
 Hash của ba source-index được lưu trong manifest. Pipeline Sprint 2 không đọc prediction
 hay Y/T của final test Sprint 1.
 
+**Vì sao lấy phần bù thay vì lấy mẫu mới.** Một sample ngẫu nhiên mới trên toàn bộ 13,98
+triệu dòng gần như chắc chắn chồng lấn với test Sprint 1. Chồng lấn đó không gây lỗi chạy
+và cũng không hiện ra trong bất kỳ metric nào — nó chỉ âm thầm biến "confirmation" thành
+một phần dữ liệu đã được nhìn. Lấy đúng phần bù của sample 50% seed 42 là cách duy nhất
+loại trừ khả năng đó một cách kiểm chứng được, và đó là lý do
+`src/data.py::stratified_complement` tồn tại thay vì gọi lại `stratified_sample` với seed
+khác.
+
+Ba split có conversion rate `0,002917 / 0,002916 / 0,002916` và treatment rate `0,85` gần
+như trùng khít nhau. Đây là kiểm tra bắt buộc chứ không phải trang trí: nếu phép chia làm
+lệch tỷ lệ outcome hiếm giữa các split thì mọi so sánh giữa validation và confirmation sẽ
+lẫn hiệu ứng của split vào hiệu ứng của model.
+
 ## 3. Phương pháp và evidence audit
 
 | Thành phần | Nguồn đã đọc | Phạm vi dùng |
@@ -82,6 +95,32 @@ Calibration cải thiện scale EUCE nhưng không chứng minh ranking tốt h�
 phương pháp “exact” không tự động cải thiện ranking so với phép xấp xỉ đang dùng cho rare
 outcome.
 
+### 4.1 Nhận xét — calibration và ranking là hai trục độc lập
+
+Bảng trên chứa một kết quả dễ bị đọc sai, nên cần tách bạch rõ.
+
+**X‑Calibrated cải thiện calibration gần gấp đôi** — EUCE giảm từ `0,000462` xuống
+`0,000240` — **nhưng ranking lại kém đi một chút**: Qini `0,188528` so với `0,191557`, và
+CI của chênh lệch `[−0,010774; 0,004700]` chứa 0. Nói cách khác, đưa điểm số về đúng thang
+CATE không làm thứ tự ưu tiên tốt hơn.
+
+Điều này đúng về mặt toán học chứ không phải nghịch lý: τ-isotonic là một phép biến đổi
+**đơn điệu tăng**, mà Qini chỉ phụ thuộc thứ hạng. Phần chênh lệch quan sát được đến từ
+cách xử lý tie sau khi isotonic gộp các đoạn hằng, không từ một sự sắp xếp lại có ý nghĩa.
+
+Hệ quả cho sản phẩm: **chọn calibration theo nhu cầu diễn giải, không theo kỳ vọng nó cải
+thiện targeting.** Nếu chỉ cần biết "target ai" thì calibration không cần thiết; nếu cần
+trả lời "hiệu ứng ước tính bao nhiêu" cho bên kinh doanh thì cần, và cái giá phải trả là
+gần như bằng 0 về ranking.
+
+**T‑LocalExact là kết quả âm rõ ràng nhất của Sprint 2** và đáng ghi lại: Qini `0,117668`,
+thấp hơn X‑Renormalized `0,073889` với CI `[−0,107381; −0,035891]` nằm hoàn toàn dưới 0.
+Đây là candidate duy nhất trong sprint bị tách biệt rõ ràng. Bài học không phải "exact
+restoration sai" mà là phạm vi áp dụng của nó hẹp: công thức đúng trong phạm vi Eq. 12 của
+Nyberg & Klami cho double-classifier, và việc ghép nó vào một kiến trúc khác không được
+paper bảo chứng. Dự án ghi rõ điều này ở mục 3 thay vì trình bày kết quả âm như một thất
+bại của nguồn.
+
 ## 5. Policy result
 
 Main scenario: budget 10%, value/conversion = 1, cost/contact = 0,0005.
@@ -100,6 +139,34 @@ Response vì selection contract đã khóa.
 Với một triệu khách hàng, Response top 10% tương ứng khoảng `848,9` incremental
 conversions gross, 95% CI `[657,8; 1.027,0]`. Đây là phép scale với assumption population
 tương tự confirmation, không phải forecast đã deploy.
+
+### 5.1 Vì sao giữ Response khi hai model khác có point estimate cao hơn
+
+Đây là quyết định gây tranh cãi nhất của Sprint 2, nên lý do phải được ghi đầy đủ.
+
+Trên confirmation, X‑Renormalized (`0,000825`) và X‑Calibrated (`0,000826`) đều cao hơn
+Response (`0,000799`). Nếu chỉ nhìn bảng này, đổi champion là lựa chọn hiển nhiên. Dự án
+không đổi, vì ba lý do xếp theo mức ràng buộc:
+
+1. **Selection contract đã khóa trước.** Champion được chọn trên validation, và
+   confirmation tồn tại để *kiểm định* lựa chọn đó chứ không phải để chọn lại. Đổi champion
+   sau khi nhìn confirmation biến confirmation thành một validation split thứ hai, và khi
+   đó dự án không còn tập nào chưa quan sát để kiểm định.
+2. **Chênh lệch không vượt được nhiễu.** X‑Renormalized − Response trên Qini là `0,008768`
+   với CI `[−0,018626; 0,038772]` — rộng gấp hơn bốn lần chênh lệch và chứa 0. Point
+   estimate cao hơn ở đây không phải bằng chứng model tốt hơn.
+3. **Chi phí của một quyết định sai không đối xứng.** Giữ baseline khi challenger thực sự
+   tốt hơn làm mất một phần cải thiện nhỏ và đo được. Đổi sang challenger dựa trên nhiễu
+   làm hỏng chính cơ chế mà mọi kết luận sau này dựa vào.
+
+Điểm đáng chú ý là quyết định này **được xác nhận về sau bằng dữ liệu độc lập**. Ở Sprint 3
+với metric chính mới và cross-fitting OOF trên `5.591.836` dòng, X‑Renormalized xếp dưới
+Response ở cả hai fold seed, và chênh lệch trên confirmation là `−0,0000226`. Nếu Sprint 2
+đã đổi champion theo point estimate, dự án đã phải đảo ngược quyết định đó một sprint sau.
+
+Đây là bằng chứng cụ thể cho giá trị của việc khóa selection contract, và là lý do quy tắc
+"mọi claim A hơn B phải kèm paired CI" được nâng thành quy tắc bắt buộc của
+[`README.md`](README.md) từ đây trở đi.
 
 ## 6. Product output
 
@@ -124,8 +191,9 @@ Full local Sprint 2:
 - minimum system available RAM 1,81 GB.
 
 Causal Forest local smoke 0,1% pass. Kaggle run vẫn cần external session/dataset
-attachment; xem `_noi-bo/van-hanh/KAGGLE_RUNBOOK_COMPLETE.md`. `inference=False` của safe profile có
-nghĩa không yêu cầu `effect_interval()`.
+attachment; runbook đầy đủ ở [`../docs/REPRODUCTION.md`](../docs/REPRODUCTION.md) mục 8 và kết
+quả ba mốc ở [`CAUSAL_FOREST_REPORT.md`](CAUSAL_FOREST_REPORT.md). `inference=False` của safe
+profile có nghĩa không yêu cầu `effect_interval()`.
 
 ## 8. Quality evidence
 
@@ -137,35 +205,19 @@ nghĩa không yêu cầu `effect_interval()`.
 - dashboard 11/11 headless-browser acceptance;
 - full pytest `49/49` pass ở release audit cuối.
 
-## 9. Hạng mục chưa hoàn thành và phạm vi không được suy rộng
+## 9. Tái lập
+
+Lệnh đầy đủ: [`../docs/REPRODUCTION.md`](../docs/REPRODUCTION.md) mục 3.
+
+## 10. Hạng mục chưa hoàn thành và phạm vi không được suy rộng
 
 - Causal Forest Kaggle 20/30/50 chưa chạy. *(Cập nhật 06/08/2026: đã chạy xong sau khi
   báo cáo này chốt. Kết quả và giới hạn diễn giải ở `report/CAUSAL_FOREST_REPORT.md`;
   kết luận của Sprint 2 giữ nguyên vì nó phản ánh bằng chứng có tại thời điểm chốt.)*
 - Chưa có production A/B test của learned policy.
 - Chưa có actual monetary outcome hoặc long-term CLV.
-- Report này được tạo trước commit đầu tiên; trạng thái repository hiện tại được ghi trong
-  `_noi-bo/lich-su/report/repository-audit-2026-07-31.md`.
+- Report này được tạo trước commit đầu tiên; trạng thái repository hiện tại đọc từ lịch sử git
+  và từ [`../output/README.md`](../output/README.md).
 - Random comparator là một ranking cố định bằng seed 42; CI hiện tại chưa tích hợp biến
   thiên qua nhiều random-policy seed.
 - Demo video/GIF thuộc Sprint 3 packaging.
-
-## 10. Lệnh tái lập
-
-```powershell
-.venv\Scripts\python.exe scripts\run_sprint2_local.py --pool-frac 1 --n-boot 500
-.venv\Scripts\python.exe scripts\rebuild_sprint2_qini_bootstrap.py --n-boot 500
-.venv\Scripts\python.exe scripts\rebuild_sprint2_main_policy.py --n-boot 500
-.venv\Scripts\python.exe scripts\rebuild_sprint2_policy_budget_curve.py --n-boot 500
-.venv\Scripts\python.exe scripts\finalize_sprint2_summary.py
-.venv\Scripts\python.exe scripts\export_dashboard_data.py
-.venv\Scripts\python.exe scripts\build_dashboard.py
-node scripts\smoke_dashboard_browser.mjs
-.venv\Scripts\python.exe -m pytest tests -q
-```
-
-## 11. Bàn giao sang Sprint 3
-
-Ưu tiên: clean-run/CI, README, video 60–90 giây, final report/slides,
-link audit và release tag sau khi repository có commit. Incremental CLV chỉ mở sau khi
-causal product được đóng gói; không gắn revenue giả vào Criteo.

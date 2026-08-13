@@ -187,27 +187,9 @@ Kết quả kiểm chứng cuối:
 Các warning còn lại đến từ deprecation của dependency và phát hiện số physical core trong môi
 trường sandbox; không có warning nào làm test fail.
 
-## 9. Cách tái lập
+## 9. Tái lập
 
-```powershell
-.venv\Scripts\python.exe scripts\run_oof_experiment.py `
-  --protocol configs\data_optimization_protocol_v1.json `
-  --pool-frac 0.15 --pool-seed 77 --fold-seed 101 --n-boot 200 `
-  --stage screen --output-dir output\improvement\data_opt_screen_seed101
-
-.venv\Scripts\python.exe scripts\run_oof_experiment.py `
-  --protocol configs\data_optimization_protocol_v1.json `
-  --pool-frac 0.15 --pool-seed 77 --fold-seed 202 --n-boot 30 `
-  --stage screen --output-dir output\improvement\data_opt_screen_seed202
-
-.venv\Scripts\python.exe scripts\compare_improvement_candidates.py `
-  --protocol configs\data_optimization_protocol_v1.json `
-  --run-dir output\improvement\data_opt_screen_seed101 `
-  --run-dir output\improvement\data_opt_screen_seed202 `
-  --n-boot 100 --output-dir output\improvement\data_opt_comparison
-
-.venv\Scripts\python.exe scripts\analyze_data_optimization.py
-```
+Lệnh đầy đủ: [`../docs/REPRODUCTION.md`](../docs/REPRODUCTION.md) mục 5.
 
 ## 10. Giới hạn còn lại
 

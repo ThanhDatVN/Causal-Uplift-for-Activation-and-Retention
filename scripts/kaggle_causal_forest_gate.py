@@ -41,6 +41,16 @@ STAGES = {
     0.50: 0.30,
 }
 
+# Phải khớp SCORE_NAMES trong train_causal_forest.py. Không import để giữ tiến
+# trình giám sát nhẹ — nó đo RSS của cây tiến trình con, nên không nên tự kéo
+# theo lightgbm/econml. `tests/test_causal_forest_rare_outcome.py` khoá hai bảng
+# này bằng nhau.
+SCORE_NAMES = {
+    "kaggle-safe": "cate_causal_forest_kaggle_safe.npy",
+    "research": "cate_causal_forest.npy",
+    "rare-outcome": "cate_causal_forest_rare_outcome.npy",
+}
+
 
 def _sha256(path: Path) -> str:
     digest = hashlib.sha256()
@@ -86,6 +96,20 @@ def main():
     parser.add_argument("--poll-seconds", type=float, default=0.25)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument(
+        "--profile",
+        choices=sorted(SCORE_NAMES),
+        default="kaggle-safe",
+    )
+    parser.add_argument(
+        "--split",
+        choices=["sprint1", "sprint3"],
+        default="sprint1",
+        help=(
+            "sprint3 fit trên development Sprint 2/3 và predict trên confirmation; "
+            "không có thang 20/30/50 nên không cần gate trước đó."
+        ),
+    )
+    parser.add_argument(
         "--skip-prior-gate",
         action="store_true",
         help="Chỉ dùng cho local smoke test; không dùng cho Kaggle release run.",
@@ -94,7 +118,9 @@ def main():
     if not 0 < args.max_ram_fraction < 1:
         raise ValueError("--max-ram-fraction phải nằm trong (0, 1)")
 
-    expected_previous = STAGES[args.frac]
+    # Split sprint3 là một lần chạy duy nhất trên development pool cố định, không
+    # phải một mốc trong thang 20→30→50%, nên ràng buộc gate trước đó không áp dụng.
+    expected_previous = STAGES[args.frac] if args.split == "sprint1" else None
     if expected_previous is not None and not args.skip_prior_gate:
         prior_path = _prior_manifest(args.output_root, expected_previous)
         if not prior_path.exists():
@@ -115,7 +141,11 @@ def main():
     data_form = EXPECTED_SHA256[actual_hash]
     print(f"[data] {args.data_path} dạng {data_form}, checksum khớp", flush=True)
 
-    stage_dir = args.output_root / f"preflight_{_slug(args.frac)}"
+    stage_dir = args.output_root / (
+        f"preflight_{_slug(args.frac)}"
+        if args.split == "sprint1"
+        else f"sprint3_{args.profile.replace('-', '_')}"
+    )
     stage_dir.mkdir(parents=True, exist_ok=True)
     log_path = stage_dir / "train.log"
     # Đường dẫn tuyệt đối suy ra từ vị trí của chính file này. Dùng đường dẫn
@@ -131,8 +161,10 @@ def main():
         str(args.data_path),
         "--frac",
         str(args.frac),
+        "--split",
+        args.split,
         "--profile",
-        "kaggle-safe",
+        args.profile,
         "--output-dir",
         str(stage_dir),
         "--seed",
@@ -159,7 +191,7 @@ def main():
         exit_code = child.wait()
     elapsed = time.time() - started
 
-    score_path = stage_dir / "cate_causal_forest_kaggle_safe.npy"
+    score_path = stage_dir / SCORE_NAMES[args.profile]
     holdout_path = stage_dir / "holdout_test_yt.npz"
     finite = False
     aligned = False
@@ -186,7 +218,8 @@ def main():
         "status": "passed" if passed else "failed",
         "scope": "resource_and_artifact_integrity_gate_only",
         "fraction": args.frac,
-        "profile": "kaggle-safe",
+        "profile": args.profile,
+        "split": args.split,
         "command": command,
         "data": {
             "path": str(args.data_path),
@@ -215,7 +248,11 @@ def main():
         },
         "stop_rule": {
             "max_ram_fraction": args.max_ram_fraction,
-            "may_continue": passed and args.frac < 0.50,
+            # Thang 20→30→50% chỉ tồn tại ở split sprint1; split sprint3 là một
+            # lần chạy duy nhất nên không có mốc kế tiếp để đi tiếp.
+            "may_continue": bool(
+                passed and args.split == "sprint1" and args.frac < 0.50
+            ),
             "quality_not_assessed": True,
         },
         "limitations": [

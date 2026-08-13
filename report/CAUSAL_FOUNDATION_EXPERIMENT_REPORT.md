@@ -140,18 +140,12 @@ Quyết định máy đọc được nằm ở
 `output/improvement/causal_foundation_analysis/analysis_summary.json`: giữ Response; không causal
 candidate advance; không full candidate advance.
 
-Protocol mới, nếu mở, nên ưu tiên:
+Chưa có Kaggle run mới cho Causal Forest trong vòng này; hạng mục đó nằm trong backlog.
 
-1. xác nhận business budget 1–2% rồi đăng ký metric riêng;
-2. DINA effect shrinkage/calibration được chọn trên synthetic hoặc inner validation độc lập;
-3. event-aware inner folds/leaf constraints theo positive từng arm;
-4. residual learner chỉ được rerank extreme top thay vì toàn bộ 1–30%;
-5. Causal Forest: event-aware minimum leaf, balanced/honest sampling, leaf shrinkage, sentinel
-   contract và cùng OOF artifact schema.
+Thứ tự ưu tiên cho protocol kế tiếp, kèm bằng chứng số cho hướng đã đóng:
+[`../planning/README.md`](../planning/README.md).
 
-Các mục Causal Forest để sau khi hoàn thiện code nền tảng; chưa có Kaggle run mới trong vòng này.
-
-## 10. Artifact, tái lập và kiểm thử cuối
+## 10. Artifact và kiểm thử cuối
 
 Nguồn số:
 
@@ -161,14 +155,9 @@ Nguồn số:
 - `output/improvement/causal_foundation_analysis/` — hypothesis table, budget deltas, decision JSON;
 - các thư mục `*_attempt*` — audit trail cho resource stop, không dùng để xếp hạng.
 
-Lệnh phân tích không fit model và không đọc confirmation:
-
-```powershell
-.venv\Scripts\python.exe scripts\analyze_causal_foundation.py
-```
-
-Lệnh screen/finalist đầy đủ và process-isolated merge được liệt kê ở
-[script index](../scripts/README.md). Theory/implementation chi tiết ở
+Lệnh tái lập đầy đủ, gồm cả bước merge process-isolated:
+[`../docs/REPRODUCTION.md`](../docs/REPRODUCTION.md) mục 6. Bước phân tích không fit model và
+không đọc confirmation. Theory/implementation chi tiết ở
 [method guide](../docs/CAUSAL_FOUNDATION_METHOD_GUIDE.md).
 
 Kiểm thử cuối:

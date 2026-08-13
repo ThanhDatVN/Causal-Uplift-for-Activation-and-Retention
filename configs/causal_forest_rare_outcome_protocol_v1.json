@@ -1,0 +1,61 @@
+{
+  "protocol_id": "causal-forest-rare-outcome-v1",
+  "created_utc": "2026-08-13",
+  "status": "registered_not_yet_run",
+  "scope": "single_registered_configuration_run",
+  "motivation": {
+    "problem": "Cau hinh kaggle-safe da chay dat min_samples_leaf=500. Voi treatment 85/15 va conversion rate control 0,1938%, moi la chi co ky vong 0,145 su kien control; sau honest splitting con khoang 0,073. Dai da so la co nhanh control rong, tuc Causal Forest uoc luong hieu so treated - control voi mot ve gan nhu khong co thong tin.",
+    "prior_backlog": "Muc 5 backlog cua causal foundation v1 da ghi 'Causal Forest: event-aware minimum leaf, balanced/honest sampling, leaf shrinkage'.",
+    "why_not_research_profile": "Profile research dung min_samples_leaf=200, tuc 0,058 su kien control moi la. No di sai huong tren dung rang buoc dang bo, va duoc thiet ke cho outcome day hon."
+  },
+  "configuration": {
+    "profile": "rare-outcome",
+    "n_estimators": 500,
+    "min_samples_leaf": 10000,
+    "cv": 3,
+    "max_samples": 0.45,
+    "honest": true,
+    "inference": false,
+    "model_y": "LGBMRegressor(n_estimators=200, max_depth=5)",
+    "model_t": "DummyClassifier(strategy='prior')",
+    "discrete_treatment": true,
+    "seed": 42
+  },
+  "configuration_rationale": {
+    "min_samples_leaf": "10000 dua ky vong su kien control moi la tu 0,145 len 2,904 - gap 20 lan. Do la tham so duy nhat nham thang vao rang buoc bo nhat.",
+    "n_estimators": "500 thay vi 200 de giam variance cua trung binh rung; la nong hon nen chi phi moi cay giam.",
+    "max_samples": "0,45 cho moi cay nhieu du lieu hon, bu lai viec la lon hon lam cay nong.",
+    "cv": "3 fold cross-fitting cho nuisance thay vi 2.",
+    "inference": "Giu False. effect_interval() ton RAM va quyet dinh champion khong can CI ca nhan.",
+    "model_y_unchanged": "Khong doi sang classifier-based nuisance: Sprint 3 da thu discrete_outcome=True cho DR/R-Learner va khong cai thien."
+  },
+  "data": {
+    "split": "sprint3",
+    "train_on": "development = fit + validation cua Sprint 2",
+    "train_rows": 5591836,
+    "predict_on": "confirmation cua Sprint 2",
+    "predict_rows": 1397959,
+    "alignment_contract": "source_index phai trung khit tung phan tu voi output/sprint3/confirmation_predictions.npz",
+    "split_hash_guard": "sha256 cua fit/validation/confirmation source-index phai khop SPRINT2_SPLIT_HASHES"
+  },
+  "evaluation": {
+    "effect_signal": "dr_signal da dong bang trong output/sprint3/confirmation_predictions.npz",
+    "signal_is_frozen": true,
+    "primary_metric": "policy_area_dr",
+    "secondary_metrics": ["autoc_dr", "qini_score", "auuc_score"],
+    "budget_grid": [0.01, 0.02, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30],
+    "comparison": "paired bootstrap voi 9 model trong bang confirmation Sprint 3, dung chung bootstrap weights",
+    "n_boot": 500
+  },
+  "decision_rule": {
+    "promotion_requires": "paired 95% CI cua policy_area_dr difference co lower bound > 0 so voi Response",
+    "expected_outcome": "CI chua 0. Confirmation co 1.397.959 dong, NHO HON holdout Sprint 1 (2.096.940), nen do phan giai thap hon lan do truoc.",
+    "value_if_ci_contains_zero": "Dong lo hong lap luan 'Causal Forest thua vi la qua nho cho outcome hiem'. Ket luan hoa tro thanh ket luan vung thay vi mot cau hinh bi dat sai.",
+    "not_allowed": "Khong duoc tinh chinh tham so sau khi nhin ket qua. Muon thu cau hinh khac phai dang ky protocol v2 va coi la run moi."
+  },
+  "scope_limits": [
+    "Ket qua nay KHONG thay dong Causal Forest cu trong bang release Sprint 1; do la tap test khac va signal khac.",
+    "Day la development evidence tren confirmation da tung duoc quan sat, khong phai randomized confirmation moi.",
+    "Mot cau hinh khong dai dien cho ho Causal Forest."
+  ]
+}

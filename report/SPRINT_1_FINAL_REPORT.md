@@ -4,9 +4,10 @@
 **Bài toán:** Nhắm mục tiêu khuyến mãi bằng hiệu ứng tăng thêm do can thiệp (*Causal Uplift Targeting*)
 **Kết quả chính thức:** `output/sprint1/` và `output/optimization/*sprint1_release*`
 
-> Đây là nguồn kết quả chính thức của Sprint 1. Các báo cáo cũ trong `report/archive/week-01-*`,
-> notebook hoặc dashboard có thể chứa kết quả thăm dò trước khi chạy lại và không được
-> dùng làm kết quả chính thức của dự án.
+> Đây là nguồn kết quả chính thức của Sprint 1. Điểm số đời đầu còn lại trong
+> `output/legacy/` là kết quả thăm dò trước khi chạy lại và **không** được dùng làm kết quả
+> chính thức — xem [`../output/README.md`](../output/README.md) mục "Artifact đời đầu" để
+> biết chỗ dễ trích nhầm nhất.
 
 ## 1. Sprint 1 giải quyết điều gì?
 
@@ -26,12 +27,6 @@ Criteo v2.1. `visit` và `exposure` là biến sau treatment nên không đượ
 
 ## 2. Kiểm toán dữ liệu
 
-Lệnh tái lập:
-
-```powershell
-.venv\Scripts\python.exe scripts\audit_criteo.py --balance-frac 0.05 --seed 42
-```
-
 | Hạng mục | Kết quả |
 |---|---:|
 | Kích thước | 13.979.592 dòng × 16 cột |
@@ -48,6 +43,31 @@ Lệnh tái lập:
 Schema, kiểu dữ liệu, nhãn nhị phân, feature hữu hạn và checksum đều được kiểm tra.
 Balance tốt là bằng chứng chẩn đoán phù hợp với randomization, nhưng **không tự chứng
 minh** randomization; nguồn xác nhận thiết kế thử nghiệm là tài liệu chính thức của Criteo.
+
+### 2.1 Nhận xét — hiệu ứng có thật, nhưng nhỏ tuyệt đối
+
+Ba con số ở trên định hình toàn bộ phần còn lại của dự án, nên cần đọc kỹ hơn một bảng
+kiểm toán thông thường.
+
+**Hiệu ứng trung bình là có thật và được đo rất chính xác.** ATE `0,11519` điểm phần trăm
+với CI `[0,10845%; 0,12192%]` không chứa 0, `z = 33,5`. Trên thang tương đối, risk ratio là
+`1,594` với CI `[1,544; 1,647]` — treatment làm tăng conversion khoảng **59%** so với
+control. Đây không phải hiệu ứng yếu về mặt thống kê.
+
+**Nhưng nó nhỏ về giá trị tuyệt đối**, và đó mới là đại lượng mà policy targeting làm việc
+cùng: `0,3089%` so với `0,1938%`. Chênh lệch tuyệt đối `0,00115` chính là ngân sách tín
+hiệu mà mọi CATE learner phải chia nhỏ tiếp theo `x`.
+
+**Đây là căng thẳng trung tâm của dự án.** Ước lượng *trung bình* thì thừa power; ước
+lượng *heterogeneity* thì không. Phân tích công suất ở `output/eda/power_analysis.csv` cho
+thấy ranh giới: phát hiện được hiệu ứng bằng `1/10` ATE cần `8,97e06` dòng — vừa đủ trong
+`13,98` triệu dòng của Criteo; nhưng `1/100` ATE cần `8,97e08`, tức **64 lần** toàn bộ
+dataset.
+
+Nói cách khác, ngay từ bước kiểm toán dữ liệu đã đọc được rằng dự án có thể trả lời chắc
+chắn câu "treatment có tác dụng không", còn câu "tác dụng với ai nhiều hơn" chỉ trả lời
+được ở mức phân giải thô. Kết quả của Sprint 3 và bốn vòng cải tiến sau đó là hệ quả của
+ràng buộc này, không phải của việc chọn sai model.
 
 Artifacts:
 
@@ -114,6 +134,29 @@ Khi mở test, kết quả ablation:
 Kết quả trên test cho thấy chỉ X-Learner duy trì chênh lệch so với baseline. Hai
 regularization candidate đạt điều kiện trên validation nhưng không duy trì chênh lệch trên test.
 
+**Nhận xét.** Hai candidate regularized đã qua một gate không dễ: median ΔQini ≥ `0,005` và
+thắng baseline ít nhất 2/3 seed validation. Trên test chúng cho `−0,0035` và `−0,0016`, tức
+**đổi dấu**. Đây không phải lỗi hiện thực mà là hành vi kỳ vọng khi chọn ra cực đại của
+nhiều candidate trên một mẫu hữu hạn: phần thắng trên validation gồm cả tín hiệu lẫn nhiễu,
+và chỉ phần tín hiệu đi tiếp sang test.
+
+Ba điều rút ra, cả ba đều định hình các sprint sau:
+
+1. **Multi-seed validation vẫn chưa đủ.** Ba seed 43/44/45 cùng chia trên một pool nên
+   không độc lập; chúng lọc được nhiễu của một lần chia, không lọc được nhiễu chung của
+   pool. Sprint 3 vì thế chuyển sang cross-fitting OOF trên toàn bộ development pool và
+   dùng **hai fold seed** làm điều kiện bắt buộc thay vì lấy trung bình.
+2. **Gate bằng ngưỡng độ lớn cần đi kèm khoảng tin cậy.** `median ΔQini ≥ 0,005` là một
+   ngưỡng point estimate; ngay cả X-Learner — candidate duy nhất giữ được chênh lệch — có
+   CI `[0,0001; 0,0539]` gần chạm 0. Từ Sprint 2 trở đi mọi claim "A hơn B" đều bắt buộc
+   kèm paired CI.
+3. **Quyết định quay về baseline phải được định trước.** Quy tắc 6 của protocol mục 3 đã
+   viết sẵn điều này trước khi mở test, nên khi hai candidate trượt thì không có tranh luận
+   hậu nghiệm nào về việc có nên giữ chúng hay không.
+
+Chi phí của bài học này là hai candidate bị loại. Giá trị của nó là toàn bộ khung
+promotion rule đăng ký trước dùng ở Sprint 3 và bốn vòng cải tiến sau.
+
 ## 6. Bảng 5 mô hình release
 
 Mỗi model được chấm trên cùng 2.096.940 dòng test; CI dùng 500 bootstrap resamples.
@@ -133,7 +176,42 @@ Không được kết luận thứ hạng chỉ từ CI riêng lẻ. Paired boot
 - Response so với S và X: CI của chênh lệch chứa 0, chưa đủ bằng chứng phân biệt.
 - S, T, X, DR còn lại cũng có nhiều cặp chưa tách biệt rõ.
 
-### 6.1 Causal Forest trên cùng holdout
+### 6.1 Nhận xét — các model xếp hạng khác nhau nhưng đo ra gần bằng nhau
+
+Bảng Qini ở trên nói model nào tốt hơn. Nó không nói các model có **đồng ý với nhau về ai
+là khách hàng ưu tiên** hay không. Tương quan Spearman giữa các bộ điểm trên cùng holdout,
+từ `output/sprint1/score_spearman_release.csv`:
+
+| | Response | S | T | X | DR |
+|---|---:|---:|---:|---:|---:|
+| Response | 1,000 | 0,824 | 0,734 | 0,439 | 0,679 |
+| S-Learner | 0,824 | 1,000 | 0,607 | 0,429 | 0,636 |
+| T-Learner | 0,734 | 0,607 | 1,000 | 0,474 | 0,598 |
+| X-Learner | 0,439 | 0,429 | 0,474 | 1,000 | 0,424 |
+| DR-Learner | 0,679 | 0,636 | 0,598 | 0,424 | 1,000 |
+
+Đọc bảng này cùng bảng Qini cho một quan sát đáng chú ý:
+
+**X-Learner xếp hạng khách hàng rất khác Response** — Spearman chỉ `0,439`, thấp nhất
+trong mọi cặp có Response — **nhưng chênh lệch Qini giữa hai model vẫn có CI chứa 0**
+(`0,0207`, CI `[−0,0038; 0,0456]`). Hai thứ tự ưu tiên khác nhau đáng kể lại cho chất
+lượng xếp hạng tổng hợp không phân biệt được.
+
+Điều đó nói lên giới hạn của phép đo chứ không phải sự tương đương của hai model. Nếu
+metric đủ phân giải, hai cách sắp xếp khác nhau tới mức đó phải cho kết quả khác nhau. Ở
+đây chúng không, vì mặt mục tiêu quá phẳng so với nhiễu — cùng cơ chế mà Sprint 3 gặp lại
+khi DR loss chỉ chênh nhau `7e-6` giữa hai candidate.
+
+Ngược lại, S-Learner tương quan `0,824` với Response, tức gần như cùng một thứ tự, và cũng
+không phân biệt được về Qini. Trường hợp này thì kết luận "không phân biệt được" là bình
+thường và không đáng ngại.
+
+Hệ quả thực hành: **"CI chứa 0" phải được đọc kèm mức tương quan thứ hạng.** Hai model
+giống nhau mà hoà là một chuyện; hai model khác hẳn nhau mà vẫn hoà là dấu hiệu phép đo
+đang hết độ phân giải. Đây là lý do các sprint sau bổ sung `policy_area_dr` và AUTOC thay
+vì tiếp tục chỉ dựa vào Qini.
+
+### 6.2 Causal Forest trên cùng holdout
 
 Ngoài bốn meta-learner và baseline, một thuật toán chuyên dụng được chấm trên **đúng cùng
 holdout** — `Y` và `T` đã kiểm chứng giống hệt từng phần tử. Sáu model vì thế đặt chung
@@ -217,49 +295,44 @@ Benchmark profile research trên máy hiện tại:
 phụ thuộc CPU; quy đổi bảo thủ cho 4 CPU khoảng 4,5 giờ. GPU P100 **không làm tăng tốc
 trực tiếp** cho `econml.CausalForestDML`; nút thắt là CPU và system RAM.
 
-**Kết luận:** 50% **chưa được duyệt**. Research-profile envelope 24 GB cần ít nhất
-32 GB system RAM để giữ peak dưới 75%; giả định 30 GB không qua gate. Kaggle Free chỉ
-được thử theo resource gate và preflight, không bắt đầu trực tiếp ở 50%.
+**Kết luận:** 50% **chưa được duyệt** tại thời điểm chốt Sprint 1. Research-profile envelope
+24 GB cần ít nhất 32 GB system RAM để giữ peak dưới 75%; giả định 30 GB không qua gate. Kaggle
+Free chỉ được thử theo resource gate và preflight, không bắt đầu trực tiếp ở 50%. Quy trình
+gate ba mốc rút ra từ kết luận này được ghi ở
+[`../docs/REPRODUCTION.md`](../docs/REPRODUCTION.md) mục 8.
 
-1. Đọc RAM/CPU live của session.
-2. Chạy profile `kaggle-safe` ở 20%; chỉ tiếp tục nếu peak RAM <75% RAM khả dụng.
-3. Chạy 30%; lặp lại điều kiện.
-4. Mới chạy 50% với `inference=False`, 200 cây, cross-validation 2-fold, `max_samples=0.25`.
-5. Nếu không đạt, dừng ở 20–30% và báo cáo learning curve; không mua Colab Pro chỉ để
-   ép chạy một model chưa chứng minh mang lại thêm giá trị.
+Kết quả ba mốc sau khi chạy: [`CAUSAL_FOREST_REPORT.md`](CAUSAL_FOREST_REPORT.md). Bằng chứng
+số của benchmark: `output/sprint1/causal_forest_feasibility.json`.
 
-Chi tiết: `_noi-bo/van-hanh/KAGGLE_RUNBOOK_COMPLETE.md` và
-`output/sprint1/causal_forest_feasibility.json`.
+## 9. Giới hạn và phạm vi suy luận
 
-## 9. Definition of Done
+Những điều bảng kết quả ở trên **không** chứng minh:
 
-- [x] Kiểm toán schema, checksum, missing/finite, prevalence và treatment balance.
-- [x] Chốt estimand và loại post-treatment leakage.
-- [x] Protocol train/validation/test và multi-seed validation.
-- [x] Năm model local chạy lại trên cùng test.
-- [x] Ablation cải tiến so với baseline bằng paired bootstrap.
-- [x] Qini, AUUC, calibration và policy table.
-- [x] Benchmark tài nguyên Causal Forest và Kaggle runbook.
-- [x] Unit tests cho schema, balance, metric và bootstrap.
-- [x] Tài liệu lý thuyết tiếng Việt và câu lệnh tái lập.
-- [ ] Causal Forest final trên Kaggle: thuộc Sprint 2, chỉ chạy sau preflight.
-- [ ] Dashboard release đọc artifact mới: thuộc Sprint 2.
+- **Response không phải CATE estimator.** Nó xếp hạng theo `P(conversion)` và có 0% điểm
+  âm, nên về nguyên tắc không biểu diễn được hiệu ứng âm. Nó đứng đầu theo Qini/AUUC, tức
+  theo *khả năng xếp hạng*, không theo *độ chính xác của ước lượng hiệu ứng cá nhân*. Hai
+  điều này khác nhau và không suy ra nhau.
+- **Không quan sát được principal stratum.** Tỷ lệ điểm âm chênh nhau rất lớn giữa các
+  model (Response 0%, T-Learner 53,96%) cho thấy đó là đại lượng phụ thuộc model, không
+  phải một tầng có thật đếm được. Không được gọi các dòng điểm âm là "Sleeping Dogs".
+- **Balance diagnostics không chứng minh randomization.** Propensity AUC `0,5074` và
+  max `|SMD|` `0,0490` phù hợp với randomization nhưng không thay thế được provenance từ
+  phía Criteo.
+- **Test 30% chỉ ngoài mẫu đúng một lần.** Nó đã được mở ở Sprint 1. Mọi vòng sau phải giữ
+  nó đóng hoặc tạo holdout mới; Sprint 2 tạo confirmation set riêng chính vì ràng buộc này.
+- **Con số policy là conversion-equivalent, không phải tiền.** Criteo không có doanh thu,
+  biên lợi nhuận hay chi phí liên hệ. Bảng mục 7 là phép quy đổi có điều kiện trên policy
+  đã đóng băng và chưa cộng uncertainty do model selection.
+- **Cấu hình Causal Forest không đi qua ablation.** Nó dùng một điểm cấu hình cố định
+  (mục 6.2), nên so sánh với nó là so sánh với một cấu hình cụ thể, không phải với họ
+  Causal Forest nói chung.
 
-## 10. Bước tiếp theo của Sprint 2
+Một giới hạn về phạm vi dữ liệu cần nhắc riêng: kết luận chỉ áp dụng cho quần thể Criteo
+v2.1 với outcome `conversion` ở tỷ lệ `0,29%`. Chưa có bằng chứng portability sang dataset
+thứ hai; đó vẫn là hướng nghiên cứu ưu tiên số một ở
+[`../planning/README.md`](../planning/README.md).
 
-1. Chạy Causal Forest learning curve 20% → 30% → tối đa 50% trên Kaggle.
-2. Triển khai calibration chính xác sau under-sampling theo Nyberg & Klami (2023);
-   candidate hiện tại mới dùng rescale `1/k` xấp xỉ.
-3. Chỉ thử R-Learner sau khi xác định trước giả thuyết và tiêu chí đánh giá; không thêm model
-   khi chưa có vai trò trong comparison protocol.
-4. Không tune lại vào test Sprint 1; tạo validation/holdout mới nếu mở vòng model mới.
-5. Thêm policy theo budget và cost-sensitive value, sensitivity analysis cho margin/cost.
-6. Chuyển dashboard sang đọc duy nhất artifact `sprint1_release`.
-7. Thêm data/model card, pipeline một lệnh và smoke test dashboard.
-8. Chỉ sau đó mở hướng **Giá trị vòng đời khách hàng tăng thêm
-   (Incremental Customer Lifetime Value)**.
-
-## 11. Nguồn gốc phải đọc
+## 10. Nguồn gốc phải đọc
 
 - Criteo AI Lab, dataset và thiết kế thử nghiệm:
   https://ailab.criteo.com/criteo-uplift-prediction-dataset/

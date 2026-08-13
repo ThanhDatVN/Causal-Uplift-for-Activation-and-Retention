@@ -132,21 +132,10 @@ Peak RAM 40,6% nằm dưới gate 75%. Dự phóng tuyến tính từ mốc 20% 
    ký, không được tinh chỉnh các tham số này sau khi nhìn kết quả; muốn thử cấu hình khác
    thì đăng ký trước và chạy như một run mới.
 
-## 7. Tái lập
+## 7. Artifact
 
-```powershell
-# Chấm điểm chính thức (nạp lại Criteo, đối chiếu holdout, paired bootstrap)
-.venv\Scripts\python.exe scripts\evaluate_causal_forest.py `
-  --stage-dir output\causal_forest\preflight_0p5 --n-boot 500 --signal ipw
-
-# Learning curve ba mốc, phân bố điểm, tài nguyên
-.venv\Scripts\python.exe scripts\analyze_causal_forest_release.py
-
-# Năm biểu đồ
-.venv\Scripts\python.exe scripts\plot_causal_forest_release.py
-```
-
-Artifact:
+Lệnh chấm điểm, phân tích và gate tài nguyên ba mốc:
+[`../docs/REPRODUCTION.md`](../docs/REPRODUCTION.md) mục 8.
 
 | Đường dẫn | Nội dung |
 |---|---|
@@ -173,5 +162,6 @@ Diễn giải phải thận trọng vì mục 6.2 — khác tập test, khác si
 mô hình đã có: khi một learner đủ mạnh về mặt dung lượng và được cho đủ dữ liệu, khoảng
 cách với baseline dự đoán outcome thu hẹp về 0. Nó không đảo chiều.
 
-Đây chính là câu hỏi mà Phase 1 trong `_noi-bo/ke-hoach/MARKET_AND_VALUE_RESEARCH.md` đặt ra: giới
-hạn nằm ở model hay ở tín hiệu. Kết quả này nghiêng về tín hiệu.
+Đây chính là câu hỏi trung tâm còn bỏ ngỏ: giới hạn nằm ở model hay ở tín hiệu. Kết quả này
+nghiêng về tín hiệu. Hướng kiểm chứng trên dataset thứ hai được ghi ở
+[`planning/README.md`](../planning/README.md) mục "Hướng kế tiếp".

@@ -1,8 +1,10 @@
 # Chỉ mục script
 
-Các script được nhóm theo vai trò. Không script nào được di chuyển khỏi thư mục này: các lệnh
-tái lập trong `report/SPRINT_1|2|3_FINAL_REPORT.md` trích dẫn đúng đường dẫn hiện tại, và
-đổi đường dẫn sẽ làm lệnh trong báo cáo lịch sử không chạy được nữa.
+Trang này ghi **vai trò** của từng script. Lệnh chạy theo thứ tự nằm ở
+[`../docs/REPRODUCTION.md`](../docs/REPRODUCTION.md).
+
+Không script nào được di chuyển khỏi thư mục này: runbook trích dẫn đúng đường dẫn hiện tại,
+và đổi đường dẫn sẽ làm mọi lệnh tái lập không chạy được nữa.
 
 Mọi script đều tự thêm repo root vào `sys.path`, nên chạy được từ bất kỳ thư mục nào.
 
@@ -87,11 +89,29 @@ Flag legacy chỉ tái lập artifact lịch sử trước manifest schema v2; m
 
 | Script | Vai trò |
 |---|---|
-| `train_causal_forest.py` | Fit `CausalForestDML` theo profile `kaggle-safe`. |
+| `train_causal_forest.py` | Fit `CausalForestDML`. Ba profile (`kaggle-safe`, `research`, `rare-outcome`) và hai split (`sprint1`, `sprint3`). |
 | `kaggle_causal_forest_gate.py` | Gate tài nguyên và toàn vẹn artifact. **Không** đánh giá chất lượng. |
-| `evaluate_causal_forest.py` | Chấm điểm artifact tải về từ Kaggle. Tự phát hiện có so được với bảng release không. |
+| `evaluate_causal_forest.py` | Chấm điểm artifact tải về từ Kaggle. Tự phát hiện so được với bảng release Sprint 1 hay bảng confirmation Sprint 3. |
 
-Runbook: `_noi-bo/van-hanh/KAGGLE_RUNBOOK_COMPLETE.md`.
+Hai trục cấu hình, chọn độc lập nhau:
+
+| `--split` | Fit trên | Predict trên | So được với |
+|---|---|---|---|
+| `sprint1` | train của sample Sprint 1 | test 30% của sample đó | bảng release năm model, khi `--frac 0.50 --seed 42` |
+| `sprint3` | development Sprint 2/3, 5.591.836 dòng | confirmation, 1.397.959 dòng | bảng confirmation Sprint 3, dùng DR signal đã đóng băng |
+
+| `--profile` | `min_samples_leaf` | Sự kiện control mỗi lá | Ghi chú |
+|---|---:|---:|---|
+| `kaggle-safe` | 500 | 0,145 | Cấu hình đã chạy ba mốc 20/30/50% |
+| `research` | 200 | 0,058 | Benchmark tài nguyên Sprint 1; **đi sai hướng** cho outcome hiếm |
+| `rare-outcome` | 10.000 | 2,904 | Đăng ký ở `configs/causal_forest_rare_outcome_protocol_v1.json` |
+
+`--train-subsample` chỉ dùng cho smoke code path; giá trị được ghi vào artifact nên một lần
+smoke không thể bị nhầm thành run thật.
+
+Runbook: [`../docs/REPRODUCTION.md`](../docs/REPRODUCTION.md) mục 8. Kết quả ba mốc:
+[`../report/CAUSAL_FOREST_REPORT.md`](../report/CAUSAL_FOREST_REPORT.md). Notebook của lần
+chạy: [`../notebooks/causal_forest.ipynb`](../notebooks/causal_forest.ipynb).
 
 ## Tái lập release cũ — vẫn chạy được, đừng đổi đường dẫn
 
@@ -116,7 +136,7 @@ model**, dùng prediction đã đóng băng. Đây là lý do nâng bootstrap t�
 
 | Script | Trạng thái |
 |---|---|
-| `train_baselines.py` | Lần chạy baseline đầu tiên; kết quả ở `_noi-bo/lich-su/report/week-01-baseline-results.md`. Nguồn Sprint 1 chính thức là `evaluate_selected_five_models.py`. |
+| `train_baselines.py` | Lần chạy baseline đầu tiên; điểm số đời đầu nằm ở `output/legacy/`. Nguồn Sprint 1 chính thức là `evaluate_selected_five_models.py`. |
 | `build_comparison.py` | Dựng bảng so sánh 6 model theo kế hoạch cũ; Sprint 3 dùng chuỗi `run_oof_experiment` → `compare_improvement_candidates` → `run_sprint3_confirmation`. |
 | `bench_harness.py` | Harness đo runtime/RAM thời kỳ đầu. |
 | `assess_causal_forest_feasibility.py` | Benchmark tài nguyên Causal Forest 1/5/10/20%; đã dùng để ra quyết định không chạy 50% local. |

@@ -56,6 +56,19 @@ RELEASE_MODELS = ["Response", "S-Learner", "T-Learner", "X-Learner", "DR-Learner
 RELEASE_HOLDOUT = OUTPUT_DIR / "holdout" / "final_test_yt.npz"
 RELEASE_CATE_DIR = OUTPUT_DIR / "optimization" / "cate"
 
+# Điểm số và DR signal đã đóng băng của bảng confirmation Sprint 3. File này bị
+# .gitignore loại (mảng lớn, tái tạo được), nên chỉ có trên máy đã chạy Sprint 3.
+SPRINT3_PREDICTIONS = OUTPUT_DIR / "sprint3" / "confirmation_predictions.npz"
+SPRINT3_NON_MODEL_KEYS = {
+    "source_index",
+    "treatment",
+    "conversion",
+    "dr_signal",
+    "ipw_signal",
+    "mu0",
+    "mu1",
+}
+
 
 def _slug(name: str) -> str:
     return name.lower().replace("-", "_")
@@ -134,6 +147,183 @@ def build_dr_signal(
     return signal, f"doubly_robust (nuisance fit tren train frac={frac:g})"
 
 
+def evaluate_against_sprint3(
+    score: np.ndarray,
+    holdout,
+    args,
+    budgets: np.ndarray,
+) -> None:
+    """Chấm Causal Forest trên confirmation Sprint 2/3 và so với chín model đã có.
+
+    Khác hẳn nhánh sprint1: **không fit lại nuisance và không nạp lại Criteo**.
+    ``confirmation_predictions.npz`` đã chứa DR signal đóng băng cùng điểm số của
+    chín model, nên so sánh ở đây dùng đúng một cơ sở đánh giá — chênh lệch giữa
+    hai model không thể lẫn với chênh lệch giữa hai tín hiệu chấm điểm.
+    """
+    if not SPRINT3_PREDICTIONS.exists():
+        raise FileNotFoundError(
+            f"Thiếu {SPRINT3_PREDICTIONS}. File này bị .gitignore loại nên chỉ có "
+            "trên máy đã chạy Sprint 3; chạy scripts/run_sprint3_confirmation.py "
+            "trước, hoặc chấm bằng --signal ipw trên nhánh standalone."
+        )
+    reference = np.load(SPRINT3_PREDICTIONS, allow_pickle=False)
+
+    if "source_index" not in holdout.files:
+        raise ValueError(
+            "Artifact không có source_index; nó không được sinh bởi "
+            "--split sprint3 nên không đối chiếu được với bảng confirmation."
+        )
+    artifact_index = holdout["source_index"].astype("int64").ravel()
+    reference_index = reference["source_index"].astype("int64").ravel()
+    if not np.array_equal(artifact_index, reference_index):
+        raise ValueError(
+            "source_index không trùng khít confirmation_predictions.npz. Điểm số "
+            "sẽ lệch hàng nên không được đặt chung bảng. Kiểm tra lại rằng run "
+            "dùng đúng --split sprint3 trên cùng file Criteo v2.1."
+        )
+    Y = reference["conversion"].astype("float64").ravel()
+    T = reference["treatment"].astype("float64").ravel()
+    if not np.array_equal(holdout["Y"].astype("int8"), reference["conversion"]):
+        raise ValueError("Y trong artifact không khớp confirmation đã đóng băng")
+    if not np.array_equal(holdout["T"].astype("int8"), reference["treatment"]):
+        raise ValueError("T trong artifact không khớp confirmation đã đóng băng")
+    print(
+        f"[align] source_index trùng khít {len(artifact_index):,} dòng; "
+        "dùng DR signal đã đóng băng của Sprint 3",
+        flush=True,
+    )
+
+    signal = reference["dr_signal"].astype("float64").ravel()
+    signal_label = "doubly_robust (dong bang tu output/sprint3/confirmation_predictions.npz)"
+    print(f"[signal] {signal_label} ate={np.mean(signal):.8f}", flush=True)
+
+    existing = [key for key in reference.files if key not in SPRINT3_NON_MODEL_KEYS]
+    all_scores = {"Causal Forest": score}
+    for name in existing:
+        all_scores[name] = reference[name].astype("float64").ravel()
+    print(f"[models] Causal Forest + {len(existing)} model Sprint 3", flush=True)
+
+    rows = [
+        metrics_for(name, values, Y, T, signal, budgets)
+        for name, values in all_scores.items()
+    ]
+    metrics = pd.DataFrame(rows).sort_values("policy_area_dr", ascending=False)
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+    metrics.to_csv(args.output_dir / "cf_sprint3_metrics.csv", index=False)
+    print(
+        metrics[["model", "policy_area_dr", "autoc_dr", "qini_score"]].to_string(
+            index=False
+        ),
+        flush=True,
+    )
+
+    print(f"[bootstrap] paired n_boot={args.n_boot}", flush=True)
+    area_bootstrap = paired_policy_area_bootstrap(
+        all_scores,
+        signal,
+        budgets=budgets,
+        n_boot=args.n_boot,
+        seed=args.seed,
+    )
+    qini_bootstrap = paired_qini_bootstrap_matrix(
+        all_scores,
+        Y,
+        T,
+        n_boot=args.n_boot,
+        seed=args.seed,
+    )
+    names = qini_bootstrap["model_names"]
+    cf_index = names.index("Causal Forest")
+    comparison_rows = []
+    for model in existing:
+        area = policy_area_difference_summary(area_bootstrap, "Causal Forest", model)
+        other = names.index(model)
+        qini_difference = (
+            qini_bootstrap["draws"][:, cf_index] - qini_bootstrap["draws"][:, other]
+        )
+        comparison_rows.append(
+            {
+                "model_a": "Causal Forest",
+                "model_b": model,
+                "policy_area_difference": area["observed_difference"],
+                "policy_area_ci_low": area["ci_low"],
+                "policy_area_ci_high": area["ci_high"],
+                "policy_area_probability_positive": area[
+                    "probability_difference_positive"
+                ],
+                "qini_difference": float(
+                    qini_bootstrap["observed"][cf_index]
+                    - qini_bootstrap["observed"][other]
+                ),
+                "qini_ci_low": float(np.quantile(qini_difference, 0.025)),
+                "qini_ci_high": float(np.quantile(qini_difference, 0.975)),
+                "n_boot": args.n_boot,
+            }
+        )
+    comparisons = pd.DataFrame(comparison_rows)
+    comparisons.to_csv(
+        args.output_dir / "cf_sprint3_paired_comparisons.csv",
+        index=False,
+    )
+    print(comparisons.to_string(index=False), flush=True)
+
+    versus_response = comparisons.loc[comparisons["model_b"] == "Response"]
+    beats_response = bool(
+        len(versus_response) and versus_response["policy_area_ci_low"].iloc[0] > 0
+    )
+    gate_manifest_path = args.stage_dir / "gate_manifest.json"
+    gate = (
+        json.loads(gate_manifest_path.read_text(encoding="utf-8"))
+        if gate_manifest_path.exists()
+        else None
+    )
+    summary = {
+        "created_utc": datetime.now(timezone.utc).isoformat(),
+        "stage_dir": str(args.stage_dir),
+        "mode": "comparable_with_sprint3_confirmation",
+        "protocol_id": "causal-forest-rare-outcome-v1",
+        "profile": str(holdout["profile"]) if "profile" in holdout.files else None,
+        "split": "sprint3",
+        "effective_configuration": {
+            key.removeprefix("effective_"): holdout[key].item()
+            for key in holdout.files
+            if key.startswith("effective_")
+        },
+        "train_subsample": (
+            float(holdout["train_subsample"])
+            if "train_subsample" in holdout.files
+            else None
+        ),
+        "control_events_per_leaf": (
+            float(holdout["control_events_per_leaf"])
+            if "control_events_per_leaf" in holdout.files
+            else None
+        ),
+        "holdout_rows": int(len(Y)),
+        "effect_signal": signal_label,
+        "effect_signal_is_frozen": True,
+        "budget_grid": budgets.tolist(),
+        "n_boot": args.n_boot,
+        "metrics": metrics.to_dict(orient="records"),
+        "paired_comparisons": comparisons.to_dict(orient="records"),
+        "resource_gate": (gate or {}).get("runtime"),
+        "gate_status": (gate or {}).get("status"),
+        "promotion_rule_lower_bound_positive_vs_response": beats_response,
+        "promoted": False,
+        "scope_note": (
+            "Confirmation Sprint 2 da duoc quan sat o Sprint 2 va Sprint 3, nen day "
+            "la retrospective evidence chu khong phai randomized confirmation moi. "
+            "Ket qua nay KHONG thay dong Causal Forest trong bang release Sprint 1: "
+            "do la tap test khac va signal khac."
+        ),
+    }
+    (args.output_dir / "cf_sprint3_summary.json").write_text(
+        json.dumps(summary, ensure_ascii=False, indent=2, default=float),
+        encoding="utf-8",
+    )
+    print(f"[write] {args.output_dir}", flush=True)
+
+
 def metrics_for(
     name: str,
     score: np.ndarray,
@@ -202,6 +392,7 @@ def main() -> None:
     frac = float(holdout["frac"])
     seed = int(holdout["seed"])
     test_size = float(holdout["test_size"]) if "test_size" in holdout else 0.30
+    split = str(holdout["split"]) if "split" in holdout.files else "sprint1"
 
     if not (len(score) == len(Y) == len(T)):
         raise ValueError(
@@ -210,10 +401,16 @@ def main() -> None:
     if not np.isfinite(score).all():
         raise ValueError("Score Causal Forest có giá trị không hữu hạn")
     print(
-        f"[artifact] rows={len(score):,} frac={frac:g} test_size={test_size:g} "
-        f"seed={seed}",
+        f"[artifact] rows={len(score):,} split={split} frac={frac:g} "
+        f"test_size={test_size:g} seed={seed}",
         flush=True,
     )
+
+    budgets = np.asarray(DEFAULT_BUDGET_GRID, dtype="float64")
+    if split == "sprint3":
+        evaluate_against_sprint3(score, holdout, args, budgets)
+        print(f"[done] elapsed={time.time() - started:.1f}s", flush=True)
+        return
 
     # Xác định xem holdout này có đúng là final test Sprint 1 không.
     comparable = False
@@ -246,7 +443,6 @@ def main() -> None:
             flush=True,
         )
 
-    budgets = np.asarray(DEFAULT_BUDGET_GRID, dtype="float64")
     if args.signal == "dr":
         signal, signal_label = build_dr_signal(
             Y,

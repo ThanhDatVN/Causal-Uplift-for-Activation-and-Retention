@@ -221,7 +221,7 @@ def qini_score(y_true, treatment, uplift_score) -> float:
     """Qini coefficient: AUC(actual) - AUC(random), normalized bởi AUC(perfect) - AUC(random).
 
     Cùng định nghĩa với `sklift.metrics.qini_auc_score(negative_effect=True)` — đối chiếu
-    bắt buộc theo mục 6.2 CAUSAL_UPLIFT_PLAN.md, lệch < 1e-6. Lưu ý: đây là 1 trong nhiều
+    bắt buộc, lệch < 1e-6, xem tests/test_evaluation.py. Lưu ý: đây là 1 trong nhiều
     biến thể "qini coefficient" xuất hiện trong tài liệu (Radcliffe & Surry 2011 mục 4.2
     liệt kê riêng: Q = diện tích thô chia N², q0 = tỉ lệ so với "zero-downlift optimum"
     khi giả định không có negative effect). Biến thể ở đây — chuẩn hoá theo đường "perfect"

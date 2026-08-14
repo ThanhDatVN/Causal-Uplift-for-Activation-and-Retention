@@ -12,7 +12,7 @@ docs/
 ├── CAUSAL_FOUNDATION_METHOD_GUIDE.md     DINA, Anchored R, partial pooling, experiment gate
 ├── TOP_TAIL_POLICY_INFERENCE_GUIDE.md     hard top-k, paired/simultaneous CI, event support
 ├── DECISION_CONTRACT.md                  policy phát hành, công thức, guardrail
-├── REPRODUCTION.md                       runbook tái lập cho cả bảy vòng thí nghiệm
+├── REPRODUCTION.md                       runbook tái lập cho mọi vòng thí nghiệm
 ├── data_cards/                           nguồn gốc, schema, giới hạn dữ liệu
 └── model_cards/                          model card champion
 ```
@@ -27,8 +27,9 @@ docs/
 | Hiểu inference cho policy 1–2% | [TOP_TAIL_POLICY_INFERENCE_GUIDE.md](TOP_TAIL_POLICY_INFERENCE_GUIDE.md) |
 | Biết quy tắc ra quyết định | [DECISION_CONTRACT.md](DECISION_CONTRACT.md) |
 | Chạy lại một vòng thí nghiệm | [REPRODUCTION.md](REPRODUCTION.md) |
-| Xem kết quả mới nhất | [../report/CAUSAL_FOUNDATION_EXPERIMENT_REPORT.md](../report/CAUSAL_FOUNDATION_EXPERIMENT_REPORT.md) |
-| Xem kết quả Causal Forest | [../report/CAUSAL_FOREST_REPORT.md](../report/CAUSAL_FOREST_REPORT.md) |
+| Xem kết quả mới nhất | [../report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md](../report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md) |
+| Xem ba mốc Causal Forest trên Kaggle | [../report/CAUSAL_FOREST_REPORT.md](../report/CAUSAL_FOREST_REPORT.md) |
+| Hiểu vì sao tín hiệu chấm điểm đổi thứ hạng | [../report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md](../report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md) mục 5 |
 | Đọc deep research sau thí nghiệm | [../planning/CAUSAL_DEEP_RESEARCH_2026.md](../planning/CAUSAL_DEEP_RESEARCH_2026.md) |
 | Hiểu bối cảnh nghiên cứu | [../planning/RESEARCH_LANDSCAPE_2026.md](../planning/RESEARCH_LANDSCAPE_2026.md) |
 

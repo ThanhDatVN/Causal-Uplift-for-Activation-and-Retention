@@ -136,7 +136,7 @@ Các số này là **conversion-equivalent scenario**, không phải actual reve
 
 ## Notebook
 
-Ba notebook, đọc theo thứ tự — đây là đường vào ngắn nhất cho người muốn xem mạch phân
+Bốn notebook, đọc theo thứ tự — đây là đường vào ngắn nhất cho người muốn xem mạch phân
 tích thay vì đọc code:
 
 | Notebook | Nội dung | Output lưu sẵn |

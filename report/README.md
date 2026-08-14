@@ -19,10 +19,10 @@ repo mâu thuẫn với chúng, ưu tiên báo cáo.
 | [TOP_TAIL_RESEARCH_V2_REPORT.md](TOP_TAIL_RESEARCH_V2_REPORT.md) | Paired simultaneous audit của phát hiện hậu nghiệm ở hard budget 1–2%, event support và membership overlap | 16/16 causal point delta dương nhưng 0/16 lower bound vượt 0; không promote, giữ Response |
 | [CAUSAL_FOREST_RARE_OUTCOME_REPORT.md](CAUSAL_FOREST_RARE_OUTCOME_REPORT.md) | Sửa `min_samples_leaf` cho outcome hiếm, chạy trên split Sprint 2/3, chấm bằng DR signal đóng băng | CF hạng 1/10 theo metric chính nhưng CI chứa 0 — hoà. Phát hiện phụ: đổi tín hiệu chấm điểm làm chênh lệch đo được đổi 69 lần |
 
-Đọc Causal Foundation trước nếu chỉ có ít thời gian — nó chứa trạng thái hiện hành; đọc Data
-Optimization để xem giả thuyết EDA đứng trước vòng này.
+Đọc Causal Forest rare-outcome trước nếu chỉ có ít thời gian — nó là vòng gần nhất và chứa
+phát hiện về độ nhạy của tín hiệu chấm điểm, thứ ảnh hưởng tới cách đọc mọi bảng còn lại.
 
-## Cách đọc bảy báo cáo cùng nhau
+## Cách đọc tám báo cáo cùng nhau
 
 Sprint 1 dựng nền tảng đo lường và cho ra một bảng xếp hạng. Sprint 2 biến bảng xếp hạng
 đó thành một quyết định ngân sách có khoảng tin cậy. Sprint 3 đóng băng giao thức chọn
@@ -34,6 +34,9 @@ Causal Foundation tiếp tục từ đó bằng estimator cho binary outcome hi�
 pooling; finalist được chạy full-development trước khi quyết định giữ champion.
 Top-Tail Research v2 kiểm định riêng tín hiệu 1–2% bằng familywise band và giữ nguyên quyết định vì
 không có lower bound dương.
+Causal Forest rare-outcome đóng nốt giả thuyết cuối về phía model — rằng thuật toán thua vì cấu
+hình đặt sai cho outcome hiếm — và trên đường đi phát hiện rằng tín hiệu chấm điểm, chứ không chỉ
+model, quyết định thứ hạng đọc được.
 
 Kết luận xuyên suốt: **không phương pháp nhân quả nào tách được khỏi baseline dự đoán
 outcome** trên bộ dữ liệu này. Bối cảnh nghiên cứu giải thích vì sao đây là chế độ đã được
@@ -42,10 +45,10 @@ mô tả trước chứ không phải dị thường:
 
 ## Kết luận tổng hợp — vì sao kết quả là "không cải thiện", và vì sao đó là một kết quả
 
-Năm vòng cải tiến — mười hai candidate ở Sprint 3, bảy ở vòng data optimization, sáu ở vòng
-causal foundation — không một challenger nào được promote. Cách đọc đúng con số đó **không**
-phải "các phương pháp nhân quả không chạy được", mà là ba phát biểu tách bạch, mỗi phát biểu
-có bằng chứng riêng.
+Sáu vòng cải tiến — mười hai candidate ở Sprint 3, bảy ở vòng data optimization, sáu ở vòng
+causal foundation, cộng hai vòng Causal Forest — không một challenger nào được promote. Cách
+đọc đúng con số đó **không** phải "các phương pháp nhân quả không chạy được", mà là ba phát
+biểu tách bạch, mỗi phát biểu có bằng chứng riêng.
 
 ### 1. Có một cơ chế giải thích, đo được trên dữ liệu thô
 

@@ -1,9 +1,8 @@
-# Causal Uplift for Activation and Retention — Python 3.12 (xem muc 6.4-6.5 trong planning/CAUSAL_UPLIFT_PLAN.md)
+# Causal Uplift for Activation and Retention — Python 3.12
 # Cai trong .venv:  .venv\Scripts\python.exe -m pip install -r requirements.txt
 #
-# Probabilistic CLV duoc tach khoi moi truong causal mac dinh.
-# Dependency va optional environment duoc dac ta tai:
-# planning/incremental_value_product/03_TECHNICAL_ARCHITECTURE.md
+# Moi truong doi chieu CausalML duoc tach rieng, xem requirements-optional.txt.
+# Lenh chay tung vong: docs/REPRODUCTION.md
 
 pandas>=2.2,<3
 numpy>=1.26,<3

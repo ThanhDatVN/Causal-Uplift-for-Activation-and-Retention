@@ -85,8 +85,10 @@ một contact. Hai input phải cùng đơn vị.
 ## 5. Guardrail sản phẩm
 
 - UI luôn hiển thị run ID, split, confirmation size và trạng thái Causal Forest.
-- API chỉ nhận budget trong lưới bằng chứng 1–30%; `0%` là trường hợp treat-none
-  đặc biệt. Không nội suy hay ngoại suy ra ngoài phạm vi này.
+- API chỉ nhận budget trong **dải** bằng chứng đã đánh giá `[1%; 30%]`, cộng đúng `0%` cho
+  trường hợp treat-none. Giá trị nằm **bên trong** dải được nội suy tuyến tính trên budget
+  curve — ví dụ `7,5%` hợp lệ dù không phải một điểm của lưới `{1, 2, 5, 10, 15, 20, 25, 30}%`.
+  Giá trị **ngoài** dải bị từ chối với HTTP 422; không ngoại suy.
 - Nếu `contact_cost / conversion_value > 0,001`, UI cảnh báo ngoài sensitivity grid đã
   kiểm tra.
 - Treat-none phải trả về target = 0 và value = 0.

@@ -1,8 +1,30 @@
 {
   "protocol_id": "causal-forest-rare-outcome-v1",
   "created_utc": "2026-08-13",
-  "status": "registered_not_yet_run",
+  "status": "run_once_gate_failed_on_memory",
   "scope": "single_registered_configuration_run",
+  "runs": [
+    {
+      "attempt": 1,
+      "date": "2026-08-13",
+      "platform": "Kaggle CPU session, 31,35 GB RAM, 4 logical CPU",
+      "n_jobs": -1,
+      "wall_minutes": 107.4,
+      "peak_rss_gb": 28.46,
+      "peak_ram_fraction": 0.908,
+      "max_ram_fraction_gate": 0.75,
+      "gate_status": "failed",
+      "gate_failure_reason": "peak_ram_fraction_only",
+      "artifact_contract": {
+        "score_rows": 1397959,
+        "all_finite": true,
+        "aligned": true
+      },
+      "note": "Fit hoan tat va artifact dat contract; gate fail thuan tuy vi nguong RAM. Diem so van hop le nhung muc vuot phai duoc ghi ro khi bao cao.",
+      "memory_driver": "Bo nho bi chi phoi boi n_estimators x max_samples x n_rows, tuc so subsample giu cho tung cay, chu khong phai do sau cay. So voi kaggle-safe tich do tang khoang 5,1 lan (500/200 x 0,45/0,25 x 5,59/4,89), nen min_samples_leaf lon hon khong bu lai duoc.",
+      "remediation_without_changing_results": "Ha --n-jobs. Da kiem chung fit voi n_jobs=1 va n_jobs=2 cho diem so giong het tung bit, nen day la tham so van hanh chu khong phai tham so model."
+    }
+  ],
   "motivation": {
     "problem": "Cau hinh kaggle-safe da chay dat min_samples_leaf=500. Voi treatment 85/15 va conversion rate control 0,1938%, moi la chi co ky vong 0,145 su kien control; sau honest splitting con khoang 0,073. Dai da so la co nhanh control rong, tuc Causal Forest uoc luong hieu so treated - control voi mot ve gan nhu khong co thong tin.",
     "prior_backlog": "Muc 5 backlog cua causal foundation v1 da ghi 'Causal Forest: event-aware minimum leaf, balanced/honest sampling, leaf shrinkage'.",

@@ -103,6 +103,25 @@ def test_protocol_declares_sprint3_split_and_frozen_signal(protocol):
 
 def test_protocol_states_expected_outcome_and_scope(protocol):
     """Protocol phải nói trước kỳ vọng, để kết quả không bị diễn giải hậu nghiệm."""
-    assert protocol["status"] == "registered_not_yet_run"
+    assert protocol["status"] in {
+        "registered_not_yet_run",
+        "run_once_gate_failed_on_memory",
+        "run_once_gate_passed",
+    }
     assert protocol["decision_rule"]["expected_outcome"]
     assert protocol["scope_limits"]
+
+
+def test_every_recorded_run_states_gate_outcome(protocol):
+    """Mỗi lần chạy phải ghi đủ tài nguyên và trạng thái contract.
+
+    Phân biệt 'artifact hỏng' với 'vượt ngân sách RAM' là điều quyết định điểm số
+    có dùng được hay không, nên nó phải nằm trong artifact chứ không nằm trong trí nhớ.
+    """
+    for run in protocol.get("runs", []):
+        assert run["gate_status"] in {"passed", "failed"}
+        assert run["peak_ram_fraction"] > 0
+        contract = run["artifact_contract"]
+        assert set(contract) == {"score_rows", "all_finite", "aligned"}
+        if run["gate_status"] == "failed":
+            assert run["gate_failure_reason"], "Phải ghi vì sao gate fail"

@@ -138,7 +138,7 @@ Chấm điểm và phân tích artifact tải về:
 
 Bản notebook của lần chạy: [`../notebooks/causal_forest.ipynb`](../notebooks/causal_forest.ipynb).
 
-### 8bis. Cấu hình `rare-outcome` trên split Sprint 2/3 — đã đăng ký, chưa chạy
+### 8bis. Cấu hình `rare-outcome` trên split Sprint 2/3
 
 Protocol: [`../configs/causal_forest_rare_outcome_protocol_v1.json`](../configs/causal_forest_rare_outcome_protocol_v1.json).
 Notebook: [`../notebooks/causal_forest_rare_outcome.ipynb`](../notebooks/causal_forest_rare_outcome.ipynb).
@@ -173,6 +173,23 @@ Chấm điểm chạy ở **local**, vì cần `output/sprint3/confirmation_pred
 Script đối chiếu `source_index` trùng khít từng phần tử với bảng confirmation Sprint 3, dùng
 đúng DR signal đã đóng băng, rồi so với cả chín model bằng paired bootstrap.
 
+**Tài nguyên đo được, lần chạy 13/08/2026 trên Kaggle CPU 31,35 GB:**
+
+| | |
+|---|---|
+| Wall time | 107,4 phút |
+| Peak RSS | 28,46 GB = `0,908` |
+| Gate `0,75` | **fail** |
+| Artifact | 1.397.959 dòng, finite và aligned — **hợp lệ** |
+
+Gate fail thuần tuý vì ngưỡng RAM, không phải vì artifact hỏng. Bộ nhớ bị chi phối bởi
+`n_estimators × max_samples × n_rows` — số subsample giữ cho từng cây — chứ không phải độ sâu
+cây; so với `kaggle-safe` tích đó tăng khoảng `5,1` lần.
+
+Muốn qua gate mà **không đổi kết quả**: hạ `--n-jobs`. Đã kiểm chứng fit với `n_jobs=1` và
+`n_jobs=2` cho điểm số giống hệt từng bit, nên đây là tham số vận hành chứ không phải tham số
+model.
+
 ### Gate tài nguyên đã dùng để quyết định chạy
 
 Quy trình dưới đây được đăng ký **trước** khi chạy, dựa trên benchmark tài nguyên ở
@@ -198,7 +215,7 @@ Mở `http://127.0.0.1:8000`; OpenAPI docs ở `/docs`.
 ## 10. Kiểm thử
 
 ```powershell
-.venv\Scripts\python.exe -m pytest tests -q          # 268 test
+.venv\Scripts\python.exe -m pytest tests -q          # 269 test
 node scripts\smoke_webapp_browser.mjs                # 23 acceptance check
 node scripts\smoke_dashboard_browser.mjs             # 12 acceptance check
 ```

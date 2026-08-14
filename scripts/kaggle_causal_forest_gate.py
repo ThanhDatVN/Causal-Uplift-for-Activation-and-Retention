@@ -110,6 +110,16 @@ def main():
         ),
     )
     parser.add_argument(
+        "--n-jobs",
+        type=int,
+        default=-1,
+        help=(
+            "Số tiến trình song song của forest. Đây là tham số **vận hành**, không "
+            "phải tham số model: đã kiểm chứng hai lần fit với n_jobs khác nhau cho "
+            "điểm số giống hệt từng bit. Hạ xuống để giảm peak RAM, đổi lại chạy lâu hơn."
+        ),
+    )
+    parser.add_argument(
         "--skip-prior-gate",
         action="store_true",
         help="Chỉ dùng cho local smoke test; không dùng cho Kaggle release run.",
@@ -169,6 +179,8 @@ def main():
         str(stage_dir),
         "--seed",
         str(args.seed),
+        "--n-jobs",
+        str(args.n_jobs),
     ]
     system = psutil.virtual_memory()
     started = time.time()

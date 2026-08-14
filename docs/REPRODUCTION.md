@@ -1,6 +1,6 @@
 # Runbook tái lập
 
-Toàn bộ lệnh tái lập của bảy vòng thí nghiệm, gom về một chỗ. Trước đây các lệnh này nằm
+Toàn bộ lệnh tái lập của các vòng thí nghiệm, gom về một chỗ. Trước đây các lệnh này nằm
 rải rác trong từng báo cáo; báo cáo nay chỉ giữ kết quả và diễn giải, còn phần vận hành
 nằm ở đây.
 
@@ -215,7 +215,7 @@ Mở `http://127.0.0.1:8000`; OpenAPI docs ở `/docs`.
 ## 10. Kiểm thử
 
 ```powershell
-.venv\Scripts\python.exe -m pytest tests -q          # 269 test
+.venv\Scripts\python.exe -m pytest tests -q          # 270 test
 node scripts\smoke_webapp_browser.mjs                # 23 acceptance check
 node scripts\smoke_dashboard_browser.mjs             # 12 acceptance check
 ```

@@ -17,7 +17,7 @@ Cập nhật **12/08/2026**, sau năm vòng cải tiến. Nguồn số: bảy b�
 
 | Hướng | Trạng thái | Lý do |
 |---|---|---|
-| Thêm model trên Criteo `conversion` | **Đã đóng** | Cần `2.123×` toàn bộ Criteo mới phân biệt được trên metric chính. Không phải "khó" mà là không tồn tại |
+| Thêm model trên Criteo `conversion` | **Đã đóng** | Độ phân giải `±1,74e-05` trên metric chính, nhỏ hơn chênh lệch cần đo một bậc độ lớn. Vòng `rare-outcome` đã loại nốt giả thuyết "thua do cấu hình đặt sai" |
 | External validity trên dataset thứ hai | **Ưu tiên 1** | Hướng duy nhất trả lời được "Response thắng vì outcome hiếm hay nói chung". Còn một điều kiện tiên quyết: nâng claim về `uplift-bench` từ mức `B` lên `A` |
 | Cross-fitted evaluation toàn bộ dữ liệu | **Ưu tiên 2** | Thiếu hụt trên Qini chỉ `3,3×` — trong tầm với. Cải tiến **cách đánh giá**, không phải model |
 | M1 hybrid prognostic–causal logit | **Ưu tiên 3** | Đã hiện thực ở `src/hybrid.py` và có test, nhưng **0 dòng trong registry**. Chạy theo đúng thứ tự đã khoá |

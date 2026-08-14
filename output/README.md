@@ -29,7 +29,7 @@ output/
 | `sprint3/` | 3 | confirmation metrics, paired comparisons, budget curve, promotion decision, protocol manifest |
 | `optimization/` | 1 | kết quả tuning và final test năm model. Điểm số release ở `optimization/cate/*_sprint1_release.npy` |
 | `improvement/` | 3 + data optimization/causal foundation | registry, OOF metrics theo stage, shortlist/gate, chẩn đoán và full finalist |
-| `causal_forest/` | — | `preflight_{0p2,0p3,0p5}/` ba mốc Kaggle · `release/` bảng metric và so sánh cặp · `analysis/` learning curve và năm biểu đồ |
+| `causal_forest/` | — | `preflight_{0p2,0p3,0p5}/` ba mốc Kaggle · `sprint3_rare_outcome/` run cấu hình `rare-outcome` trên split Sprint 2/3 · `release/` bảng metric và so sánh cặp · `analysis/` learning curve và năm biểu đồ |
 
 Quy tắc: số trong báo cáo phải truy được về một file trong nhóm này.
 
@@ -128,6 +128,28 @@ full stability. Đây là development evidence, không phải randomized confirm
 
 Kết luận: không simultaneous lower bound nào của causal candidate vượt 0; champion vẫn là Response.
 Interval có điều kiện trên frozen OOF scores và không chứa model-refitting uncertainty.
+
+## Causal Forest cấu hình `rare-outcome`
+
+| Đường dẫn | Vai trò |
+|---|---|
+| `causal_forest/sprint3_rare_outcome/` | Điểm CATE, holdout, `gate_manifest.json` và `train.log` của run 14/08/2026. `holdout_test_yt.npz` chứa `source_index` để đối chiếu với confirmation |
+| `causal_forest/release/cf_sprint3_metrics.csv` | Bảng metric 10 model trên confirmation |
+| `causal_forest/release/cf_sprint3_paired_comparisons.csv` | So sánh cặp 500 bootstrap |
+| `causal_forest/release/cf_sprint3_summary.json` | Quyết định máy đọc được và cấu hình **thực tế** đã chạy |
+| `causal_forest/signal_sensitivity/` | Artifact `kaggle-safe` cũ chấm **lại** bằng DR signal thay vì IPW |
+
+Run này chấm bằng **DR signal đã đóng băng** trong `sprint3/confirmation_predictions.npz`, không
+fit lại nuisance, nên so trực tiếp được với bảng confirmation Sprint 3.
+
+`signal_sensitivity/` là nguồn số cho một phát hiện cần đọc trước khi trích bất kỳ so sánh nào:
+đổi tín hiệu chấm điểm làm chênh lệch đo được giữa Causal Forest và Response đổi **69 lần**, trên
+đúng cùng bộ điểm và cùng những dòng. Chi tiết:
+`report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md` mục 5.
+
+**Cảnh báo:** gate của run này báo `failed` vì peak RAM `90,8%` vượt ngưỡng `75%`. Đó là vi phạm
+ngân sách tài nguyên, **không** phải artifact hỏng — `all_finite` và `aligned` đều `true`. Đọc
+`status` mà bỏ qua `artifact_contract` sẽ loại nhầm một kết quả dùng được.
 
 ## Artifact đời đầu
 

@@ -2,6 +2,13 @@
 
 Ngày: 06/08/2026.
 
+> **Cập nhật 14/08/2026.** Cấu hình trong báo cáo này dùng `min_samples_leaf=500`, chỉ cho
+> khoảng `0,145` sự kiện control mỗi lá — không phù hợp với outcome hiếm. Một vòng riêng đã
+> chạy lại với `min_samples_leaf=10000` trên split Sprint 2/3 và vẫn hoà với Response:
+> [`CAUSAL_FOREST_RARE_OUTCOME_REPORT.md`](CAUSAL_FOREST_RARE_OUTCOME_REPORT.md). Vòng đó cũng
+> cho thấy chấm lại chính artifact của báo cáo này bằng DR signal thay vì IPW làm chênh lệch
+> đo được đổi **69 lần** — xem mục 5 của báo cáo mới trước khi trích số ở đây.
+
 Causal Forest là thuật toán chuyên dụng duy nhất trong dự án — nó sửa thẳng tiêu chí chia
 nhánh của cây thay vì ghép các model thông thường như bốn meta-learner. Báo cáo này trình
 bày kết quả của nó trên ba mốc dữ liệu và so sánh với năm model còn lại trên cùng holdout.

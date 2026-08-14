@@ -39,6 +39,9 @@ output/legacy/qini_curve.png
 # Ngoai le: log train Causal Forest, 1,2 KB moi file. Chung chua fit_time va so dong
 # split duoc trich trong report/CAUSAL_FOREST_REPORT.md, nen phai kiem chung duoc.
 !output/causal_forest/preflight_*/train.log
+# Cung ly do cho run rare-outcome: log chua dong [leaf] ghi so su kien control moi
+# la, tuc bang chung cho chinh ly do cau hinh do ton tai.
+!output/causal_forest/sprint3_*/train.log
 
 # --- Tai lieu  ---
 _noi-bo/

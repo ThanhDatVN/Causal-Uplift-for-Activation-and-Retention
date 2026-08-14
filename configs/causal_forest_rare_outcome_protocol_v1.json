@@ -1,7 +1,26 @@
 {
   "protocol_id": "causal-forest-rare-outcome-v1",
   "created_utc": "2026-08-13",
-  "status": "run_once_gate_failed_on_memory",
+  "status": "completed_not_promoted",
+  "result": {
+    "report": "report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md",
+    "policy_area_dr_causal_forest": 0.000914,
+    "policy_area_dr_response": 0.000912,
+    "rank_on_primary_metric": "1/10",
+    "paired_difference_vs_response": 1.197719e-06,
+    "paired_ci_95": [-1.51646e-05, 1.970551e-05],
+    "probability_difference_positive": 0.558,
+    "ci_contains_zero": true,
+    "promoted": false,
+    "champion_unchanged": "Response",
+    "beats_with_ci_above_zero": ["Rank-K05", "Rank-K1", "Rank-K2"],
+    "intervention_worked_as_designed": {
+      "control_events_per_leaf": "0,145 -> 2,906",
+      "negative_score_fraction": "19,6% -> 11,9%",
+      "unique_score_count": 516404
+    },
+    "secondary_finding": "Doi tin hieu cham diem tu IPW sang DR, tren dung cung bo diem va cung nhung dong cua artifact kaggle-safe cu, lam chenh lech do duoc doi 69 lan va lam Response tut tu hang 2 xuong hang 4 trong sau model. Moi paired CI trong nhom dau van chua 0, nen viec doi thu hang nam trong nhieu - nhung no cho thay thu hang theo point estimate khong on dinh khi doi tin hieu."
+  },
   "scope": "single_registered_configuration_run",
   "runs": [
     {

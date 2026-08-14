@@ -5,7 +5,7 @@ nghiên cứu ở [`../planning/`](../planning/).
 
 ## Nguồn số chính thức
 
-Bảy báo cáo dưới đây là nguồn duy nhất được phép trích dẫn. Nếu một tài liệu khác trong
+Tám báo cáo dưới đây là nguồn duy nhất được phép trích dẫn. Nếu một tài liệu khác trong
 repo mâu thuẫn với chúng, ưu tiên báo cáo.
 
 | Báo cáo | Phạm vi | Kết luận chính |
@@ -17,6 +17,7 @@ repo mâu thuẫn với chúng, ưu tiên báo cáo.
 | [DATA_OPTIMIZATION_REPORT.md](DATA_OPTIMIZATION_REPORT.md) | Quay lại từ EDA, sentinel/funnel ablation, OOF hai seed và gate từng vấn đề | Response-Sentinel đi tiếp nhưng chưa được promote; champion vẫn là Response |
 | [CAUSAL_FOUNDATION_EXPERIMENT_REPORT.md](CAUSAL_FOUNDATION_EXPERIMENT_REPORT.md) | DINA, Anchored R, Pattern R; synthetic tests, screen hai seed và full finalist | Không causal learner qua screen; Response-Sentinel không ổn định ở full; giữ Response |
 | [TOP_TAIL_RESEARCH_V2_REPORT.md](TOP_TAIL_RESEARCH_V2_REPORT.md) | Paired simultaneous audit của phát hiện hậu nghiệm ở hard budget 1–2%, event support và membership overlap | 16/16 causal point delta dương nhưng 0/16 lower bound vượt 0; không promote, giữ Response |
+| [CAUSAL_FOREST_RARE_OUTCOME_REPORT.md](CAUSAL_FOREST_RARE_OUTCOME_REPORT.md) | Sửa `min_samples_leaf` cho outcome hiếm, chạy trên split Sprint 2/3, chấm bằng DR signal đóng băng | CF hạng 1/10 theo metric chính nhưng CI chứa 0 — hoà. Phát hiện phụ: đổi tín hiệu chấm điểm làm chênh lệch đo được đổi 69 lần |
 
 Đọc Causal Foundation trước nếu chỉ có ít thời gian — nó chứa trạng thái hiện hành; đọc Data
 Optimization để xem giả thuyết EDA đứng trước vòng này.
@@ -62,18 +63,32 @@ một kết quả không mong muốn.
 
 ### 2. Phép đo hết độ phân giải trước khi model hết dư địa
 
-Kể cả nếu một challenger thực sự tốt hơn, thiết kế hiện tại không công nhận được. Chênh
-lệch Causal Forest − Response trên metric chính là `+4,96e-07` với nửa độ rộng CI
-`5,90e-05` — CI rộng gấp **119 lần** đại lượng cần đo. Để tách được cần `2,97e10` dòng, tức
-`2.123` lần toàn bộ Criteo.
+Kể cả nếu một challenger thực sự tốt hơn, thiết kế hiện tại không công nhận được. Trên
+confirmation, độ phân giải của `policy_area_dr` là khoảng `±1,74e-05`, trong khi chênh lệch
+giữa các model hàng đầu nằm ở bậc `1e-06` — nhỏ hơn một bậc độ lớn so với thứ đo được.
+
+> **Đính chính 14/08/2026.** Bản trước của mục này viết "cần `2.123×` toàn bộ Criteo". Con số
+> đó không vững: nó dùng `n · (nửa CI / Δ)²`, tức **chia cho một point estimate mà chính nó
+> không phân biệt được với 0**. Cùng công thức, cùng dữ liệu, chỉ đổi tín hiệu chấm điểm từ
+> IPW sang DR thì ra `1,8×` thay vì `2.123×` — chênh gần 7.800 lần. Khi `Δ → 0` do nhiễu, "số
+> dòng cần thêm" tiến ra vô cùng; điều đó phản ánh sự bất định của `Δ`, không phản ánh một yêu
+> cầu dữ liệu có thật. Nên phát biểu bằng **độ rộng CI**, không bằng tỷ lệ dữ liệu cần thêm.
+> Bằng chứng số: [CAUSAL_FOREST_RARE_OUTCOME_REPORT.md](CAUSAL_FOREST_RARE_OUTCOME_REPORT.md)
+> mục 5.
 
 Phân biệt hai câu này là điểm mấu chốt của cả tập báo cáo:
 
 - "Challenger không tốt hơn" — điều dữ liệu **không** khẳng định được.
 - "Dữ liệu không đủ để nói challenger tốt hơn" — điều dữ liệu **có** khẳng định.
 
-Mọi kết luận trong bảy báo cáo đều là loại thứ hai. Đó là lý do quyết định luôn được viết
+Mọi kết luận trong tám báo cáo đều là loại thứ hai. Đó là lý do quyết định luôn được viết
 là *giữ champion vì challenger không vượt gate*, không phải *challenger kém hơn*.
+
+Vòng `rare-outcome` bổ sung một cảnh báo thứ ba, đắt hơn cả hai câu trên: **thứ hạng theo point
+estimate không ổn định khi đổi tín hiệu chấm điểm.** Chấm lại cùng một bộ điểm trên cùng những
+dòng dữ liệu, chỉ đổi IPW sang DR, làm Response tụt từ hạng 2 xuống hạng 4 trên sáu model — dù
+mọi paired CI trong nhóm đầu đều chứa 0. Đó là lý do phải cố định và ghi rõ tín hiệu chấm điểm
+trước khi so sánh bất cứ thứ gì.
 
 ### 3. Kết quả âm chỉ có giá trị khi giao thức đủ chặt
 
@@ -93,30 +108,33 @@ pipeline.
 
 ### Điều dự án tạo ra có giá trị
 
-Sản phẩm của bảy báo cáo này không phải một model tốt hơn — không có model nào tốt hơn.
+Sản phẩm của tám báo cáo này không phải một model tốt hơn — không có model nào tốt hơn.
 Sản phẩm là **một bộ máy đo đủ chặt để kết luận "không tốt hơn" một cách đáng tin**, cộng
 với một cơ chế giải thích vì sao. Trong ứng dụng thực tế, biết chắc rằng một baseline rẻ và
 đơn giản đã gần tối ưu là kết quả có giá trị vận hành trực tiếp: nó chặn được việc đầu tư
 tiếp vào một hướng đã hết dư địa.
 
-## Trạng thái sau bảy báo cáo
+## Trạng thái sau tám báo cáo
 
-Cập nhật **12/08/2026**.
+Cập nhật **14/08/2026**.
 
 | | |
 |---|---|
-| Champion | **Response top-k**, không đổi từ Sprint 2 qua cả năm vòng cải tiến |
-| Số vòng cải tiến đã chạy | 5, mỗi vòng một giao thức đăng ký trước riêng |
+| Champion | **Response top-k**, không đổi từ Sprint 2 qua cả sáu vòng cải tiến |
+| Số vòng cải tiến đã chạy | 6, mỗi vòng một giao thức đăng ký trước riêng |
 | Số challenger đạt promotion rule | **0** |
 | Cơ chế giải thích | `τ(x) ≈ 0,53 · p₀(x)` — đo trực tiếp trên dữ liệu thô, xem `output/eda/` |
+| Độ phân giải hiện tại | `±1,74e-05` trên `policy_area_dr`, so với chênh lệch bậc `1e-06` |
 
-Bảy báo cáo trên là **đóng băng**: không sửa số trong báo cáo đã phát hành. Kết quả mới đi vào
+Tám báo cáo trên là **đóng băng**: không sửa số trong báo cáo đã phát hành. Kết quả mới đi vào
 một báo cáo mới, kèm banner trỏ qua lại.
 
 ## Hướng kế tiếp
 
-Hướng "tìm model tốt hơn trên Criteo `conversion`" **đã đóng** — cần `2.123×` toàn bộ dataset mới
-phân biệt được trên metric chính. Ba hướng còn mở, xếp theo giá trị trên chi phí, ghi đầy đủ ở
+Hướng "tìm model tốt hơn trên Criteo `conversion`" **đã đóng** — không phải vì một tỷ lệ dữ liệu
+cần thêm cụ thể (xem đính chính ở mục 2), mà vì độ phân giải của phép đo nhỏ hơn chênh lệch cần
+đo một bậc độ lớn, và vì vòng `rare-outcome` đã loại nốt giả thuyết "thua do cấu hình đặt sai".
+Ba hướng còn mở, xếp theo giá trị trên chi phí, ghi đầy đủ ở
 [`../planning/README.md`](../planning/README.md):
 
 1. External validity trên dataset thứ hai — trả lời "Response thắng vì outcome hiếm hay nói chung".

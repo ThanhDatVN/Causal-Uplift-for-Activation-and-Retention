@@ -1,0 +1,18 @@
+[split] mode=sprint3 frac=0.5 train=5,591,836 test=1,397,959 time=61.2s
+[leaf] min_samples_leaf=10000 -> ky vong 2.906 su kien control moi la (control_share=0.1500 control_rate=0.001937)
+[fit] profile=rare-outcome n_estimators=500 min_samples_leaf=10000 cv=3 max_samples=0.45 inference=False
+/usr/local/lib/python3.12/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMRegressor was fitted with feature names
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMRegressor was fitted with feature names
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMRegressor was fitted with feature names
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMRegressor was fitted with feature names
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMRegressor was fitted with feature names
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMRegressor was fitted with feature names
+  warnings.warn(
+[fit] done fit_time=6348.9s
+[holdout] y_sha256=b0d9e82e56168c4da09ef0d1 t_sha256=a3d65107174cffa80663de3d
+[write] /kaggle/working/output/causal_forest/sprint3_rare_outcome/cate_causal_forest_rare_outcome.npy n=1,397,959 mean=0.000937 total_time=6438.8s

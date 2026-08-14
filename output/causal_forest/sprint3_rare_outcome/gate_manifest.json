@@ -1,0 +1,57 @@
+{
+  "created_utc": "2026-08-13T18:58:15.786323+00:00",
+  "status": "failed",
+  "scope": "resource_and_artifact_integrity_gate_only",
+  "fraction": 0.5,
+  "profile": "rare-outcome",
+  "split": "sprint3",
+  "command": [
+    "/usr/bin/python3",
+    "/kaggle/working/repo/scripts/train_causal_forest.py",
+    "--data-path",
+    "/kaggle/input/datasets/datthnh/criteo-uplift-v21/criteo-uplift-v2.1.csv",
+    "--frac",
+    "0.5",
+    "--split",
+    "sprint3",
+    "--profile",
+    "rare-outcome",
+    "--output-dir",
+    "/kaggle/working/output/causal_forest/sprint3_rare_outcome",
+    "--seed",
+    "42"
+  ],
+  "data": {
+    "path": "/kaggle/input/datasets/datthnh/criteo-uplift-v21/criteo-uplift-v2.1.csv",
+    "sha256": "e4d7c710ca1f38e523309d0f8a0745d1b53e7392d51f20d1088b6cfeaef222ef",
+    "form": "csv"
+  },
+  "runtime": {
+    "logical_cpus": 4,
+    "physical_cpus": 2,
+    "system_ram_total_gb": 31.347740173339844,
+    "system_ram_available_start_gb": 30.252975463867188,
+    "peak_process_tree_rss_gb": 28.46208953857422,
+    "peak_process_tree_ram_fraction": 0.9079470922366593,
+    "minimum_system_available_gb": 1.9858856201171875,
+    "wall_seconds": 6443.128773927689,
+    "exit_code": 0
+  },
+  "artifact_contract": {
+    "score_path": "/kaggle/working/output/causal_forest/sprint3_rare_outcome/cate_causal_forest_rare_outcome.npy",
+    "holdout_path": "/kaggle/working/output/causal_forest/sprint3_rare_outcome/holdout_test_yt.npz",
+    "score_rows": 1397959,
+    "all_finite": true,
+    "aligned": true
+  },
+  "stop_rule": {
+    "max_ram_fraction": 0.75,
+    "may_continue": false,
+    "quality_not_assessed": true
+  },
+  "limitations": [
+    "Passing this gate does not show that Causal Forest improves Qini.",
+    "GPU selection does not accelerate EconML CausalForestDML itself.",
+    "Kaggle resources and quota must be read live; they are not guaranteed."
+  ]
+}

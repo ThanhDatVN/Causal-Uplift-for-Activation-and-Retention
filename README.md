@@ -78,6 +78,24 @@ không promote. Nguồn: [top-tail v2 report](report/TOP_TAIL_RESEARCH_V2_REPORT
 [inference guide](docs/TOP_TAIL_POLICY_INFERENCE_GUIDE.md).
 
 
+### Causal Forest `rare-outcome` — sửa cấu hình cho outcome hiếm
+
+- cấu hình đã chạy trước đó dùng `min_samples_leaf=500`, chỉ cho `0,145` sự kiện control mỗi
+  lá — đại đa số lá có nhánh control rỗng;
+- `min_samples_leaf=10000` nâng lên `2,906`; tỷ lệ score âm giảm `19,6% → 11,9%`;
+- fit trên development 5.591.836 dòng, predict trên confirmation 1.397.959 dòng, chấm bằng
+  **DR signal đã đóng băng** của Sprint 3 nên so trực tiếp được với bảng confirmation;
+- Causal Forest **hạng 1/10** theo metric chính (`0,000914` so với Response `0,000912`), nhưng
+  paired CI `[−1,52e-05; +1,97e-05]` chứa 0 — **hoà**, champion giữ nguyên **Response**;
+- vượt rõ cả ba biến thể Rank-Learner với CI hoàn toàn trên 0.
+
+Phát hiện phụ quan trọng hơn kết quả model: chấm lại **cùng một bộ điểm trên cùng những dòng**
+bằng DR signal thay vì IPW làm chênh lệch đo được đổi **69 lần** và làm Response tụt từ hạng 2
+xuống hạng 4. Mọi paired CI trong nhóm đầu vẫn chứa 0, nên đây là bằng chứng rằng **thứ hạng
+theo point estimate không ổn định khi đổi tín hiệu chấm điểm**, không phải bằng chứng đổi ngôi.
+
+Nguồn: [Causal Forest rare-outcome report](report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md).
+
 ## Kết quả Sprint 3
 
 Metric chính là `policy_area_dr`: trung bình conversion tăng thêm trên mỗi khách
@@ -126,7 +144,7 @@ tích thay vì đọc code:
 | [`01_eda_criteo.ipynb`](notebooks/01_eda_criteo.ipynb) | Phân tích dữ liệu: toàn vẹn nguồn, cardinality và sentinel value, cân bằng covariate (SMD + Love plot), propensity tuyến tính và phi tuyến, overlap, bằng chứng số cho leakage hậu can thiệp, ATE/risk ratio kèm CI, MDE, heterogeneity theo tầng và chẩn đoán prognostic dominance | 25/25 code cell, 9 biểu đồ |
 | [`02_modeling_and_evaluation.ipynb`](notebooks/02_modeling_and_evaluation.ipynb) | Baseline Response so với 8 challenger: estimand, protocol đăng ký trước, OOF hai fold seed, paired bootstrap, bất đồng metric, promotion rule, threats to validity | 18/18 code cell, 5 biểu đồ |
 | [`causal_forest.ipynb`](notebooks/causal_forest.ipynb) | Chạy `CausalForestDML` ba stage 20→30→50% trên Kaggle. Bản notebook Kaggle trả về sau `Save & Run All`, 53,2 phút, không exception | 10/10 code cell |
-| [`causal_forest_rare_outcome.ipynb`](notebooks/causal_forest_rare_outcome.ipynb) | Cấu hình `rare-outcome` trên split Sprint 2/3, đăng ký trước ở `configs/causal_forest_rare_outcome_protocol_v1.json`. Sửa `min_samples_leaf` cho outcome hiếm | chưa chạy |
+| [`causal_forest_rare_outcome.ipynb`](notebooks/causal_forest_rare_outcome.ipynb) | Cấu hình `rare-outcome` trên split Sprint 2/3, đăng ký trước ở `configs/causal_forest_rare_outcome_protocol_v1.json`. Sửa `min_samples_leaf` cho outcome hiếm | đã chạy, 107,4 phút |
 
 Notebook `02` **đọc lại artifact đã đóng băng** trong `output/`, không huấn luyện lại —
 chạy vài giây và không cần file dữ liệu 13,98 triệu dòng. Việc huấn luyện nằm ở
@@ -302,7 +320,7 @@ py -3.12 -m venv .venv
 ```
 
 ```powershell
-.venv\Scripts\python.exe -m pytest tests -q          # 269 test
+.venv\Scripts\python.exe -m pytest tests -q          # 270 test
 node scripts\smoke_webapp_browser.mjs                # 23 acceptance check
 ```
 

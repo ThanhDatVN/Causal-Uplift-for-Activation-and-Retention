@@ -107,9 +107,33 @@ def test_protocol_states_expected_outcome_and_scope(protocol):
         "registered_not_yet_run",
         "run_once_gate_failed_on_memory",
         "run_once_gate_passed",
+        "completed_not_promoted",
+        "completed_promoted",
     }
     assert protocol["decision_rule"]["expected_outcome"]
     assert protocol["scope_limits"]
+
+
+def test_result_if_present_is_consistent_with_promotion_rule(protocol):
+    """Kết quả đã ghi phải tự nhất quán với quy tắc promotion đã đăng ký.
+
+    Bắt đúng một loại lỗi: ghi ``promoted: true`` trong khi CI vẫn chứa 0, tức
+    kết luận mạnh hơn bằng chứng.
+    """
+    result = protocol.get("result")
+    if result is None:
+        assert protocol["status"] == "registered_not_yet_run"
+        return
+
+    low, high = result["paired_ci_95"]
+    assert low <= result["paired_difference_vs_response"] <= high
+    assert result["ci_contains_zero"] == (low <= 0 <= high)
+    if result["ci_contains_zero"]:
+        assert result["promoted"] is False, (
+            "CI chứa 0 mà vẫn ghi promoted=true: kết luận mạnh hơn bằng chứng"
+        )
+        assert protocol["status"] == "completed_not_promoted"
+        assert result["champion_unchanged"] == "Response"
 
 
 def test_every_recorded_run_states_gate_outcome(protocol):

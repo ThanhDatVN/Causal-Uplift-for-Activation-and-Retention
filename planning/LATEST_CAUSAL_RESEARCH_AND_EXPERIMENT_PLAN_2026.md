@@ -277,8 +277,16 @@ vì phép đo không đủ phân giải để công nhận một cải tiến k�
 | `policy_area_dr` | `+4,96e-07` | `5,90e-05` | `2,97e10` — **2.123× toàn bộ Criteo** |
 | Qini | `−1,32e-02` | `2,39e-02` | `6,85e06` — **3,3× holdout hiện tại** |
 
-Trên metric chính, CI rộng gấp **119 lần** chênh lệch cần đo. Con số 2.123× không phải "khó" mà
-là không tồn tại.
+Trên metric chính, CI rộng gấp **119 lần** chênh lệch cần đo.
+
+> **Đính chính 14/08/2026.** Hai con số `2.123×` và `6,85e06` ở bảng trên **không vững**, và
+> không nên trích tiếp. Chúng dùng `n · (nửa CI / Δ)²`, tức chia cho một point estimate mà chính
+> nó không phân biệt được với 0. Chấm lại đúng artifact đó bằng DR signal thay vì IPW cho
+> `1,8×` thay vì `2.123×` — chênh gần 7.800 lần. Phát biểu vững là phát biểu về **độ rộng CI**:
+> trên confirmation, độ phân giải là `±1,74e-05` trong khi chênh lệch cần đo ở bậc `1e-06`.
+> Bằng chứng: [`../report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md`](../report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md)
+> mục 5. Kết luận "hướng này đã đóng" **không đổi** — nó nay dựa trên độ phân giải và trên việc
+> vòng `rare-outcome` đã loại nốt giả thuyết cấu hình đặt sai.
 
 Dòng thứ hai chỉ ra chỗ vẫn còn dư địa: trên Qini, thiếu hụt chỉ `3,3` lần — nằm trong tầm với.
 Nhưng đó là cải tiến về **thiết kế đánh giá**, không phải về model.

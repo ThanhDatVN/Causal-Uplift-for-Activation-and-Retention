@@ -147,7 +147,7 @@ Ba hướng còn mở, xếp theo giá trị trên chi phí, ghi đầy đủ �
 
 ## Quy ước trình bày
 
-Bảy báo cáo dùng chung một bố cục: kết luận trước, bằng chứng số ở giữa, giới hạn và
+Tám báo cáo dùng chung một bố cục: kết luận trước, bằng chứng số ở giữa, giới hạn và
 artifact ở cuối. Báo cáo chỉ chứa **kết quả và diễn giải**; phần vận hành nằm ở nơi khác:
 
 | Cần gì | Đọc ở đâu |

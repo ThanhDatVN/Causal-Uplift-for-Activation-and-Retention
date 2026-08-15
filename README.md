@@ -142,15 +142,22 @@ tích thay vì đọc code:
 | Notebook | Nội dung | Output lưu sẵn |
 |---|---|---|
 | [`01_eda_criteo.ipynb`](notebooks/01_eda_criteo.ipynb) | Phân tích dữ liệu: toàn vẹn nguồn, cardinality và sentinel value, cân bằng covariate (SMD + Love plot), propensity tuyến tính và phi tuyến, overlap, bằng chứng số cho leakage hậu can thiệp, ATE/risk ratio kèm CI, MDE, heterogeneity theo tầng và chẩn đoán prognostic dominance | 25/25 code cell, 9 biểu đồ |
-| [`02_modeling_and_evaluation.ipynb`](notebooks/02_modeling_and_evaluation.ipynb) | Baseline Response so với 8 challenger: estimand, protocol đăng ký trước, OOF hai fold seed, paired bootstrap, bất đồng metric, promotion rule, threats to validity | 18/18 code cell, 5 biểu đồ |
+| [`02_modeling_and_evaluation.ipynb`](notebooks/02_modeling_and_evaluation.ipynb) | Baseline Response so với 8 challenger: estimand, protocol đăng ký trước, OOF hai fold seed, paired bootstrap, bất đồng metric, promotion rule, threats to validity. Mục 7bis huấn luyện thật ngay trong notebook | 22/22 code cell, 5 biểu đồ |
 | [`causal_forest.ipynb`](notebooks/causal_forest.ipynb) | Chạy `CausalForestDML` ba stage 20→30→50% trên Kaggle. Bản notebook Kaggle trả về sau `Save & Run All`, 53,2 phút, không exception | 10/10 code cell |
-| [`causal_forest_rare_outcome.ipynb`](notebooks/causal_forest_rare_outcome.ipynb) | Cấu hình `rare-outcome` trên split Sprint 2/3, đăng ký trước ở `configs/causal_forest_rare_outcome_protocol_v1.json`. Sửa `min_samples_leaf` cho outcome hiếm | đã chạy, 107,4 phút |
+| [`causal_forest_rare_outcome.ipynb`](notebooks/causal_forest_rare_outcome.ipynb) | Cấu hình `rare-outcome` trên split Sprint 2/3, đăng ký trước ở `configs/causal_forest_rare_outcome_protocol_v1.json`. Sửa `min_samples_leaf` cho outcome hiếm | 0/10 code cell — bản source Kaggle, **chưa nhúng output**; bằng chứng lần chạy 107,4 phút nằm ở `output/causal_forest/sprint3_rare_outcome/train.log` |
 
-Notebook `02` **đọc lại artifact đã đóng băng** trong `output/`, không huấn luyện lại —
-chạy vài giây và không cần file dữ liệu 13,98 triệu dòng. Việc huấn luyện nằm ở
-`scripts/run_oof_experiment.py` và `scripts/run_sprint3_confirmation.py`; tách trình bày
-khỏi tính toán để mọi con số truy được về đúng một run có `run_id`, `commit_sha` và hash
-split cố định.
+Notebook `02` có hai chế độ, ghi rõ ngay ở đầu notebook. Mục 1–7 và 8–17 **đọc lại artifact
+đã đóng băng** trong `output/` — chạy vài giây, không cần dữ liệu gốc. Mục 7bis thì **huấn
+luyện thật ngay trong notebook**: 15% development pool, 3-fold cross-fitting, ba candidate,
+bằng đúng những hàm mà [`scripts/run_oof_experiment.py`](scripts/run_oof_experiment.py) gọi;
+mất khoảng hai phút và cần dữ liệu gốc.
+
+Mục 7bis tồn tại để việc tách trình bày khỏi tính toán **kiểm chứng được** thay vì chỉ được
+tuyên bố: nó huấn luyện lại từ đầu rồi đối chiếu với artifact đã đóng băng ở
+`output/improvement/data_opt_screen_seed101/`, khớp metric chính ở bậc `1e-17`. Huấn luyện
+đầy đủ — 5.591.836 dòng × hai fold seed — vẫn nằm ở `scripts/run_oof_experiment.py` và
+`scripts/run_sprint3_confirmation.py`, để mọi con số truy được về đúng một run có `run_id`,
+`commit_sha` và hash split cố định.
 
 Notebook `01` chạy trực tiếp trên toàn bộ 13,98 triệu dòng (khoảng 2,5 phút) và **tự đối
 chiếu** kết quả với artifact đã đóng băng ở `output/eda/` do
@@ -251,7 +258,7 @@ webapp/                 API FastAPI + SPA không CDN
 output/                 artifact đã chạy — xem output/README.md
 docs/                   method guide, decision contract, data/model card
 planning/               bối cảnh nghiên cứu và mức xác minh nguồn
-report/                 sáu báo cáo kết quả
+report/                 tám báo cáo kết quả
 ```
 
 Mỗi thư mục lớn có `README.md` riêng ghi vai trò và trạng thái từng file:
@@ -320,7 +327,7 @@ py -3.12 -m venv .venv
 ```
 
 ```powershell
-.venv\Scripts\python.exe -m pytest tests -q          # 270 test
+.venv\Scripts\python.exe -m pytest tests -q          # 275 test
 node scripts\smoke_webapp_browser.mjs                # 23 acceptance check
 ```
 

@@ -1,22 +1,22 @@
 # Causal Forest cấu hình `rare-outcome` — báo cáo kết quả
 
-Ngày hoàn tất: 14/08/2026
-Protocol: [`causal_forest_rare_outcome_protocol_v1.json`](../configs/causal_forest_rare_outcome_protocol_v1.json) — đăng ký **trước** khi chạy
-Nguồn số: `output/causal_forest/sprint3_rare_outcome/`, `output/causal_forest/release/cf_sprint3_*`,
-`output/causal_forest/signal_sensitivity/`
-Notebook: [`causal_forest_rare_outcome.ipynb`](../notebooks/causal_forest_rare_outcome.ipynb)
+- **Ngày:** 14/08/2026
+- **Protocol:** [`causal_forest_rare_outcome_protocol_v1.json`](../configs/causal_forest_rare_outcome_protocol_v1.json) — đăng ký **trước** khi chạy
+- **Nguồn số:** `output/causal_forest/sprint3_rare_outcome/`,
+  `output/causal_forest/release/cf_sprint3_*`, `output/causal_forest/signal_sensitivity/`
+- **Notebook:** [`causal_forest_rare_outcome.ipynb`](../notebooks/causal_forest_rare_outcome.ipynb)
 
 ## 1. Kết luận
 
 **Champion giữ nguyên Response.** Causal Forest đứng đầu theo metric chính nhưng chênh lệch có
-CI chứa 0, nên đây là hoà.
+CI chứa 0, nên đây là hòa.
 
 | | |
 |---|---|
 | `policy_area_dr` Causal Forest | `0,000914` — hạng **1/10** |
 | `policy_area_dr` Response | `0,000912` — hạng 2/10 |
 | Δ paired | `+1,198e-06` |
-| CI 95% | `[−1,516e-05; +1,971e-05]` — **chứa 0** |
+| CI 95% | `[-1,516e-05; +1,971e-05]` — **chứa 0** |
 | `P(Δ > 0)` | `0,558` |
 | Promotion rule | **không đạt** |
 
@@ -34,7 +34,7 @@ Cấu hình `kaggle-safe` đã chạy ba mốc 20/30/50% dùng `min_samples_leaf
 ```
 
 Honest splitting còn chia đôi tiếp, còn khoảng `0,073`. Nghĩa là **đại đa số lá có nhánh control
-rỗng**, trong khi Causal Forest ước lượng chính hiệu số treated − control trong từng lá. Đó là
+rỗng**, trong khi Causal Forest ước lượng chính hiệu số treated - control trong từng lá. Đó là
 một cấu hình bị đặt sai cho outcome hiếm, và bất kỳ ai đọc báo cáo Causal Forest cũ đều có thể
 phản bác rằng model thua vì lý do đó — phản bác ấy **đúng**.
 
@@ -97,17 +97,17 @@ là để tình huống này không trở thành lựa chọn hậu nghiệm.
 
 | So với | Δ `policy_area_dr` | CI 95% | Kết luận |
 |---|---:|---|---|
-| Response | `+1,198e-06` | `[−1,516e-05; +1,971e-05]` | hoà |
-| Ensemble-QAgg | `+2,32e-06` | `[−4,84e-05; +5,34e-05]` | hoà |
-| Ensemble-RankAverage | `+5,85e-06` | `[−4,32e-05; +5,52e-05]` | hoà |
-| S-Under7 | `+1,80e-05` | `[−4,62e-05; +8,11e-05]` | hoà |
-| X-Renormalized | `+2,38e-05` | `[−2,42e-05; +7,29e-05]` | hoà |
-| Ensemble-BestSingle | `+2,38e-05` | `[−2,42e-05; +7,29e-05]` | hoà |
+| Response | `+1,198e-06` | `[-1,516e-05; +1,971e-05]` | hòa |
+| Ensemble-QAgg | `+2,32e-06` | `[-4,84e-05; +5,34e-05]` | hòa |
+| Ensemble-RankAverage | `+5,85e-06` | `[-4,32e-05; +5,52e-05]` | hòa |
+| S-Under7 | `+1,80e-05` | `[-4,62e-05; +8,11e-05]` | hòa |
+| X-Renormalized | `+2,38e-05` | `[-2,42e-05; +7,29e-05]` | hòa |
+| Ensemble-BestSingle | `+2,38e-05` | `[-2,42e-05; +7,29e-05]` | hòa |
 | Rank-K2 | `+5,16e-05` | `[+2,52e-05; +8,18e-05]` | **CF vượt rõ** |
 | Rank-K1 | `+6,17e-05` | `[+2,34e-05; +9,80e-05]` | **CF vượt rõ** |
 | Rank-K05 | `+6,51e-05` | `[+2,26e-05; +1,072e-04]` | **CF vượt rõ** |
 
-Causal Forest vượt rõ cả ba biến thể Rank-Learner và hoà với sáu model còn lại. Không có lower
+Causal Forest vượt rõ cả ba biến thể Rank-Learner và hòa với sáu model còn lại. Không có lower
 bound nào dương so với Response, nên điều kiện promotion hỏng.
 
 ### 4.3 Can thiệp có hiệu lực đúng như thiết kế
@@ -196,7 +196,7 @@ Trần nằm ở tín hiệu, không ở cấu hình model — đúng như báo 
 
 **2. Giá trị của vòng này chủ yếu là đóng một lỗ hổng lập luận.** Trước đây có thể phản bác rằng
 Causal Forest thua vì lá quá nhỏ cho outcome hiếm. Nay phản bác đó đã được kiểm chứng và bác bỏ
-bằng số: sửa đúng ràng buộc ấy, kết quả vẫn hoà. Kết luận "hoà" từ chỗ là một cấu hình bị đặt sai
+bằng số: sửa đúng ràng buộc ấy, kết quả vẫn hòa. Kết luận "hòa" từ chỗ là một cấu hình bị đặt sai
 trở thành một kết luận vững.
 
 **3. Chọn tín hiệu chấm điểm quan trọng ngang chọn model.** Đây là bài học đắt nhất của vòng này.

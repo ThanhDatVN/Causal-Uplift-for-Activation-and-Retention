@@ -11,13 +11,13 @@ repo mâu thuẫn với chúng, ưu tiên báo cáo.
 | Báo cáo | Phạm vi | Kết luận chính |
 |---|---|---|
 | [SPRINT_1_FINAL_REPORT.md](SPRINT_1_FINAL_REPORT.md) | Nền tảng causal, sáu model, final test 2.096.940 dòng | Response Qini `0,187886` dẫn đầu; khoảng tin cậy chỉ tách được Response khỏi T-Learner và DR-Learner |
-| [SPRINT_2_FINAL_REPORT.md](SPRINT_2_FINAL_REPORT.md) | Policy, calibration, dashboard, confirmation 1.397.959 dòng | Champion Response top-k; X‑Renormalized − Response có CI chứa 0 |
+| [SPRINT_2_FINAL_REPORT.md](SPRINT_2_FINAL_REPORT.md) | Policy, calibration, dashboard, confirmation 1.397.959 dòng | Champion Response top-k; X-Renormalized - Response có CI chứa 0 |
 | [SPRINT_3_FINAL_REPORT.md](SPRINT_3_FINAL_REPORT.md) | Vòng cải tiến có đăng ký trước, web app, ba chẩn đoán bổ sung | Không challenger nào đạt promotion rule; champion giữ nguyên |
-| [CAUSAL_FOREST_REPORT.md](CAUSAL_FOREST_REPORT.md) | Thuật toán chuyên dụng trên ba mốc dữ liệu, chấm cùng holdout Sprint 1 | `policy_area_dr` hạng 1/6, Qini hạng 3/6; CI chứa 0 so với Response nên là hoà |
+| [CAUSAL_FOREST_REPORT.md](CAUSAL_FOREST_REPORT.md) | Thuật toán chuyên dụng trên ba mốc dữ liệu, chấm cùng holdout Sprint 1 | `policy_area_dr` hạng 1/6, Qini hạng 3/6; CI chứa 0 so với Response nên là hòa |
 | [DATA_OPTIMIZATION_REPORT.md](DATA_OPTIMIZATION_REPORT.md) | Quay lại từ EDA, sentinel/funnel ablation, OOF hai seed và gate từng vấn đề | Response-Sentinel đi tiếp nhưng chưa được promote; champion vẫn là Response |
 | [CAUSAL_FOUNDATION_EXPERIMENT_REPORT.md](CAUSAL_FOUNDATION_EXPERIMENT_REPORT.md) | DINA, Anchored R, Pattern R; synthetic tests, screen hai seed và full finalist | Không causal learner qua screen; Response-Sentinel không ổn định ở full; giữ Response |
 | [TOP_TAIL_RESEARCH_V2_REPORT.md](TOP_TAIL_RESEARCH_V2_REPORT.md) | Paired simultaneous audit của phát hiện hậu nghiệm ở hard budget 1–2%, event support và membership overlap | 16/16 causal point delta dương nhưng 0/16 lower bound vượt 0; không promote, giữ Response |
-| [CAUSAL_FOREST_RARE_OUTCOME_REPORT.md](CAUSAL_FOREST_RARE_OUTCOME_REPORT.md) | Sửa `min_samples_leaf` cho outcome hiếm, chạy trên split Sprint 2/3, chấm bằng DR signal đóng băng | CF hạng 1/10 theo metric chính nhưng CI chứa 0 — hoà. Phát hiện phụ: đổi tín hiệu chấm điểm làm chênh lệch đo được đổi 69 lần |
+| [CAUSAL_FOREST_RARE_OUTCOME_REPORT.md](CAUSAL_FOREST_RARE_OUTCOME_REPORT.md) | Sửa `min_samples_leaf` cho outcome hiếm, chạy trên split Sprint 2/3, chấm bằng DR signal đóng băng | CF hạng 1/10 theo metric chính nhưng CI chứa 0 — hòa. Phát hiện phụ: đổi tín hiệu chấm điểm làm chênh lệch đo được đổi 69 lần |
 
 Đọc Causal Forest rare-outcome trước nếu chỉ có ít thời gian — nó là vòng gần nhất và chứa
 phát hiện về độ nhạy của tín hiệu chấm điểm, thứ ảnh hưởng tới cách đọc mọi bảng còn lại.
@@ -103,7 +103,7 @@ nhạy hoặc kết luận được chọn sau khi nhìn số. Bốn cơ chế t
 | Metric hierarchy đăng ký trước | chọn metric có lợi sau khi xem kết quả | Sprint 3: Qini xếp ba challenger trên Response, metric chính xếp ngược lại — kết luận không đổi |
 | Gate theo **từng** fold seed | che giấu bất ổn bằng cách lấy trung bình | Causal Foundation: `Response-Sentinel` qua screen rồi đổi dấu ở full |
 | Power diagnostic trên `visit` | giao thức thiếu độ nhạy | Đổi sang outcome 4,7%, ba challenger chuyển từ "thua rõ" sang "không phân biệt được" |
-| Paired CI bắt buộc | nhầm point estimate với bằng chứng | Sprint 2 giữ Response dù X‑Renormalized cao hơn; Sprint 3 xác nhận quyết định đó đúng |
+| Paired CI bắt buộc | nhầm point estimate với bằng chứng | Sprint 2 giữ Response dù X-Renormalized cao hơn; Sprint 3 xác nhận quyết định đó đúng |
 
 Dòng thứ ba là quan trọng nhất. Nó cho thấy pipeline **có** phản ứng khi tín hiệu mạnh
 lên, nên việc nó không phản ứng trên `conversion` là phát biểu về dữ liệu chứ không phải về
@@ -147,8 +147,20 @@ Ba hướng còn mở, xếp theo giá trị trên chi phí, ghi đầy đủ �
 
 ## Quy ước trình bày
 
-Tám báo cáo dùng chung một bố cục: kết luận trước, bằng chứng số ở giữa, giới hạn và
-artifact ở cuối. Báo cáo chỉ chứa **kết quả và diễn giải**; phần vận hành nằm ở nơi khác:
+Bố cục chung: khối metadata dạng danh sách ở đầu (ngày, protocol, nguồn số, trạng thái),
+rồi kết luận, rồi bằng chứng số, và giới hạn ở cuối. Mọi báo cáo đều có một mục giới hạn,
+nhưng tên mục khác nhau tùy vòng — "Giới hạn", "Phạm vi suy luận",
+"Điều kết quả này **không** nói", hay "Hạng mục chưa hoàn thành và phạm vi không được suy
+rộng".
+
+Hai chỗ lệch khỏi bố cục đó, cả hai đều có lý do:
+
+- **Sprint 1 mở bằng phát biểu bài toán**, không phải kết luận. Nó là báo cáo đầu tiên nên
+  phải dựng khung khái niệm trước khi có gì để kết luận; bảng kết quả nằm ở mục 6.
+- **Ba báo cáo Sprint không có mục artifact gom cuối** — chúng liệt kê artifact ngay trong
+  từng mục hoặc ở khối metadata đầu trang. Năm báo cáo còn lại có mục artifact riêng.
+
+Báo cáo chỉ chứa **kết quả và diễn giải**; phần vận hành nằm ở nơi khác:
 
 | Cần gì | Đọc ở đâu |
 |---|---|

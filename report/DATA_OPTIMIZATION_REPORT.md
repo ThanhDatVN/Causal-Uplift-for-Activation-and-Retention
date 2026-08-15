@@ -1,8 +1,10 @@
 # Báo cáo tối ưu từ phân tích dữ liệu — protocol v1
 
-Ngày chốt: 2026-08-09  
-Protocol: `configs/data_optimization_protocol_v1.json`  
-Phạm vi bằng chứng: development OOF, **không đọc confirmation**
+- **Ngày:** 09/08/2026
+- **Protocol:** `configs/data_optimization_protocol_v1.json`
+- **Nguồn số:** `output/improvement/data_opt_screen_seed101/`,
+  `output/improvement/data_opt_screen_seed202/`, `output/improvement/data_opt_comparison/`
+- **Phạm vi bằng chứng:** development OOF, **không đọc confirmation**
 
 ## 1. Kết luận điều hành
 
@@ -105,11 +107,11 @@ Screen 15% là bằng chứng development OOF, không phải confirmation và kh
 |---|---:|---:|---:|---:|
 | **Response-Sentinel** | **0,000858831** | **0,000855201** | **0,000857016** | **+0,000002543** |
 | Response | 0,000856779 | 0,000852166 | 0,000854473 | 0 |
-| X-Renormalized | 0,000847377 | 0,000816124 | 0,000831750 | −0,000022722 |
-| Funnel-S-Sentinel | 0,000826904 | 0,000789146 | 0,000808025 | −0,000046448 |
-| Funnel-S | 0,000825798 | 0,000781736 | 0,000803767 | −0,000050706 |
-| S-Under7 | 0,000826134 | 0,000778575 | 0,000802355 | −0,000052118 |
-| S-Sentinel-Under7 | 0,000814791 | 0,000759424 | 0,000787107 | −0,000067365 |
+| X-Renormalized | 0,000847377 | 0,000816124 | 0,000831750 | -0,000022722 |
+| Funnel-S-Sentinel | 0,000826904 | 0,000789146 | 0,000808025 | -0,000046448 |
+| Funnel-S | 0,000825798 | 0,000781736 | 0,000803767 | -0,000050706 |
+| S-Under7 | 0,000826134 | 0,000778575 | 0,000802355 | -0,000052118 |
+| S-Sentinel-Under7 | 0,000814791 | 0,000759424 | 0,000787107 | -0,000067365 |
 
 Hai kết luận kỹ thuật quan trọng:
 
@@ -120,7 +122,7 @@ Hai kết luận kỹ thuật quan trọng:
 
 ## 6. Suy luận thống kê và quyết định
 
-So sánh paired `Response-Sentinel − Response` tại seed chính:
+So sánh paired `Response-Sentinel - Response` tại seed chính:
 
 | Thước đo | Giá trị |
 |---|---:|

@@ -240,7 +240,7 @@ Chi tiết và đường dẫn artifact nằm ở
 
 ## 9. Thứ tự thực thi
 
-Thứ tự này được khoá trước và **không đổi sau khi xem kết quả**. Cột trạng thái cập nhật
+Thứ tự này được khóa trước và **không đổi sau khi xem kết quả**. Cột trạng thái cập nhật
 12/08/2026.
 
 ```text
@@ -265,17 +265,17 @@ Không chạy lại Causal Forest trong vòng nền tảng này. Đó là trì h
 ## 10. Trạng thái 12/08/2026 và điều chỉnh hướng
 
 Sau năm vòng cải tiến, kế hoạch cần một điều chỉnh về **trọng số ưu tiên**, không phải về thứ tự
-đã khoá ở mục 9.
+đã khóa ở mục 9.
 
 ### 10.1 Một hướng đã đóng, có bằng chứng số
 
 Hướng "tìm model tốt hơn trên Criteo `conversion`" **đã đóng**. Không phải vì đã thử hết cách, mà
 vì phép đo không đủ phân giải để công nhận một cải tiến kể cả khi cải tiến đó có thật:
 
-| Metric | Chênh lệch CF − Response | Nửa độ rộng CI | Số dòng cần để phân biệt |
+| Metric | Chênh lệch CF - Response | Nửa độ rộng CI | Số dòng cần để phân biệt |
 |---|---:|---:|---:|
 | `policy_area_dr` | `+4,96e-07` | `5,90e-05` | `2,97e10` — **2.123× toàn bộ Criteo** |
-| Qini | `−1,32e-02` | `2,39e-02` | `6,85e06` — **3,3× holdout hiện tại** |
+| Qini | `-1,32e-02` | `2,39e-02` | `6,85e06` — **3,3× holdout hiện tại** |
 
 Trên metric chính, CI rộng gấp **119 lần** chênh lệch cần đo.
 
@@ -298,12 +298,12 @@ Response thắng *vì outcome hiếm* hay *nói chung*? Đây là hướng duy n
 trên một dataset" thành một phát biểu có phạm vi rộng hơn.
 
 Điều kiện tiên quyết chưa làm: đọc mã nguồn `uplift-bench` để nâng claim "benchmark công khai
-không có baseline Response" từ mức xác minh `B` lên `A`. Nếu hoá ra họ **có** baseline outcome
+không có baseline Response" từ mức xác minh `B` lên `A`. Nếu hóa ra họ **có** baseline outcome
 thì luận điểm định vị của hướng này sụp — nên kiểm **trước** khi chạy, không phải sau.
 
 **Ưu tiên 2 — cross-fitted evaluation trên toàn bộ dữ liệu.** Nới chính giới hạn ở mục 10.1:
 thiếu hụt trên Qini chỉ `3,3` lần. Chi phí thấp, và nó cải thiện độ phân giải cho mọi vòng sau
-chứ không chỉ cho một model. Hướng này nằm **ngoài** thứ tự đã khoá ở mục 9; muốn mở phải quyết
+chứ không chỉ cho một model. Hướng này nằm **ngoài** thứ tự đã khóa ở mục 9; muốn mở phải quyết
 định nó đứng ở đâu trong thứ tự đó.
 
 **Ưu tiên 3 — M1 hybrid theo đúng thứ tự mục 9.** Đã code, chưa chạy. Tiêu chí dừng đặt trước:

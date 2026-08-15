@@ -1,4 +1,4 @@
-# Model Card — Response top‑k Policy
+# Model Card — Response top-k Policy
 
 **Cập nhật 05/08/2026 sau Sprint 3.** Champion không đổi; bằng chứng ủng hộ nó đã được
 mở rộng. Xem mục "Sprint 3 re-evaluation" bên dưới trước khi trích số Sprint 2.
@@ -18,7 +18,7 @@ Confirmation:
 
 - Qini `0,182789`;
 - AUUC `0,005912`;
-- X‑Renormalized − Response Qini `0,008768`,
+- X-Renormalized - Response Qini `0,008768`,
   paired 95% CI `[-0,018626; 0,038772]`.
 
 Challenger chưa chứng minh hơn champion; release ưu tiên parsimony.

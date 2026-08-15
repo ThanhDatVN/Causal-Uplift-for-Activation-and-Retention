@@ -35,7 +35,7 @@ Response được chọn vì:
 
 1. model selection chỉ dùng validation mới;
 2. Response có Qini validation cao nhất trong ba candidate có thể triển khai;
-3. trên confirmation độc lập, X‑Renormalized − Response = `0,008768` Qini, nhưng paired
+3. trên confirmation độc lập, X-Renormalized - Response = `0,008768` Qini, nhưng paired
    bootstrap 95% CI `[-0,018626; 0,038772]`, chưa tách khỏi 0;
 4. giữ model có ít thành phần hơn khi paired CI chưa cho thấy challenger cải thiện.
 

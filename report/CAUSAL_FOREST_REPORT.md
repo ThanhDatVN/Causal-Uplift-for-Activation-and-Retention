@@ -1,10 +1,14 @@
 # Causal Forest — báo cáo kết quả
 
-Ngày: 06/08/2026.
+- **Ngày:** 06/08/2026
+- **Nguồn số:** `output/causal_forest/preflight_0p2/`, `output/causal_forest/preflight_0p3/`,
+  `output/causal_forest/preflight_0p5/`, `output/causal_forest/release/`,
+  `output/causal_forest/analysis/`
+- **Notebook:** [`causal_forest.ipynb`](../notebooks/causal_forest.ipynb)
 
 > **Cập nhật 14/08/2026.** Cấu hình trong báo cáo này dùng `min_samples_leaf=500`, chỉ cho
 > khoảng `0,145` sự kiện control mỗi lá — không phù hợp với outcome hiếm. Một vòng riêng đã
-> chạy lại với `min_samples_leaf=10000` trên split Sprint 2/3 và vẫn hoà với Response:
+> chạy lại với `min_samples_leaf=10000` trên split Sprint 2/3 và vẫn hòa với Response:
 > [`CAUSAL_FOREST_RARE_OUTCOME_REPORT.md`](CAUSAL_FOREST_RARE_OUTCOME_REPORT.md). Vòng đó cũng
 > cho thấy chấm lại chính artifact của báo cáo này bằng DR signal thay vì IPW làm chênh lệch
 > đo được đổi **69 lần** — xem mục 5 của báo cáo mới trước khi trích số ở đây.
@@ -26,8 +30,8 @@ metric, và vượt rõ ba trong năm model release theo metric chính.
 | X-Learner | 0,000975 — hạng 4/6 | 0,167168 — hạng 4/6 |
 | DR-Learner | 0,000925 — hạng 5/6 | 0,153967 — hạng 5/6 |
 | T-Learner | 0,000897 — hạng 6/6 | 0,142021 — hạng 6/6 |
-| Chênh lệch CF − Response | `+4,96e-07` | `−0,013208` |
-| CI 95% paired bootstrap | `[−0,000060; 0,000058]` | `[−0,036989; 0,010740]` |
+| Chênh lệch CF - Response | `+4,96e-07` | `-0,013208` |
+| CI 95% paired bootstrap | `[-0,000060; 0,000058]` | `[-0,036989; 0,010740]` |
 | CI chứa 0 | **có** | **có** |
 
 Cả hai chênh lệch đều không có ý nghĩa thống kê. `probability_positive = 0,504` trên
@@ -45,14 +49,14 @@ bootstrap weights nên pairing được giữ đúng.
 
 | So với | Δ policy_area_dr | CI 95% | Δ Qini | CI 95% |
 |---|---:|---|---:|---|
-| Response | `+4,96e-07` | `[−6,0e-05; 5,8e-05]` | `−0,013208` | `[−0,0370; 0,0107]` |
-| S-Learner | `+6,75e-06` | `[−2,1e-05; 3,6e-05]` | `−0,002526` | `[−0,0150; 0,0097]` |
-| X-Learner | `+3,09e-05` | `[1,3e-05; 5,3e-05]` | `+0,007510` | `[−0,0005; 0,0148]` |
-| DR-Learner | `+8,10e-05` | `[1,6e-05; 1,5e-04]` | `+0,020711` | `[−0,0064; 0,0472]` |
+| Response | `+4,96e-07` | `[-6,0e-05; 5,8e-05]` | `-0,013208` | `[-0,0370; 0,0107]` |
+| S-Learner | `+6,75e-06` | `[-2,1e-05; 3,6e-05]` | `-0,002526` | `[-0,0150; 0,0097]` |
+| X-Learner | `+3,09e-05` | `[1,3e-05; 5,3e-05]` | `+0,007510` | `[-0,0005; 0,0148]` |
+| DR-Learner | `+8,10e-05` | `[1,6e-05; 1,5e-04]` | `+0,020711` | `[-0,0064; 0,0472]` |
 | T-Learner | `+1,09e-04` | `[4,0e-05; 1,8e-04]` | `+0,032657` | `[0,0041; 0,0620]` |
 
-Theo `policy_area_dr`: vượt rõ X, DR, T; hoà với Response và S.
-Theo Qini: chỉ vượt rõ T; hoà với bốn model còn lại.
+Theo `policy_area_dr`: vượt rõ X, DR, T; hòa với Response và S.
+Theo Qini: chỉ vượt rõ T; hòa với bốn model còn lại.
 
 ## 3. Hai metric xếp hạng khác nhau
 
@@ -162,7 +166,7 @@ một quy trình chọn ứng viên cụ thể trên validation; Causal Forest k
 Điều nó bổ sung là một điểm dữ liệu đáng kể vào lập luận trung tâm.
 
 Sprint 3 kết luận: không CATE learner nào vượt được Response trên `conversion`, và mọi CI
-đều nằm hoàn toàn dưới 0. Causal Forest là model đầu tiên trong dự án **hoà** với Response
+đều nằm hoàn toàn dưới 0. Causal Forest là model đầu tiên trong dự án **hòa** với Response
 trên metric chính thay vì thua rõ.
 
 Diễn giải phải thận trọng vì mục 6.2 — khác tập test, khác signal. Nhưng nó phù hợp với

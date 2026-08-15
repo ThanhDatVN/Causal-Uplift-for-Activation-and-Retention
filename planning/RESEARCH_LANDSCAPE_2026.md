@@ -355,7 +355,7 @@ Chi tiết và bảng số: `report/SPRINT_3_FINAL_REPORT.md` mục 7bis.1.
 ### 5bis.2 Proxy-ordering diagnostic
 
 Bản HTML v7 của arXiv 2206.12532 cho phép nâng nguồn lên mức `A` cho **một phần**: điều
-kiện đủ `theta_max < (1 − beta_max)/2`, với `theta_max` là xác suất baseline lớn nhất và
+kiện đủ `theta_max < (1 - beta_max)/2`, với `theta_max` là xác suất baseline lớn nhất và
 `beta_max` là chặn trên của CATE lớn nhất.
 
 **Kết quả trên development OOF:** `theta_max = 0,885764`, ngưỡng `0,200783`, điều kiện

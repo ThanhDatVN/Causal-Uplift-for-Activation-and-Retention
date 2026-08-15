@@ -191,6 +191,37 @@ def test_every_directory_index_exists():
 
 
 @pytest.mark.parametrize(
+    "codepoint,name",
+    [("‑", "U+2011 non-breaking hyphen"), ("−", "U+2212 minus sign")],
+)
+def test_no_lookalike_hyphens_in_docs(codepoint, name):
+    """Tên model trong tài liệu phải khớp *từng byte* với tên trong `configs/`.
+
+    Lỗi đã xảy ra thật: tên candidate viết bằng gạch nối U+2011 hiển thị giống hệt bản ASCII
+    nhưng là một chuỗi khác. Hệ quả là `grep` theo đúng tên đã đăng ký trong `configs/` bỏ sót
+    19 lần nhắc `X-Renormalized`, và không tìm thấy lần nào của `X-Calibrated`. Cùng lý do cho
+    U+2212 dùng làm dấu trừ trong số âm.
+    """
+    offenders = []
+    for path in markdown_files():
+        # Tài liệu nội bộ nằm ngoài repo public và ngoài quy ước trình bày của nó.
+        if is_prospective(path):
+            continue
+        text = path.read_text(encoding="utf-8", errors="replace")
+        if codepoint not in text:
+            continue
+        for number, line in enumerate(text.splitlines(), 1):
+            if codepoint in line:
+                offenders.append(
+                    f"{path.relative_to(REPO_ROOT).as_posix()}:{number}: {line.strip()[:70]}"
+                )
+    assert not offenders, (
+        f"Dung '-' ASCII thay cho {name}:\n"
+        + "\n".join(f"  {o}" for o in offenders[:20])
+    )
+
+
+@pytest.mark.parametrize(
     "banned",
     ["state of the art", "production-ready", "SOTA"],
 )

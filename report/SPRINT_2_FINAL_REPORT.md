@@ -1,21 +1,23 @@
 # Báo cáo Sprint 2 — Từ mô hình causal đến policy và dashboard
 
-**Run ID:** `sprint2-local-exact-calibration-v1`
-**Trạng thái:** Local pipeline + dashboard hoàn thành; Causal Forest Kaggle pending
-**Nguồn số chính thức:** `output/sprint2/`
+- **Run ID:** `sprint2-local-exact-calibration-v1`
+- **Ngày:** 31/07/2026
+- **Nguồn số chính thức:** `output/sprint2/`
+- **Trạng thái:** hoàn thành pipeline local và dashboard; Causal Forest trên Kaggle còn treo
+  tại thời điểm chốt báo cáo
 
 ## 1. Kết quả điều hành
 
 Sprint 2 đã biến nghiên cứu uplift thành sản phẩm quyết định chạy được:
 
 - tạo confirmation set mới 1.397.959 dòng, không tái sử dụng final test Sprint 1;
-- thử X‑Learner renormalization, τ-isotonic và exact local restoration;
+- thử X-Learner renormalization, τ-isotonic và exact local restoration;
 - khóa Response top-k làm operational champion từ validation;
 - chấm policy bằng IPW/DR và 500 paired bootstrap;
 - tạo dashboard self-contained, 11/11 browser acceptance checks pass;
 - đóng gói gate Causal Forest cho Kaggle, nhưng không claim cloud result khi chưa chạy.
 
-Kết quả model: X‑Renormalized có Qini confirmation cao nhất (`0,191557`),
+Kết quả model: X-Renormalized có Qini confirmation cao nhất (`0,191557`),
 nhưng hơn Response `0,008768` với CI `[-0,018626; 0,038772]`. Chưa đủ bằng chứng đổi
 champion đã chọn trên validation.
 
@@ -71,25 +73,25 @@ Nguồn trực tiếp:
 - [Criteo dataset](https://ailab.criteo.com/criteo-uplift-prediction-dataset/).
 
 Không có claim nào rằng Nyberg đã empirical-validate exact correction bên trong
-X‑Learner. Ablation ở mẫu 10% không vượt baseline; release chuyển exact restoration sang
-T‑Learner/double-classifier đúng phạm vi Eq. 12.
+X-Learner. Ablation ở mẫu 10% không vượt baseline; release chuyển exact restoration sang
+T-Learner/double-classifier đúng phạm vi Eq. 12.
 
-## 4. Model results
+## 4. Kết quả model
 
 | Model | Qini | AUUC | EUCE |
 |---|---:|---:|---:|
-| X‑Renormalized | 0,191557 | 0,006189 | 0,000462 |
-| X‑Calibrated | 0,188528 | 0,006084 | 0,000240 |
+| X-Renormalized | 0,191557 | 0,006189 | 0,000462 |
+| X-Calibrated | 0,188528 | 0,006084 | 0,000240 |
 | Response | 0,182789 | 0,005912 | không áp dụng |
-| T‑LocalExact | 0,117668 | 0,003798 | 0,000957 |
+| T-LocalExact | 0,117668 | 0,003798 | 0,000957 |
 
 Paired Qini:
 
-| A − B | Δ | 95% CI | Kết luận |
+| A - B | Δ | 95% CI | Kết luận |
 |---|---:|---:|---|
-| X‑Renormalized − Response | 0,008768 | [-0,018626; 0,038772] | chưa phân biệt |
-| X‑Calibrated − X‑Renormalized | -0,003029 | [-0,010774; 0,004700] | chưa phân biệt |
-| T‑LocalExact − X‑Renormalized | -0,073889 | [-0,107381; -0,035891] | CI nằm hoàn toàn dưới 0 |
+| X-Renormalized - Response | 0,008768 | [-0,018626; 0,038772] | chưa phân biệt |
+| X-Calibrated - X-Renormalized | -0,003029 | [-0,010774; 0,004700] | chưa phân biệt |
+| T-LocalExact - X-Renormalized | -0,073889 | [-0,107381; -0,035891] | CI nằm hoàn toàn dưới 0 |
 
 Calibration cải thiện scale EUCE nhưng không chứng minh ranking tốt hơn. Kết quả cho thấy
 phương pháp “exact” không tự động cải thiện ranking so với phép xấp xỉ đang dùng cho rare
@@ -99,9 +101,9 @@ outcome.
 
 Bảng trên chứa một kết quả dễ bị đọc sai, nên cần tách bạch rõ.
 
-**X‑Calibrated cải thiện calibration gần gấp đôi** — EUCE giảm từ `0,000462` xuống
+**X-Calibrated cải thiện calibration gần gấp đôi** — EUCE giảm từ `0,000462` xuống
 `0,000240` — **nhưng ranking lại kém đi một chút**: Qini `0,188528` so với `0,191557`, và
-CI của chênh lệch `[−0,010774; 0,004700]` chứa 0. Nói cách khác, đưa điểm số về đúng thang
+CI của chênh lệch `[-0,010774; 0,004700]` chứa 0. Nói cách khác, đưa điểm số về đúng thang
 CATE không làm thứ tự ưu tiên tốt hơn.
 
 Điều này đúng về mặt toán học chứ không phải nghịch lý: τ-isotonic là một phép biến đổi
@@ -113,24 +115,24 @@ thiện targeting.** Nếu chỉ cần biết "target ai" thì calibration khôn
 trả lời "hiệu ứng ước tính bao nhiêu" cho bên kinh doanh thì cần, và cái giá phải trả là
 gần như bằng 0 về ranking.
 
-**T‑LocalExact là kết quả âm rõ ràng nhất của Sprint 2** và đáng ghi lại: Qini `0,117668`,
-thấp hơn X‑Renormalized `0,073889` với CI `[−0,107381; −0,035891]` nằm hoàn toàn dưới 0.
+**T-LocalExact là kết quả âm rõ ràng nhất của Sprint 2** và đáng ghi lại: Qini `0,117668`,
+thấp hơn X-Renormalized `0,073889` với CI `[-0,107381; -0,035891]` nằm hoàn toàn dưới 0.
 Đây là candidate duy nhất trong sprint bị tách biệt rõ ràng. Bài học không phải "exact
 restoration sai" mà là phạm vi áp dụng của nó hẹp: công thức đúng trong phạm vi Eq. 12 của
 Nyberg & Klami cho double-classifier, và việc ghép nó vào một kiến trúc khác không được
 paper bảo chứng. Dự án ghi rõ điều này ở mục 3 thay vì trình bày kết quả âm như một thất
 bại của nguồn.
 
-## 5. Policy result
+## 5. Kết quả policy
 
 Main scenario: budget 10%, value/conversion = 1, cost/contact = 0,0005.
 
 | Policy | DR net/customer | 95% CI | Δ vs random 95% CI |
 |---|---:|---:|---:|
 | Response top-k | 0,000799 | [0,000608; 0,000977] | [0,000582; 0,000928] |
-| X‑Renormalized top-k | 0,000825 | [0,000649; 0,001001] | [0,000611; 0,000951] |
-| X‑Calibrated top-k | 0,000826 | [0,000652; 0,001004] | [0,000611; 0,000953] |
-| T‑LocalExact top-k | 0,000671 | [0,000501; 0,000829] | [0,000464; 0,000777] |
+| X-Renormalized top-k | 0,000825 | [0,000649; 0,001001] | [0,000611; 0,000951] |
+| X-Calibrated top-k | 0,000826 | [0,000652; 0,001004] | [0,000611; 0,000953] |
+| T-LocalExact top-k | 0,000671 | [0,000501; 0,000829] | [0,000464; 0,000777] |
 | Random top-k | 0,000040 | [-0,000017; 0,000096] | — |
 
 Policy point estimates không được dùng để đổi champion sau confirmation. Product dùng
@@ -144,7 +146,7 @@ tương tự confirmation, không phải forecast đã deploy.
 
 Đây là quyết định gây tranh cãi nhất của Sprint 2, nên lý do phải được ghi đầy đủ.
 
-Trên confirmation, X‑Renormalized (`0,000825`) và X‑Calibrated (`0,000826`) đều cao hơn
+Trên confirmation, X-Renormalized (`0,000825`) và X-Calibrated (`0,000826`) đều cao hơn
 Response (`0,000799`). Nếu chỉ nhìn bảng này, đổi champion là lựa chọn hiển nhiên. Dự án
 không đổi, vì ba lý do xếp theo mức ràng buộc:
 
@@ -152,23 +154,23 @@ không đổi, vì ba lý do xếp theo mức ràng buộc:
    confirmation tồn tại để *kiểm định* lựa chọn đó chứ không phải để chọn lại. Đổi champion
    sau khi nhìn confirmation biến confirmation thành một validation split thứ hai, và khi
    đó dự án không còn tập nào chưa quan sát để kiểm định.
-2. **Chênh lệch không vượt được nhiễu.** X‑Renormalized − Response trên Qini là `0,008768`
-   với CI `[−0,018626; 0,038772]` — rộng gấp hơn bốn lần chênh lệch và chứa 0. Point
+2. **Chênh lệch không vượt được nhiễu.** X-Renormalized - Response trên Qini là `0,008768`
+   với CI `[-0,018626; 0,038772]` — rộng gấp hơn bốn lần chênh lệch và chứa 0. Point
    estimate cao hơn ở đây không phải bằng chứng model tốt hơn.
 3. **Chi phí của một quyết định sai không đối xứng.** Giữ baseline khi challenger thực sự
    tốt hơn làm mất một phần cải thiện nhỏ và đo được. Đổi sang challenger dựa trên nhiễu
    làm hỏng chính cơ chế mà mọi kết luận sau này dựa vào.
 
 Điểm đáng chú ý là quyết định này **được xác nhận về sau bằng dữ liệu độc lập**. Ở Sprint 3
-với metric chính mới và cross-fitting OOF trên `5.591.836` dòng, X‑Renormalized xếp dưới
-Response ở cả hai fold seed, và chênh lệch trên confirmation là `−0,0000226`. Nếu Sprint 2
+với metric chính mới và cross-fitting OOF trên `5.591.836` dòng, X-Renormalized xếp dưới
+Response ở cả hai fold seed, và chênh lệch trên confirmation là `-0,0000226`. Nếu Sprint 2
 đã đổi champion theo point estimate, dự án đã phải đảo ngược quyết định đó một sprint sau.
 
 Đây là bằng chứng cụ thể cho giá trị của việc khóa selection contract, và là lý do quy tắc
 "mọi claim A hơn B phải kèm paired CI" được nâng thành quy tắc bắt buộc của
 [`README.md`](README.md) từ đây trở đi.
 
-## 6. Product output
+## 6. Sản phẩm
 
 - `output/product/dashboard.html`: app demo self-contained.
 - `output/product/dashboard_data.json`: schema release.
@@ -179,7 +181,7 @@ Response ở cả hai fold seed, và chênh lệch trên confirmation là `−0,
 
 Dashboard chỉ dùng artifact freeze, không train/download implicit.
 
-## 7. Infrastructure
+## 7. Hạ tầng
 
 Full local Sprint 2:
 
@@ -195,7 +197,7 @@ attachment; runbook đầy đủ ở [`../docs/REPRODUCTION.md`](../docs/REPRODU
 quả ba mốc ở [`CAUSAL_FOREST_REPORT.md`](CAUSAL_FOREST_REPORT.md). `inference=False` của safe
 profile có nghĩa không yêu cầu `effect_interval()`.
 
-## 8. Quality evidence
+## 8. Bằng chứng chất lượng
 
 - formula inversion tests cho undersampling;
 - synthetic truth tests cho IPW/DR;

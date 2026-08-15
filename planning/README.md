@@ -20,7 +20,7 @@ Cập nhật **14/08/2026**, sau sáu vòng cải tiến. Nguồn số: tám bá
 | Thêm model trên Criteo `conversion` | **Đã đóng** | Độ phân giải `±1,74e-05` trên metric chính, nhỏ hơn chênh lệch cần đo một bậc độ lớn. Vòng `rare-outcome` đã loại nốt giả thuyết "thua do cấu hình đặt sai" |
 | External validity trên dataset thứ hai | **Ưu tiên 1** | Hướng duy nhất trả lời được "Response thắng vì outcome hiếm hay nói chung". Còn một điều kiện tiên quyết: nâng claim về `uplift-bench` từ mức `B` lên `A` |
 | Cross-fitted evaluation toàn bộ dữ liệu | **Ưu tiên 2** | Đưa độ phân giải từ `±1,74e-05` xuống `±5,5e-06`. **Không** đủ để tách top 2 (chênh lệch `1,2e-06`), nhưng đủ để tách phần giữa bảng — ví dụ CF so với X-Renormalized (`2,4e-05`) và S-Under7 (`1,8e-05`), hiện đều có CI chứa 0 |
-| M1 hybrid prognostic–causal logit | **Ưu tiên 3** | Đã hiện thực ở `src/hybrid.py` và có test, nhưng **0 dòng trong registry**. Chạy theo đúng thứ tự đã khoá |
+| M1 hybrid prognostic–causal logit | **Ưu tiên 3** | Đã hiện thực ở `src/hybrid.py` và có test, nhưng **0 dòng trong registry**. Chạy theo đúng thứ tự đã khóa |
 
 Chi tiết và bằng chứng số của bảng này:
 [LATEST_CAUSAL_RESEARCH_AND_EXPERIMENT_PLAN_2026.md](LATEST_CAUSAL_RESEARCH_AND_EXPERIMENT_PLAN_2026.md)
@@ -33,7 +33,7 @@ leaf — **đã chạy và không đổi kết luận**, nên căn cứ cho các
 
 | Hạng mục | Trạng thái |
 |---|---|
-| Event-aware minimum leaf | **Đã chạy 14/08/2026** — kết quả hoà, xem [`../report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md`](../report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md) |
+| Event-aware minimum leaf | **Đã chạy 14/08/2026** — kết quả hòa, xem [`../report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md`](../report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md) |
 | Balanced/honest sampling | Chưa làm |
 | Leaf shrinkage | Chưa làm |
 | Sentinel contract cho feature | Chưa làm |

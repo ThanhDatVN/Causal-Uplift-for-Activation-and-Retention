@@ -27,7 +27,7 @@ s_t = \frac{1/k-p_t}{1-p_t},
 trong đó \(p_t=P(Y=1\mid T=t)\), \(k=7\). Đây là công thức từ Nyberg & Klami
 (2023), Eq. 4, áp dụng riêng từng arm.
 
-### X‑Learner renormalized
+### X-Learner renormalized
 
 Với stratified undersampling cùng \(k\) ở hai arm và outcome hiếm:
 
@@ -49,8 +49,8 @@ p = \frac{s q}{1-q(1-s)}.
 \]
 
 Công thức phải áp dụng riêng cho treatment/control, sau đó mới lấy \(p_1-p_0\). Vì vậy
-release dùng nó với T‑Learner/double-classifier (`T-LocalExact`). Việc nhúng correction
-vào các bước imputation của X‑Learner không được bài gốc kiểm chứng; ablation 10% của dự
+release dùng nó với T-Learner/double-classifier (`T-LocalExact`). Việc nhúng correction
+vào các bước imputation của X-Learner không được bài gốc kiểm chứng; ablation 10% của dự
 án cho kết quả xấu nên không được promote.
 
 ### τ-isotonic
@@ -63,7 +63,7 @@ R=\frac{TY}{e}-\frac{(1-T)Y}{1-e}, \qquad E[R\mid X]=\tau(X).
 
 Isotonic regression fit ánh xạ đơn điệu từ score sang \(R\) trên validation. Candidate
 giảm EUCE confirmation từ `0,000462` xuống `0,000240`, nhưng Qini giảm nhẹ do tạo nhiều
-ties; ΔQini so với X‑Renormalized có CI chứa 0. Candidate được giữ như calibration
+ties; ΔQini so với X-Renormalized có CI chứa 0. Candidate được giữ như calibration
 ablation, không được dùng để tuyên bố ranking tốt hơn.
 
 Nguồn chính: Nyberg & Klami,
@@ -113,12 +113,12 @@ và Athey & Wager
 
 | Model | Qini confirmation | EUCE |
 |---|---:|---:|
-| X‑Renormalized | 0,191557 | 0,000462 |
-| X‑Calibrated | 0,188528 | 0,000240 |
+| X-Renormalized | 0,191557 | 0,000462 |
+| X-Calibrated | 0,188528 | 0,000240 |
 | Response | 0,182789 | không áp dụng |
-| T‑LocalExact | 0,117668 | 0,000957 |
+| T-LocalExact | 0,117668 | 0,000957 |
 
-X‑Renormalized có point estimate cao nhất, nhưng hơn Response chưa có ý nghĩa theo paired
+X-Renormalized có point estimate cao nhất, nhưng hơn Response chưa có ý nghĩa theo paired
 CI. Champion vẫn là Response vì được chọn trước trên validation.
 
 Ở budget 10%, `value=1`, `cost=0,0005`:

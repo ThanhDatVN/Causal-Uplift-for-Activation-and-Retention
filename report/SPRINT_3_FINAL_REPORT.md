@@ -1,12 +1,12 @@
 # Báo cáo Sprint 3 — Vòng cải tiến model, quyết định champion và web application
 
-**Run ID:** `sprint3-retrospective-confirmation-v1`
-**Protocol:** `sprint3-improvement-v1`, đăng ký trong `configs/sprint3_improvement_protocol.json`
-**Ngày:** 05/08/2026
-**Nguồn số chính thức:** `output/sprint3/`, `output/improvement/`
-**Trạng thái:** hoàn thành. Kết quả Causal Forest nằm ở `report/CAUSAL_FOREST_REPORT.md`
-và không thuộc release Sprint 3 — nó chấm trên holdout Sprint 1 với IPW signal, còn các
-challenger trong báo cáo này chấm trên confirmation Sprint 2 với DR signal
+- **Run ID:** `sprint3-retrospective-confirmation-v1`
+- **Protocol:** `sprint3-improvement-v1`, đăng ký trong `configs/sprint3_improvement_protocol.json`
+- **Ngày:** 05/08/2026
+- **Nguồn số chính thức:** `output/sprint3/`, `output/improvement/`
+- **Trạng thái:** hoàn thành. Kết quả Causal Forest nằm ở `report/CAUSAL_FOREST_REPORT.md`
+  và không thuộc release Sprint 3 — nó chấm trên holdout Sprint 1 với IPW signal, còn các
+  challenger trong báo cáo này chấm trên confirmation Sprint 2 với DR signal
 
 **Rà soát integrity 09/08/2026.** Artifact lịch sử đã được migrate sang schema v2 mà
 không fit lại model: registry được de-duplicate theo `(run_id, fold_seed, outcome)`, metric
@@ -180,7 +180,7 @@ ghi đúng như vậy: bảy phương pháp mới, ba biến thể ensemble và 
 12 candidate không tạo ra bằng chứng đủ để thay một baseline không phải CATE
 estimator.
 
-## 6. Policy result
+## 6. Kết quả policy
 
 Kịch bản chính: budget 10%, `value = 1`, `cost = 0,0005`, trên retrospective
 confirmation.
@@ -363,7 +363,7 @@ Fernández-Loría & Loría (arXiv 2206.12532 v7) cho một **điều kiện đ�
 xếp hạng đúng theo CATE:
 
 ```
-theta_max < (1 − beta_max) / 2
+theta_max < (1 - beta_max) / 2
 ```
 
 `theta_max` là xác suất baseline lớn nhất trong population; `beta_max` là chặn trên của

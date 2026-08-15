@@ -57,7 +57,7 @@ Theo Yadlowsky, Fleming, Shah, Brunskill & Wager, JASA 2025
 (DOI 10.1080/01621459.2024.2393466):
 
 ```text
-TOC(q) = mean(Γ trên top-q theo S) − mean(Γ)
+TOC(q) = mean(Γ trên top-q theo S) - mean(Γ)
 RATE   = ∫₀¹ α(q) · TOC(q) dq
 ```
 
@@ -73,7 +73,7 @@ Hai chi tiết hiện thực đáng ghi:
   `tests/test_ranking_metrics.py::test_constant_score_gives_zero_rate` bắt được
   trong lần chạy đầu.
 - **AUTOC không phản đối xứng khi đảo ngược ranking.** Từ đồng nhất thức
-  `TOC_rev(1−q) = −q·TOC(q)/(1−q)` suy ra `∫ q·TOC_rev = −∫ q·TOC`, tức chỉ biến
+  `TOC_rev(1-q) = -q·TOC(q)/(1-q)` suy ra `∫ q·TOC_rev = -∫ q·TOC`, tức chỉ biến
   thể `α(q)=q` mới đổi dấu chính xác. Điều này được khẳng định bằng test riêng.
 
 ## 4. Outcome adjustment giảm variance
@@ -85,22 +85,22 @@ hàm trong repo là dạng regression-adjusted quen thuộc, **được suy ra v
 tại chỗ**, không phải bản sao công thức của paper:
 
 ```text
-R_adj = (Y − m(X)) · (T − p) / (p(1 − p))
+R_adj = (Y - m(X)) · (T - p) / (p(1 - p))
 ```
 
 Với propensity hằng `p` và bất kỳ `m(X)` nào không phụ thuộc `T` hay `Y`:
 
 ```text
-E[R_adj | X] = (μ₁ − m) − (μ₀ − m) = τ(X)
+E[R_adj | X] = (μ₁ - m) - (μ₀ - m) = τ(X)
 ```
 
 nên adjustment không đổi estimand. Variance giảm khi `m(X)` xấp xỉ tốt `E[Y | X]`
 gộp hai arm. `m` bắt buộc phải fit ngoài mẫu đang chấm; trong pipeline nó là
-`p·mu1 + (1−p)·mu0` từ nuisance đã cross-fit.
+`p·mu1 + (1-p)·mu0` từ nuisance đã cross-fit.
 
 Kiểm chứng: hai test riêng cho tính bất biến kỳ vọng và cho việc giảm variance.
 Test giảm variance dùng dạng paired của Pitman–Morgan
-(`Cov(a+b, a−b) = Var(a) − Var(b)`) vì hai chuỗi AUTOC tương quan khoảng 0,92; đo
+(`Cov(a+b, a-b) = Var(a) - Var(b)`) vì hai chuỗi AUTOC tương quan khoảng 0,92; đo
 trên 5 khối seed độc lập, tỷ lệ variance nằm trong 0,84–0,91.
 
 Mức giảm variance của AUTOC yếu hơn nhiều so với mức giảm variance của signal từng
@@ -130,20 +130,20 @@ tối ưu trực tiếp một pairwise loss Neyman-orthogonal thay vì ước l�
 Các thành phần lấy từ paper:
 
 ```text
-φ(W)      = T/e·(Y − μ₁) − (1−T)/(1−e)·(Y − μ₀) + μ₁ − μ₀
-t_τ(X,X′) = σ( (τ(X) − τ(X′)) / κ )
-ω_τ(X,X′) = (1/κ)·t_τ·(1 − t_τ)
-Δ_η(W,W′) = [φ(W) − τ(X)] − [φ(W′) − τ(X′)]
+φ(W)      = T/e·(Y - μ₁) - (1-T)/(1-e)·(Y - μ₀) + μ₁ - μ₀
+t_τ(X,X′) = σ( (τ(X) - τ(X′)) / κ )
+ω_τ(X,X′) = (1/κ)·t_τ·(1 - t_τ)
+Δ_η(W,W′) = [φ(W) - τ(X)] - [φ(W′) - τ(X′)]
 t̃         = t_τ + ω_τ·Δ_η
-L         = E[ ℓ( σ(g(X) − g(X′)), t̃ ) ]
+L         = E[ ℓ( σ(g(X) - g(X′)), t̃ ) ]
 ```
 
 Hai lựa chọn hiện thực khác paper được ghi rõ:
 
 1. Paper dùng mạng feed-forward/Adam; repo dùng LightGBM custom objective. Loss
-   vẫn là binary cross-entropy của paper: với `p=σ(g_i−g_j)`, gradient theo
-   pair difference là `p−t̃` và Hessian là `p(1−p)`. Pseudo-label được clip vào
-   `(10⁻⁶, 1−10⁻⁶)` để objective hữu hạn.
+   vẫn là binary cross-entropy của paper: với `p=σ(g_i-g_j)`, gradient theo
+   pair difference là `p-t̃` và Hessian là `p(1-p)`. Pseudo-label được clip vào
+   `(10⁻⁶, 1-10⁻⁶)` để objective hữu hạn.
 2. Paper dùng "một tập con ngẫu nhiên các cặp rút đều ở mỗi epoch". Ở đây tập con
    đó là **ghép cặp hoàn hảo ngẫu nhiên**: mỗi vòng boosting xáo trộn toàn bộ chỉ
    số rồi ghép các vị trí liền kề. Cách này giữ tính rút đều theo từng cặp, cho mỗi
@@ -171,14 +171,14 @@ Nguồn: Lan & Syrgkanis, AISTATS 2024 (arXiv 2310.16945). Với squared loss v�
 pseudo-outcome `Γ`, đồng nhất thức
 
 ```text
-Σ_m w_m ‖Γ − f_m‖² = ‖Γ − f_w‖² + Σ_m w_m ‖f_m − f_w‖²
+Σ_m w_m ‖Γ - f_m‖² = ‖Γ - f_w‖² + Σ_m w_m ‖f_m - f_w‖²
 ```
 
 biến mục tiêu Q-aggregation thành
 
 ```text
-Q(w) = ‖Γ − f_w‖² + nu · Σ_m w_m ‖f_m − f_w‖²
-     = const − 2·wᵀb + (1 − nu)·wᵀAw + nu·wᵀd
+Q(w) = ‖Γ - f_w‖² + nu · Σ_m w_m ‖f_m - f_w‖²
+     = const - 2·wᵀb + (1 - nu)·wᵀAw + nu·wᵀd
 ```
 
 Với `nu ∈ [0, 1)` hàm lồi trên simplex; `nu = 0` cho stacking thuần, `nu = 1/2` là

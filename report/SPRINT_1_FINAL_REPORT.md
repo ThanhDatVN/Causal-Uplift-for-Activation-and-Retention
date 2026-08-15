@@ -1,8 +1,9 @@
 # Báo cáo Sprint 1 — Nền tảng dữ liệu, mô hình uplift và khung đánh giá
 
-**Trạng thái:** Hoàn thành bản release ngày 29/07/2026
-**Bài toán:** Nhắm mục tiêu khuyến mãi bằng hiệu ứng tăng thêm do can thiệp (*Causal Uplift Targeting*)
-**Kết quả chính thức:** `output/sprint1/` và `output/optimization/*sprint1_release*`
+- **Ngày:** 29/07/2026
+- **Bài toán:** nhắm mục tiêu khuyến mãi bằng hiệu ứng tăng thêm do can thiệp (*Causal Uplift Targeting*)
+- **Nguồn số chính thức:** `output/sprint1/` và `output/optimization/*sprint1_release*`
+- **Trạng thái:** hoàn thành bản release
 
 > Đây là nguồn kết quả chính thức của Sprint 1. Điểm số đời đầu còn lại trong
 > `output/legacy/` là kết quả thăm dò trước khi chạy lại và **không** được dùng làm kết quả
@@ -135,7 +136,7 @@ Kết quả trên test cho thấy chỉ X-Learner duy trì chênh lệch so vớ
 regularization candidate đạt điều kiện trên validation nhưng không duy trì chênh lệch trên test.
 
 **Nhận xét.** Hai candidate regularized đã qua một gate không dễ: median ΔQini ≥ `0,005` và
-thắng baseline ít nhất 2/3 seed validation. Trên test chúng cho `−0,0035` và `−0,0016`, tức
+thắng baseline ít nhất 2/3 seed validation. Trên test chúng cho `-0,0035` và `-0,0016`, tức
 **đổi dấu**. Đây không phải lỗi hiện thực mà là hành vi kỳ vọng khi chọn ra cực đại của
 nhiều candidate trên một mẫu hữu hạn: phần thắng trên validation gồm cả tín hiệu lẫn nhiễu,
 và chỉ phần tín hiệu đi tiếp sang test.
@@ -194,7 +195,7 @@ từ `output/sprint1/score_spearman_release.csv`:
 
 **X-Learner xếp hạng khách hàng rất khác Response** — Spearman chỉ `0,439`, thấp nhất
 trong mọi cặp có Response — **nhưng chênh lệch Qini giữa hai model vẫn có CI chứa 0**
-(`0,0207`, CI `[−0,0038; 0,0456]`). Hai thứ tự ưu tiên khác nhau đáng kể lại cho chất
+(`0,0207`, CI `[-0,0038; 0,0456]`). Hai thứ tự ưu tiên khác nhau đáng kể lại cho chất
 lượng xếp hạng tổng hợp không phân biệt được.
 
 Điều đó nói lên giới hạn của phép đo chứ không phải sự tương đương của hai model. Nếu
@@ -207,7 +208,7 @@ không phân biệt được về Qini. Trường hợp này thì kết luận "
 thường và không đáng ngại.
 
 Hệ quả thực hành: **"CI chứa 0" phải được đọc kèm mức tương quan thứ hạng.** Hai model
-giống nhau mà hoà là một chuyện; hai model khác hẳn nhau mà vẫn hoà là dấu hiệu phép đo
+giống nhau mà hòa là một chuyện; hai model khác hẳn nhau mà vẫn hòa là dấu hiệu phép đo
 đang hết độ phân giải. Đây là lý do các sprint sau bổ sung `policy_area_dr` và AUTOC thay
 vì tiếp tục chỉ dựa vào Qini.
 
@@ -227,8 +228,8 @@ một bảng:
 | T-Learner baseline | 0,000897 | 0,142021 |
 
 Causal Forest đứng đầu theo `policy_area_dr` và thứ ba theo Qini. Cả hai chênh lệch so
-với Response đều có CI chứa 0 — `[−6,0e-05; 5,8e-05]` và `[−0,0370; 0,0107]` — nên đây
-là **hoà**, không phải thắng. Champion không đổi.
+với Response đều có CI chứa 0 — `[-6,0e-05; 5,8e-05]` và `[-0,0370; 0,0107]` — nên đây
+là **hòa**, không phải thắng. Champion không đổi.
 
 Hai điều phải ghi kèm khi trích bảng này:
 

@@ -3,7 +3,7 @@
 ## Identity
 
 - Local file: `data/criteo-research-uplift-v2.1.csv.gz`
-- SHA‑256: `2716e1bf0fd157a93b5bf86924d9088419dfbac2022c6cd90030220634f616dc`
+- SHA-256: `2716e1bf0fd157a93b5bf86924d9088419dfbac2022c6cd90030220634f616dc`
 - Rows/columns: 13.979.592 × 16
 - Upstream description:
   [Criteo AI Lab](https://ailab.criteo.com/criteo-uplift-prediction-dataset/)
@@ -55,12 +55,12 @@ trúc thật khác hẳn ấn tượng của một bảng 12 biến liên tục:
 | Đặc trưng có hơn 90% khối lượng ở đúng một giá trị | 6/12 (`f1` 0,988 · `f11` 0,986 · `f4` và `f10` 0,957 · `f5` và `f7` 0,947) |
 | Đặc trưng không cắt được thành hai bin phân vị | 6/12 — cùng sáu đặc trưng trên |
 | Cặp có mask "nằm ở mode" trùng khít **đúng 1,00** | 4 — `(f0, f6)`, `(f2, f8)`, `(f4, f10)`, `(f5, f7)` |
-| Cặp có `|Spearman| > 0,99` | 2 — `(f4, f10)` `+0,999`, `(f5, f7)` `−0,999`; `|Pearson|` chỉ `0,66` và `0,75` |
+| Cặp có `|Spearman| > 0,99` | 2 — `(f4, f10)` `+0,999`, `(f5, f7)` `-0,999`; `|Pearson|` chỉ `0,66` và `0,75` |
 | Số pattern "ở mode / khác mode" khác nhau | 53 trên 4.096 khả năng; pattern lớn nhất chiếm 43,6% số dòng |
 | Trung vị số đặc trưng khác giá trị mode trên mỗi dòng | **2 trên 12** |
 
 Bốn cặp mask trùng khít tuyệt đối là bằng chứng rằng point mass **có thể** là mã của giá trị
-không quan sát được với một cơ chế mã hóa dùng chung. Criteo **không** công bố quy trình mã hoá
+không quan sát được với một cơ chế mã hóa dùng chung. Criteo **không** công bố quy trình mã hóa
 giá trị thiếu, nên đây là suy luận từ cấu trúc quan sát được, không phải một tính chất được
 nguồn xác nhận. Không dùng nó để hoàn nguyên giá trị gốc.
 

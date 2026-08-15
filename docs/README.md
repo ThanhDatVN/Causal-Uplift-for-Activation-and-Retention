@@ -66,3 +66,17 @@ Dùng metric, split, interval, runtime hoặc trạng thái artifact thay cho t�
 giá. Không emoji, không câu hỏi tu từ, không giọng quảng bá. Viết "đạt/không đạt gate",
 "CI chứa/không chứa 0", "đã/chưa có artifact". Phân biệt rõ biến quan sát, estimate, input
 kịch bản và kết quả semi-synthetic.
+
+Quy ước hình thức, thống nhất trên toàn repo:
+
+| Hạng mục | Quy ước | Vì sao |
+|---|---|---|
+| Gạch nối và dấu trừ | chỉ dùng `-` ASCII | tên candidate viết bằng gạch nối U+2011 hiển thị y hệt nhưng là **chuỗi khác** với `X-Renormalized` trong `configs/`, nên `grep` và Ctrl+F không tìm ra. Test `tests/test_documentation_integrity.py` chặn U+2011 và U+2212 |
+| Số thập phân | dấu phẩy: `0,000912` | thống nhất với toàn bộ văn bản tiếng Việt trong repo |
+| Ngày tháng | `dd/mm/yyyy` | trước đây trộn `dd/mm/yyyy` với ISO giữa các báo cáo |
+| Dấu thanh | `hòa`, `hóa`, `khóa`, `thỏa` | repo từng trộn hai lối đặt dấu cho cùng một từ |
+| Đầu mỗi báo cáo | danh sách `- **Nhãn:**` | xuống dòng bằng hai dấu cách cuối dòng vừa vô hình vừa bị `git diff --check` báo lỗi |
+
+Viết tiếng Việt trước; chỉ giữ nguyên tiếng Anh cho tên riêng, tên định danh trong code và
+thuật ngữ chưa có tương đương ổn định (`policy_area_dr`, `fold seed`, `confirmation`). Những
+từ như *full*, *rows*, *family*, *point*, *audit* thì dịch.

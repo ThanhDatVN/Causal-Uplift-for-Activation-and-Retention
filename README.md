@@ -12,7 +12,7 @@ uncertainty và phát hành một dashboard policy chạy được.
 ### Sprint 1 — model/evaluation foundation
 
 - data/schema/balance audit;
-- Response, S/T/X‑Learner, DR‑Learner;
+- Response, S/T/X-Learner, DR-Learner;
 - validation nhiều seed và final holdout chung;
 - Qini/AUUC cross-check với `scikit-uplift`;
 - 500 paired percentile bootstrap;
@@ -23,7 +23,7 @@ Nguồn: [Sprint 1 report](report/SPRINT_1_FINAL_REPORT.md).
 ### Sprint 2 — decision product
 
 - confirmation mới 1.397.959 dòng, không tái sử dụng test Sprint 1;
-- X‑Renormalized, τ-isotonic và T‑LocalExact ablation;
+- X-Renormalized, τ-isotonic và T-LocalExact ablation;
 - Response top-k champion được chọn trên validation;
 - offline policy value bằng IPW/DR, 500 paired bootstrap;
 - cost/value sensitivity và break-even;
@@ -37,8 +37,8 @@ Nguồn chính: [Sprint 2 report](report/SPRINT_2_FINAL_REPORT.md).
 
 - protocol đăng ký trước: metric chính, gate, promotion rule;
 - 3-fold cross-fitting OOF trên 5.591.836 dòng, hai fold seed;
-- 12 candidate screening, gồm R‑Learner, DR ablation và Rank‑Learner (ICML 2026);
-- causal Q‑aggregation và hai ensemble baseline;
+- 12 candidate screening, gồm R-Learner, DR ablation và Rank-Learner (ICML 2026);
+- causal Q-aggregation và hai ensemble baseline;
 - experiment registry ghi cả run bị dừng sớm;
 - web application có API, batch scoring và export.
 
@@ -86,7 +86,7 @@ không promote. Nguồn: [top-tail v2 report](report/TOP_TAIL_RESEARCH_V2_REPORT
 - fit trên development 5.591.836 dòng, predict trên confirmation 1.397.959 dòng, chấm bằng
   **DR signal đã đóng băng** của Sprint 3 nên so trực tiếp được với bảng confirmation;
 - Causal Forest **hạng 1/10** theo metric chính (`0,000914` so với Response `0,000912`), nhưng
-  paired CI `[−1,52e-05; +1,97e-05]` chứa 0 — **hoà**, champion giữ nguyên **Response**;
+  paired CI `[-1,52e-05; +1,97e-05]` chứa 0 — **hòa**, champion giữ nguyên **Response**;
 - vượt rõ cả ba biến thể Rank-Learner với CI hoàn toàn trên 0.
 
 Phát hiện phụ quan trọng hơn kết quả model: chấm lại **cùng một bộ điểm trên cùng những dòng**
@@ -104,13 +104,13 @@ hàng ở dải budget 1–30%, chấm bằng doubly robust signal.
 | Model | `policy_area_dr` | AUTOC | Qini |
 |---|---:|---:|---:|
 | Response | 0,000912 | 0,003823 | 0,192989 |
-| Ensemble‑QAgg | 0,000911 | 0,003271 | 0,209845 |
-| Ensemble‑RankAverage | 0,000908 | 0,003332 | 0,195022 |
-| S‑Under7 | 0,000896 | 0,003116 | 0,205904 |
-| X‑Renormalized | 0,000890 | 0,003283 | 0,201812 |
-| Rank‑K2 | 0,000862 | 0,002454 | 0,184993 |
-| Rank‑K1 | 0,000852 | 0,002400 | 0,185657 |
-| Rank‑K05 | 0,000848 | 0,002388 | 0,186454 |
+| Ensemble-QAgg | 0,000911 | 0,003271 | 0,209845 |
+| Ensemble-RankAverage | 0,000908 | 0,003332 | 0,195022 |
+| S-Under7 | 0,000896 | 0,003116 | 0,205904 |
+| X-Renormalized | 0,000890 | 0,003283 | 0,201812 |
+| Rank-K2 | 0,000862 | 0,002454 | 0,184993 |
+| Rank-K1 | 0,000852 | 0,002400 | 0,185657 |
+| Rank-K05 | 0,000848 | 0,002388 | 0,186454 |
 
 **Không challenger nào đạt promotion rule; champion giữ nguyên Response.** Không
 challenger nào thắng Response ở cả hai fold seed OOF, và không paired 95% CI nào có
@@ -327,7 +327,7 @@ py -3.12 -m venv .venv
 ```
 
 ```powershell
-.venv\Scripts\python.exe -m pytest tests -q          # 275 test
+.venv\Scripts\python.exe -m pytest tests -q          # 277 test
 node scripts\smoke_webapp_browser.mjs                # 23 acceptance check
 ```
 
@@ -357,7 +357,7 @@ Lệnh đầy đủ của cả bảy vòng — Sprint 1–3, data optimization, 
 Causal Forest — nằm trong một runbook duy nhất:
 [docs/REPRODUCTION.md](docs/REPRODUCTION.md).
 
-Run cần file Criteo v2.1 với SHA‑256:
+Run cần file Criteo v2.1 với SHA-256:
 
 ```text
 2716e1bf0fd157a93b5bf86924d9088419dfbac2022c6cd90030220634f616dc
@@ -381,8 +381,8 @@ từng phần tử), nên sáu model đặt chung một bảng được:
 | T-Learner | 0,000897 | 0,142021 |
 
 Causal Forest đứng đầu theo metric chính và thứ ba theo Qini. Nhưng chênh lệch so với
-Response có **CI 95% chứa 0 trên cả hai metric** — `[−6,0e-05; 5,8e-05]` và
-`[−0,0370; 0,0107]` — nên đây là **hoà**, không phải thắng. Champion giữ nguyên Response.
+Response có **CI 95% chứa 0 trên cả hai metric** — `[-6,0e-05; 5,8e-05]` và
+`[-0,0370; 0,0107]` — nên đây là **hòa**, không phải thắng. Champion giữ nguyên Response.
 
 Theo `policy_area_dr`, Causal Forest vượt rõ X, DR, T. Điểm không suy biến: 912.579 giá
 trị phân biệt.

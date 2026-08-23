@@ -4,7 +4,7 @@
 - **Nguồn số:** `output/causal_forest/preflight_0p2/`, `output/causal_forest/preflight_0p3/`,
   `output/causal_forest/preflight_0p5/`, `output/causal_forest/release/`,
   `output/causal_forest/analysis/`
-- **Notebook:** [`causal_forest.ipynb`](../notebooks/causal_forest.ipynb)
+- **Notebook:** [`03_causal_forest.ipynb`](../notebooks/03_causal_forest.ipynb)
 
 > **Cập nhật 14/08/2026.** Cấu hình trong báo cáo này dùng `min_samples_leaf=500`, chỉ cho
 > khoảng `0,145` sự kiện control mỗi lá — không phù hợp với outcome hiếm. Một vòng riêng đã

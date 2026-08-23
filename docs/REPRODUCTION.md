@@ -136,12 +136,12 @@ Chấm điểm và phân tích artifact tải về:
 .venv\Scripts\python.exe scripts\plot_causal_forest_release.py
 ```
 
-Bản notebook của lần chạy: [`../notebooks/causal_forest.ipynb`](../notebooks/causal_forest.ipynb).
+Bản notebook của lần chạy: [`../notebooks/03_causal_forest.ipynb`](../notebooks/03_causal_forest.ipynb).
 
 ### 8bis. Cấu hình `rare-outcome` trên split Sprint 2/3
 
 Protocol: [`../configs/causal_forest_rare_outcome_protocol_v1.json`](../configs/causal_forest_rare_outcome_protocol_v1.json).
-Notebook: [`../notebooks/causal_forest_rare_outcome.ipynb`](../notebooks/causal_forest_rare_outcome.ipynb).
+Notebook: [`../notebooks/04_causal_forest_rare_outcome.ipynb`](../notebooks/04_causal_forest_rare_outcome.ipynb).
 
 Lý do tồn tại: cấu hình `kaggle-safe` đã chạy dùng `min_samples_leaf=500`, cho kỳ vọng chỉ
 `0,145` sự kiện control mỗi lá. Cấu hình này nâng lên khoảng `2,9`. Profile `research` sẵn có

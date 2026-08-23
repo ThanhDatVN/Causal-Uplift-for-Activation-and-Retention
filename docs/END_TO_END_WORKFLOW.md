@@ -98,6 +98,35 @@ Ba điều cần đọc ra từ sơ đồ, vì chúng là ba quyết định gâ
 - **Sản phẩm ghép ở tầng quyết định.** Đó là chỗ duy nhất hai bài toán gặp nhau một cách
   hợp lệ, và ngay tại đó vẫn phải phát biểu giả định.
 
+## 2bis. Bản đồ giai đoạn — mỗi giai đoạn nằm ở đâu trong repo
+
+Repo được tổ chức theo **loại artifact** (`src/`, `scripts/`, `output/`, `report/`), vì đó
+là bố cục mà công cụ Python và CI cần. Nhưng dự án **phát triển theo giai đoạn**. Bảng này
+là chỗ hai trục đó gặp nhau: mỗi dòng là một giai đoạn, đọc ngang là đi hết một giai đoạn
+qua mọi thư mục.
+
+| # | Giai đoạn | Câu hỏi của giai đoạn | Protocol | Script chính | Artifact | Báo cáo |
+|---:|---|---|---|---|---|---|
+| 0 | Chẩn đoán dữ liệu | dữ liệu này cho phép suy luận tới đâu | — | `scripts/run_eda_profile.py` | `output/eda/` | mục 2 của Sprint 1 |
+| 1 | Sprint 1 — nền tảng | model nào xếp hạng tốt nhất | — | `scripts/audit_criteo.py`, `scripts/tune_five_models.py`, `scripts/evaluate_selected_five_models.py` | `output/sprint1/`, `output/optimization/` | [SPRINT_1](../report/SPRINT_1_FINAL_REPORT.md) |
+| 2 | Sprint 2 — tầng quyết định | biến xếp hạng thành quyết định ngân sách | — | `scripts/run_sprint2_local.py`, `scripts/build_dashboard.py` | `output/sprint2/`, `output/product/` | [SPRINT_2](../report/SPRINT_2_FINAL_REPORT.md) |
+| 3 | Sprint 3 — vòng đăng ký trước | metric nào mới là metric quyết định | `configs/sprint3_improvement_protocol.json` | `scripts/run_oof_experiment.py`, `scripts/run_sprint3_confirmation.py` | `output/improvement/`, `output/sprint3/` | [SPRINT_3](../report/SPRINT_3_FINAL_REPORT.md) |
+| 4 | Causal Forest | có cần một thuật toán chuyên dụng không | — | `scripts/kaggle_causal_forest_gate.py`, `scripts/evaluate_causal_forest.py` | `output/causal_forest/` | [CAUSAL_FOREST](../report/CAUSAL_FOREST_REPORT.md) |
+| 5 | Data optimization | biểu diễn dữ liệu có phải nút thắt | `configs/data_optimization_protocol_v1.json` | `scripts/run_oof_experiment.py`, `scripts/analyze_data_optimization.py` | `output/improvement/data_opt_comparison/` | [DATA_OPTIMIZATION](../report/DATA_OPTIMIZATION_REPORT.md) |
+| 6 | Causal foundation | estimator có sai thang không | `configs/causal_foundation_protocol_v1.json` | `scripts/merge_oof_runs.py`, `scripts/analyze_causal_foundation.py` | `output/improvement/causal_foundation_analysis/` | [CAUSAL_FOUNDATION](../report/CAUSAL_FOUNDATION_EXPERIMENT_REPORT.md) |
+| 7 | Top-tail v2 | có đang nhìn sai vùng ngân sách không | `configs/top_tail_research_protocol_v2.json` | `scripts/analyze_top_tail_evidence.py` | `output/improvement/top_tail_research_v2/` | [TOP_TAIL_V2](../report/TOP_TAIL_RESEARCH_V2_REPORT.md) |
+| 8 | Causal Forest rare-outcome | thuật toán đó có bị đặt sai cấu hình không | `configs/causal_forest_rare_outcome_protocol_v1.json` | `scripts/train_causal_forest.py`, `scripts/evaluate_causal_forest.py` | `output/causal_forest/sprint3_rare_outcome/` | [CF_RARE_OUTCOME](../report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md) |
+| 9 | Sản phẩm | đưa quyết định tới người dùng | — | `scripts/build_champion_scorer.py`, `scripts/serve_webapp.py` | `output/product/webapp/` | mục 9 của Sprint 3 |
+
+Notebook cắt ngang bảng này chứ không thuộc về một dòng nào: `01` trình bày giai đoạn 0,
+`02` trình bày giai đoạn 3, `03` và `04` là bản chạy Kaggle của giai đoạn 4 và 8. Chỉ mục
+đầy đủ: [`../notebooks/README.md`](../notebooks/README.md).
+
+Ba thư mục còn lại phục vụ **mọi** giai đoạn, nên chúng không nằm trong bảng:
+[`../src/`](../src/) là thư viện dùng chung — chỉ mục theo tầng pipeline ở
+[`../src/README.md`](../src/README.md); [`../tests/`](../tests/) khóa các bất biến;
+[`../docs/`](../docs/) giữ phương pháp.
+
 ## 3. Bài toán A — vòng lặp đã chạy
 
 ### 3.0 Pipeline kỹ thuật — bản đồ từ file dữ liệu tới artifact
@@ -217,41 +246,42 @@ thay đổi. Mà `p₀` chính là thứ baseline Response ước lượng trự
 
 Mạch phát triển không phải "thử thêm model cho tới khi thắng". Nó là một chuỗi loại trừ:
 mỗi vòng nhận một giả thuyết cụ thể về *vì sao* nhân quả chưa thắng, can thiệp đúng vào
-giả thuyết đó, và đóng nó lại bằng bằng chứng.
+giả thuyết đó, và đóng nó lại bằng bằng chứng. Thứ tự dưới đây vừa là thứ tự **thời gian**
+vừa là thứ tự **suy luận** — mỗi câu hỏi mới đến từ vòng ngay trước nó.
 
 ```mermaid
 flowchart LR
     H0["Vì sao CATE learner<br/>không thắng Response?"]
     H1["H1: chọn model<br/>chưa đủ chặt"]
     H2["H2: metric sai<br/>trọng tâm"]
-    H3["H3: biểu diễn<br/>dữ liệu thiếu"]
-    H4["H4: estimator<br/>sai thang"]
-    H5["H5: sai vùng<br/>ngân sách"]
-    H6["H6: cần thuật toán<br/>chuyên dụng"]
+    H3["H3: cần thuật toán<br/>chuyên dụng"]
+    H4["H4: biểu diễn<br/>dữ liệu thiếu"]
+    H5["H5: estimator<br/>sai thang"]
+    H6["H6: sai vùng<br/>ngân sách"]
     H7["H7: thuật toán đó<br/>bị đặt sai cấu hình"]
     R["Còn lại: ràng buộc<br/>nằm ở PHÉP ĐO"]
 
-    H0 --> H1 -->|"Sprint 1-2"| H2
-    H2 -->|"Sprint 3"| H3
-    H3 -->|"data optimization"| H4
-    H4 -->|"causal foundation"| H5
-    H5 -->|"top-tail v2"| H6
-    H6 -->|"causal forest 20/30/50%"| H7
-    H7 -->|"causal forest rare-outcome"| R
+    H0 --> H1 -->|"Sprint 1-2 · 29-31/07"| H2
+    H2 -->|"Sprint 3 · 05/08"| H3
+    H3 -->|"causal forest · 06/08"| H4
+    H4 -->|"data optimization · 09/08"| H5
+    H5 -->|"causal foundation · 09/08"| H6
+    H6 -->|"top-tail v2 · 09/08"| H7
+    H7 -->|"cf rare-outcome · 14/08"| R
 ```
 
 Bảng dưới là cùng một mạch, kèm bằng chứng đóng của từng bước:
 
-| # | Giả thuyết được kiểm | Can thiệp | Kết quả | Điều nó đóng lại | Câu hỏi nó mở ra |
-|---|---|---|---|---|---|
-| 1 | Sprint 1 — chọn model chưa đủ chặt | 5 model, gate `median ΔQini ≥ 0,005` trên 3 seed validation | 2 candidate thắng validation **đổi dấu** trên test | gate theo point estimate trên một pool là không đủ | vậy chọn model bằng gì |
-| 2 | Sprint 2 — cần tầng quyết định và CI | policy value DR, 500 paired bootstrap, confirmation mới | X-Renormalized cao hơn nhưng CI chứa 0; giữ Response theo hợp đồng | point estimate cao hơn không phải bằng chứng | metric chính có đang đo đúng thứ cần không |
-| 3 | Sprint 3 — metric sai trọng tâm | đổi metric chính Qini sang `policy_area_dr`, cross-fitting OOF, hai fold seed, promotion rule bốn điều kiện | 12 candidate, không ai promote. **Qini và metric chính xếp ngược nhau** | Qini không phải metric quyết định cho bài toán ngân sách | nếu không phải metric, có phải biểu diễn dữ liệu |
-| 4 | Data optimization — biểu diễn thiếu cấu trúc | đưa point mass và sentinel phát hiện trong EDA thành feature tường minh | Response-Sentinel qua screen, **trượt gate ổn định ở full** | biểu diễn dữ liệu không phải nút thắt | có phải estimator sai thang |
-| 5 | Causal foundation — estimator sai thang | DINA học trên log-odds, Anchored R giữ neo tiên lượng, Pattern R gộp một phần theo 53 pattern | không candidate nào thắng ở cả hai seed; đổi dấu theo seed | đúng thang chưa đủ để khử phương sai xếp hạng | có phải đang nhìn sai vùng ngân sách |
-| 6 | Top-tail v2 — sai vùng ngân sách | audit riêng budget `1%` và `2%`, familywise simultaneous band trên họ 20 ô | `16/16` point delta dương, **`0/16`** cận dưới vượt 0 | tín hiệu ở đuôi là giả thuyết, không phải bằng chứng | có phải cần một thuật toán chuyên dụng ngoài họ meta-learner |
-| 7 | Causal Forest — cần một thuật toán chuyên dụng ngoài họ meta-learner | `CausalForestDML` ba mốc dữ liệu 20/30/50%, chấm trên cùng holdout Sprint 1 | `policy_area_dr` hạng `1/6`, Qini hạng `3/6`, CI chứa 0 | thuật toán chuyên dụng cũng không tách được khỏi baseline | có phải chỉ vì cấu hình đặt sai cho outcome hiếm |
-| 8 | Causal Forest rare-outcome | `min_samples_leaf` từ `500` lên `10.000`, chạy trên split Sprint 2/3, chấm bằng DR signal đóng băng | hạng `1/10` theo metric chính nhưng CI chứa 0, tức hòa | cấu hình cho outcome hiếm không phải nút thắt | *(không còn giả thuyết phía model)* |
+| # | Ngày | Giả thuyết được kiểm | Can thiệp | Kết quả | Điều nó đóng lại | Câu hỏi nó mở ra |
+|---|---|---|---|---|---|---|
+| 1 | 29/07 | Sprint 1 — chọn model chưa đủ chặt | 5 model, gate `median ΔQini ≥ 0,005` trên 3 seed validation | 2 candidate thắng validation **đổi dấu** trên test | gate theo point estimate trên một pool là không đủ | vậy chọn model bằng gì |
+| 2 | 31/07 | Sprint 2 — cần tầng quyết định và CI | policy value DR, 500 paired bootstrap, confirmation mới | X-Renormalized cao hơn nhưng CI chứa 0; giữ Response theo hợp đồng | point estimate cao hơn không phải bằng chứng | metric chính có đang đo đúng thứ cần không |
+| 3 | 05/08 | Sprint 3 — metric sai trọng tâm | đổi metric chính Qini sang `policy_area_dr`, cross-fitting OOF, hai fold seed, promotion rule bốn điều kiện | 12 candidate, không ai promote. **Qini và metric chính xếp ngược nhau** | Qini không phải metric quyết định cho bài toán ngân sách | có phải cần một thuật toán chuyên dụng ngoài họ meta-learner |
+| 4 | 06/08 | Causal Forest — thuật toán chuyên dụng | `CausalForestDML` ba mốc dữ liệu 20/30/50%, chấm trên cùng holdout Sprint 1 | `policy_area_dr` hạng `1/6`, Qini hạng `3/6`, CI chứa 0 | thuật toán chuyên dụng cũng không tách được khỏi baseline | có phải biểu diễn dữ liệu thiếu cấu trúc |
+| 5 | 09/08 | Data optimization — biểu diễn thiếu cấu trúc | đưa point mass và sentinel phát hiện trong EDA thành feature tường minh | Response-Sentinel qua screen, **trượt gate ổn định ở full** | biểu diễn dữ liệu không phải nút thắt | có phải estimator sai thang |
+| 6 | 09/08 | Causal foundation — estimator sai thang | DINA học trên log-odds, Anchored R giữ neo tiên lượng, Pattern R gộp một phần theo 53 pattern | không candidate nào thắng ở cả hai seed; đổi dấu theo seed | đúng thang chưa đủ để khử phương sai xếp hạng | có phải đang nhìn sai vùng ngân sách |
+| 7 | 09/08 | Top-tail v2 — sai vùng ngân sách | audit riêng budget `1%` và `2%`, familywise simultaneous band trên họ 20 ô | `16/16` point delta dương, **`0/16`** cận dưới vượt 0 | tín hiệu ở đuôi là giả thuyết, không phải bằng chứng | có phải Causal Forest chỉ bị đặt sai cấu hình cho outcome hiếm |
+| 8 | 14/08 | Causal Forest rare-outcome | `min_samples_leaf` từ `500` lên `10.000`, chạy trên split Sprint 2/3, chấm bằng DR signal đóng băng | hạng `1/10` theo metric chính nhưng CI chứa 0, tức hòa | cấu hình cho outcome hiếm không phải nút thắt | *(không còn giả thuyết phía model)* |
 
 Tám dòng: hai dòng đầu là nền tảng, sáu dòng sau là sáu vòng cải tiến. Sau
 dòng cuối, **không còn giả thuyết nào phía model chưa bị kiểm**. Ba hướng sửa độc lập —

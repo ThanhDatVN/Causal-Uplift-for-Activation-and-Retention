@@ -4,7 +4,7 @@
 - **Protocol:** [`causal_forest_rare_outcome_protocol_v1.json`](../configs/causal_forest_rare_outcome_protocol_v1.json) — đăng ký **trước** khi chạy
 - **Nguồn số:** `output/causal_forest/sprint3_rare_outcome/`,
   `output/causal_forest/release/cf_sprint3_*`, `output/causal_forest/signal_sensitivity/`
-- **Notebook:** [`causal_forest_rare_outcome.ipynb`](../notebooks/causal_forest_rare_outcome.ipynb)
+- **Notebook:** [`04_causal_forest_rare_outcome.ipynb`](../notebooks/04_causal_forest_rare_outcome.ipynb)
 
 ## 1. Kết luận
 

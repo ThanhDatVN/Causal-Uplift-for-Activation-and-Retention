@@ -7,9 +7,81 @@ Pipeline dùng [Criteo Uplift Prediction Dataset](https://ailab.criteo.com/crite
 (13,98 triệu dòng, randomized incrementality test), so sánh response/CATE learners, đo
 uncertainty và phát hành một dashboard policy chạy được.
 
-## Thành quả hiện tại
+## Mạch phát triển — chín giai đoạn
 
-### Sprint 1 — model/evaluation foundation
+Dự án không phải một chuỗi "thử thêm model cho tới khi thắng". Mỗi vòng **đóng lại đúng
+một giả thuyết** về việc vì sao phương pháp nhân quả không thắng baseline dự đoán, và
+chính việc đóng đó sinh ra vòng kế tiếp. Bảng này đọc ngang là đi hết một giai đoạn qua
+mọi thư mục.
+
+| # | Giai đoạn | Câu hỏi của giai đoạn | Kết quả | Báo cáo |
+|---:|---|---|---|---|
+| 0 | Chẩn đoán dữ liệu | dữ liệu cho phép suy luận tới đâu | đo được **trần phân giải** trước khi chạy model nào | mục 2 của Sprint 1 |
+| 1 | Sprint 1 — nền tảng | model nào xếp hạng tốt nhất | Response dẫn đầu; hai candidate thắng validation đổi dấu trên test | [Sprint 1](report/SPRINT_1_FINAL_REPORT.md) |
+| 2 | Sprint 2 — tầng quyết định | biến xếp hạng thành quyết định ngân sách | X-Renormalized cao hơn nhưng CI chứa 0; giữ Response | [Sprint 2](report/SPRINT_2_FINAL_REPORT.md) |
+| 3 | Sprint 3 — vòng đăng ký trước | metric nào mới là metric quyết định | 0/12 promote; **Qini và metric chính xếp ngược nhau** | [Sprint 3](report/SPRINT_3_FINAL_REPORT.md) |
+| 4 | Causal Forest | có cần thuật toán chuyên dụng không | hạng 1/6 theo metric chính nhưng CI chứa 0 — hòa | [Causal Forest](report/CAUSAL_FOREST_REPORT.md) |
+| 5 | Data optimization | biểu diễn dữ liệu có phải nút thắt | qua screen, trượt gate ổn định ở full | [Data optimization](report/DATA_OPTIMIZATION_REPORT.md) |
+| 6 | Causal foundation | estimator có sai thang không | không learner nào thắng ở cả hai seed | [Causal foundation](report/CAUSAL_FOUNDATION_EXPERIMENT_REPORT.md) |
+| 7 | Top-tail v2 | có đang nhìn sai vùng ngân sách không | 16/16 delta dương, **0/16** cận dưới vượt 0 | [Top-tail v2](report/TOP_TAIL_RESEARCH_V2_REPORT.md) |
+| 8 | Causal Forest `rare-outcome` | thuật toán đó có bị đặt sai cấu hình không | hạng 1/10 nhưng CI chứa 0 — hòa | [CF rare-outcome](report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md) |
+| 9 | Sản phẩm | đưa quyết định tới người dùng | web app + dashboard, 23/23 và 12/12 acceptance | mục 9 của Sprint 3 |
+
+Sau giai đoạn 8, **không còn giả thuyết nào phía model chưa bị kiểm**. Ba hướng sửa độc
+lập — biểu diễn dữ liệu, estimator, thuật toán — đều đóng. Kết luận vì vậy đổi từ "chưa
+tìm được model tốt hơn" thành một phát biểu kiểm chứng được: **phép đo hết độ phân giải
+trước khi model hết dư địa** (`±1,74e-05` so với chênh lệch bậc `1e-06`).
+
+Mạch đầy đủ, gồm bản đồ script–artifact–báo cáo của từng giai đoạn, quy trình bốn cổng
+quyết định ghép dataset và kiến trúc sản phẩm ba tầng:
+[**docs/END_TO_END_WORKFLOW.md**](docs/END_TO_END_WORKFLOW.md).
+
+Một **bài toán thứ hai** — xác suất mua lại và giá trị kỳ vọng trên dữ liệu giao dịch —
+đã được đăng ký phạm vi nhưng **chưa mở**. Nó không phải phần mở rộng của bài toán trên:
+dữ liệu đó có outcome tiền tệ nhưng **không có treatment**, nên không hỗ trợ được đại
+lượng nhân quả. Lý do đầy đủ, pipeline đăng ký trước, và quy trình quyết định khi nào
+được ghép hai dataset: [workflow](docs/END_TO_END_WORKFLOW.md) mục 4 đến 6.
+
+## Tiến trình dự án — chi tiết từng giai đoạn
+
+### 0. Chẩn đoán dữ liệu — bước này dự đoán trước kết quả model
+
+Ba phát hiện dưới đây đo trực tiếp trên dữ liệu thô, **không qua model nào**, và cả ba đều
+được tính lại trong [notebook 01](notebooks/01_eda_criteo.ipynb).
+
+**Không gian covariate hẹp hơn con số 12 rất nhiều.** Sáu trên mười hai đặc trưng có hơn
+90% khối lượng dồn vào đúng một giá trị — chúng không cắt được thành hai nhóm phân vị. Bốn
+cặp đặc trưng có mask "nằm ở giá trị mode/sentinel" **trùng khít tuyệt đối**. Vì dữ liệu
+không mã hóa `NA`, đây là cấu trúc sentinel-like chứ không phải bằng chứng trực tiếp về ô
+thiếu. Chỉ có 53 pattern trên 4.096 khả năng và trung vị số đặc trưng không ở sentinel là
+**2 trên 12**. Cột "0 ô thiếu" đúng về cú pháp nhưng chưa mô tả hết cấu trúc dữ liệu.
+
+**Heterogeneity tồn tại, và rất lớn.** Sáu đặc trưng phân tầng được đều có `I² > 0,99`;
+hiệu ứng chênh 15–169 lần giữa các bin phân vị, và chênh tới ba bậc độ lớn giữa các pattern
+missingness. Nên cách giải thích "các CATE learner thua vì hiệu ứng đồng nhất" bị bác bỏ
+bằng dữ liệu.
+
+**Nhưng hiệu ứng gần như tỉ lệ thuận với rủi ro nền.** Khi gộp 30 bin của sáu feature,
+`corr(p₀, τ) = 0,984` (Pearson) và `0,959` (Spearman), còn trung vị `τ/p₀ = 0,53`.
+Các bin này dùng lại cùng quan sát giữa nhiều feature nên hai tương quan chỉ mang tính mô
+tả, không được gắn p-value hay Cochran `Q`. Bằng chứng suy luận được tính trên các tầng độc
+lập: trong từng feature có ít nhất ba bin, Pearson nằm trong `[0,991; 1,000]`; trên 26
+pattern sentinel rời nhau, Pearson `0,769`, Spearman `0,883`, và `Q` giảm từ `861` trên
+thang cộng xuống `150` trên thang nhân — tỷ lệ **5,7 lần**.
+
+Nói cách khác `τ(x) ≈ 0,53 · p₀(x)`. Hàm `p₀` đơn điệu tăng, nên xếp hạng theo rủi ro nền
+cho gần đúng thứ tự xếp hạng theo uplift. Điều đó dự đoán trước — từ dữ liệu thô, trước mọi
+model — kết quả mà Sprint 1, Sprint 3 và vòng Causal Forest sau đó xác nhận: không phương
+pháp nhân quả nào tách được khỏi baseline Response.
+
+Bước này cũng để lại bằng chứng số cho hai ràng buộc mà trước đó chỉ được phát biểu:
+`exposure` có **đúng 0** sự kiện ở nhánh control, và `P(conversion = 1 | visit = 0) = 0`
+chính xác — `visit` là điều kiện cần của `conversion`. Đó là lý do cả hai bị cấm làm feature.
+
+**Mở ra:** nếu xếp hạng theo rủi ro nền đã gần đúng thứ tự xếp hạng theo uplift, thì
+một CATE learner còn thắng được ở đâu. Đó là câu hỏi Sprint 1 nhận.
+
+### 1. Sprint 1 — nền tảng model và đánh giá (29/07)
 
 - data/schema/balance audit;
 - Response, S/T/X-Learner, DR-Learner;
@@ -20,7 +92,10 @@ uncertainty và phát hành một dashboard policy chạy được.
 
 Nguồn: [Sprint 1 report](report/SPRINT_1_FINAL_REPORT.md).
 
-### Sprint 2 — decision product
+**Đóng lại:** gate theo point estimate trên một pool validation là không đủ — hai
+candidate thắng validation *đổi dấu* trên test. **Mở ra:** vậy chọn model bằng gì.
+
+### 2. Sprint 2 — tầng quyết định và dashboard (31/07)
 
 - confirmation mới 1.397.959 dòng, không tái sử dụng test Sprint 1;
 - X-Renormalized, τ-isotonic và T-LocalExact ablation;
@@ -33,7 +108,10 @@ Nguồn: [Sprint 1 report](report/SPRINT_1_FINAL_REPORT.md).
 
 Nguồn chính: [Sprint 2 report](report/SPRINT_2_FINAL_REPORT.md).
 
-### Sprint 3 — vòng cải tiến model và web application
+**Đóng lại:** point estimate cao hơn không phải bằng chứng. **Mở ra:** metric chính
+có đang đo đúng thứ cần không.
+
+### 3. Sprint 3 — vòng cải tiến có đăng ký trước (05/08)
 
 - protocol đăng ký trước: metric chính, gate, promotion rule;
 - 3-fold cross-fitting OOF trên 5.591.836 dòng, hai fold seed;
@@ -45,7 +123,46 @@ Nguồn chính: [Sprint 2 report](report/SPRINT_2_FINAL_REPORT.md).
 Nguồn: [Sprint 3 report](report/SPRINT_3_FINAL_REPORT.md),
 [method guide](docs/SPRINT_3_METHOD_GUIDE.md).
 
-### Data optimization v1 — quay lại từ EDA
+**Đóng lại:** Qini không phải metric quyết định cho bài toán ngân sách. **Mở ra:** có
+phải cần một thuật toán chuyên dụng ngoài họ meta-learner.
+
+### 4. Causal Forest — ba mốc 20/30/50% (06/08)
+
+Kaggle 20% → 30% → 50% đã chạy và đã chấm điểm. Báo cáo đầy đủ:
+[CAUSAL_FOREST_REPORT.md](report/CAUSAL_FOREST_REPORT.md).
+
+Chấm trên cùng holdout final test Sprint 1 (2.096.940 dòng, trùng khít đã kiểm chứng
+từng phần tử), nên sáu model đặt chung một bảng được:
+
+| Model | `policy_area_dr` | Qini |
+|---|---:|---:|
+| **Causal Forest** | **0,001006** | 0,174678 |
+| Response | 0,001005 | **0,187886** |
+| S-Learner | 0,000999 | 0,177204 |
+| X-Learner | 0,000975 | 0,167168 |
+| DR-Learner | 0,000925 | 0,153967 |
+| T-Learner | 0,000897 | 0,142021 |
+
+Causal Forest đứng đầu theo metric chính và thứ ba theo Qini. Nhưng chênh lệch so với
+Response có **CI 95% chứa 0 trên cả hai metric** — `[-6,0e-05; 5,8e-05]` và
+`[-0,0370; 0,0107]` — nên đây là **hòa**, không phải thắng. Champion giữ nguyên Response.
+
+Theo `policy_area_dr`, Causal Forest vượt rõ X, DR, T. Điểm không suy biến: 912.579 giá
+trị phân biệt.
+
+Causal Forest dùng cấu hình cố định thay vì chọn qua validation như bốn meta-learner.
+Chi tiết cấu hình, learning curve ba mốc và năm biểu đồ:
+[CAUSAL_FOREST_REPORT.md](report/CAUSAL_FOREST_REPORT.md).
+
+**Notebook của lần chạy:** [`notebooks/03_causal_forest.ipynb`](notebooks/03_causal_forest.ipynb)
+— 23 cell, bản Kaggle trả về sau `Save & Run All` nên **có output thật của cả ba stage**;
+`papermill` ghi 3.192,7 giây, `exception: null`. Chạy lại được nguyên trạng, không cần
+restart kernel.
+
+**Đóng lại:** thuật toán chuyên dụng cũng không tách được khỏi baseline dự đoán.
+**Mở ra:** có phải biểu diễn dữ liệu thiếu cấu trúc.
+
+### 5. Data optimization v1 — quay lại từ EDA (09/08)
 
 - ánh xạ bốn failure mode sang bốn can thiệp đăng ký trong protocol riêng;
 - thêm feature sentinel fold-local và funnel factorization dùng `visit` chỉ làm auxiliary
@@ -59,7 +176,10 @@ Nguồn: [Sprint 3 report](report/SPRINT_3_FINAL_REPORT.md),
 Nguồn: [data optimization report](report/DATA_OPTIMIZATION_REPORT.md),
 [`optimization_decision.json`](output/improvement/data_opt_comparison/optimization_decision.json).
 
-### Causal foundation v1 — estimator cho binary outcome hiếm
+**Đóng lại:** biểu diễn dữ liệu không phải nút thắt. **Mở ra:** có phải estimator sai
+thang.
+
+### 6. Causal foundation v1 — estimator cho binary outcome hiếm (09/08)
 
 - research DINA/R-Learner/PATH được khóa trước trong một protocol riêng;
 - thêm Binary DINA-CATE, Anchored R25, Anchored R25-Sentinel và Anchored Pattern R;
@@ -70,15 +190,23 @@ Nguồn: [data optimization report](report/DATA_OPTIMIZATION_REPORT.md),
 - full paired CI đều chứa 0; champion giữ nguyên **Response**;
 - Causal Forest được để lại trong backlog, chưa chạy Kaggle lại.
 
-Follow-up top-tail audit đã kiểm 20 model × seed × budget cells bằng paired simultaneous band. Cả
+**Đóng lại:** đúng thang chưa đủ để khử phương sai xếp hạng. **Mở ra:** có phải đang
+nhìn sai vùng ngân sách.
+
+### 7. Top-tail research v2 — kiểm riêng phần đuôi 1-2% (09/08)
+
+Top-tail audit đã kiểm 20 model × seed × budget cells bằng paired simultaneous band. Cả
 16 causal point delta đều dương, nhưng 0/16 pointwise và 0/16 simultaneous lower bounds vượt 0;
 minimum causal overlap chỉ 61,31% và minimum control tail events là 84. Kết luận vẫn là giữ Response,
 không promote. Nguồn: [top-tail v2 report](report/TOP_TAIL_RESEARCH_V2_REPORT.md),
 [latest research/experiment plan](planning/LATEST_CAUSAL_RESEARCH_AND_EXPERIMENT_PLAN_2026.md) và
 [inference guide](docs/TOP_TAIL_POLICY_INFERENCE_GUIDE.md).
 
+**Đóng lại:** tín hiệu ở đuôi là giả thuyết, không phải bằng chứng. **Mở ra:** có phải
+Causal Forest chỉ bị đặt sai cấu hình cho outcome hiếm.
 
-### Causal Forest `rare-outcome` — sửa cấu hình cho outcome hiếm
+
+### 8. Causal Forest `rare-outcome` — sửa cấu hình (14/08)
 
 - cấu hình đã chạy trước đó dùng `min_samples_leaf=500`, chỉ cho `0,145` sự kiện control mỗi
   lá — đại đa số lá có nhánh control rỗng;
@@ -95,6 +223,22 @@ xuống hạng 4. Mọi paired CI trong nhóm đầu vẫn chứa 0, nên đây 
 theo point estimate không ổn định khi đổi tín hiệu chấm điểm**, không phải bằng chứng đổi ngôi.
 
 Nguồn: [Causal Forest rare-outcome report](report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md).
+
+**Đóng lại:** cấu hình cho outcome hiếm không phải nút thắt. **Còn lại:** ràng buộc nằm
+ở phép đo, không ở model — xem [mạch đầy đủ](docs/END_TO_END_WORKFLOW.md) mục 3.6.
+
+### 9. Sản phẩm — đưa quyết định tới người dùng
+
+- web app FastAPI + SPA không CDN, 23/23 acceptance trình duyệt;
+- dashboard HTML self-contained, 12/12 acceptance;
+- cả hai **chỉ đọc artifact đã phát hành**, không huấn luyện khi nhận request — nên con số
+  trên sản phẩm và con số trong báo cáo không thể trôi khỏi nhau.
+
+**Ranh giới đã ghi và giữ nguyên:** đây là tầng *nhắm mục tiêu*, đặt **sau** tầng *đo
+lường*, và **không thay thế** incrementality test. Nhầm hai tầng này là cách một tổ chức
+tự thuyết phục mình rằng chiến dịch có hiệu quả bằng chính model dùng để phân phối nó.
+
+Ảnh chụp màn hình và cách chạy: mục [Demo](#demo) bên dưới.
 
 ## Kết quả Sprint 3
 
@@ -143,8 +287,8 @@ tích thay vì đọc code:
 |---|---|---|
 | [`01_eda_criteo.ipynb`](notebooks/01_eda_criteo.ipynb) | Phân tích dữ liệu: toàn vẹn nguồn, cardinality và sentinel value, cân bằng covariate (SMD + Love plot), propensity tuyến tính và phi tuyến, overlap, bằng chứng số cho leakage hậu can thiệp, ATE/risk ratio kèm CI, MDE, heterogeneity theo tầng và chẩn đoán prognostic dominance | 25/25 code cell, 9 biểu đồ |
 | [`02_modeling_and_evaluation.ipynb`](notebooks/02_modeling_and_evaluation.ipynb) | Baseline Response so với 8 challenger: estimand, protocol đăng ký trước, OOF hai fold seed, paired bootstrap, bất đồng metric, promotion rule, threats to validity. Mục 7bis huấn luyện thật ngay trong notebook | 22/22 code cell, 5 biểu đồ |
-| [`causal_forest.ipynb`](notebooks/causal_forest.ipynb) | Chạy `CausalForestDML` ba stage 20→30→50% trên Kaggle. Bản notebook Kaggle trả về sau `Save & Run All`, 53,2 phút, không exception | 10/10 code cell |
-| [`causal_forest_rare_outcome.ipynb`](notebooks/causal_forest_rare_outcome.ipynb) | Cấu hình `rare-outcome` trên split Sprint 2/3, đăng ký trước ở `configs/causal_forest_rare_outcome_protocol_v1.json`. Sửa `min_samples_leaf` cho outcome hiếm | 0/10 code cell — bản source Kaggle, **chưa nhúng output**; bằng chứng lần chạy 107,4 phút nằm ở `output/causal_forest/sprint3_rare_outcome/train.log` |
+| [`03_causal_forest.ipynb`](notebooks/03_causal_forest.ipynb) | Chạy `CausalForestDML` ba stage 20→30→50% trên Kaggle. Bản notebook Kaggle trả về sau `Save & Run All`, 53,2 phút, không exception | 10/10 code cell |
+| [`04_causal_forest_rare_outcome.ipynb`](notebooks/04_causal_forest_rare_outcome.ipynb) | Cấu hình `rare-outcome` trên split Sprint 2/3, đăng ký trước ở `configs/causal_forest_rare_outcome_protocol_v1.json`. Sửa `min_samples_leaf` cho outcome hiếm | 0/10 code cell — bản source Kaggle, **chưa nhúng output**; bằng chứng lần chạy 107,4 phút nằm ở `output/causal_forest/sprint3_rare_outcome/train.log` |
 
 Notebook `02` có hai chế độ, ghi rõ ngay ở đầu notebook. Mục 1–7 và 8–17 **đọc lại artifact
 đã đóng băng** trong `output/` — chạy vài giây, không cần dữ liệu gốc. Mục 7bis thì **huấn
@@ -163,40 +307,6 @@ Notebook `01` chạy trực tiếp trên toàn bộ 13,98 triệu dòng (khoản
 chiếu** kết quả với artifact đã đóng băng ở `output/eda/` do
 [`scripts/run_eda_profile.py`](scripts/run_eda_profile.py) sinh ra. Phép đối chiếu nằm ở
 mục 1.1 chứ không ở cuối: nếu nó fail thì mọi diễn giải phía sau đều đáng ngờ.
-
-## Bước phân tích dữ liệu cho biết trước kết quả model
-
-Ba phát hiện dưới đây đo trực tiếp trên dữ liệu thô, **không qua model nào**, và cả ba đều
-được tính lại trong [notebook 01](notebooks/01_eda_criteo.ipynb).
-
-**Không gian covariate hẹp hơn con số 12 rất nhiều.** Sáu trên mười hai đặc trưng có hơn
-90% khối lượng dồn vào đúng một giá trị — chúng không cắt được thành hai nhóm phân vị. Bốn
-cặp đặc trưng có mask "nằm ở giá trị mode/sentinel" **trùng khít tuyệt đối**. Vì dữ liệu
-không mã hóa `NA`, đây là cấu trúc sentinel-like chứ không phải bằng chứng trực tiếp về ô
-thiếu. Chỉ có 53 pattern trên 4.096 khả năng và trung vị số đặc trưng không ở sentinel là
-**2 trên 12**. Cột "0 ô thiếu" đúng về cú pháp nhưng chưa mô tả hết cấu trúc dữ liệu.
-
-**Heterogeneity tồn tại, và rất lớn.** Sáu đặc trưng phân tầng được đều có `I² > 0,99`;
-hiệu ứng chênh 15–169 lần giữa các bin phân vị, và chênh tới ba bậc độ lớn giữa các pattern
-missingness. Nên cách giải thích "các CATE learner thua vì hiệu ứng đồng nhất" bị bác bỏ
-bằng dữ liệu.
-
-**Nhưng hiệu ứng gần như tỉ lệ thuận với rủi ro nền.** Khi gộp 30 bin của sáu feature,
-`corr(p₀, τ) = 0,984` (Pearson) và `0,959` (Spearman), còn trung vị `τ/p₀ = 0,53`.
-Các bin này dùng lại cùng quan sát giữa nhiều feature nên hai tương quan chỉ mang tính mô
-tả, không được gắn p-value hay Cochran `Q`. Bằng chứng suy luận được tính trên các tầng độc
-lập: trong từng feature có ít nhất ba bin, Pearson nằm trong `[0,991; 1,000]`; trên 26
-pattern sentinel rời nhau, Pearson `0,769`, Spearman `0,883`, và `Q` giảm từ `861` trên
-thang cộng xuống `150` trên thang nhân — tỷ lệ **5,7 lần**.
-
-Nói cách khác `τ(x) ≈ 0,53 · p₀(x)`. Hàm `p₀` đơn điệu tăng, nên xếp hạng theo rủi ro nền
-cho gần đúng thứ tự xếp hạng theo uplift. Điều đó dự đoán trước — từ dữ liệu thô, trước mọi
-model — kết quả mà Sprint 1, Sprint 3 và vòng Causal Forest sau đó xác nhận: không phương
-pháp nhân quả nào tách được khỏi baseline Response.
-
-Bước này cũng để lại bằng chứng số cho hai ràng buộc mà trước đó chỉ được phát biểu:
-`exposure` có **đúng 0** sự kiện ở nhánh control, và `P(conversion = 1 | visit = 0) = 0`
-chính xác — `visit` là điều kiện cần của `conversion`. Đó là lý do cả hai bị cấm làm feature.
 
 ## Demo
 
@@ -254,6 +364,7 @@ scripts/
   smoke_webapp_browser.mjs         acceptance headless cho web app
   run_sprint2_local.py, rebuild_sprint2_*.py, build_dashboard.py
   kaggle_causal_forest_gate.py
+notebooks/              bốn notebook, đánh số theo giai đoạn
 webapp/                 API FastAPI + SPA không CDN
 output/                 artifact đã chạy — xem output/README.md
 docs/                   method guide, decision contract, data/model card
@@ -262,8 +373,14 @@ report/                 tám báo cáo kết quả
 ```
 
 Mỗi thư mục lớn có `README.md` riêng ghi vai trò và trạng thái từng file:
-[scripts](scripts/README.md) · [output](output/README.md) · [docs](docs/README.md) ·
-[planning](planning/README.md) · [report](report/README.md).
+[src](src/README.md) · [scripts](scripts/README.md) · [notebooks](notebooks/README.md) ·
+[output](output/README.md) · [docs](docs/README.md) · [planning](planning/README.md) ·
+[report](report/README.md).
+
+Bố cục vật lý xếp theo **loại artifact** vì đó là thứ công cụ Python và CI cần. Muốn đi
+theo **giai đoạn** thì đọc bảng ở đầu trang, hoặc bản đồ đầy đủ ở
+[docs/END_TO_END_WORKFLOW.md](docs/END_TO_END_WORKFLOW.md) mục 2bis — nó ghép hai trục
+đó lại: mỗi dòng một giai đoạn, đọc ngang là đi hết giai đoạn qua mọi thư mục.
 
 ## Feature engineering và nuisance specification
 
@@ -363,52 +480,27 @@ Run cần file Criteo v2.1 với SHA-256:
 2716e1bf0fd157a93b5bf86924d9088419dfbac2022c6cd90030220634f616dc
 ```
 
-## Causal Forest — đã chạy xong
-
-Kaggle 20% → 30% → 50% đã chạy và đã chấm điểm. Báo cáo đầy đủ:
-[CAUSAL_FOREST_REPORT.md](report/CAUSAL_FOREST_REPORT.md).
-
-Chấm trên cùng holdout final test Sprint 1 (2.096.940 dòng, trùng khít đã kiểm chứng
-từng phần tử), nên sáu model đặt chung một bảng được:
-
-| Model | `policy_area_dr` | Qini |
-|---|---:|---:|
-| **Causal Forest** | **0,001006** | 0,174678 |
-| Response | 0,001005 | **0,187886** |
-| S-Learner | 0,000999 | 0,177204 |
-| X-Learner | 0,000975 | 0,167168 |
-| DR-Learner | 0,000925 | 0,153967 |
-| T-Learner | 0,000897 | 0,142021 |
-
-Causal Forest đứng đầu theo metric chính và thứ ba theo Qini. Nhưng chênh lệch so với
-Response có **CI 95% chứa 0 trên cả hai metric** — `[-6,0e-05; 5,8e-05]` và
-`[-0,0370; 0,0107]` — nên đây là **hòa**, không phải thắng. Champion giữ nguyên Response.
-
-Theo `policy_area_dr`, Causal Forest vượt rõ X, DR, T. Điểm không suy biến: 912.579 giá
-trị phân biệt.
-
-Causal Forest dùng cấu hình cố định thay vì chọn qua validation như bốn meta-learner.
-Chi tiết cấu hình, learning curve ba mốc và năm biểu đồ:
-[CAUSAL_FOREST_REPORT.md](report/CAUSAL_FOREST_REPORT.md).
-
-**Notebook của lần chạy:** [`notebooks/causal_forest.ipynb`](notebooks/causal_forest.ipynb)
-— 23 cell, bản Kaggle trả về sau `Save & Run All` nên **có output thật của cả ba stage**;
-`papermill` ghi 3.192,7 giây, `exception: null`. Chạy lại được nguyên trạng, không cần
-restart kernel.
-
 ## Đọc theo thứ tự
 
-Bắt đầu bằng [**flow công việc toàn dự án**](docs/END_TO_END_WORKFLOW.md) nếu muốn hiểu
-*vì sao* dự án đi theo đúng thứ tự này: mỗi vòng thí nghiệm đóng lại một giả thuyết về
-việc vì sao phương pháp nhân quả không thắng baseline dự đoán, và chính việc đóng đó sinh
-ra vòng kế tiếp. Tài liệu này cũng chứa quy trình bốn cổng để quyết định khi nào được ghép
-hai dataset, và kiến trúc sản phẩm hai tầng.
+Ba đường vào, chọn theo mục đích. Cả ba dùng chung một tập tài liệu, chỉ khác thứ tự.
 
-Muốn vào thẳng kết quả thì bắt đầu bằng [**Sprint 1 report**](report/SPRINT_1_FINAL_REPORT.md) — nền tảng và bảng model, có
-trình tự đọc theo thời gian bạn có (15 phút / 1 giờ / nửa ngày), kiến trúc split, giải
-thích từng module, metric, model, web app và danh mục bẫy khi đọc kết quả.
+### Đường 1 — theo mạch phát triển
 
-Sau đó:
+Khuyên dùng cho người đọc lần đầu, và cho người cần đánh giá cách làm chứ không chỉ kết
+quả. Bắt đầu ở [**docs/END_TO_END_WORKFLOW.md**](docs/END_TO_END_WORKFLOW.md), rồi đi theo
+bảng chín giai đoạn ở đầu trang này.
+
+Nó trả lời câu hỏi mà không tài liệu nào khác trả lời: *vì sao dự án đi theo đúng thứ tự
+đó, và bước tiếp theo được suy ra từ đâu.* Kèm bản đồ script–artifact–báo cáo của từng giai
+đoạn, quy trình bốn cổng quyết định khi nào được ghép hai dataset, và kiến trúc sản phẩm
+ba tầng.
+
+### Đường 2 — kết quả mới nhất trước
+
+Cho người đã quen bài toán và muốn xem phát hiện gần nhất. Bắt đầu ở
+[**Sprint 1 report**](report/SPRINT_1_FINAL_REPORT.md) để lấy nền tảng và bảng model — nó
+có sẵn trình tự đọc theo thời gian bạn có (15 phút / 1 giờ / nửa ngày), kiến trúc split,
+giải thích từng module, và danh mục bẫy khi đọc kết quả. Sau đó:
 
 1. [Top-tail research v2 report](report/TOP_TAIL_RESEARCH_V2_REPORT.md)
 2. [Latest causal research and experiment plan](planning/LATEST_CAUSAL_RESEARCH_AND_EXPERIMENT_PLAN_2026.md)
@@ -426,6 +518,15 @@ Sau đó:
 13. [Data card](docs/data_cards/CRITEO_V2_1.md) và [model card](docs/model_cards/SPRINT_2_POLICY_RELEASE.md)
 14. [Causal Forest report](report/CAUSAL_FOREST_REPORT.md)
 15. [Bối cảnh nghiên cứu và bài toán lân cận](planning/RESEARCH_LANDSCAPE_2026.md)
+
+### Đường 3 — theo vai trò
+
+| Bạn cần | Đọc theo thứ tự này |
+|---|---|
+| Đánh giá phương pháp và code | [Sprint 1 report](report/SPRINT_1_FINAL_REPORT.md) → [notebook 01](notebooks/01_eda_criteo.ipynb) → [notebook 02](notebooks/02_modeling_and_evaluation.ipynb) → [src/README.md](src/README.md) |
+| Hiểu quyết định kinh doanh | [Decision contract](docs/DECISION_CONTRACT.md) → mục [Demo](#demo) → [Sprint 2 report](report/SPRINT_2_FINAL_REPORT.md) mục 5 |
+| Tái lập kết quả | [REPRODUCTION.md](docs/REPRODUCTION.md) → [scripts/README.md](scripts/README.md) → [output/README.md](output/README.md) |
+| Mở một vòng nghiên cứu mới | [planning/README.md](planning/README.md) → [END_TO_END_WORKFLOW.md](docs/END_TO_END_WORKFLOW.md) mục 9 |
 
 Chỉ mục đầy đủ kèm trạng thái từng tài liệu: [docs/README.md](docs/README.md) và
 [planning/README.md](planning/README.md).

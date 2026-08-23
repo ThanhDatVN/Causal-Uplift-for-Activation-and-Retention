@@ -6,6 +6,7 @@ Kết quả nằm ở [`../report/`](../report/); bối cảnh nghiên cứu ở
 
 ```text
 docs/
+├── END_TO_END_WORKFLOW.md                mạch phát triển toàn dự án, từ đầu tới sản phẩm
 ├── SPRINT_1_THEORY_AND_METHOD_GUIDE.md   lý thuyết nền, sáu model, metric
 ├── SPRINT_2_METHOD_AND_PRODUCT_GUIDE.md  undersampling, calibration, policy value
 ├── SPRINT_3_METHOD_GUIDE.md              policy_area_dr, RATE/AUTOC, cross-fitting
@@ -21,6 +22,7 @@ docs/
 
 | Bạn muốn | Đọc |
 |---|---|
+| **Hiểu mạch phát triển của cả dự án** | [END_TO_END_WORKFLOW.md](END_TO_END_WORKFLOW.md) |
 | Hiểu lý thuyết nền và sáu model | [SPRINT_1_THEORY_AND_METHOD_GUIDE.md](SPRINT_1_THEORY_AND_METHOD_GUIDE.md) |
 | Hiểu cách biến xếp hạng thành quyết định | [SPRINT_2_METHOD_AND_PRODUCT_GUIDE.md](SPRINT_2_METHOD_AND_PRODUCT_GUIDE.md) |
 | Hiểu metric chính hiện hành | [SPRINT_3_METHOD_GUIDE.md](SPRINT_3_METHOD_GUIDE.md) |

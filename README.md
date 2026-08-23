@@ -398,7 +398,13 @@ restart kernel.
 
 ## Đọc theo thứ tự
 
-Bắt đầu bằng [**Sprint 1 report**](report/SPRINT_1_FINAL_REPORT.md) — nền tảng và bảng model, có
+Bắt đầu bằng [**flow công việc toàn dự án**](docs/END_TO_END_WORKFLOW.md) nếu muốn hiểu
+*vì sao* dự án đi theo đúng thứ tự này: mỗi vòng thí nghiệm đóng lại một giả thuyết về
+việc vì sao phương pháp nhân quả không thắng baseline dự đoán, và chính việc đóng đó sinh
+ra vòng kế tiếp. Tài liệu này cũng chứa quy trình bốn cổng để quyết định khi nào được ghép
+hai dataset, và kiến trúc sản phẩm hai tầng.
+
+Muốn vào thẳng kết quả thì bắt đầu bằng [**Sprint 1 report**](report/SPRINT_1_FINAL_REPORT.md) — nền tảng và bảng model, có
 trình tự đọc theo thời gian bạn có (15 phút / 1 giờ / nửa ngày), kiến trúc split, giải
 thích từng module, metric, model, web app và danh mục bẫy khi đọc kết quả.
 

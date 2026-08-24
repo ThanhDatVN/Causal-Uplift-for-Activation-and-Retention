@@ -12,6 +12,7 @@ docs/
 ├── SPRINT_2_METHOD_AND_PRODUCT_GUIDE.md  undersampling, calibration, policy value
 ├── SPRINT_3_METHOD_GUIDE.md              policy_area_dr, RATE/AUTOC, cross-fitting
 ├── CAUSAL_FOUNDATION_METHOD_GUIDE.md     DINA, Anchored R, partial pooling, experiment gate
+├── CAUSAL_FOREST_METHOD_GUIDE.md         honest splitting, ba profile, ràng buộc outcome hiếm
 ├── TOP_TAIL_POLICY_INFERENCE_GUIDE.md    hard top-k, paired/simultaneous CI, event support
 ├── DECISION_CONTRACT.md                  policy phát hành, công thức, guardrail
 ├── REPRODUCTION.md                       runbook tái lập cho mọi vòng thí nghiệm
@@ -19,7 +20,7 @@ docs/
 └── model_cards/                          model card champion
 ```
 
-**Tên file theo sprint, nội dung theo chủ đề.** Năm method guide được đặt tên theo vòng
+**Tên file theo sprint, nội dung theo chủ đề.** Sáu method guide được đặt tên theo vòng
 viết ra chúng, nên tìm theo tên file sẽ khó. Dùng bảng tra theo chủ đề ngay dưới thay vì
 đoán từ tên.
 
@@ -43,12 +44,18 @@ Cột trái là **khái niệm**, không phải tên file. Đây là cách tìm 
 | DINA, Anchored R, partial pooling | [CAUSAL_FOUNDATION_METHOD_GUIDE.md](CAUSAL_FOUNDATION_METHOD_GUIDE.md) |
 | Simultaneous band, familywise, hard top-k | [TOP_TAIL_POLICY_INFERENCE_GUIDE.md](TOP_TAIL_POLICY_INFERENCE_GUIDE.md) |
 | Giới hạn của frozen-score inference | [TOP_TAIL_POLICY_INFERENCE_GUIDE.md](TOP_TAIL_POLICY_INFERENCE_GUIDE.md) |
+| **Causal Forest**, honest splitting, `min_samples_leaf` | [CAUSAL_FOREST_METHOD_GUIDE.md](CAUSAL_FOREST_METHOD_GUIDE.md) |
+| Vì sao tín hiệu chấm điểm đổi thứ hạng | [CAUSAL_FOREST_METHOD_GUIDE.md](CAUSAL_FOREST_METHOD_GUIDE.md) mục 6 |
+| Resource gate và ngân sách RAM | [CAUSAL_FOREST_METHOD_GUIDE.md](CAUSAL_FOREST_METHOD_GUIDE.md) mục 8 |
+| Chẩn đoán proxy-ordering | [../src/README.md](../src/README.md) — `proxy_diagnostic.py` |
+| **Chạy lại một vòng thí nghiệm** | [REPRODUCTION.md](REPRODUCTION.md) |
+| Chạy trong Docker | [REPRODUCTION.md](REPRODUCTION.md) mục 11 |
 | Promotion rule và luật quyết định | [DECISION_CONTRACT.md](DECISION_CONTRACT.md) |
 | Protocol đăng ký trước, gate, registry | [../configs/README.md](../configs/README.md) |
 | Nguồn gốc và giới hạn dữ liệu | [data_cards/CRITEO_V2_1.md](data_cards/CRITEO_V2_1.md) |
 | Vì sao dự án đi theo thứ tự đó | [END_TO_END_WORKFLOW.md](END_TO_END_WORKFLOW.md) |
 
-## Năm method guide — mô tả đầy đủ
+## Sáu method guide — mô tả đầy đủ
 
 Bảng trên tra theo khái niệm; bảng này mô tả **toàn bộ nội dung** của từng file, dùng khi
 cần biết một guide có gì trước khi mở.
@@ -60,6 +67,7 @@ cần biết một guide có gì trước khi mở.
 | [SPRINT_3_METHOD_GUIDE.md](SPRINT_3_METHOD_GUIDE.md) | Vì sao đổi metric chính, `policy_area_dr`, RATE/AUTOC, cross-fitting, Rank-Learner, Q-aggregation |
 | [CAUSAL_FOUNDATION_METHOD_GUIDE.md](CAUSAL_FOUNDATION_METHOD_GUIDE.md) | Binary DINA, risk-anchored R-Learner, sentinel partial pooling, synthetic validation và failure modes |
 | [TOP_TAIL_POLICY_INFERENCE_GUIDE.md](TOP_TAIL_POLICY_INFERENCE_GUIDE.md) | Exact hard-k, factual DR value, paired bootstrap, simultaneous family band, support/overlap và giới hạn frozen-score inference |
+| [CAUSAL_FOREST_METHOD_GUIDE.md](CAUSAL_FOREST_METHOD_GUIDE.md) | Chia nhánh theo hiệu ứng, honest splitting, số học sự kiện mỗi lá, ba profile, hai split, độ nhạy của tín hiệu chấm điểm, ràng buộc tài nguyên |
 
 ## Hợp đồng và thẻ
 
@@ -80,7 +88,7 @@ cần biết một guide có gì trước khi mở.
 | `output/` | [../output/README.md](../output/README.md) | artifact, đâu là nguồn số chính thức |
 | `report/` | [../report/README.md](../report/README.md) | tám báo cáo kết quả |
 | `planning/` | [../planning/README.md](../planning/README.md) | nghiên cứu và hướng chưa mở |
-| `tests/` | [../tests/README.md](../tests/README.md) | 293 test, xếp theo bất biến được bảo vệ |
+| `tests/` | [../tests/README.md](../tests/README.md) | 294 test, xếp theo bất biến được bảo vệ |
 | `webapp/` | [../webapp/README.md](../webapp/README.md) | sản phẩm, API và ranh giới |
 | `benchmarks/` | [../benchmarks/README.md](../benchmarks/README.md) | đo tài nguyên, không phải kết quả khoa học |
 

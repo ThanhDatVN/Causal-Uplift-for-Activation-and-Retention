@@ -7,12 +7,13 @@ Kết quả nằm ở [`../report/`](../report/); bối cảnh nghiên cứu ở
 ```text
 docs/
 ├── END_TO_END_WORKFLOW.md                mạch phát triển toàn dự án, từ đầu tới sản phẩm
-├── GLOSSARY.md                           ~45 thuật ngữ, xếp theo chủ đề
+├── GLOSSARY.md                           89 thuật ngữ, xếp theo 11 chủ đề
 ├── SPRINT_1_THEORY_AND_METHOD_GUIDE.md   lý thuyết nền, sáu model, metric
 ├── SPRINT_2_METHOD_AND_PRODUCT_GUIDE.md  undersampling, calibration, policy value
 ├── SPRINT_3_METHOD_GUIDE.md              policy_area_dr, RATE/AUTOC, cross-fitting
 ├── CAUSAL_FOUNDATION_METHOD_GUIDE.md     DINA, Anchored R, partial pooling, experiment gate
 ├── CAUSAL_FOREST_METHOD_GUIDE.md         honest splitting, ba profile, ràng buộc outcome hiếm
+├── DATA_OPTIMIZATION_METHOD_GUIDE.md     sentinel augmentation, funnel S-learner, ablation
 ├── TOP_TAIL_POLICY_INFERENCE_GUIDE.md    hard top-k, paired/simultaneous CI, event support
 ├── DECISION_CONTRACT.md                  policy phát hành, công thức, guardrail
 ├── REPRODUCTION.md                       runbook tái lập cho mọi vòng thí nghiệm
@@ -20,7 +21,7 @@ docs/
 └── model_cards/                          model card champion
 ```
 
-**Tên file theo sprint, nội dung theo chủ đề.** Sáu method guide được đặt tên theo vòng
+**Tên file theo sprint, nội dung theo chủ đề.** Bảy method guide được đặt tên theo vòng
 viết ra chúng, nên tìm theo tên file sẽ khó. Dùng bảng tra theo chủ đề ngay dưới thay vì
 đoán từ tên.
 
@@ -45,9 +46,11 @@ Cột trái là **khái niệm**, không phải tên file. Đây là cách tìm 
 | Simultaneous band, familywise, hard top-k | [TOP_TAIL_POLICY_INFERENCE_GUIDE.md](TOP_TAIL_POLICY_INFERENCE_GUIDE.md) |
 | Giới hạn của frozen-score inference | [TOP_TAIL_POLICY_INFERENCE_GUIDE.md](TOP_TAIL_POLICY_INFERENCE_GUIDE.md) |
 | **Causal Forest**, honest splitting, `min_samples_leaf` | [CAUSAL_FOREST_METHOD_GUIDE.md](CAUSAL_FOREST_METHOD_GUIDE.md) |
+| Sentinel augmentation, funnel S-learner | [DATA_OPTIMIZATION_METHOD_GUIDE.md](DATA_OPTIMIZATION_METHOD_GUIDE.md) |
+| Vì sao xử lý dữ liệu phải qua gate | [DATA_OPTIMIZATION_METHOD_GUIDE.md](DATA_OPTIMIZATION_METHOD_GUIDE.md) mục 1 |
 | Vì sao tín hiệu chấm điểm đổi thứ hạng | [CAUSAL_FOREST_METHOD_GUIDE.md](CAUSAL_FOREST_METHOD_GUIDE.md) mục 6 |
 | Resource gate và ngân sách RAM | [CAUSAL_FOREST_METHOD_GUIDE.md](CAUSAL_FOREST_METHOD_GUIDE.md) mục 8 |
-| Chẩn đoán proxy-ordering | [../src/README.md](../src/README.md) — `proxy_diagnostic.py` |
+| Chẩn đoán: SMD, propensity AUC, proxy-ordering, overlap | [GLOSSARY.md](GLOSSARY.md) mục 8bis |
 | **Chạy lại một vòng thí nghiệm** | [REPRODUCTION.md](REPRODUCTION.md) |
 | Chạy trong Docker | [REPRODUCTION.md](REPRODUCTION.md) mục 11 |
 | Promotion rule và luật quyết định | [DECISION_CONTRACT.md](DECISION_CONTRACT.md) |
@@ -55,7 +58,7 @@ Cột trái là **khái niệm**, không phải tên file. Đây là cách tìm 
 | Nguồn gốc và giới hạn dữ liệu | [data_cards/CRITEO_V2_1.md](data_cards/CRITEO_V2_1.md) |
 | Vì sao dự án đi theo thứ tự đó | [END_TO_END_WORKFLOW.md](END_TO_END_WORKFLOW.md) |
 
-## Sáu method guide — mô tả đầy đủ
+## Bảy method guide — mô tả đầy đủ
 
 Bảng trên tra theo khái niệm; bảng này mô tả **toàn bộ nội dung** của từng file, dùng khi
 cần biết một guide có gì trước khi mở.
@@ -68,6 +71,7 @@ cần biết một guide có gì trước khi mở.
 | [CAUSAL_FOUNDATION_METHOD_GUIDE.md](CAUSAL_FOUNDATION_METHOD_GUIDE.md) | Binary DINA, risk-anchored R-Learner, sentinel partial pooling, synthetic validation và failure modes |
 | [TOP_TAIL_POLICY_INFERENCE_GUIDE.md](TOP_TAIL_POLICY_INFERENCE_GUIDE.md) | Exact hard-k, factual DR value, paired bootstrap, simultaneous family band, support/overlap và giới hạn frozen-score inference |
 | [CAUSAL_FOREST_METHOD_GUIDE.md](CAUSAL_FOREST_METHOD_GUIDE.md) | Chia nhánh theo hiệu ứng, honest splitting, số học sự kiện mỗi lá, ba profile, hai split, độ nhạy của tín hiệu chấm điểm, ràng buộc tài nguyên |
+| [DATA_OPTIMIZATION_METHOD_GUIDE.md](DATA_OPTIMIZATION_METHOD_GUIDE.md) | Xử lý dữ liệu như một can thiệp, sentinel augmentation và ba ràng buộc của nó, phân rã funnel qua `visit`, thiết kế ablation bảy candidate |
 
 ## Hợp đồng và thẻ
 

@@ -49,6 +49,13 @@ Quy ước: giữ nguyên tiếng Anh cho tên định danh trong code và thu�
 | **Causal Forest** | Sửa tiêu chí chia nhánh của cây để tối đa hóa chênh lệch hiệu ứng |
 | **Honest splitting** | Dùng nửa dữ liệu chọn điểm chia, nửa còn lại ước lượng giá trị lá |
 | **Nuisance**, `μ₁`/`μ₀` | Model phụ dự đoán `Y` cho từng nhánh. Cross-fit **một lần**, dùng chung mọi candidate |
+| **Funnel S-learner** | Phân rã `P(conv) = P(visit) x P(conv \| visit)`. `visit` chỉ là auxiliary outcome, **không** vào feature |
+| **Rank-Learner** | Học trực tiếp thứ hạng bằng pairwise Neyman-orthogonal loss, thay vì học `τ` rồi xếp |
+| **DINA** | Học hiệu ứng trên thang log-odds — thang tham số tự nhiên của outcome nhị phân — rồi đổi về chênh lệch xác suất |
+| **Anchored R-learner** | Giữ neo tiên lượng `p₀`, chỉ học phần dư đã co lại theo hệ số `0,25` |
+| **Pattern R-learner** | Gộp một phần phần dư theo `53` pattern sentinel, thay vì để mỗi pattern học riêng |
+| **Sentinel augmentation** | Thêm cờ nhị phân `x_j == mode_j`. Fit chỉ từ `X` của fold train, không đọc nhãn |
+| **Hybrid stacker** | Prognostic–causal logistic stacking. **Đã hiện thực, chưa có run nào trong registry** |
 | **Ensemble** | Tổ hợp nhiều model. Dự án có Q-aggregation, best-single, rank average |
 
 ## 4. Tín hiệu chấm điểm
@@ -120,6 +127,20 @@ hạng** — xem `report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md` mục 5.
 | **Final test Sprint 1** | `2.096.940` | Bằng chứng lịch sử, không tái sử dụng |
 | **Retrospective confirmation** | | Tên gọi bắt buộc cho kết quả trên tập confirmation đã bị đọc ở Sprint 2. **Không** phải holdout mới |
 | **Stratified complement** | | Lấy đúng phần bù của một sample để đảm bảo không chồng lấn |
+
+## 8bis. Chẩn đoán
+
+Không phải model, cũng không phải metric. Chúng trả lời *"phép đo có đáng tin không"*.
+
+| Thuật ngữ | Nó kiểm điều gì |
+|---|---|
+| **SMD** | Chênh lệch trung bình giữa hai nhánh, chuẩn hoá theo độ lệch chuẩn. `< 0,1` là cân bằng tốt |
+| **Propensity AUC** | Model đoán được nhánh từ `X` tới đâu. Gần `0,5` là phù hợp với randomization |
+| **Proxy-ordering diagnostic** | Khi nào xếp theo một proxy cho **đúng** thứ tự xếp theo `τ`. Bị chi phối bởi **giá trị lớn nhất** của chặn CATE, không phải trung bình |
+| **Power / MDE** | Cỡ mẫu tối thiểu để phát hiện một hiệu ứng cho trước |
+| **Score degeneracy check** | Số giá trị phân biệt của điểm. Ngưỡng đã đăng ký: `>= 10` |
+| **Membership overlap** | Tỷ lệ người trùng nhau trong top-k giữa hai fold seed. Đo bất ổn khi huấn luyện |
+| **Event support** | Số sự kiện thật trong nhóm được chọn. Ít sự kiện thì CI rộng bất kể model nào |
 
 ## 9. Đặc thù dữ liệu Criteo
 

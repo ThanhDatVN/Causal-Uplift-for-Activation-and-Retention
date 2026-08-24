@@ -7,35 +7,51 @@ Kết quả nằm ở [`../report/`](../report/); bối cảnh nghiên cứu ở
 ```text
 docs/
 ├── END_TO_END_WORKFLOW.md                mạch phát triển toàn dự án, từ đầu tới sản phẩm
+├── GLOSSARY.md                           ~45 thuật ngữ, xếp theo chủ đề
 ├── SPRINT_1_THEORY_AND_METHOD_GUIDE.md   lý thuyết nền, sáu model, metric
 ├── SPRINT_2_METHOD_AND_PRODUCT_GUIDE.md  undersampling, calibration, policy value
 ├── SPRINT_3_METHOD_GUIDE.md              policy_area_dr, RATE/AUTOC, cross-fitting
 ├── CAUSAL_FOUNDATION_METHOD_GUIDE.md     DINA, Anchored R, partial pooling, experiment gate
-├── TOP_TAIL_POLICY_INFERENCE_GUIDE.md     hard top-k, paired/simultaneous CI, event support
+├── TOP_TAIL_POLICY_INFERENCE_GUIDE.md    hard top-k, paired/simultaneous CI, event support
 ├── DECISION_CONTRACT.md                  policy phát hành, công thức, guardrail
 ├── REPRODUCTION.md                       runbook tái lập cho mọi vòng thí nghiệm
 ├── data_cards/                           nguồn gốc, schema, giới hạn dữ liệu
 └── model_cards/                          model card champion
 ```
 
-## Bắt đầu từ đâu
+**Tên file theo sprint, nội dung theo chủ đề.** Năm method guide được đặt tên theo vòng
+viết ra chúng, nên tìm theo tên file sẽ khó. Dùng bảng tra theo chủ đề ngay dưới thay vì
+đoán từ tên.
 
-| Bạn muốn | Đọc |
+## Tra theo chủ đề
+
+Cột trái là **khái niệm**, không phải tên file. Đây là cách tìm nhanh nhất.
+
+| Chủ đề | Đọc ở |
 |---|---|
-| **Hiểu mạch phát triển của cả dự án** | [END_TO_END_WORKFLOW.md](END_TO_END_WORKFLOW.md) |
-| Hiểu lý thuyết nền và sáu model | [SPRINT_1_THEORY_AND_METHOD_GUIDE.md](SPRINT_1_THEORY_AND_METHOD_GUIDE.md) |
-| Hiểu cách biến xếp hạng thành quyết định | [SPRINT_2_METHOD_AND_PRODUCT_GUIDE.md](SPRINT_2_METHOD_AND_PRODUCT_GUIDE.md) |
-| Hiểu metric chính hiện hành | [SPRINT_3_METHOD_GUIDE.md](SPRINT_3_METHOD_GUIDE.md) |
-| Hiểu inference cho policy 1–2% | [TOP_TAIL_POLICY_INFERENCE_GUIDE.md](TOP_TAIL_POLICY_INFERENCE_GUIDE.md) |
-| Biết quy tắc ra quyết định | [DECISION_CONTRACT.md](DECISION_CONTRACT.md) |
-| Chạy lại một vòng thí nghiệm | [REPRODUCTION.md](REPRODUCTION.md) |
-| Xem kết quả mới nhất | [../report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md](../report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md) |
-| Xem ba mốc Causal Forest trên Kaggle | [../report/CAUSAL_FOREST_REPORT.md](../report/CAUSAL_FOREST_REPORT.md) |
-| Hiểu vì sao tín hiệu chấm điểm đổi thứ hạng | [../report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md](../report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md) mục 5 |
-| Đọc deep research sau thí nghiệm | [../planning/CAUSAL_DEEP_RESEARCH_2026.md](../planning/CAUSAL_DEEP_RESEARCH_2026.md) |
-| Hiểu bối cảnh nghiên cứu | [../planning/RESEARCH_LANDSCAPE_2026.md](../planning/RESEARCH_LANDSCAPE_2026.md) |
+| Một thuật ngữ bất kỳ | [GLOSSARY.md](GLOSSARY.md) |
+| Potential outcomes, ATE, CATE | [SPRINT_1_THEORY_AND_METHOD_GUIDE.md](SPRINT_1_THEORY_AND_METHOD_GUIDE.md) |
+| Sáu họ model và cơ chế từng cái | [SPRINT_1_THEORY_AND_METHOD_GUIDE.md](SPRINT_1_THEORY_AND_METHOD_GUIDE.md) |
+| Undersampling và khôi phục thang xác suất | [SPRINT_2_METHOD_AND_PRODUCT_GUIDE.md](SPRINT_2_METHOD_AND_PRODUCT_GUIDE.md) |
+| Calibration, τ-isotonic, EUCE | [SPRINT_2_METHOD_AND_PRODUCT_GUIDE.md](SPRINT_2_METHOD_AND_PRODUCT_GUIDE.md) |
+| Policy value, đường cong ngân sách, break-even | [SPRINT_2_METHOD_AND_PRODUCT_GUIDE.md](SPRINT_2_METHOD_AND_PRODUCT_GUIDE.md) |
+| **`policy_area_dr`** — metric chính | [SPRINT_3_METHOD_GUIDE.md](SPRINT_3_METHOD_GUIDE.md) |
+| RATE, AUTOC, TOC | [SPRINT_3_METHOD_GUIDE.md](SPRINT_3_METHOD_GUIDE.md) |
+| Cross-fitting, OOF, nuisance dùng chung | [SPRINT_3_METHOD_GUIDE.md](SPRINT_3_METHOD_GUIDE.md) |
+| DR signal và vì sao nó thay IPW | [SPRINT_3_METHOD_GUIDE.md](SPRINT_3_METHOD_GUIDE.md) |
+| Ensemble: Q-aggregation, rank average | [SPRINT_3_METHOD_GUIDE.md](SPRINT_3_METHOD_GUIDE.md) |
+| DINA, Anchored R, partial pooling | [CAUSAL_FOUNDATION_METHOD_GUIDE.md](CAUSAL_FOUNDATION_METHOD_GUIDE.md) |
+| Simultaneous band, familywise, hard top-k | [TOP_TAIL_POLICY_INFERENCE_GUIDE.md](TOP_TAIL_POLICY_INFERENCE_GUIDE.md) |
+| Giới hạn của frozen-score inference | [TOP_TAIL_POLICY_INFERENCE_GUIDE.md](TOP_TAIL_POLICY_INFERENCE_GUIDE.md) |
+| Promotion rule và luật quyết định | [DECISION_CONTRACT.md](DECISION_CONTRACT.md) |
+| Protocol đăng ký trước, gate, registry | [../configs/README.md](../configs/README.md) |
+| Nguồn gốc và giới hạn dữ liệu | [data_cards/CRITEO_V2_1.md](data_cards/CRITEO_V2_1.md) |
+| Vì sao dự án đi theo thứ tự đó | [END_TO_END_WORKFLOW.md](END_TO_END_WORKFLOW.md) |
 
-## Phương pháp — một tài liệu cho mỗi sprint
+## Năm method guide — mô tả đầy đủ
+
+Bảng trên tra theo khái niệm; bảng này mô tả **toàn bộ nội dung** của từng file, dùng khi
+cần biết một guide có gì trước khi mở.
 
 | Tài liệu | Nội dung |
 |---|---|
@@ -55,12 +71,18 @@ docs/
 
 ## Chỉ mục thư mục khác
 
-| Thư mục | Chỉ mục |
-|---|---|
-| `scripts/` | [../scripts/README.md](../scripts/README.md) |
-| `output/` | [../output/README.md](../output/README.md) |
-| `planning/` | [../planning/README.md](../planning/README.md) |
-| `report/` | [../report/README.md](../report/README.md) |
+| Thư mục | Chỉ mục | Nội dung |
+|---|---|---|
+| `src/` | [../src/README.md](../src/README.md) | thư viện, xếp theo tầng pipeline |
+| `scripts/` | [../scripts/README.md](../scripts/README.md) | script điều phối, theo vòng |
+| `configs/` | [../configs/README.md](../configs/README.md) | sáu protocol đăng ký trước |
+| `notebooks/` | [../notebooks/README.md](../notebooks/README.md) | bốn notebook, theo giai đoạn |
+| `output/` | [../output/README.md](../output/README.md) | artifact, đâu là nguồn số chính thức |
+| `report/` | [../report/README.md](../report/README.md) | tám báo cáo kết quả |
+| `planning/` | [../planning/README.md](../planning/README.md) | nghiên cứu và hướng chưa mở |
+| `tests/` | [../tests/README.md](../tests/README.md) | 293 test, xếp theo bất biến được bảo vệ |
+| `webapp/` | [../webapp/README.md](../webapp/README.md) | sản phẩm, API và ranh giới |
+| `benchmarks/` | [../benchmarks/README.md](../benchmarks/README.md) | đo tài nguyên, không phải kết quả khoa học |
 
 ## Quy tắc viết tài liệu
 

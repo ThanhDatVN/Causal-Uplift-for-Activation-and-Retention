@@ -366,10 +366,18 @@ planning/               bối cảnh nghiên cứu và mức xác minh nguồn
 report/                 tám báo cáo kết quả
 ```
 
-Mỗi thư mục lớn có `README.md` riêng ghi vai trò và trạng thái từng file:
-[src](src/README.md) · [scripts](scripts/README.md) · [notebooks](notebooks/README.md) ·
-[output](output/README.md) · [docs](docs/README.md) · [planning](planning/README.md) ·
-[report](report/README.md).
+**Mười một thư mục lớn, mỗi thư mục một `README.md` chỉ mục** ghi vai trò và trạng thái
+từng file: [src](src/README.md) · [scripts](scripts/README.md) ·
+[configs](configs/README.md) · [notebooks](notebooks/README.md) ·
+[tests](tests/README.md) · [output](output/README.md) · [docs](docs/README.md) ·
+[report](report/README.md) · [planning](planning/README.md) ·
+[webapp](webapp/README.md) · [benchmarks](benchmarks/README.md).
+
+Sự tồn tại của cả mười một được [khóa bằng test](tests/test_documentation_integrity.py), nên
+một thư mục mới không thể lặng lẽ xuất hiện mà không có chỉ mục.
+
+Không nhớ một thuật ngữ? [**docs/GLOSSARY.md**](docs/GLOSSARY.md) — khoảng 45 thuật ngữ xếp
+theo chủ đề, kèm chỗ dùng trong repo.
 
 Bố cục vật lý xếp theo **loại artifact** vì đó là thứ công cụ Python và CI cần. Muốn đi
 theo **giai đoạn** thì đọc bảng ở đầu trang, hoặc bản đồ đầy đủ ở
@@ -517,6 +525,7 @@ giải thích từng module, và danh mục bẫy khi đọc kết quả. Sau đ
 | Bạn cần | Đọc theo thứ tự này |
 |---|---|
 | Đánh giá phương pháp và code | [Sprint 1 report](report/SPRINT_1_FINAL_REPORT.md) → [notebook 01](notebooks/01_eda_criteo.ipynb) → [notebook 02](notebooks/02_modeling_and_evaluation.ipynb) → [src/README.md](src/README.md) |
+| Tra một thuật ngữ | [docs/GLOSSARY.md](docs/GLOSSARY.md) |
 | Hiểu quyết định kinh doanh | [Decision contract](docs/DECISION_CONTRACT.md) → mục [Demo](#demo) → [Sprint 2 report](report/SPRINT_2_FINAL_REPORT.md) mục 5 |
 | Tái lập kết quả | [REPRODUCTION.md](docs/REPRODUCTION.md) → [scripts/README.md](scripts/README.md) → [output/README.md](output/README.md) |
 | Mở một vòng nghiên cứu mới | [planning/README.md](planning/README.md) → [END_TO_END_WORKFLOW.md](docs/END_TO_END_WORKFLOW.md) mục 9 |

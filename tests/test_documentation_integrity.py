@@ -185,7 +185,8 @@ def test_documented_test_count_matches_reality():
 def test_every_directory_index_exists():
     """Mỗi thư mục lớn phải có README.md chỉ mục."""
     for directory in (
-        "docs", "planning", "report", "scripts", "output", "src", "notebooks",
+        "docs", "planning", "report", "scripts", "output",
+        "src", "notebooks", "tests", "configs", "webapp", "benchmarks",
     ):
         index = REPO_ROOT / directory / "README.md"
         assert index.exists(), f"Thieu chi muc {directory}/README.md"

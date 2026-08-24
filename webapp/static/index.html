@@ -82,7 +82,16 @@
       <h2>Chênh lệch paired và khoảng tin cậy 95%</h2>
       <p class="hint">Chỉ khoảng tin cậy của <em>chênh lệch</em> mới tách được hai model. CI của
       từng model riêng lẻ chồng lấn không có nghĩa là hai model bằng nhau, và ngược lại.</p>
-      <div class="table-scroll"><table id="pairwiseTable"></table></div>
+      <figure class="figure">
+        <div class="chart-host"><canvas id="pairwiseForest" role="img"
+          aria-label="Forest plot chênh lệch policy_area_dr của từng challenger so với champion, kèm khoảng tin cậy 95%"></canvas></div>
+        <figcaption class="figcaption" id="pairwiseForestCaption"></figcaption>
+      </figure>
+      <div class="resolution" id="resolutionBlock"></div>
+      <details class="raw-toggle">
+        <summary>Xem toàn bộ bảng so sánh cặp</summary>
+        <div class="table-scroll"><table id="pairwiseTable"></table></div>
+      </details>
     </article>
     <article class="card">
       <p class="eyebrow">Vòng cải tiến</p>

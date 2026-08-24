@@ -458,6 +458,117 @@
 
   /* -------------------------------------------------------------- registry */
 
+  /* ------------------------------------------------------------- forest */
+
+  /* Forest plot cho chenh lech ghep cap. Bang so noi cung mot dieu, nhung khi
+   * co 8 dong thi "moi khoang tin cay deu cat duong 0" phai doc tung dong moi
+   * thay. O dang hinh thi thay ngay. Duong 0 la nhan vat chinh, khong phai truc. */
+  function drawForestChart(canvas, config) {
+    const items = config.items.filter(
+      (item) => isFinite(item.value) && isFinite(item.low) && isFinite(item.high),
+    );
+    const height = config.height || Math.max(180, items.length * 34 + 64);
+    const { ctx, width } = setupCanvas(canvas, height);
+    const colors = palette();
+    const labelWidth = config.labelWidth || 168;
+    const pad = { top: 14, right: 96, bottom: 34, left: labelWidth };
+    const plotWidth = width - pad.left - pad.right;
+    const plotHeight = height - pad.top - pad.bottom;
+    if (!items.length || plotWidth <= 20) return;
+
+    let vMin = 0;
+    let vMax = 0;
+    items.forEach((item) => {
+      vMin = Math.min(vMin, item.low);
+      vMax = Math.max(vMax, item.high);
+    });
+    const ticks = niceTicks(vMin, vMax, 4);
+    const lo = ticks[0];
+    const hi = ticks[ticks.length - 1];
+    const sx = (v) => pad.left + ((v - lo) / (hi - lo || 1)) * plotWidth;
+
+    ctx.font = "11px ui-monospace, Consolas, monospace";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    ticks.forEach((tick) => {
+      const x = Math.round(sx(tick)) + 0.5;
+      ctx.strokeStyle = colors.grid;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x, pad.top);
+      ctx.lineTo(x, pad.top + plotHeight);
+      ctx.stroke();
+      ctx.fillStyle = colors.muted;
+      ctx.fillText(
+        config.formatValue ? config.formatValue(tick) : String(tick),
+        x,
+        pad.top + plotHeight + 8,
+      );
+    });
+
+    // Duong 0 duoc ve dam hon moi duong luoi khac: no la nguong quyet dinh.
+    const zeroX = Math.round(sx(0)) + 0.5;
+    ctx.strokeStyle = colors.text;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(zeroX, pad.top - 4);
+    ctx.lineTo(zeroX, pad.top + plotHeight + 2);
+    ctx.stroke();
+
+    const slot = plotHeight / items.length;
+    const rects = [];
+    items.forEach((item, index) => {
+      const centerY = Math.round(pad.top + slot * index + slot / 2) + 0.5;
+      // Tach ve hai phia mang y nghia nguoc nhau: ben phai moc 0 la challenger
+      // thang, ben trai la thua ro. Dung mot mau cho ca hai se doc sai.
+      const better = item.low > 0;
+      const worse = item.high < 0;
+      const separated = better || worse;
+      const color = better ? colors.series[2] : worse ? colors.series[1] : colors.muted;
+
+      ctx.strokeStyle = color;
+      ctx.lineWidth = separated ? 2 : 1.5;
+      ctx.beginPath();
+      ctx.moveTo(sx(item.low), centerY);
+      ctx.lineTo(sx(item.high), centerY);
+      ctx.moveTo(sx(item.low), centerY - 5);
+      ctx.lineTo(sx(item.low), centerY + 5);
+      ctx.moveTo(sx(item.high), centerY - 5);
+      ctx.lineTo(sx(item.high), centerY + 5);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(sx(item.value), centerY, separated ? 5 : 4, 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.strokeStyle = colors.surface;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.fillStyle = separated ? colors.text : colors.secondary;
+      ctx.font = separated
+        ? "600 12px system-ui, sans-serif"
+        : "12px system-ui, sans-serif";
+      ctx.textAlign = "right";
+      ctx.textBaseline = "middle";
+      ctx.fillText(item.label, pad.left - 12, centerY);
+
+      ctx.fillStyle = colors.secondary;
+      ctx.font = "11px ui-monospace, Consolas, monospace";
+      ctx.textAlign = "left";
+      ctx.fillText(
+        config.formatValue ? config.formatValue(item.value) : String(item.value),
+        Math.max(sx(item.high), sx(item.value)) + 10,
+        centerY,
+      );
+
+      rects.push({ item, top: centerY - slot / 2, bottom: centerY + slot / 2, color });
+    });
+
+    canvas._bars = { rects, config, colors };
+    attachBarHover(canvas);
+  }
+
   function render(canvasId, type, config) {
     const canvas = document.getElementById(canvasId);
     if (!canvas) return;
@@ -466,6 +577,7 @@
     if (existing >= 0) registry[existing] = entry;
     else registry.push(entry);
     if (type === "line") drawLineChart(canvas, config);
+    else if (type === "forest") drawForestChart(canvas, config);
     else drawBarChart(canvas, config);
   }
 
@@ -474,6 +586,7 @@
       const canvas = document.getElementById(entry.canvasId);
       if (!canvas || !canvas.offsetParent) return;
       if (entry.type === "line") drawLineChart(canvas, entry.config);
+      else if (entry.type === "forest") drawForestChart(canvas, entry.config);
       else drawBarChart(canvas, entry.config);
     });
   }

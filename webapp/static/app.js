@@ -51,7 +51,9 @@
     if (value === null || value === undefined || Number.isNaN(value)) return "—";
     if (value === 0) return "0";
     const magnitude = Math.abs(value);
-    if (magnitude < 0.001) return value.toExponential(digits);
+    // toExponential luon dung dau cham; doi sang phay cho khop voi nf() o
+    // moi cho khac, neu khong cung mot man hinh se co ca 8.56e-4 lan 0,0091.
+    if (magnitude < 0.001) return value.toExponential(digits).replace(".", ",");
     if (magnitude < 1) return nf(4).format(value);
     if (magnitude < 1000) return nf(2).format(value);
     return fmtInt(value);
@@ -59,6 +61,165 @@
 
   function shortHash(value) {
     return value ? `${String(value).slice(0, 12)}…` : "—";
+  }
+
+  /* Chi ve cac so sanh VOI champion. So sanh giua hai challenger voi nhau khong
+   * doi duoc quyet dinh giu hay thay champion, nen dua vao day chi lam loang. */
+  function renderPairwiseForest(rows, champion) {
+    const items = rows
+      .filter((row) => row.model_b === champion)
+      .map((row) => ({
+        label: row.model_a,
+        value: row.policy_area_difference,
+        low: row.policy_area_ci_low,
+        high: row.policy_area_ci_high,
+      }))
+      .sort((a, b) => b.value - a.value);
+    if (!items.length) return;
+
+    window.Charts.render("pairwiseForest", "forest", {
+      items,
+      formatValue: (value) => fmtSci(value),
+      height: Math.max(200, items.length * 34 + 64),
+    });
+
+    const better = items.filter((item) => item.low > 0).length;
+    const worse = items.filter((item) => item.high < 0).length;
+    const unresolved = items.length - better - worse;
+    const parts = [
+      better === 0
+        ? `<strong>Không khoảng nào nằm hoàn toàn bên phải mốc 0</strong>, nên không ` +
+          `challenger nào thỏa điều kiện 3 của promotion rule.`
+        : `<strong>${better}/${items.length}</strong> khoảng nằm hoàn toàn bên phải mốc 0.`,
+    ];
+    if (worse) {
+      parts.push(
+        `${worse} khoảng nằm hoàn toàn bên trái: thấp hơn ${champion} một cách có ý nghĩa.`,
+      );
+    }
+    if (unresolved) {
+      parts.push(`${unresolved} khoảng cắt mốc 0: chưa phân biệt được.`);
+    }
+    el("pairwiseForestCaption").innerHTML =
+      `Mỗi dòng là <em>challenger trừ ${champion}</em> trên metric chính, kèm khoảng tin cậy 95% ` +
+      `từ paired bootstrap. ${parts.join(" ")} ` +
+      `Nguồn: <code>output/sprint3/paired_comparisons.csv</code>.`;
+
+    renderResolution(items, champion);
+  }
+
+  /* Do phan giai cua phep do. Day la ket luan trung tam cua du an — phep do het
+   * do phan giai truoc khi model het du dia — va truoc day no chi nam trong bao
+   * cao, khong nam trong san pham. Moi so o day tinh tu chinh bang paired da
+   * hien thi ben tren, khong phai hang so chep tay. */
+  function renderResolution(items, champion) {
+    const node = el("resolutionBlock");
+    if (!node || !items.length) return;
+
+    const halves = items
+      .map((item) => (item.high - item.low) / 2)
+      .filter((value) => isFinite(value) && value > 0)
+      .sort((a, b) => a - b);
+    if (!halves.length) return;
+    const mid = Math.floor(halves.length / 2);
+    const halfWidth =
+      halves.length % 2 ? halves[mid] : (halves[mid - 1] + halves[mid]) / 2;
+
+    // Challenger sat champion nhat, tuc truong hop kho phan biet nhat.
+    const closest = items.reduce((best, item) =>
+      Math.abs(item.value) < Math.abs(best.value) ? item : best,
+    );
+    const gap = Math.abs(closest.value);
+    const ratio = gap > 0 ? halfWidth / gap : null;
+
+    node.innerHTML =
+      `<div class="res-row">` +
+      `<div class="res-cell"><div class="label">Ngưỡng phân biệt được</div>` +
+      `<div class="value">±${fmtSci(halfWidth)}</div></div>` +
+      `<div class="res-cell"><div class="label">Chênh lệch sát nhất</div>` +
+      `<div class="value">${fmtSci(gap)}</div></div>` +
+      (ratio
+        ? `<div class="res-cell"><div class="label">Nhỏ hơn ngưỡng</div>` +
+          `<div class="value">${fmt(ratio, 0)}×</div></div>`
+        : "") +
+      `</div>` +
+      `<p>Nửa độ rộng khoảng tin cậy trung vị là <strong>±${fmtSci(halfWidth)}</strong>, ` +
+      `nên phép đo chỉ phân biệt được chênh lệch từ mức đó trở lên. Challenger sát ` +
+      `${champion} nhất là <strong>${closest.label}</strong>, chênh <strong>${fmtSci(gap)}</strong>` +
+      (ratio ? ` — nhỏ hơn ngưỡng <strong>${fmt(ratio, 0)} lần</strong>` : "") +
+      `. Vì vậy kết luận đúng là <em>chưa đủ bằng chứng để đổi champion</em>, ` +
+      `không phải <em>challenger kém hơn</em>.</p>`;
+  }
+
+  /* Ghi chu trong manifest duoc viet khong dau vi manifest phai in ra duoc tren
+   * console Windows. Manifest la artifact da dong bang va SHA cua no nam trong
+   * provenance, nen khong sua file; dich o tang trinh bay, va tra ve nguyen van
+   * neu gap chuoi chua biet. */
+  const NOTE_TEXT = {
+    "Confirmation Sprint 2 da duoc quan sat va bao cao o Sprint 2. Ket qua o day khong phai prospective unseen test.":
+      "Confirmation Sprint 2 đã được quan sát và báo cáo ở Sprint 2, nên kết quả ở đây là " +
+      "retrospective confirmation, không phải prospective unseen test.",
+  };
+
+  function displayNote(note) {
+    if (!note) return "";
+    return NOTE_TEXT[note.trim()] || note;
+  }
+
+  /* ------------------------------------------------------- promotion rule */
+
+  /* Protocol da dang ky duoc luu nguyen van, va nguyen van do khong dau vi no
+   * duoc viet de chay tren console Windows. Khong sua file protocol: SHA cua no
+   * nam trong manifest cua moi run. Nen tang trinh bay dich sang tieng Viet co
+   * dau, con chuoi goc giu lai trong thuoc tinh title de van doi chieu duoc. */
+  const RULE_LABEL = {
+    condition_1: "Điều kiện 1 — thắng ở cả hai fold seed",
+    condition_2: "Điều kiện 2 — cùng dấu trên confirmation",
+    condition_3: "Điều kiện 3 — khoảng tin cậy loại 0",
+    condition_4: "Điều kiện 4 — không vi phạm ràng buộc kỹ thuật",
+    condition_4_checks: "Điều kiện 4 — các phép kiểm tự động",
+    fallback: "Nếu không đạt",
+  };
+  const RULE_TEXT = {
+    condition_1: "policy_area_dr OOF của challenger phải cao hơn Response ở cả hai fold seed",
+    condition_2: "point estimate trên retrospective confirmation phải cùng dấu",
+    condition_3: "paired 95% CI của chênh lệch policy_area_dr phải có cận dưới lớn hơn 0",
+    condition_4: "không vi phạm resource gate; score hữu hạn và không suy biến; calibration hữu hạn nếu ở thang CATE",
+    fallback: "giữ Response và phát hành challenger kèm khoảng tin cậy",
+  };
+  const CHECK_TEXT = {
+    require_resource_gate_passed: "resource gate phải đạt",
+    require_finite_nonconstant_score: "score phải hữu hạn và không hằng số",
+    require_finite_calibration_for_cate_scale: "calibration phải hữu hạn nếu model ở thang CATE",
+  };
+
+  function escapeAttr(value) {
+    return String(value).replace(/[&<>"]/g, (c) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c],
+    );
+  }
+
+  /* Gia tri cua mot dieu kien co the la chuoi hoac la mot object cac phep kiem
+   * con. Ban truoc noi thang gia tri vao template nen object hien ra thanh
+   * "[object Object]". */
+  function renderPromotionRule(rule) {
+    return Object.entries(rule)
+      .map(([key, value]) => {
+        const label = RULE_LABEL[key] || key;
+        if (value && typeof value === "object") {
+          const items = Object.entries(value)
+            .map(([name, required]) => {
+              const text = CHECK_TEXT[name] || `<code>${name}</code>`;
+              const state = required ? "bắt buộc" : "không bắt buộc";
+              return `<li>${text} — <strong>${state}</strong></li>`;
+            })
+            .join("");
+          return `<li><strong>${label}</strong><ul>${items}</ul></li>`;
+        }
+        const shown = RULE_TEXT[key] || value;
+        return `<li title="${escapeAttr(value)}"><strong>${label}</strong> — ${shown}</li>`;
+      })
+      .join("");
   }
 
   /* ----------------------------------------------------------------- table */
@@ -233,11 +394,10 @@
     const evidence = bundle.evidence;
     const rule = evidence.promotion_rule || {};
     el("championBlock").innerHTML =
-      `<p class="hint">${meta.champion_selection_note}</p><ul>` +
-      Object.entries(rule)
-        .map(([key, text]) => `<li><code>${key}</code>: ${text}</li>`)
-        .join("") +
-      "</ul>";
+      `<p class="hint">${meta.champion_selection_note}</p>` +
+      `<ul class="rule-list">${renderPromotionRule(rule)}</ul>` +
+      `<p class="figcaption">Nguyên văn đã đăng ký nằm trong ` +
+      `<code>configs/sprint3_improvement_protocol.json</code>; di chuột lên từng dòng để xem.</p>`;
 
     const sprints = meta.sprints;
     el("sprintBlock").innerHTML = `<div class="table-scroll"><table>
@@ -248,7 +408,7 @@
         <tr><td>Sprint 3</td><td>${sprints.sprint3.status}</td><td>${fmtInt(sprints.sprint3.confirmation_rows)}</td></tr>
         <tr><td>Causal Forest</td><td>${meta.causal_forest.status}</td><td>—</td></tr>
       </tbody></table></div>
-      <p class="hint" style="margin-top:10px">${sprints.sprint3.evidence_note || ""}</p>`;
+      <p class="hint" style="margin-top:10px">${displayNote(sprints.sprint3.evidence_note)}</p>`;
 
     buildTable(
       "hierarchyTable",
@@ -346,6 +506,7 @@
         ],
         pairwise,
       );
+      renderPairwiseForest(pairwise, champion);
     } else {
       buildTable(
         "pairwiseTable",

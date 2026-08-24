@@ -117,7 +117,16 @@ loại. Nên CI chạy tập con:
 pytest tests --ignore=tests\test_data.py --ignore=tests\test_baselines.py --ignore=tests\test_webapp.py
 ```
 
-`294` test ở local, `249` trên CI và trong container. `repo_state.py` tồn tại để một đường dẫn vắng mặt **đúng
+`294` test ở local, `249` trên CI và trong container.
+
+Không có dữ liệu Criteo trên máy thì lọc bằng marker thay vì liệt kê file:
+
+```powershell
+.venv\Scripts\python.exe -m pytest tests -m "not requires_criteo"   # 272 test
+```
+
+`22` test bị bỏ qua là toàn bộ `test_data.py` và `test_baselines.py` — hai file duy nhất
+nạp dữ liệu gốc. Marker khai báo ở `pyproject.toml`. `repo_state.py` tồn tại để một đường dẫn vắng mặt **đúng
 theo thiết kế** không bị báo là lỗi tài liệu — trộn hai loại đó lại sẽ làm CI đỏ vì lý do sai,
 và lâu dài dẫn tới thói quen bỏ qua CI đỏ.
 

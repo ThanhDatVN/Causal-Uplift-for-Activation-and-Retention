@@ -25,6 +25,12 @@ from src.baselines import (
 from src.calibration import negative_keep_probability
 from src.data import FEATURES, rare_outcome_undersample
 
+import pytest
+
+# Ca file can data/criteo-research-uplift-v2.1.csv.gz: fit model tren mau Criteo.
+# Khong co du lieu thi chay: pytest -m "not requires_criteo"
+pytestmark = pytest.mark.requires_criteo
+
 
 def _xty(sample_df):
     X = sample_df[FEATURES].to_numpy(dtype="float64")

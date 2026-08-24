@@ -27,6 +27,12 @@ from src.data import (
     validate_criteo_schema,
 )
 
+import pytest
+
+# Ca file can data/criteo-research-uplift-v2.1.csv.gz: nap toan bo Criteo va kiem hop dong du lieu.
+# Khong co du lieu thi chay: pytest -m "not requires_criteo"
+pytestmark = pytest.mark.requires_criteo
+
 
 def test_criteo_path_exists():
     assert CRITEO_PATH.exists()

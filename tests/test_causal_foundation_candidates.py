@@ -1,3 +1,18 @@
+"""DINA, Anchored R và Pattern R — kiểm trước khi chạm dữ liệu thật.
+
+Ba estimator này được hiện thực từ công thức, nên phải kiểm công thức trước khi tin kết quả:
+
+- **Gradient và Hessian của DINA khớp sai phân hữu hạn.** Sai đạo hàm thì tối ưu hóa vẫn
+  chạy và vẫn hội tụ về đâu đó, chỉ là sai chỗ.
+- **Mỗi learner khôi phục đúng thứ hạng đã biết trên dữ liệu sinh** — DINA trên thang
+  log-odds, Anchored R trên thang tuyệt đối, Pattern R nhận ra moderator dạng sentinel.
+- **Tham số khóa không hợp lệ bị từ chối**: shrinkage, prior và ngưỡng cắt xác suất ngoài
+  miền cho phép.
+
+`test_sentinel_pattern_id_is_fold_local_and_stable` chặn một lỗi tinh vi: mã pattern phải
+được tính **trong từng fold**, nếu không thông tin từ fold test rò sang fold train.
+"""
+
 import numpy as np
 import pytest
 from scipy.special import expit

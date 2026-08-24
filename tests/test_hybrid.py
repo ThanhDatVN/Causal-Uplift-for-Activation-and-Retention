@@ -1,3 +1,17 @@
+"""Hybrid prognostic–causal stacking, phương trình 2 và 3.
+
+Nguồn: Athey, Keleher & Spiess, Journal of Econometrics 2025. Module đã hiện thực nhưng
+**chưa có dòng nào trong registry** — nó là mục M1 của kế hoạch, chưa chạy.
+
+Bốn điều được khóa:
+
+- **Phương trình 3 chứa CATE thô đúng nguyên dạng**, không bị biến đổi ngầm;
+- **Phương trình 2 khôi phục được submodel log-odds hằng số** khi dữ liệu đúng dạng đó;
+- **Stacker tất định trên outcome nhị phân hiếm** — chế độ dễ mất tính tất định nhất;
+- **Đầu vào của tầng trong chỉ được dự đoán bởi model không chứa dòng đó.** Vi phạm điều
+  này là leakage bên trong chính stacker, và nó không hiện ra ở bất kỳ metric nào.
+"""
+
 import numpy as np
 import pytest
 from scipy.special import expit, logit

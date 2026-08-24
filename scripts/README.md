@@ -92,6 +92,8 @@ Flag legacy chỉ tái lập artifact lịch sử trước manifest schema v2; m
 | `train_causal_forest.py` | Fit `CausalForestDML`. Ba profile (`kaggle-safe`, `research`, `rare-outcome`) và hai split (`sprint1`, `sprint3`). |
 | `kaggle_causal_forest_gate.py` | Gate tài nguyên và toàn vẹn artifact. **Không** đánh giá chất lượng. |
 | `evaluate_causal_forest.py` | Chấm điểm artifact tải về từ Kaggle. Tự phát hiện so được với bảng release Sprint 1 hay bảng confirmation Sprint 3. |
+| `analyze_causal_forest_release.py` | Learning curve ba mốc, phân bố điểm và tài nguyên. Đọc artifact đã chấm, **không** fit lại. |
+| `plot_causal_forest_release.py` | Năm biểu đồ vào `output/causal_forest/analysis/`. |
 
 Hai trục cấu hình, chọn độc lập nhau:
 

@@ -472,8 +472,8 @@ Sprint 3:
   --n-boot 300 --output-dir output\improvement\screen
 ```
 
-Lệnh đầy đủ của cả bảy vòng — Sprint 1–3, data optimization, causal foundation, top-tail và
-Causal Forest — nằm trong một runbook duy nhất:
+Lệnh đầy đủ của cả tám vòng chạy được — chẩn đoán dữ liệu, Sprint 1–3, data optimization,
+causal foundation, top-tail và Causal Forest — nằm trong một runbook duy nhất:
 [docs/REPRODUCTION.md](docs/REPRODUCTION.md).
 
 Run cần file Criteo v2.1 với SHA-256:

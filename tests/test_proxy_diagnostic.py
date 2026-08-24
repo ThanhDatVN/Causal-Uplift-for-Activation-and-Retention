@@ -1,3 +1,13 @@
+"""Chẩn đoán khi nào một proxy xếp hạng đúng theo treatment effect.
+
+Nguồn: arXiv 2206.12532. Chẩn đoán này trả lời câu hỏi trung tâm của dự án — vì sao xếp
+theo `p₀` lại gần đúng xếp theo `τ`.
+
+Điều dễ hiện thực sai nhất, và được kiểm riêng: điều kiện bị chi phối bởi **giá trị lớn
+nhất** của chặn CATE, không phải bởi trung bình. Dùng trung bình sẽ cho kết luận lạc quan
+sai ở đúng những trường hợp cần cẩn thận nhất.
+"""
+
 import numpy as np
 import pytest
 

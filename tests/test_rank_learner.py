@@ -1,3 +1,14 @@
+"""Rank-Learner — pairwise Neyman-orthogonal ranking, ICML 2026.
+
+Kiểm ba tầng:
+
+- **DR score cross-fitted khôi phục được ATE** trên dữ liệu sinh — nếu tầng này sai thì mọi
+  thứ phía trên vô nghĩa;
+- **xếp hạng tốt hơn ngẫu nhiên trên holdout**, và điểm không hằng số;
+- **tái lập được với cùng seed.** Một learner không tất định thì không so sánh được giữa
+  hai vòng, và mọi kết luận về nó đều lẫn nhiễu của chính lần chạy.
+"""
+
 import numpy as np
 import pytest
 

@@ -1,3 +1,17 @@
+"""Kiểm chính bộ sinh dữ liệu, trước khi dùng nó để kiểm thứ khác.
+
+`synthetic_rct.py` sinh RCT có `τ` **biết trước**, và nhiều test khác dựa vào đó làm đáp
+án. Nên bản thân bộ sinh phải được kiểm trước, nếu không mọi test dùng nó đều kiểm sai
+chuẩn.
+
+Ba điều được khóa:
+
+- **`τ` thật đúng bằng hiệu hai kết quả tiềm năng sau khi clip** — không phải trước;
+- **tái tạo đúng chế độ của Criteo**: outcome hiếm và gán nhánh mất cân bằng;
+- **ba chế độ effect alignment có đúng quan hệ với rủi ro nền đã đăng ký**, để mô phỏng
+  được cả trường hợp `τ` tỉ lệ với `p₀` lẫn trường hợp không.
+"""
+
 import numpy as np
 import pytest
 

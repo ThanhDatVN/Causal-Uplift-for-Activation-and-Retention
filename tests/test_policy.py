@@ -1,3 +1,14 @@
+"""Dựng policy top-k và các tín hiệu hiệu ứng.
+
+Bắt ba lỗi:
+
+- **Policy vượt ngân sách** hoặc không tôn trọng thứ hạng điểm số.
+- **IPW và DR không khôi phục được ATE.** Kiểm trên dữ liệu sinh có ATE biết trước; đây là
+  cách duy nhất kiểm được tính đúng đắn, vì trên dữ liệu thật không có đáp án.
+- **Bootstrap làm mất tính ghép cặp.** Nếu mỗi model được rút một bộ dòng khác nhau thì
+  khoảng tin cậy của chênh lệch rộng ra vô cớ và mọi so sánh mất độ nhạy.
+"""
+
 import numpy as np
 import pytest
 

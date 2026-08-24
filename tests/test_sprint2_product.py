@@ -1,3 +1,18 @@
+"""Artifact phát hành Sprint 2 và dashboard tự chứa.
+
+Kiểm rằng sản phẩm và bằng chứng không trôi khỏi nhau:
+
+- artifact release tồn tại đủ;
+- confirmation là tập **riêng biệt**, và số lần bootstrap đúng bằng mức đã phát hành;
+- hợp đồng dashboard chọn Response **trên validation**, đúng như selection contract — không
+  chọn lại sau khi nhìn confirmation;
+- policy curve có điểm `treat-none` và mọi điểm release đều hữu hạn;
+- Response top-k thắng random theo **paired CI**, không chỉ theo point estimate.
+
+`test_dashboard_html_is_self_contained_and_guarded` chặn việc dashboard lặng lẽ phụ thuộc
+CDN: nó phải mở được khi không có mạng.
+"""
+
 import json
 from pathlib import Path
 

@@ -138,7 +138,7 @@
 
     node.innerHTML =
       `<div class="res-row">` +
-      `<div class="res-cell"><div class="label">Ngưỡng phân biệt được</div>` +
+      `<div class="res-cell"><div class="label">Nửa CI trung vị</div>` +
       `<div class="value">±${fmtSci(halfWidth)}</div></div>` +
       `<div class="res-cell"><div class="label">Chênh lệch sát nhất</div>` +
       `<div class="value">${fmtSci(gap)}</div></div>` +
@@ -147,12 +147,17 @@
           `<div class="value">${fmt(ratio, 0)}×</div></div>`
         : "") +
       `</div>` +
-      `<p>Nửa độ rộng khoảng tin cậy trung vị là <strong>±${fmtSci(halfWidth)}</strong>, ` +
-      `nên phép đo chỉ phân biệt được chênh lệch từ mức đó trở lên. Challenger sát ` +
+      `<p>Lấy trung vị nửa độ rộng khoảng tin cậy trên ${items.length} so sánh, được ` +
+      `<strong>±${fmtSci(halfWidth)}</strong> — phép đo chỉ phân biệt được chênh lệch từ ` +
+      `mức đó trở lên. Challenger sát ` +
       `${champion} nhất là <strong>${closest.label}</strong>, chênh <strong>${fmtSci(gap)}</strong>` +
       (ratio ? ` — nhỏ hơn ngưỡng <strong>${fmt(ratio, 0)} lần</strong>` : "") +
       `. Vì vậy kết luận đúng là <em>chưa đủ bằng chứng để đổi champion</em>, ` +
-      `không phải <em>challenger kém hơn</em>.</p>`;
+      `không phải <em>challenger kém hơn</em>.</p>` +
+      `<p class="figcaption" style="margin-top:8px">Đây là <em>trung vị</em> trên cả nhóm ` +
+      `so sánh. Báo cáo trích một cặp cụ thể nên cho con số khác — ví dụ Causal Forest so ` +
+      `với Response trên confirmation là <code>±1,74e-05</code>. Hai con số đo hai thứ ` +
+      `khác nhau, không mâu thuẫn.</p>`;
   }
 
   /* Ghi chu trong manifest duoc viet khong dau vi manifest phai in ra duoc tren

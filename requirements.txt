@@ -22,6 +22,7 @@ pytest>=8,<10           # chay tests/ - doi chieu qini_curve voi sklift
 
 # Web application (webapp/): API doc artifact release, khong train khi nhan request.
 fastapi>=0.115,<1
+pydantic>=2,<3               # webapp/api.py import truc tiep, khong dua vao fastapi keo ve
 uvicorn[standard]>=0.32,<1
 python-multipart>=0.0.9,<1  # bat buoc cho upload CSV o /api/score/csv
 httpx>=0.27,<1               # fastapi.testclient dung trong tests/test_webapp.py

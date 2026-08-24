@@ -1,3 +1,18 @@
+"""Metric xếp hạng, đối chiếu với một hiện thực độc lập.
+
+Qini, AUUC và uplift curve được so trực tiếp với `scikit-uplift`. Đây là tầng bảo vệ mạnh
+nhất cho nhóm metric: hai hiện thực viết độc lập khó sai giống hệt nhau.
+
+Ngoài ra có ba **negative control** — trường hợp mà kết quả đúng đã biết trước:
+
+- hai bộ điểm giống hệt nhau phải cho chênh lệch đúng bằng 0 và CI suy biến;
+- dữ liệu không có conversion phải trả `nan` hoặc báo lỗi rõ ràng, không crash;
+- transformed outcome phải có kỳ vọng có điều kiện đúng bằng hiệu ứng thật.
+
+Negative control quan trọng ngang positive test: một metric luôn trả về số đẹp thì không
+phân biệt được với một metric hỏng.
+"""
+
 import numpy as np
 import pytest
 from sklift.metrics import (

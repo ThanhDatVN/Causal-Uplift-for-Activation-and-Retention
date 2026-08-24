@@ -1,3 +1,16 @@
+"""Artifact của vòng causal foundation không bị sửa và không tự mâu thuẫn.
+
+Bốn phát biểu trong báo cáo được kiểm thẳng trên file artifact:
+
+- hai fold seed dùng **đúng cùng một** OOF population đã đăng ký;
+- **không** causal candidate nào qua gate hai seed ở bước sàng lọc;
+- bước full-development **bác bỏ** finalist đã qua sàng lọc — đây là kết quả chính của vòng;
+- `analysis_summary.json` kết luận giữ Response **mà không đọc confirmation**.
+
+Điểm cuối quan trọng nhất: vòng này cố ý không đọc confirmation. Nếu một ngày nào đó bước
+phân tích lặng lẽ đọc tập đó, phạm vi bằng chứng đổi mà báo cáo vẫn ghi như cũ.
+"""
+
 import json
 from pathlib import Path
 

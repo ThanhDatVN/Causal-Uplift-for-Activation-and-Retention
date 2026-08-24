@@ -1,3 +1,16 @@
+"""Những luật đã đăng ký có thực sự được cưỡng chế không.
+
+Đây là nhóm test đặc thù nhất của repo. Nó không kiểm toán học mà kiểm **quy trình**.
+
+- **Early stop phát hiện dominance theo budget** — candidate thua ở mọi mức `5–20%` phải bị
+  dừng, không được chạy tiếp lên full.
+- **Promotion guardrail kiểm đủ ba thứ**: resource gate, score hữu hạn không suy biến, và
+  calibration hữu hạn nếu model ở thang CATE.
+- **Execution contract từ chối CLI trôi khỏi protocol.** Đây là chỗ dễ mất chính trực nhất:
+  chạy với `--pool-frac` khác rồi báo cáo như thể đúng protocol. Contract so tham số dòng
+  lệnh với giao ước đã đăng ký và **dừng** nếu lệch, kể cả khi lệch có vẻ vô hại.
+"""
+
 from types import SimpleNamespace
 
 import numpy as np

@@ -1,3 +1,22 @@
+"""Promotion rule và các phép so sánh giữa nhiều lần chạy.
+
+Nhóm test lớn nhất của repo, vì đây là chỗ một kết luận sai có thể lọt ra ngoài.
+
+**Điều kiện thắng.** Candidate phải thắng ở **mọi** fold seed đã đăng ký, không phải thắng
+trung bình. Có test riêng cho từng cách lách: thắng một seed, thiếu seed, trùng dòng
+`(model, fold_seed)`, và ensemble chẩn đoán tự nhận mình đủ điều kiện.
+
+**Chống trôi.** So sánh bị từ chối nếu hai run dùng OOF population khác nhau, protocol khác,
+stage khác, cấu hình candidate khác, hoặc treatment/outcome khác. Không có những chốt này
+thì hai bảng số trông so được với nhau trong khi thực ra không.
+
+**Manifest cũ.** Run lịch sử thiếu trường phải bị buộc vào chế độ `diagnostic` và **không
+được** promote — bảo thủ theo hướng an toàn thay vì đoán giá trị thiếu.
+
+Dòng cuối cùng đáng chú ý: `test_causal_foundation_stability_label_does_not_average_away_a_loss`
+— nhãn ổn định không được lấy trung bình để che một lần thua.
+"""
+
 import hashlib
 import json
 

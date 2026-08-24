@@ -1,3 +1,17 @@
+"""RATE, AUTOC, TOC và adjusted transformed outcome.
+
+Ba tính chất toán học được kiểm trực tiếp, vì vi phạm chúng nghĩa là công thức sai chứ
+không phải dữ liệu xấu:
+
+- **Bất biến với phép biến đổi đơn điệu tăng.** RATE chỉ phụ thuộc thứ hạng, nên nhân điểm
+  với 2 hoặc lấy log không được đổi kết quả.
+- **Phản đối xứng khi đảo thứ hạng.** Đảo ngược bảng xếp hạng phải đổi dấu Qini-weighted rate.
+- **Điểm hằng số cho rate bằng 0.** Không xếp hạng được gì thì không có giá trị nào.
+
+`adjusted_transformed_outcome` phải **giữ nguyên ATE** trong khi **giảm phương sai** — nếu
+nó đổi ATE thì nó đang sửa đại lượng đích chứ không phải giảm nhiễu.
+"""
+
 import numpy as np
 import pytest
 

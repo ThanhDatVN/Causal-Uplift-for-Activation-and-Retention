@@ -1,3 +1,16 @@
+"""Sáu model nền của Sprint 1 chạy đúng và không suy biến.
+
+Kiểm ở mức hợp đồng chứ không kiểm chất lượng dự báo: hàm phải trả về giá trị **hữu hạn**,
+đúng hình dạng, và `clone` được theo giao ước của scikit-learn.
+
+Hai điểm đặc thù của dự án:
+
+- **Probability regressor phải trả xác suất, không trả nhãn cứng.** Trả nhãn cứng vẫn chạy
+  được nhưng phá mọi metric xếp hạng phía sau.
+- **Undersampling phải giữ outcome phụ khớp hàng.** Khi bỏ bớt dòng âm, nếu mảng outcome
+  phụ không được lọc theo cùng chỉ số thì dữ liệu lệch hàng một cách âm thầm.
+"""
+
 import numpy as np
 from sklearn.base import clone
 

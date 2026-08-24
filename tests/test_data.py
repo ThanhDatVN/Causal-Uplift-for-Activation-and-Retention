@@ -1,3 +1,18 @@
+"""Hợp đồng dữ liệu Criteo, và các phép chia không được chồng lấn.
+
+Bốn loại lỗi bị bắt ở đây:
+
+1. **File dữ liệu đổi mà không ai biết** — kiểm hình dạng, tỷ lệ treatment và tỷ lệ
+   conversion so với hằng số đã đăng ký.
+2. **Split chồng lấn.** `stratified_complement` phải cho ra phần bù *rời nhau và phủ kín*.
+   Nếu nó chồng lấn, confirmation Sprint 2 sẽ chứa dòng đã dùng ở Sprint 1 mà không metric
+   nào phát hiện được.
+3. **Schema hỏng lọt qua** — cột thiếu, nhãn nhị phân nhận giá trị phân số.
+4. **Chẩn đoán cân bằng mất độ nhạy.** `test_standardized_mean_difference_detects_injected_imbalance`
+   cố ý bơm lệch vào dữ liệu để chắc rằng SMD **phát hiện được**; một phép chẩn đoán không
+   bao giờ báo động thì vô dụng.
+"""
+
 import numpy as np
 
 from src.paths import CRITEO_PATH

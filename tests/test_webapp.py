@@ -1,3 +1,24 @@
+"""Hợp đồng API của web app.
+
+Web app chỉ đọc artifact đã phát hành, nên rủi ro không nằm ở tính toán mà ở **hợp đồng**:
+schema đổi, trường biến mất, hoặc endpoint trả số ngoài phạm vi bằng chứng.
+
+Bốn nhóm:
+
+**Schema.** Mỗi endpoint trả đủ trường, và toàn bộ bundle serialise được sang JSON.
+
+**Phạm vi bằng chứng.** `simulate` phải **từ chối** budget ngoài lưới đã đánh giá và **cảnh
+báo** khi chi phí nằm ngoài lưới sensitivity. Nội suy ngoài vùng có bằng chứng là cách một
+sản phẩm âm thầm bịa số.
+
+**Số học.** `test_simulate_matches_the_documented_arithmetic` tính lại công thức bằng tay và
+so với API — nếu hai bên lệch thì công thức hiển thị trên giao diện không mô tả đúng thứ
+đang chạy.
+
+**Đầu vào xấu.** Sai số cột, sai content-type, budget bằng 0, chưa build scorer — tất cả
+phải trả lỗi rõ ràng thay vì 500.
+"""
+
 import json
 
 import pytest

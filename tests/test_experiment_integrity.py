@@ -1,3 +1,19 @@
+"""Cache, registry và khóa chạy — hạ tầng chống dữ liệu trôi.
+
+Ba nhóm lỗi, cả ba đều âm thầm:
+
+**Cache hỏng.** Split được cache lại để không phải dựng lại từ 14 triệu dòng mỗi lần. Nếu
+cache bị sửa hoặc thiếu manifest mà vẫn được dùng, mọi run sau đó chạy trên dữ liệu khác
+với dữ liệu ghi trong báo cáo. Test cố ý **làm hỏng payload** để chắc rằng checksum bắt được.
+
+**Registry ghi đè nhầm.** Upsert phải khóa theo `(run_id, fold_seed, outcome)`. Thiếu
+`outcome` trong khóa thì hai estimand khác nhau ghi đè lên nhau. Đọc lại seed từ CSV cũng
+phải chuẩn hóa `101` và `101.0` về cùng một giá trị.
+
+**Hai vòng cùng đụng full development pool.** `FullDataRunLock` chặn điều đó, nhưng phải
+phân biệt được owner còn sống với PID đã được hệ điều hành cấp lại cho tiến trình khác.
+"""
+
 import json
 import os
 

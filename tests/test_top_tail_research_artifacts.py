@@ -1,3 +1,19 @@
+"""Vòng audit phần đuôi không được biến phát hiện hậu nghiệm thành kết luận.
+
+Vòng top-tail v2 kiểm một quan sát **hậu nghiệm**: bốn causal candidate trông tốt hơn ở
+budget `1–2%`. Rủi ro lớn nhất của một vòng như vậy là nó tự nâng quan sát đó thành bằng
+chứng.
+
+Bốn chốt chặn:
+
+- protocol **tách bạch** audit hồi cứu với confirmation;
+- audit **không** promote một chiến thắng hậu nghiệm, bất kể dấu của nó;
+- khoảng đồng thời phải **phủ mọi** khoảng pointwise — nếu không thì mức tin cậy familywise
+  bị phá và `16/16` dấu dương sẽ trông như bằng chứng;
+- support và độ ổn định thành viên **được ghi lại**, vì `61,31%` overlap là lý do chính để
+  không tin phần đuôi.
+"""
+
 import hashlib
 import json
 from pathlib import Path

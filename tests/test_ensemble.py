@@ -1,3 +1,18 @@
+"""Chọn và tổ hợp model bằng doubly robust loss.
+
+Q-aggregation phải cho ra trọng số nằm trên **simplex** — không âm và tổng bằng 1. Trọng số
+âm nghĩa là ensemble đang bán khống một model, điều không có nghĩa ở đây.
+
+Ba kiểm tra hành vi, mỗi cái ứng với một cách ensemble có thể hỏng:
+
+- tổ hợp phải **tốt hơn candidate tệ nhất** — nếu không thì tổ hợp làm hại;
+- khi chỉ một model có tín hiệu còn lại là nhiễu, tổ hợp phải **khôi phục về model đó**;
+- rank average phải **không phụ thuộc thang đo**, vì các model cho điểm ở thang rất khác nhau.
+
+`test_cross_fitted_ensemble_returns_complete_out_of_fold_score` chặn lỗi âm thầm nhất: ensemble
+để sót dòng không có điểm OOF, khiến metric tính trên tập con mà không ai biết.
+"""
+
 import numpy as np
 import pytest
 

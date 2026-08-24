@@ -1,3 +1,15 @@
+"""Biểu diễn sentinel và họ funnel S-learner.
+
+Vòng data optimization đưa cấu trúc sentinel thành feature tường minh. Bốn điều phải đúng:
+
+- **Augmenter chỉ fit trên point mass thật sự chiếm ưu thế**, không tạo cờ cho mọi giá trị;
+- **Undersampling giữ outcome phụ khớp hàng** — cùng lỗi lệch hàng như ở `test_baselines`;
+- **Dạng nén cho dự đoán trùng khít dạng dày.** Chuyển sang dtype hỗn hợp là để tiết kiệm
+  RAM; nếu nó đổi kết quả thì đó không còn là tối ưu mà là một model khác;
+- **Funnel S-learner từ chối vi phạm bất biến hậu can thiệp** — nó dùng `visit` làm biến
+  trung gian, nên phải có chốt chặn không cho `visit` lọt vào feature.
+"""
+
 import numpy as np
 import pytest
 

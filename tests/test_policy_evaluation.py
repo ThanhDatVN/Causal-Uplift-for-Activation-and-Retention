@@ -1,3 +1,20 @@
+"""`policy_area_dr` — metric chính — và các phép suy luận đi kèm.
+
+Metric chính được kiểm bằng cách so với những trường hợp mà đáp án tính tay được:
+
+- đường cong tại một mức budget phải khớp giá trị top-k tính trực tiếp;
+- ở budget 100% phải bằng đúng trung bình của effect signal;
+- diện tích của một đường thẳng phải bằng giá trị tại điểm giữa;
+- policy oracle phải thắng cả random lẫn ranking đảo ngược.
+
+Nhóm `simultaneous_policy_band` kiểm dải tin cậy đồng thời: nó phải **phủ mọi** khoảng
+pointwise trong họ. Nếu không, mức tin cậy familywise bị phá và vòng top-tail v2 sẽ báo
+thắng sai.
+
+`test_metrics_finite_on_rare_outcome` chạy trên mẫu có tỷ lệ sự kiện thấp như thật — nhiều
+công thức chỉ vỡ ở chế độ đó.
+"""
+
 import numpy as np
 import pytest
 

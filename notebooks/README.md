@@ -9,7 +9,7 @@ trình bày. Mạch phát triển đầy đủ:
 | [`01_eda_criteo.ipynb`](01_eda_criteo.ipynb) | 0 — chẩn đoán dữ liệu | local, **trên toàn bộ 13.979.592 dòng**, khoảng 2,5 phút | 25/25 code cell, 9 biểu đồ |
 | [`02_modeling_and_evaluation.ipynb`](02_modeling_and_evaluation.ipynb) | 3 — vòng Sprint 3 | local; mục 1–7 và 8–17 đọc artifact đóng băng, **mục 7bis huấn luyện thật** | 22/22 code cell, 5 biểu đồ |
 | [`03_causal_forest.ipynb`](03_causal_forest.ipynb) | 4 — Causal Forest ba mốc | **Kaggle**, `Save & Run All`, 53,2 phút | 10/10 code cell |
-| [`04_causal_forest_rare_outcome.ipynb`](04_causal_forest_rare_outcome.ipynb) | 8 — cấu hình `rare-outcome` | **Kaggle**, 107,4 phút | 0/10 code cell — **chưa nhúng output** |
+| [`04_causal_forest_rare_outcome.ipynb`](04_causal_forest_rare_outcome.ipynb) | 8 — cấu hình `rare-outcome` | **Kaggle**, 107,4 phút | 10/10 code cell |
 
 ## Hai chế độ, và vì sao phải phân biệt
 
@@ -19,13 +19,13 @@ trình bày. Mạch phát triển đầy đủ:
 dần — tức đúng trạng thái sau một lần `Run All` trên kernel sạch.
 
 **Notebook Kaggle (`03`, `04`)** chỉ điều phối một job trên session Kaggle vì RAM local
-không đủ cho development pool `5.591.836` dòng. Chúng nằm ngoài phạm vi hai kiểm tra trên,
-và trạng thái output của chúng được ghi ở bảng trên thay vì bị cưỡng chế bằng test.
+không đủ cho development pool `5.591.836` dòng. Chúng được tải về sau `Save & Run All` nên
+cũng phải thỏa đúng hai điều kiện đó, và test áp cho cả bốn notebook.
 
-`04` hiện **chưa nhúng output**. Bằng chứng lần chạy nằm ở
-`output/causal_forest/sprint3_rare_outcome/train.log`, nhưng mở notebook ra thì nó trông
-như chưa từng chạy. Cách sửa: chạy lại `Save & Run All` trên Kaggle rồi tải bản có output
-về, không phải sửa tay.
+Cả hai đều mang theo output thật của session Kaggle. Đáng đọc nhất ở `04` là cell cuối:
+gate tài nguyên **fail** vì RAM đỉnh chạm `90,6%` so với ngưỡng `75%`, nhưng điểm số vẫn
+hợp lệ vì artifact đã ghi xong trước khi gate được đánh giá. Đó là một lần gate hoạt động
+đúng và được ghi lại thay vì bị bỏ qua.
 
 ## Nguyên tắc: notebook trình bày, script tính
 

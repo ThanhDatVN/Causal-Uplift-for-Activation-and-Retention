@@ -215,7 +215,7 @@ Mở `http://127.0.0.1:8000`; OpenAPI docs ở `/docs`.
 ## 10. Kiểm thử
 
 ```powershell
-.venv\Scripts\python.exe -m pytest tests -q          # 277 test
+.venv\Scripts\python.exe -m pytest tests -q          # 293 test
 node scripts\smoke_webapp_browser.mjs                # 23 acceptance check
 node scripts\smoke_dashboard_browser.mjs             # 12 acceptance check
 ```

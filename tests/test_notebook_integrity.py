@@ -7,9 +7,8 @@ Hai lỗi mà test này bắt, cả hai đều đã xảy ra thật trong repo:
 2. **Notebook chạy lộn xộn rồi commit.** Execution count nhảy cóc nghĩa là kết quả trên
    màn hình đến từ một trạng thái kernel không tái lập được bằng `Run All`.
 
-Notebook Kaggle nằm ngoài phạm vi hai kiểm tra trên: chúng chạy trên session Kaggle chứ
-không chạy ở local, và trạng thái output của chúng được mô tả trong bảng notebook của
-`README.md` thay vì bị cưỡng chế ở đây.
+Kiểm tra áp cho cả notebook chạy ở local lẫn notebook chạy trên Kaggle. Notebook Kaggle
+được tải về sau `Save & Run All`, nên nó cũng phải thỏa đúng hai điều kiện đó.
 """
 
 from __future__ import annotations
@@ -22,10 +21,14 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parent.parent
 NOTEBOOK_DIR = REPO_ROOT / "notebooks"
 
-# Notebook trình bày: chạy ở local, phải kèm output đã chạy.
+# Cả bốn notebook đều phải mang theo output của một lần `Run All` sạch. Hai notebook
+# Kaggle từng được miễn trừ vì `04` chưa nhúng output; từ 17/08/2026 nó đã có đủ, nên
+# không còn lý do giữ ngoại lệ.
 PRESENTATION_NOTEBOOKS = (
     "01_eda_criteo.ipynb",
     "02_modeling_and_evaluation.ipynb",
+    "03_causal_forest.ipynb",
+    "04_causal_forest_rare_outcome.ipynb",
 )
 
 

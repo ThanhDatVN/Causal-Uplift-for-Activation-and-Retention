@@ -421,7 +421,7 @@ test tài liệu.
 
 ### 5.2 Trạng thái sản phẩm
 
-[`../webapp/`](../webapp/) — API FastAPI và giao diện SPA không CDN, `28/28` acceptance
+[`../webapp/`](../webapp/) — API FastAPI và giao diện SPA không CDN, `29/29` acceptance
 trình duyệt. [`../output/product/`](../output/product/) — dashboard HTML self-contained,
 `12/12` acceptance.
 
@@ -486,17 +486,12 @@ Bài toán A đã đi trọn vòng này và dừng ở trạng thái đó. Bài 
 | 5, 6, 7 — ba vòng đóng giả thuyết còn lại | **Xong** | Data optimization, Causal foundation, Top-tail v2 |
 | 8 — Causal Forest rare-outcome | **Xong** | [CF_RARE_OUTCOME](../report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md) |
 | Kết luận và tiêu chí dừng | **Xong.** Cả ba tiêu chí đều chạm | Mục 3.6 |
-| 9 — sản phẩm, tầng nhắm mục tiêu | **Chạy được**, `28/28` và `12/12` acceptance. Đã qua vòng thiết kế đầu tiên | Mục 5.2 |
+| 9 — sản phẩm, tầng nhắm mục tiêu | **Chạy được**, `29/29` và `12/12` acceptance. Đã qua vòng thiết kế đầu tiên | Mục 5.2 |
 
-Hai hạng mục còn mở, và cả hai đều nằm ở phía sản phẩm chứ không phải phía nghiên cứu —
-đúng như tiêu chí dừng ở mục 3.6 dự đoán:
+Một hạng mục còn mở, và nó nằm ở phía sản phẩm chứ không phải phía nghiên cứu — đúng như
+tiêu chí dừng ở mục 3.6 dự đoán:
 
-**1. Notebook `04` chưa nhúng output.** `0/10` code cell có kết quả. Bằng chứng lần chạy
-nằm ở `output/causal_forest/sprint3_rare_outcome/train.log`, nhưng mở notebook ra thì nó
-trông như chưa từng chạy. Cách sửa là chạy lại `Save & Run All` trên Kaggle rồi tải bản có
-output về — không sửa tay được.
-
-**2. Sản phẩm chưa qua một vòng thiết kế nào.** Nó vượt acceptance, nghĩa là **đúng chức
+**Sản phẩm chưa qua một vòng thiết kế nào.** Nó vượt acceptance, nghĩa là **đúng chức
 năng**, không có nghĩa là **dễ hiểu**. Đây là chỗ có tỷ lệ giá trị trên chi phí cao nhất
 còn lại của dự án: nghiên cứu đã chạm cả ba tiêu chí dừng, nên công sức tiếp theo bỏ vào
 model sẽ không đổi được kết luận, còn công sức bỏ vào việc **làm rõ kết luận đó cho người

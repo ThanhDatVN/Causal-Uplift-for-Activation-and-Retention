@@ -134,6 +134,9 @@ try {
   check("pairwise forest plot present", dom.includes('id="pairwiseForest"'));
   check("resolution block quantifies the gap", dom.includes("Ngưỡng phân biệt được"));
   check("concentration block quantifies targeting value", dom.includes("Decile 1 chiếm"));
+  // ARIA phai dung tren DOM da render, khong chi dung trong ma nguon tinh.
+  const selectedTabs = (dom.match(/aria-selected="true"/g) || []).length;
+  check("exactly one tab reports aria-selected=true", selectedTabs === 1, `co ${selectedTabs}`);
   check("promotion rule renders nested checks", !dom.includes("[object Object]"));
 
   const simulate = await fetch(`http://127.0.0.1:${port}/api/policy/simulate`, {

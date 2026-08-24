@@ -9,7 +9,7 @@
   --page: #f9f9f7;
   --text-primary: #0b0b0b;
   --text-secondary: #52514e;
-  --text-muted: #898781;
+  --text-muted: #74736d;   /* AA 4,51:1 tren --page */
   --grid: #e1e0d9;
   --axis: #c3c2b7;
   --border: rgba(11, 11, 11, 0.10);
@@ -22,7 +22,7 @@
   --warning: #fab219;
   --critical: #d03b3b;
   --success-text: #006300;
-  --accent: #2a78d6;
+  --accent: #2670c8;       /* AA 4,73:1 tren --page */
   --shadow: 0 1px 2px rgba(11, 11, 11, 0.06), 0 8px 24px rgba(11, 11, 11, 0.04);
   --radius: 12px;
   --mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
@@ -317,6 +317,32 @@ code { font: 0.86em var(--mono); background: var(--page); padding: 1px 4px; bord
 .verdict p { margin: 0 0 8px; font-size: 0.92rem; color: var(--text-secondary); }
 .verdict p:last-child { margin-bottom: 0; }
 .verdict strong { color: var(--text-primary); }
+
+/* Truoc day khong co focus style nao: nguoi dung ban phim khong biet minh dang
+ * o dau. Dung :focus-visible de chuot khong lam hien vong focus. Offset 2px de
+ * vong khong dinh vao vien san co cua nut va o nhap. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.tab:focus-visible { outline-offset: -2px; }
+/* Panel nhan tabindex=-1 de doc duoc bang tro giup, nhung no khong phai diem
+ * dung cua ban phim nen khong ve vong focus. */
+.panel:focus { outline: none; }
+
+/* Nguoi dat prefers-reduced-motion thuong lam vay vi ly do tien dinh. Tat hieu
+ * ung chuyen thay vi chi lam nhanh hon. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
 
 /* Khoi do phan giai: phat bieu trung tam cua du an, nen duoc tach khoi
  * caption bang mot vien trai giong scope-banner. */

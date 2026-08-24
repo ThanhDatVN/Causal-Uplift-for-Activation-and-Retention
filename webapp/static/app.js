@@ -361,9 +361,17 @@
     const tab = document.querySelector(`.tab[data-panel="${name}"]`);
     const panel = el(`panel-${name}`);
     if (!tab || !panel) return false;
-    document.querySelectorAll(".tab").forEach((t) => t.classList.remove("is-active"));
+    document.querySelectorAll(".tab").forEach((other) => {
+      other.classList.remove("is-active");
+      // Roving tabindex: chi tab dang chon nam trong thu tu Tab, cac tab con lai
+      // duoc voi toi bang phim mui ten. Day la mau tabs cua WAI-ARIA.
+      other.setAttribute("aria-selected", "false");
+      other.setAttribute("tabindex", "-1");
+    });
     document.querySelectorAll(".panel").forEach((p) => p.classList.remove("is-active"));
     tab.classList.add("is-active");
+    tab.setAttribute("aria-selected", "true");
+    tab.setAttribute("tabindex", "0");
     panel.classList.add("is-active");
     window.Charts.redrawAll();
     return true;
@@ -378,6 +386,22 @@
         history.replaceState(null, "", `#${name}`);
       });
     });
+    const tabs = Array.from(document.querySelectorAll(".tab"));
+    document.getElementById("tabs").addEventListener("keydown", (event) => {
+      const step = { ArrowRight: 1, ArrowLeft: -1, Home: "first", End: "last" }[event.key];
+      if (step === undefined) return;
+      event.preventDefault();
+      const current = tabs.findIndex((tab) => tab.getAttribute("aria-selected") === "true");
+      let next;
+      if (step === "first") next = 0;
+      else if (step === "last") next = tabs.length - 1;
+      else next = (current + step + tabs.length) % tabs.length;
+      const target = tabs[next];
+      activateTab(target.dataset.panel);
+      history.replaceState(null, "", `#${target.dataset.panel}`);
+      target.focus();
+    });
+
     window.addEventListener("hashchange", () => {
       activateTab(location.hash.replace("#", ""));
     });

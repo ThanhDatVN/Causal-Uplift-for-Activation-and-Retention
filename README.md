@@ -25,7 +25,7 @@ mọi thư mục.
 | 6 | Causal foundation | estimator có sai thang không | không learner nào thắng ở cả hai seed | [Causal foundation](report/CAUSAL_FOUNDATION_EXPERIMENT_REPORT.md) |
 | 7 | Top-tail v2 | có đang nhìn sai vùng ngân sách không | 16/16 delta dương, **0/16** cận dưới vượt 0 | [Top-tail v2](report/TOP_TAIL_RESEARCH_V2_REPORT.md) |
 | 8 | Causal Forest `rare-outcome` | thuật toán đó có bị đặt sai cấu hình không | hạng 1/10 nhưng CI chứa 0 — hòa | [CF rare-outcome](report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md) |
-| 9 | Sản phẩm | đưa quyết định tới người dùng | web app + dashboard, 28/28 và 12/12 acceptance | mục 9 của Sprint 3 |
+| 9 | Sản phẩm | đưa quyết định tới người dùng | web app + dashboard, 29/29 và 12/12 acceptance | mục 9 của Sprint 3 |
 
 Sau giai đoạn 8, **không còn giả thuyết nào phía model chưa bị kiểm**. Ba hướng sửa độc
 lập — biểu diễn dữ liệu, estimator, thuật toán — đều đóng. Kết luận vì vậy đổi từ "chưa
@@ -223,7 +223,7 @@ Nguồn: [Causal Forest rare-outcome report](report/CAUSAL_FOREST_RARE_OUTCOME_R
 
 ### 9. Sản phẩm — đưa quyết định tới người dùng
 
-- web app FastAPI + SPA không CDN, 28/28 acceptance trình duyệt;
+- web app FastAPI + SPA không CDN, 29/29 acceptance trình duyệt;
 - dashboard HTML self-contained, 12/12 acceptance;
 - cả hai **chỉ đọc artifact đã phát hành**, không huấn luyện khi nhận request — nên con số
   trên sản phẩm và con số trong báo cáo không thể trôi khỏi nhau.
@@ -282,7 +282,7 @@ tích thay vì đọc code:
 | [`01_eda_criteo.ipynb`](notebooks/01_eda_criteo.ipynb) | Phân tích dữ liệu: toàn vẹn nguồn, cardinality và sentinel value, cân bằng covariate (SMD + Love plot), propensity tuyến tính và phi tuyến, overlap, bằng chứng số cho leakage hậu can thiệp, ATE/risk ratio kèm CI, MDE, heterogeneity theo tầng và chẩn đoán prognostic dominance | 25/25 code cell, 9 biểu đồ |
 | [`02_modeling_and_evaluation.ipynb`](notebooks/02_modeling_and_evaluation.ipynb) | Baseline Response so với 8 challenger: estimand, protocol đăng ký trước, OOF hai fold seed, paired bootstrap, bất đồng metric, promotion rule, threats to validity. Mục 7bis huấn luyện thật ngay trong notebook | 22/22 code cell, 5 biểu đồ |
 | [`03_causal_forest.ipynb`](notebooks/03_causal_forest.ipynb) | Chạy `CausalForestDML` ba stage 20→30→50% trên Kaggle. Bản notebook Kaggle trả về sau `Save & Run All`, 53,2 phút, không exception | 10/10 code cell |
-| [`04_causal_forest_rare_outcome.ipynb`](notebooks/04_causal_forest_rare_outcome.ipynb) | Cấu hình `rare-outcome` trên split Sprint 2/3, đăng ký trước ở `configs/causal_forest_rare_outcome_protocol_v1.json`. Sửa `min_samples_leaf` cho outcome hiếm | 0/10 code cell — bản source Kaggle, **chưa nhúng output**; bằng chứng lần chạy 107,4 phút nằm ở `output/causal_forest/sprint3_rare_outcome/train.log` |
+| [`04_causal_forest_rare_outcome.ipynb`](notebooks/04_causal_forest_rare_outcome.ipynb) | Cấu hình `rare-outcome` trên split Sprint 2/3, đăng ký trước ở `configs/causal_forest_rare_outcome_protocol_v1.json`. Sửa `min_samples_leaf` cho outcome hiếm | 10/10 code cell — bản Kaggle trả về, gate RAM fail ở `90,6%` nhưng điểm số vẫn hợp lệ |
 
 Notebook `02` có hai chế độ, ghi rõ ngay ở đầu notebook. Mục 1–7 và 8–17 **đọc lại artifact
 đã đóng băng** trong `output/` — chạy vài giây, không cần dữ liệu gốc. Mục 7bis thì **huấn
@@ -438,7 +438,7 @@ py -3.12 -m venv .venv
 ```
 
 ```powershell
-.venv\Scripts\python.exe -m pytest tests -q          # 277 test
+.venv\Scripts\python.exe -m pytest tests -q          # 293 test
 node scripts\smoke_webapp_browser.mjs                # 23 acceptance check
 ```
 

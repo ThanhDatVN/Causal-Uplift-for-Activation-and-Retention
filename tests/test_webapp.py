@@ -116,6 +116,23 @@ def test_simulate_at_zero_budget_returns_zero_value(client):
     assert payload["break_even_contact_cost"] is None
 
 
+def test_simulate_rejects_unknown_field_instead_of_silently_defaulting(client):
+    """Gõ sai tên trường phải báo lỗi, không được trả kết quả tính từ mặc định.
+
+    Mọi trường của `SimulateRequest` đều có mặc định, nên nếu không cấm trường lạ thì
+    `{"budget": 0.05}` sẽ được hiểu là "dùng toàn bộ mặc định" và API trả về kết quả của
+    ngân sách `0,10`. Người gọi nhận một con số trông hợp lý cho một câu hỏi họ không hỏi.
+    Lỗi này tìm ra khi chạy thử web app trong container.
+    """
+    good = client.post("/api/policy/simulate", json={"budget_fraction": 0.05})
+    assert good.status_code == 200
+
+    typo = client.post("/api/policy/simulate", json={"budget": 0.05})
+    assert typo.status_code == 422, (
+        f"Truong la phai bi tu choi, nhung API tra {typo.status_code}: {typo.text[:200]}"
+    )
+
+
 def test_simulate_rejects_invalid_inputs(client):
     assert client.post("/api/policy/simulate", json={"budget_fraction": 1.5}).status_code == 422
     assert client.post("/api/policy/simulate", json={"audience": 0}).status_code == 422

@@ -446,7 +446,7 @@ py -3.12 -m venv .venv
 ```
 
 ```powershell
-.venv\Scripts\python.exe -m pytest tests -q          # 293 test
+.venv\Scripts\python.exe -m pytest tests -q          # 294 test
 node scripts\smoke_webapp_browser.mjs                # 23 acceptance check
 ```
 

@@ -15,7 +15,7 @@ import pandas as pd
 from fastapi import FastAPI, File, HTTPException, Query, UploadFile
 from fastapi.responses import JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from src.data import FEATURES
 from webapp.service import (
@@ -44,7 +44,23 @@ app = FastAPI(
 )
 
 
-class SimulateRequest(BaseModel):
+class StrictRequest(BaseModel):
+    """Từ chối trường lạ thay vì im lặng bỏ qua.
+
+    Mọi trường của hai request model dưới đây đều có giá trị mặc định, nên nếu client gõ
+    sai tên trường thì pydantic mặc định **bỏ qua nó và dùng mặc định** — API trả về một
+    con số trông hợp lý, tính từ tham số mà người gọi không hề chọn.
+
+    Lỗi này đã xảy ra thật khi kiểm thử: gọi `simulate` với `budget` thay vì
+    `budget_fraction` cho ra cùng một kết quả ở mọi mức ngân sách, vì cả ba lần đều rơi về
+    mặc định `0,10`. Với một công cụ hỗ trợ ra quyết định, trả sai mà không báo là chế độ
+    hỏng tệ nhất.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class SimulateRequest(StrictRequest):
     budget_fraction: float = Field(0.10, ge=0.0, le=0.30)
     audience: int = Field(1_000_000, ge=1)
     value_per_conversion: float = Field(1.0, gt=0.0)
@@ -52,7 +68,7 @@ class SimulateRequest(BaseModel):
     model: str | None = None
 
 
-class ScoreRequest(BaseModel):
+class ScoreRequest(StrictRequest):
     rows: list[list[float]] = Field(
         ...,
         max_length=MAX_JSON_SCORE_ROWS,

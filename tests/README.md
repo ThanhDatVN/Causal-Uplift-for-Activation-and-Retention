@@ -1,13 +1,13 @@
 # Chỉ mục kiểm thử
 
-`293` test trên `28` file. Chúng không được viết để đạt độ phủ code, mà để **khóa các bất
+`294` test trên `28` file. Chúng không được viết để đạt độ phủ code, mà để **khóa các bất
 biến** — những điều kiện mà nếu vỡ thì một kết quả sai vẫn trông như kết quả đúng.
 
 Bảng dưới xếp theo **loại bất biến được bảo vệ**, không theo bảng chữ cái. Đọc cột "Bắt được
 gì" trước; đó là lý do file đó tồn tại.
 
 ```powershell
-.venv\Scripts\python.exe -m pytest tests -q          # 293 test
+.venv\Scripts\python.exe -m pytest tests -q          # 294 test
 ```
 
 ## Tầng 1 — đúng về toán
@@ -117,7 +117,7 @@ loại. Nên CI chạy tập con:
 pytest tests --ignore=tests\test_data.py --ignore=tests\test_baselines.py --ignore=tests\test_webapp.py
 ```
 
-`293` test ở local, `233` trên CI. `repo_state.py` tồn tại để một đường dẫn vắng mặt **đúng
+`294` test ở local, `249` trên CI và trong container. `repo_state.py` tồn tại để một đường dẫn vắng mặt **đúng
 theo thiết kế** không bị báo là lỗi tài liệu — trộn hai loại đó lại sẽ làm CI đỏ vì lý do sai,
 và lâu dài dẫn tới thói quen bỏ qua CI đỏ.
 

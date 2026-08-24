@@ -80,10 +80,11 @@ Flag legacy chỉ tái lập artifact lịch sử trước manifest schema v2; m
 |---|---|
 | `build_champion_scorer.py` | Fit champion trên development pool, lưu joblib cho web app. |
 | `serve_webapp.py` | Chạy web app bằng uvicorn. |
-| `smoke_webapp_browser.mjs` | Acceptance headless cho web app, 23 check. |
+| `smoke_webapp_browser.mjs` | Acceptance headless cho web app, **30 check**. Chỉ chạy ở local: cần champion scorer `.joblib` bị `.gitignore` loại. |
+| `find_chrome.mjs` | Tìm Chrome hoặc Edge trên Windows, Linux và macOS. Hai script acceptance dùng chung; đặt `CHROME_PATH` để ghi đè. |
 | `export_dashboard_data.py` | Dựng payload cho dashboard tĩnh Sprint 2. |
 | `build_dashboard.py` | Dựng `dashboard.html` self-contained. |
-| `smoke_dashboard_browser.mjs` | Acceptance headless cho dashboard tĩnh, 12 check. Screenshot tạm được tạo mới và kiểm tra kích thước trong mỗi run. |
+| `smoke_dashboard_browser.mjs` | Acceptance headless cho dashboard tĩnh, 12 check. **Chạy cả trên CI** vì `dashboard.html` là file tracked. Screenshot tạm được tạo mới và kiểm kích thước mỗi run. |
 
 ## Đang dùng — Causal Forest
 

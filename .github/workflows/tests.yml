@@ -8,8 +8,12 @@ name: tests
 #   tests/test_baselines.py  — fit model trên mẫu Criteo
 #   tests/test_webapp.py     — cần artifact release và champion scorer
 #
+# Acceptance cua dashboard CO chay o day: output/product/dashboard.html la file tracked
+# nen khong can du lieu goc. Acceptance cua web app thi khong — no can champion scorer
+# .joblib, von bi .gitignore loai.
+#
 # CI xanh vì thế **không** thay thế được lần chạy đầy đủ trên máy có dữ liệu. Trước khi
-# phát hành phải chạy `pytest tests -q` đầy đủ cộng hai acceptance test trình duyệt.
+# phát hành phải chạy `pytest tests -q` đầy đủ cộng cả hai acceptance test trình duyệt.
 
 on:
   push:
@@ -63,6 +67,16 @@ jobs:
             [ -n "$line" ] && echo "::error::tail| ${line}"
           done
           exit 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # Dashboard la mot file HTML tu chua da commit, nen kiem duoc ma khong can du lieu
+      # goc. Truoc day buoc nay chi chay o may local, tuc mot thay doi lam vo dashboard
+      # co the lot qua CI.
+      - name: Dashboard browser acceptance
+        run: node scripts/smoke_dashboard_browser.mjs
 
       - name: Check internal documentation links
         run: |

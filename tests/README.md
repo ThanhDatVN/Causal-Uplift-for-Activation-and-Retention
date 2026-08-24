@@ -121,6 +121,11 @@ pytest tests --ignore=tests\test_data.py --ignore=tests\test_baselines.py --igno
 theo thiết kế** không bị báo là lỗi tài liệu — trộn hai loại đó lại sẽ làm CI đỏ vì lý do sai,
 và lâu dài dẫn tới thói quen bỏ qua CI đỏ.
 
+Trong hai bộ acceptance trình duyệt, **dashboard chạy được trên CI** vì
+`output/product/dashboard.html` là file tracked; web app thì không, vì nó cần champion scorer
+`.joblib` bị `.gitignore` loại. Đó là lý do một thay đổi làm vỡ web app vẫn phải chạy tay
+trước khi phát hành.
+
 ## Quy ước khi thêm test
 
 - Docstring nói **lỗi nào từng xảy ra hoặc có thể xảy ra**, không mô tả lại tên hàm.

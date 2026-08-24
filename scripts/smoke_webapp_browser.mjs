@@ -8,22 +8,14 @@ import { createServer } from "node:net";
 import path from "node:path";
 import { promisify } from "node:util";
 import { existsSync, mkdtempSync, rmSync, statSync } from "node:fs";
+import { findChrome } from "./find_chrome.mjs";
 import { tmpdir } from "node:os";
 
 const run = promisify(execFile);
 const repo = path.resolve(import.meta.dirname, "..");
 const screenshotDir = mkdtempSync(path.join(tmpdir(), "causal-uplift-web-smoke-"));
 const python = path.join(repo, ".venv", "Scripts", "python.exe");
-const chromeCandidates = [
-  "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-  "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
-  "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
-];
-const chrome = chromeCandidates.find((candidate) => existsSync(candidate));
-if (!chrome) {
-  console.error("No headless Chrome/Edge binary found in the known locations.");
-  process.exit(2);
-}
+const chrome = findChrome();
 
 function freePort() {
   return new Promise((resolve, reject) => {

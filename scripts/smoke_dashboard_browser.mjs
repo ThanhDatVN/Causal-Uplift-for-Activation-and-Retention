@@ -1,17 +1,19 @@
-// Headless Edge acceptance smoke for four deterministic dashboard scenarios.
+// Headless-browser acceptance cho bon kich ban tat dinh cua dashboard.
+// Trinh duyet tim qua scripts/find_chrome.mjs nen chay duoc ca tren CI Linux.
 import { execFile } from "node:child_process";
 import path from "node:path";
 import { promisify } from "node:util";
 import { pathToFileURL } from "node:url";
 import { mkdtempSync, rmSync, statSync } from "node:fs";
 import { tmpdir } from "node:os";
+import { findChrome } from "./find_chrome.mjs";
 
 const run = promisify(execFile);
 const repo = path.resolve(import.meta.dirname, "..");
 const html = path.join(repo, "output", "product", "dashboard.html");
 const screenshotDir = mkdtempSync(path.join(tmpdir(), "causal-uplift-dashboard-smoke-"));
 const screenshot = path.join(screenshotDir, "dashboard_screenshot.png");
-const edge = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+const edge = findChrome();
 const baseUrl = pathToFileURL(html).href;
 
 async function dump(scenario) {

@@ -1,0 +1,60 @@
+# Ba cach chay du an trong container. Xem docs/REPRODUCTION.md muc 11.
+#
+# Nguyen tac chung cho ca ba: data/ va output/ duoc MOUNT chu khong nam trong image.
+# Nho vay con so trong container luon la con so tren dia, va image khong phan phoi lai
+# du lieu Criteo.
+
+x-common: &common
+  build:
+    context: .
+  image: causal-uplift:dev
+  working_dir: /app
+
+services:
+  # Tap test khong can du lieu goc — dung tap ma CI chay. Dung de kiem nhanh rang
+  # moi truong dung.
+  tests:
+    <<: *common
+    volumes:
+      - ./output:/app/output
+    command: >
+      python -m pytest tests -q
+      --ignore=tests/test_data.py
+      --ignore=tests/test_baselines.py
+      --ignore=tests/test_webapp.py
+
+  # Tap test day du. Can data/criteo-research-uplift-v2.1.csv.gz co that tren dia.
+  tests-full:
+    <<: *common
+    volumes:
+      - ./data:/app/data:ro
+      - ./output:/app/output
+    command: python -m pytest tests -q
+
+  # Web app. Mo http://localhost:8000 sau khi container bao healthy.
+  # output/ mount READ-ONLY vi web app chi doc artifact, khong bao gio ghi.
+  webapp:
+    <<: *common
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./output:/app/output:ro
+    command: >
+      python -m uvicorn webapp.api:app
+      --host 0.0.0.0 --port 8000
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 20s
+
+# Ghi chu ve quyen ghi tren Linux:
+#
+# Image chay bang user `app` uid 1000. Tren Linux, neu thu muc output/ tren may thuoc
+# ve mot uid khac thi service `tests` se khong ghi duoc thu muc tam. Cach xu ly:
+#
+#   docker compose run --user "$(id -u):$(id -g)" tests
+#
+# Tren Windows va macOS, Docker Desktop tu xu ly anh xa quyen nen khong can co gi them.

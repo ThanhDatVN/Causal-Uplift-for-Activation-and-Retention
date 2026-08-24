@@ -1,0 +1,27 @@
+# Giu build context nho. Data va output KHONG di vao image — chung duoc mount luc chay,
+# xem compose.yaml. Ly do: data/ 341 MB co giay phep rieng, output/ 2,1 GB, va ca hai deu
+# la thu phai doc duoc o trang thai that chu khong phai ban chup luc build.
+data/
+output/
+
+.venv/
+.git/
+.github/
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Tai lieu noi bo khong len GitHub thi cung khong vao image.
+_noi-bo/
+
+# Notebook PHAI co: tai lieu cong khai tro toi chung o nhieu cho, va
+# tests/test_notebook_integrity.py doc truc tiep file .ipynb.
+
+# Anh, video, slide neu co sau nay.
+*.png
+*.jpg
+*.mp4
+*.pdf

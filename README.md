@@ -450,6 +450,23 @@ py -3.12 -m venv .venv
 node scripts\smoke_webapp_browser.mjs                # 23 acceptance check
 ```
 
+## Chạy trong Docker
+
+Cách nhanh nhất để có môi trường đúng, không cần dựng `.venv`:
+
+```powershell
+docker compose build
+docker compose run --rm tests        # tap test khong can du lieu goc
+docker compose up webapp             # mo http://localhost:8000
+```
+
+Image chứa **code và dependency**, không chứa dữ liệu. `data/` và `output/` được mount lúc
+chạy — `data/` có giấy phép riêng của Criteo nên không phân phối lại trong image, còn
+`output/` phải đọc được ở trạng thái thật chứ không phải bản chụp lúc build.
+
+Chi tiết ba service và giới hạn của từng cái:
+[docs/REPRODUCTION.md](docs/REPRODUCTION.md) mục 11.
+
 ## Chạy lại
 
 Chẩn đoán dữ liệu (khoảng 2,5 phút, sinh 17 artifact trong `output/eda/`):

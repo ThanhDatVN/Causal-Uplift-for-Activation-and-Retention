@@ -216,10 +216,53 @@ Mở `http://127.0.0.1:8000`; OpenAPI docs ở `/docs`.
 
 ```powershell
 .venv\Scripts\python.exe -m pytest tests -q          # 293 test
-node scripts\smoke_webapp_browser.mjs                # 23 acceptance check
+node scripts\smoke_webapp_browser.mjs                # 30 acceptance check
 node scripts\smoke_dashboard_browser.mjs             # 12 acceptance check
 ```
 
-CI công khai chỉ chạy phần test không cần dữ liệu Criteo local
-(`.github/workflows/tests.yml`), nên **CI xanh không thay thế được** lần chạy đầy đủ trên
-máy có dữ liệu.
+CI công khai chạy `233` test không cần dữ liệu Criteo, cộng acceptance của dashboard —
+`output/product/dashboard.html` là file tracked nên kiểm được. Acceptance của **web app**
+không chạy trên CI vì nó cần champion scorer `.joblib` bị `.gitignore` loại.
+
+Nên **CI xanh không thay thế được** lần chạy đầy đủ trên máy có dữ liệu.
+
+## 11. Chạy trong Docker
+
+Cách này bỏ qua bước dựng `.venv` và cố định luôn cả phiên bản hệ điều hành lẫn thư viện
+hệ thống — `libgomp1` mà LightGBM cần là một trong số đó.
+
+Image chứa **code và dependency**, không chứa dữ liệu. `data/` và `output/` được mount lúc
+chạy. Hai lý do: `data/` có giấy phép riêng của Criteo nên không phân phối lại trong image,
+và `output/` phải đọc được ở **trạng thái thật** chứ không phải bản chụp lúc build — nếu
+bake vào thì con số trong container và con số trên đĩa trôi khỏi nhau mà không ai biết.
+
+```powershell
+docker compose build                 # lan dau khoang 40 phut, phu thuoc toc do mang
+
+docker compose run --rm tests        # 249 test, khoang 20 giay
+docker compose run --rm tests-full   # tap day du, can data/ tren dia
+docker compose up webapp             # mo http://localhost:8000
+```
+
+Image khoảng `1,57 GB`. Đã kiểm: `249/249` test chạy trong container, và `/api/models`
+trong container trả về **đúng từng chữ số** như `output/sprint3/confirmation_metrics.csv`
+trên đĩa — đó là bằng chứng mount hoạt động chứ không phải bản chụp lúc build.
+
+| Service | Cần `data/` | Mount `output/` | Dùng khi |
+|---|:-:|---|---|
+| `tests` | không | đọc–ghi | kiểm nhanh môi trường dựng đúng |
+| `tests-full` | **có** | đọc–ghi | trước khi phát hành |
+| `webapp` | không | **chỉ đọc** | xem sản phẩm |
+
+`webapp` mount `output/` chỉ-đọc vì nó không bao giờ ghi; đó là ràng buộc được cưỡng chế ở
+tầng filesystem chứ không chỉ là quy ước.
+
+Trên Linux, nếu `output/` trên máy thuộc về uid khác `1000` thì service ghi thư mục tạm sẽ
+lỗi quyền. Chạy kèm uid của bạn:
+
+```bash
+docker compose run --rm --user "$(id -u):$(id -g)" tests
+```
+
+Hai bộ acceptance trình duyệt **không** chạy trong image: nó không cài Node và Chrome, để
+image gọn. Chạy chúng ở host.

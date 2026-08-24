@@ -32,15 +32,9 @@ lập — biểu diễn dữ liệu, estimator, thuật toán — đều đóng.
 tìm được model tốt hơn" thành một phát biểu kiểm chứng được: **phép đo hết độ phân giải
 trước khi model hết dư địa** (`±1,74e-05` so với chênh lệch bậc `1e-06`).
 
-Mạch đầy đủ, gồm bản đồ script–artifact–báo cáo của từng giai đoạn, quy trình bốn cổng
-quyết định ghép dataset và kiến trúc sản phẩm ba tầng:
+Mạch đầy đủ, gồm bản đồ script–artifact–báo cáo của từng giai đoạn, ranh giới của kết
+luận và kiến trúc sản phẩm hai tầng:
 [**docs/END_TO_END_WORKFLOW.md**](docs/END_TO_END_WORKFLOW.md).
-
-Một **bài toán thứ hai** — xác suất mua lại và giá trị kỳ vọng trên dữ liệu giao dịch —
-đã được đăng ký phạm vi nhưng **chưa mở**. Nó không phải phần mở rộng của bài toán trên:
-dữ liệu đó có outcome tiền tệ nhưng **không có treatment**, nên không hỗ trợ được đại
-lượng nhân quả. Lý do đầy đủ, pipeline đăng ký trước, và quy trình quyết định khi nào
-được ghép hai dataset: [workflow](docs/END_TO_END_WORKFLOW.md) mục 4 đến 6.
 
 ## Tiến trình dự án — chi tiết từng giai đoạn
 
@@ -491,9 +485,8 @@ quả. Bắt đầu ở [**docs/END_TO_END_WORKFLOW.md**](docs/END_TO_END_WORKFL
 bảng chín giai đoạn ở đầu trang này.
 
 Nó trả lời câu hỏi mà không tài liệu nào khác trả lời: *vì sao dự án đi theo đúng thứ tự
-đó, và bước tiếp theo được suy ra từ đâu.* Kèm bản đồ script–artifact–báo cáo của từng giai
-đoạn, quy trình bốn cổng quyết định khi nào được ghép hai dataset, và kiến trúc sản phẩm
-ba tầng.
+đó, và bước tiếp theo được suy ra từ đâu.* Kèm bản đồ script–artifact–báo cáo của từng
+giai đoạn, ranh giới của kết luận, và kiến trúc sản phẩm hai tầng.
 
 ### Đường 2 — kết quả mới nhất trước
 

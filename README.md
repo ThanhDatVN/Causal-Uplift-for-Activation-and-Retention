@@ -25,7 +25,7 @@ mọi thư mục.
 | 6 | Causal foundation | estimator có sai thang không | không learner nào thắng ở cả hai seed | [Causal foundation](report/CAUSAL_FOUNDATION_EXPERIMENT_REPORT.md) |
 | 7 | Top-tail v2 | có đang nhìn sai vùng ngân sách không | 16/16 delta dương, **0/16** cận dưới vượt 0 | [Top-tail v2](report/TOP_TAIL_RESEARCH_V2_REPORT.md) |
 | 8 | Causal Forest `rare-outcome` | thuật toán đó có bị đặt sai cấu hình không | hạng 1/10 nhưng CI chứa 0 — hòa | [CF rare-outcome](report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md) |
-| 9 | Sản phẩm | đưa quyết định tới người dùng | web app + dashboard, 29/29 và 12/12 acceptance | mục 9 của Sprint 3 |
+| 9 | Sản phẩm | đưa quyết định tới người dùng | web app + dashboard, 30/30 và 12/12 acceptance | mục 9 của Sprint 3 |
 
 Sau giai đoạn 8, **không còn giả thuyết nào phía model chưa bị kiểm**. Ba hướng sửa độc
 lập — biểu diễn dữ liệu, estimator, thuật toán — đều đóng. Kết luận vì vậy đổi từ "chưa
@@ -223,7 +223,7 @@ Nguồn: [Causal Forest rare-outcome report](report/CAUSAL_FOREST_RARE_OUTCOME_R
 
 ### 9. Sản phẩm — đưa quyết định tới người dùng
 
-- web app FastAPI + SPA không CDN, 29/29 acceptance trình duyệt;
+- web app FastAPI + SPA không CDN, 30/30 acceptance trình duyệt;
 - dashboard HTML self-contained, 12/12 acceptance;
 - cả hai **chỉ đọc artifact đã phát hành**, không huấn luyện khi nhận request — nên con số
   trên sản phẩm và con số trong báo cáo không thể trôi khỏi nhau.

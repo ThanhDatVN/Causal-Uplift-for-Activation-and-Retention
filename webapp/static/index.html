@@ -212,6 +212,26 @@
       </div>
       <div id="scoreStatus" class="status-line"></div>
       <div id="scoreResult"></div>
+      <div class="resolution" id="scoringGuide">
+        <div class="res-row">
+          <div class="res-cell"><div class="label">Cột <code>score</code></div>
+            <div class="value">thứ tự ưu tiên</div></div>
+          <div class="res-cell"><div class="label">Cột <code>percentile</code></div>
+            <div class="value">vị trí trong population</div></div>
+          <div class="res-cell"><div class="label">Cột <code>được target</code></div>
+            <div class="value">phụ thuộc ngân sách</div></div>
+        </div>
+        <p><strong>Cách đọc kết quả.</strong> <code>score</code> chỉ dùng để <em>xếp thứ tự</em>;
+        nó không phải xác suất conversion và cũng không phải hiệu ứng ước lượng của riêng
+        người đó. Chỉ <code>percentile</code> mới có nghĩa tuyệt đối: nó cho biết khách hàng
+        này đứng ở đâu so với toàn bộ population. Cột <strong>được target</strong> so
+        <code>percentile</code> với ngưỡng cắt của mức ngân sách đang đặt ở tab
+        <strong>Policy</strong> — đổi ngân sách ở đó thì cột này đổi theo.</p>
+        <p style="margin-top:8px"><strong>Điều không được suy ra.</strong> Một dòng điểm cao
+        không có nghĩa người đó <em>sẽ</em> mua nếu được tiếp cận. Bằng chứng của dự án nằm ở
+        mức <em>nhóm</em>: nhóm điểm cao có hiệu ứng trung bình cao hơn, và điều đó chỉ đo
+        được trên tập có cả hai nhánh treatment và control.</p>
+      </div>
     </article>
   </section>
 

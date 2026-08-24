@@ -137,6 +137,7 @@ try {
   // ARIA phai dung tren DOM da render, khong chi dung trong ma nguon tinh.
   const selectedTabs = (dom.match(/aria-selected="true"/g) || []).length;
   check("exactly one tab reports aria-selected=true", selectedTabs === 1, `co ${selectedTabs}`);
+  check("scoring tab explains how to read the score", dom.includes("Cách đọc kết quả"));
   check("promotion rule renders nested checks", !dom.includes("[object Object]"));
 
   const simulate = await fetch(`http://127.0.0.1:${port}/api/policy/simulate`, {

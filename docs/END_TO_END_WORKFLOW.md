@@ -421,7 +421,7 @@ test tài liệu.
 
 ### 5.2 Trạng thái sản phẩm
 
-[`../webapp/`](../webapp/) — API FastAPI và giao diện SPA không CDN, `29/29` acceptance
+[`../webapp/`](../webapp/) — API FastAPI và giao diện SPA không CDN, `30/30` acceptance
 trình duyệt. [`../output/product/`](../output/product/) — dashboard HTML self-contained,
 `12/12` acceptance.
 
@@ -486,7 +486,7 @@ Bài toán A đã đi trọn vòng này và dừng ở trạng thái đó. Bài 
 | 5, 6, 7 — ba vòng đóng giả thuyết còn lại | **Xong** | Data optimization, Causal foundation, Top-tail v2 |
 | 8 — Causal Forest rare-outcome | **Xong** | [CF_RARE_OUTCOME](../report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md) |
 | Kết luận và tiêu chí dừng | **Xong.** Cả ba tiêu chí đều chạm | Mục 3.6 |
-| 9 — sản phẩm, tầng nhắm mục tiêu | **Chạy được**, `29/29` và `12/12` acceptance. Đã qua vòng thiết kế đầu tiên | Mục 5.2 |
+| 9 — sản phẩm, tầng nhắm mục tiêu | **Chạy được**, `30/30` và `12/12` acceptance. Đã qua vòng thiết kế đầu tiên | Mục 5.2 |
 
 Một hạng mục còn mở, và nó nằm ở phía sản phẩm chứ không phải phía nghiên cứu — đúng như
 tiêu chí dừng ở mục 3.6 dự đoán:

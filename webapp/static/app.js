@@ -1039,6 +1039,44 @@
       ],
       rows,
     );
+    renderConcentration(rows);
+  }
+
+  /* Vi sao nham muc tieu co tac dung: hieu ung khong trai deu. Con so nay dang
+   * nam trong mot cot bang ten "Ty trong" — no la ly do ca san pham ton tai,
+   * nen dua no ra ngoai. */
+  function renderConcentration(rows) {
+    const node = el("concentrationBlock");
+    if (!node) return;
+    const sorted = rows
+      .filter((row) => isFinite(row.share_of_full_incremental_estimate))
+      .sort((a, b) => a.decile - b.decile);
+    if (sorted.length < 3) {
+      node.innerHTML = "";
+      return;
+    }
+    const top1 = sorted[0];
+    const top3 = sorted[2];
+    const deciles = sorted.length;
+    const evenShare = 1 / deciles;
+    const lift = top1.share_of_full_incremental_estimate / evenShare;
+
+    node.innerHTML =
+      `<div class="res-row">` +
+      `<div class="res-cell"><div class="label">Decile 1 chiếm</div>` +
+      `<div class="value">${fmtPercent(top1.share_of_full_incremental_estimate, 1)}</div></div>` +
+      `<div class="res-cell"><div class="label">Ba decile đầu chiếm</div>` +
+      `<div class="value">${fmtPercent(top3.share_of_full_incremental_estimate, 1)}</div></div>` +
+      `<div class="res-cell"><div class="label">So với chia đều</div>` +
+      `<div class="value">${fmt(lift, 1)}×</div></div>` +
+      `</div>` +
+      `<p>Nếu hiệu ứng trải đều thì mỗi decile chỉ chiếm ` +
+      `${fmtPercent(evenShare, 1)}. Thực tế decile đầu chiếm ` +
+      `<strong>${fmtPercent(top1.share_of_full_incremental_estimate, 1)}</strong> toàn bộ ` +
+      `conversion tăng thêm — <strong>${fmt(lift, 1)} lần</strong> mức chia đều. ` +
+      `Đó là toàn bộ lý do việc nhắm mục tiêu có tác dụng: ngân sách nhỏ vẫn giữ được ` +
+      `phần lớn giá trị. Đây là uplift <em>quan sát theo nhóm</em> trên final test Sprint 1, ` +
+      `không phải hiệu ứng của một cá nhân.</p>`;
   }
 
   /* --------------------------------------------------------------- scoring */

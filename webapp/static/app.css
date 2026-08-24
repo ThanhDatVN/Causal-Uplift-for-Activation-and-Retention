@@ -302,6 +302,22 @@ code { font: 0.86em var(--mono); background: var(--page); padding: 1px 4px; bord
 .tooltip .tt-row .tt-key { color: var(--text-secondary); display: inline-flex; align-items: center; gap: 5px; }
 .tooltip .tt-swatch { width: 9px; height: 3px; border-radius: 2px; flex: none; }
 
+/* Khoi ket luan: cau tra loi cua ca du an, dat truoc moi con so. Truoc day
+ * nguoi doc phai tu ghep nam o thong ke moi hieu chuyen gi da xay ra. */
+.verdict {
+  margin-bottom: 18px;
+  padding: 18px 20px;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+}
+.verdict .eyebrow { margin: 0 0 8px; }
+.verdict h2 { margin: 0 0 10px; font-size: 1.18rem; font-weight: 600; letter-spacing: -0.01em; }
+.verdict p { margin: 0 0 8px; font-size: 0.92rem; color: var(--text-secondary); }
+.verdict p:last-child { margin-bottom: 0; }
+.verdict strong { color: var(--text-primary); }
+
 /* Khoi do phan giai: phat bieu trung tam cua du an, nen duoc tach khoi
  * caption bang mot vien trai giong scope-banner. */
 .resolution {

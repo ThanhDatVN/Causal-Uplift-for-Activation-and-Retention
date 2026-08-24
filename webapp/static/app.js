@@ -7,6 +7,10 @@
 (function () {
   "use strict";
 
+  /* Duong random ky vong duoc doc mot lan khi ve bieu do ngan sach, roi dung
+   * lai o o thong ke de tra loi "hon chon ngau nhien bao nhieu lan". */
+  let randomByBudget = null;
+
   const state = {
     bundle: null,
     budget: 0.1,
@@ -164,6 +168,98 @@
   function displayNote(note) {
     if (!note) return "";
     return NOTE_TEXT[note.trim()] || note;
+  }
+
+  function interpolate(points, x) {
+    if (!points.length || !isFinite(x)) return NaN;
+    if (x <= points[0].x) return points[0].y;
+    const last = points[points.length - 1];
+    if (x >= last.x) return last.y;
+    for (let i = 1; i < points.length; i += 1) {
+      const a = points[i - 1];
+      const b = points[i];
+      if (x <= b.x) {
+        const span = b.x - a.x;
+        return span === 0 ? a.y : a.y + ((x - a.x) / span) * (b.y - a.y);
+      }
+    }
+    return NaN;
+  }
+
+  /* "Tot hon bao nhieu" chi co nghia khi co moc so sanh. Moc dung o day la
+   * policy ngau nhien ky vong tai CUNG muc ngan sach, khong phai 0: chon bua
+   * mot ty le khach hang van tao ra mot it gia tri. */
+  function randomLiftTile(result) {
+    if (!randomByBudget || randomByBudget.length < 2) return "";
+    const budget = Number(result.inputs && result.inputs.budget_fraction);
+    const gross = Number(result.gross_incremental_conversions_per_customer);
+    // Slider cho gia tri ngoai luoi budget da danh gia, nen phai noi suy tuyen
+    // tinh dung nhu server lam voi duong champion.
+    const base = interpolate(randomByBudget, budget);
+    if (!isFinite(base) || !isFinite(gross) || base <= 0) return "";
+    return statTile(
+      "So với chọn ngẫu nhiên",
+      `${fmt(gross / base, 1)}×`,
+      `random kỳ vọng ${fmtSci(base)} / khách hàng ở cùng ngân sách`,
+    );
+  }
+
+  /* ------------------------------------------------------------- ket luan */
+
+  /* Tab Tong quan truoc day mo bang nam o thong ke roi rac; nguoi doc phai tu
+   * ghep chung lai moi biet chuyen gi da xay ra. Khoi nay noi thang cau tra loi,
+   * va moi con so trong do tinh tu bundle chu khong chep tay. */
+  function renderVerdict(bundle) {
+    const node = el("verdictBlock");
+    if (!node) return;
+    const champion = bundle.meta.champion;
+    const pairs = (bundle.pairwise && bundle.pairwise.sprint3_policy_area) || [];
+    const versus = pairs.filter((row) => row.model_b === champion);
+
+    const lines = [];
+    if (versus.length) {
+      const better = versus.filter((row) => row.policy_area_ci_low > 0).length;
+      lines.push(
+        `Đã so <strong>${versus.length}</strong> challenger với <strong>${champion}</strong> ` +
+          `trên retrospective confirmation. ` +
+          (better === 0
+            ? `<strong>Không challenger nào</strong> có khoảng tin cậy 95% của chênh lệch nằm ` +
+              `hoàn toàn trên 0, nên không ai đạt promotion rule.`
+            : `<strong>${better}</strong> challenger đạt điều kiện khoảng tin cậy.`),
+      );
+
+      const halves = versus
+        .map((row) => (row.policy_area_ci_high - row.policy_area_ci_low) / 2)
+        .filter((value) => isFinite(value) && value > 0)
+        .sort((a, b) => a - b);
+      const closest = versus.reduce((best, row) =>
+        Math.abs(row.policy_area_difference) < Math.abs(best.policy_area_difference)
+          ? row
+          : best,
+      );
+      const gap = Math.abs(closest.policy_area_difference);
+      if (halves.length && gap > 0) {
+        const mid = Math.floor(halves.length / 2);
+        const halfWidth =
+          halves.length % 2 ? halves[mid] : (halves[mid - 1] + halves[mid]) / 2;
+        lines.push(
+          `Challenger sát nhất chỉ chênh <strong>${fmtSci(gap)}</strong>, trong khi phép đo ` +
+            `chỉ phân biệt được từ <strong>±${fmtSci(halfWidth)}</strong> trở lên — ` +
+            `nhỏ hơn ngưỡng <strong>${fmt(halfWidth / gap, 0)} lần</strong>. Vì vậy đây là ` +
+            `kết luận <em>chưa đủ bằng chứng để đổi champion</em>, không phải ` +
+            `<em>challenger kém hơn</em>.`,
+        );
+      }
+    }
+    lines.push(
+      `Bằng chứng chi tiết ở tab <strong>Model</strong>; quyết định theo ngân sách ở tab ` +
+        `<strong>Policy</strong>.`,
+    );
+
+    node.innerHTML =
+      `<p class="eyebrow">Kết luận</p>` +
+      `<h2>Champion giữ nguyên ${champion}</h2>` +
+      lines.map((line) => `<p>${line}</p>`).join("");
   }
 
   /* ------------------------------------------------------- promotion rule */
@@ -390,6 +486,7 @@
       );
     }
     el("overviewStats").innerHTML = tiles.join("");
+    renderVerdict(bundle);
 
     const evidence = bundle.evidence;
     const rule = evidence.promotion_rule || {};
@@ -634,6 +731,10 @@
     }));
     const random = grouped.get("Expected random (stochastic policy)");
     if (random) {
+      randomByBudget = random
+        .map((r) => ({ x: Number(r.budget_fraction), y: Number(r.gross_value_per_customer) }))
+        .filter((point) => isFinite(point.x) && isFinite(point.y))
+        .sort((a, b) => a.x - b.x);
       series.push({
         label: "Random kỳ vọng",
         color: colors.muted,
@@ -732,7 +833,10 @@
         fmtSci(result.break_even_contact_cost),
         "trên mỗi contact, cùng đơn vị với giá trị nhập",
       ),
-    ].join("");
+      randomLiftTile(result),
+    ]
+      .filter(Boolean)
+      .join("");
 
     el("policyDetail").innerHTML = `
       ${result.guardrail_warning ? `<p class="status-line warning">${result.guardrail_warning}</p>` : ""}

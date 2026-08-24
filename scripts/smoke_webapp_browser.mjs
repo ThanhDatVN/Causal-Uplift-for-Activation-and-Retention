@@ -127,6 +127,13 @@ try {
   check("limitations listed", dom.includes("principal stratum"));
   check("export buttons rendered", dom.includes("/api/export/"));
   check("no unresolved placeholders", !dom.includes("Chưa tải được dữ liệu"));
+  // Ba khoi giai thich ket luan. Chung sinh tu du lieu nen de hong am tham khi
+  // schema doi, va khi hong thi trang van "chay duoc" — dung loai loi ma
+  // acceptance phai bat.
+  check("verdict block states the champion", /class="verdict"[\s\S]*?Champion giữ nguyên \S+/.test(dom));
+  check("pairwise forest plot present", dom.includes('id="pairwiseForest"'));
+  check("resolution block quantifies the gap", dom.includes("Ngưỡng phân biệt được"));
+  check("promotion rule renders nested checks", !dom.includes("[object Object]"));
 
   const simulate = await fetch(`http://127.0.0.1:${port}/api/policy/simulate`, {
     method: "POST",

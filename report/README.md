@@ -22,6 +22,17 @@ repo mâu thuẫn với chúng, ưu tiên báo cáo.
 Đọc Causal Forest rare-outcome trước nếu chỉ có ít thời gian — nó là vòng gần nhất và chứa
 phát hiện về độ nhạy của tín hiệu chấm điểm, thứ ảnh hưởng tới cách đọc mọi bảng còn lại.
 
+## Báo cáo tổng hợp
+
+[`BAO_CAO_THU_HOACH.docx`](BAO_CAO_THU_HOACH.docx) tổng hợp toàn bộ quá trình, kết quả và
+kinh nghiệm rút ra thành một tài liệu liền mạch, định dạng Word: bài toán và khung nhận
+dạng, phương pháp kèm công thức và trích dẫn, sáu vòng cải tiến, biện luận, sản phẩm, và
+phần kinh nghiệm.
+
+Nó **không phải nguồn số**. Mọi con số trong đó trích từ tám báo cáo ở trên; khi hai bên
+lệch nhau thì tám báo cáo đúng. Tài liệu này dùng để trình bày tổng thể, không dùng để
+trích dẫn số liệu.
+
 ## Cách đọc tám báo cáo cùng nhau
 
 Sprint 1 dựng nền tảng đo lường và cho ra một bảng xếp hạng. Sprint 2 biến bảng xếp hạng

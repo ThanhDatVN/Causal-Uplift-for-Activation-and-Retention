@@ -79,7 +79,7 @@ giữa các model hàng đầu nằm ở bậc `1e-06` — nhỏ hơn một bậ
 > Bằng chứng số: [CAUSAL_FOREST_RARE_OUTCOME_REPORT.md](CAUSAL_FOREST_RARE_OUTCOME_REPORT.md)
 > mục 5.
 
-Phân biệt hai câu này là điểm mấu chốt của cả tập báo cáo:
+Toàn bộ tập báo cáo dựa trên phân biệt giữa hai phát biểu:
 
 - "Challenger không tốt hơn" — điều dữ liệu **không** khẳng định được.
 - "Dữ liệu không đủ để nói challenger tốt hơn" — điều dữ liệu **có** khẳng định.
@@ -105,8 +105,7 @@ nhạy hoặc kết luận được chọn sau khi nhìn số. Bốn cơ chế t
 | Power diagnostic trên `visit` | giao thức thiếu độ nhạy | Đổi sang outcome 4,7%, ba challenger chuyển từ "thua rõ" sang "không phân biệt được" |
 | Paired CI bắt buộc | nhầm point estimate với bằng chứng | Sprint 2 giữ Response dù X-Renormalized cao hơn; Sprint 3 xác nhận quyết định đó đúng |
 
-Dòng thứ ba là quan trọng nhất. Nó cho thấy pipeline **có** phản ứng khi tín hiệu mạnh
-lên, nên việc nó không phản ứng trên `conversion` là phát biểu về dữ liệu chứ không phải về
+Dòng thứ ba cho thấy pipeline **có** phản ứng khi tín hiệu mạnh lên, nên việc nó không phản ứng trên `conversion` là phát biểu về dữ liệu chứ không phải về
 pipeline.
 
 ### Điều dự án tạo ra có giá trị

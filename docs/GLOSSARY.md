@@ -80,7 +80,7 @@ hạng** — xem `report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md` mục 5.
 | **Qini** | Diện tích giữa đường uplift tích lũy và đường ngẫu nhiên, dải `0–100%` | Metric phụ. Từng là metric chính ở Sprint 1–2 |
 | **AUUC** | Gần Qini, khác cách chuẩn hóa | Metric phụ |
 | **TOC** | `mean(Γ \| top q) - mean(Γ)` — mức vượt trội của top `q` so với trung bình | Nền của RATE/AUTOC |
-| **RATE / AUTOC** | Diện tích dưới đường TOC | Metric phụ quan trọng nhất |
+| **RATE / AUTOC** | Diện tích dưới đường TOC | Metric phụ chính |
 | **EUCE** | Sai số hiệu chuẩn. Chỉ áp dụng cho model ở thang CATE | Chẩn đoán |
 | **DR risk** | Sai số bình phương giữa `τ̂(x)` và `Γ` | Chọn trọng số ensemble |
 | **Policy value** | Giá trị kỳ vọng khi target top `b` theo một điểm số | Nền của `policy_area_dr` |

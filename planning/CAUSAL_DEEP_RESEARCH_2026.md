@@ -28,7 +28,7 @@ thể xếp hạng tốt nếu baseline risk là proxy ổn định của treatm
 learner có thể tốt ở top 1–2% nhưng thua khi lấy diện tích 1–30%. Đây không phải mâu thuẫn: hai
 metric trả lời hai quyết định khác nhau.
 
-Ba kết luận mới quan trọng nhất:
+Ba kết luận mới:
 
 - **5,59 triệu dòng không tương đương 5,59 triệu đơn vị thông tin nhân quả.** Full-development
   chỉ có 1.625 control conversions. Với event rate quan sát được, thiết kế 85/15 làm phần

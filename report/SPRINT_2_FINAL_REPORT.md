@@ -103,8 +103,8 @@ Bảng trên chứa một kết quả dễ bị đọc sai, nên cần tách b�
 
 **X-Calibrated cải thiện calibration gần gấp đôi** — EUCE giảm từ `0,000462` xuống
 `0,000240` — **nhưng ranking lại kém đi một chút**: Qini `0,188528` so với `0,191557`, và
-CI của chênh lệch `[-0,010774; 0,004700]` chứa 0. Nói cách khác, đưa điểm số về đúng thang
-CATE không làm thứ tự ưu tiên tốt hơn.
+CI của chênh lệch `[-0,010774; 0,004700]` chứa 0 — đưa điểm số về đúng thang CATE không
+làm thứ tự ưu tiên tốt hơn.
 
 Điều này đúng về mặt toán học chứ không phải nghịch lý: τ-isotonic là một phép biến đổi
 **đơn điệu tăng**, mà Qini chỉ phụ thuộc thứ hạng. Phần chênh lệch quan sát được đến từ

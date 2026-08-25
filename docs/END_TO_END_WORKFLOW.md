@@ -6,27 +6,25 @@
   trích ở đây đều thuộc về một báo cáo trong [`../report/`](../report/) và truy được về
   một file trong [`../output/`](../output/)
 
-## 0. Tài liệu này trả lời gì
+## 0. Phạm vi
 
-Repo có tám báo cáo kết quả, sáu method guide và ba tài liệu nghiên cứu. Mỗi cái đúng
-trong phạm vi của nó, nhưng không cái nào trả lời câu hỏi: **vì sao dự án đi theo đúng
+Tám báo cáo kết quả, sáu method guide và ba tài liệu nghiên cứu đều giới hạn trong phạm vi
+riêng của chúng. Còn lại một câu chưa tài liệu nào trả lời: **vì sao dự án đi theo đúng
 thứ tự đó, và bước tiếp theo được suy ra từ đâu.**
 
-Đây là câu hỏi mà người đọc lần đầu hỏi trước tiên, và là câu hỏi mà một hội đồng đánh
-giá hỏi sau cùng. Tài liệu này trả lời nó bằng một mạch duy nhất: mỗi vòng thí nghiệm
-**đóng lại đúng một giả thuyết** về việc vì sao phương pháp nhân quả không thắng baseline
-dự đoán, và chính việc đóng lại đó sinh ra vòng kế tiếp. Khi cả ba hướng sửa độc lập đều
-đóng, ranh giới lộ ra — và ranh giới đó, chứ không phải một model tốt hơn, là thứ
-quyết định việc còn lại đáng làm.
+Mạch trả lời nằm ở cấu trúc thí nghiệm. Mỗi vòng **đóng một giả thuyết** về nguyên nhân
+baseline dự đoán chưa bị vượt qua, và kết quả của nó xác định giả thuyết vòng sau. Khi ba
+hướng sửa độc lập đều đóng, ràng buộc còn lại lộ ra, và chính ràng buộc đó quyết định việc
+tiếp theo đáng làm.
 
-Ba thứ tài liệu này **không** làm: không thay báo cáo kết quả, không phát biểu số mới,
-không thay [`REPRODUCTION.md`](REPRODUCTION.md) về mặt lệnh chạy.
+Ngoài phạm vi: kết quả số (thuộc [`../report/`](../report/)) và lệnh chạy (thuộc
+[`REPRODUCTION.md`](REPRODUCTION.md)).
 
-## 1. Một câu hỏi, và vì sao nó quyết định mọi thứ phía sau
+## 1. Câu hỏi gốc và đại lượng nó kéo theo
 
 Câu hỏi kinh doanh: *với ngân sách chỉ đủ tiếp cận một phần khách hàng, nên tiếp cận ai?*
 
-Có hai cách đọc câu hỏi này, và chúng dẫn tới hai đại lượng khác nhau:
+Hai cách đọc câu hỏi này dẫn tới hai đại lượng khác nhau:
 
 | Cách đọc | Đại lượng | Quan sát được không |
 |---|---|---|
@@ -35,7 +33,7 @@ Có hai cách đọc câu hỏi này, và chúng dẫn tới hai đại lượng
 
 Toàn bộ độ khó của dự án nằm ở dòng thứ hai. `τ(x)` là hiệu của hai đại lượng không bao
 giờ cùng quan sát được trên một cá nhân, nên **không có nhãn để chấm điểm ở mức cá nhân**.
-Hệ quả dây chuyền, và mọi quyết định kỹ thuật sau này đều là hệ quả của nó:
+Mọi quyết định kỹ thuật phía sau đều là hệ quả của ràng buộc này:
 
 1. không dùng được accuracy/RMSE trên `τ` — phải đánh giá ở mức **nhóm**, qua policy value
    hoặc đường cong xếp hạng;
@@ -76,7 +74,7 @@ flowchart TB
     P2 --> OUT["Quyết định ngân sách<br/>kèm khoảng tin cậy"]
 ```
 
-Ba điều cần đọc ra từ sơ đồ, vì chúng là ba quyết định định hình cả dự án:
+Sơ đồ mã hoá ba quyết định thiết kế:
 
 - **Chẩn đoán đứng trước mô hình**, không phải sau. Bước A1 dự đoán trước kết quả của cả
   sáu vòng A2. Nếu nó đứng sau, nó đã thành lời biện minh hậu nghiệm.
@@ -176,9 +174,9 @@ Ba ràng buộc kiến trúc đáng chú ý, vì chúng là thứ giữ cho kế
 | Hash split đối chiếu trước mỗi run | [`../src/experiment.py`](../src/experiment.py) | hai lần chạy tưởng là so được nhưng thực ra khác dữ liệu |
 | Tầng trình bày chỉ **đọc** artifact | [`../webapp/`](../webapp/), notebook 02 | con số trên báo cáo và trên sản phẩm trôi khỏi nhau |
 
-Mũi tên từ khối chẩn đoán sang khối huấn luyện là mũi tên quan trọng nhất trong sơ đồ:
-phát hiện sentinel ở bước EDA về sau trở thành vòng cải tiến thứ tư, và trần phân giải đo
-ở bước EDA là thứ giải thích kết quả của cả sáu vòng.
+Mũi tên từ khối chẩn đoán sang khối huấn luyện mang phần lớn nội dung của sơ đồ: phát
+hiện sentinel ở bước EDA về sau thành vòng cải tiến thứ tư, và trần phân giải đo ở bước
+EDA giải thích kết quả của cả sáu vòng.
 
 ### 3.1 Bước 0 — hợp đồng dữ liệu, chốt trước khi nhìn kết quả
 
@@ -195,9 +193,8 @@ Bốn điều được chốt ở bước này, và cả bốn về sau đều c
 | Registry | mọi run vào [`../output/improvement/registry.csv`](../output/improvement/registry.csv), **kể cả run hỏng** | báo cáo chỉ những lần chạy đẹp |
 
 Registry hiện có `97` run trên `24` candidate: `44` screen, `23` smoke, `16` finalist,
-`9` confirmation, `2` diagnostic, `2` **failed**, `1` released. Hai dòng `failed` là phần
-đáng giá nhất của bảng này — chúng là bằng chứng rằng gate tự động thực sự có kích hoạt,
-chứ không phải một điều khoản trang trí.
+`9` confirmation, `2` diagnostic, `2` **failed**, `1` released. Hai dòng `failed` là bằng
+chứng gate tự động có kích hoạt trong thực tế.
 
 ### 3.2 Bước 1 — chẩn đoán đứng trước mô hình, và nó đã dự đoán trước kết quả
 
@@ -226,7 +223,7 @@ sentinel **rời nhau**, Pearson `0,769` và Spearman `0,883`. Quyết định h
 đó: Cochran `Q` giảm từ `861` trên thang cộng xuống `150` trên thang nhân, tỷ lệ `5,7`
 lần — tức phần lớn tính không đồng nhất biến mất khi đổi thang.
 
-Nói cách khác: hiệu ứng *có* thay đổi theo `x`, nhưng chủ yếu theo đúng cách mà `p₀(x)`
+Hiệu ứng *có* thay đổi theo `x`, nhưng chủ yếu theo đúng cách mà `p₀(x)`
 thay đổi. Mà `p₀` chính là thứ baseline Response ước lượng trực tiếp và ước lượng tốt.
 **Đây là lý do Response khó bị đánh bại, và nó được đo trên dữ liệu thô, trước mọi model.**
 
@@ -406,7 +403,7 @@ dịch có hiệu quả bằng chính model dùng để phân phối chiến d�
 
 ### 5.1 Điều sản phẩm được phép nói và không được phép nói
 
-Bảng này là công cụ kiểm tra khi viết nhãn giao diện, tên cột artifact và tên biến:
+Ràng buộc từ vựng, áp cho nhãn giao diện, tên cột artifact và tên biến:
 
 | Được phép | Không được phép | Vì sao |
 |---|---|---|

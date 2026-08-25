@@ -21,13 +21,12 @@ docs/
 └── model_cards/                          model card champion
 ```
 
-**Tên file theo sprint, nội dung theo chủ đề.** Bảy method guide được đặt tên theo vòng
-viết ra chúng, nên tìm theo tên file sẽ khó. Dùng bảng tra theo chủ đề ngay dưới thay vì
-đoán từ tên.
+Bảy method guide mang tên vòng thí nghiệm sinh ra chúng, không mang tên chủ đề. Bảng
+dưới đây ánh xạ chủ đề sang file.
 
 ## Tra theo chủ đề
 
-Cột trái là **khái niệm**, không phải tên file. Đây là cách tìm nhanh nhất.
+Cột trái là khái niệm; cột phải là file chứa nó.
 
 | Chủ đề | Đọc ở |
 |---|---|
@@ -60,8 +59,7 @@ Cột trái là **khái niệm**, không phải tên file. Đây là cách tìm 
 
 ## Bảy method guide — mô tả đầy đủ
 
-Bảng trên tra theo khái niệm; bảng này mô tả **toàn bộ nội dung** của từng file, dùng khi
-cần biết một guide có gì trước khi mở.
+Phạm vi nội dung đầy đủ của từng guide:
 
 | Tài liệu | Nội dung |
 |---|---|

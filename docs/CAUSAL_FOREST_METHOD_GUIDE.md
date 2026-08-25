@@ -11,7 +11,7 @@ Bốn meta-learner ở [`SPRINT_1_THEORY_AND_METHOD_GUIDE.md`](SPRINT_1_THEORY_A
 pseudo-outcome. Causal Forest là thuật toán chuyên dụng duy nhất trong dự án — nó sửa
 thẳng **tiêu chí chia nhánh của cây**.
 
-Tài liệu này giải thích cơ chế đó, và vì sao đúng cơ chế đó lại xung đột với outcome hiếm.
+Chính cơ chế này xung đột với outcome hiếm, theo số học trình bày ở mục 2.
 
 ## 1. Khác biệt cốt lõi: chia nhánh theo cái gì
 
@@ -60,9 +60,9 @@ su_kien_control_moi_la = min_samples_leaf × 0,15 × 0,001938
 | `kaggle-safe` | 500 | `0,145` | `0,073` |
 | `rare-outcome` | 10.000 | `2,907` | `1,454` |
 
-**Đọc bảng này cho đúng.** Với `kaggle-safe`, kỳ vọng chỉ `0,073` sự kiện control mỗi lá
-sau honest splitting. Nghĩa là **đại đa số lá có nhánh control rỗng**, và Causal Forest
-đang lấy hiệu `treated - control` với một vế gần như không có thông tin.
+Với `kaggle-safe`, kỳ vọng chỉ `0,073` sự kiện control mỗi lá sau honest splitting —
+**đại đa số lá có nhánh control rỗng**, và hiệu `treated - control` được lấy với một vế
+gần như không có thông tin.
 
 Với `research` còn tệ hơn — `0,029`. Đó là lý do profile `research` **không** phải bản cải
 tiến cho bài toán này dù tên nghe như vậy: nó nặng hơn về tài nguyên và đi **sai hướng**
@@ -112,8 +112,7 @@ cả tín hiệu chấm điểm — mục 6.
 
 ## 6. Tín hiệu chấm điểm đổi kết quả nhiều hơn model
 
-Phát hiện đắt nhất của vòng `rare-outcome`, và nó không nói về Causal Forest mà nói về
-**cách đo**.
+Phát hiện của vòng `rare-outcome` nằm ở **cách đo**, không ở Causal Forest.
 
 Vòng đầu chấm bằng **IPW signal**; vòng `rare-outcome` chấm lại bằng **DR signal đã đóng
 băng**. Cùng bộ điểm, cùng những dòng dữ liệu, chỉ đổi tín hiệu:

@@ -129,7 +129,7 @@ thuần tuý vì ngưỡng RAM; `exit_code = 0`, artifact đủ số dòng, fini
 phối bởi `n_estimators × max_samples × n_rows` — số subsample giữ cho từng cây — chứ không phải
 độ sâu cây; tích đó tăng khoảng `5,1` lần so với cấu hình cũ.
 
-## 5. Phát hiện quan trọng nhất — tín hiệu chấm điểm đổi kết quả
+## 5. Phát hiện chính — tín hiệu chấm điểm đổi kết quả
 
 Vòng này để lại một kết quả vượt ra ngoài phạm vi Causal Forest.
 
@@ -199,7 +199,7 @@ Causal Forest thua vì lá quá nhỏ cho outcome hiếm. Nay phản bác đó �
 bằng số: sửa đúng ràng buộc ấy, kết quả vẫn hòa. Kết luận "hòa" từ chỗ là một cấu hình bị đặt sai
 trở thành một kết luận vững.
 
-**3. Chọn tín hiệu chấm điểm quan trọng ngang chọn model.** Đây là bài học đắt nhất của vòng này.
+**3. Chọn tín hiệu chấm điểm quan trọng ngang chọn model.**
 Cùng một bộ điểm, cùng những dòng dữ liệu, đổi từ IPW sang DR làm chênh lệch đo được đổi 69 lần
 và làm Response tụt hai bậc. Mọi so sánh model chỉ có nghĩa khi tín hiệu chấm điểm được cố định
 và ghi rõ — đó là lý do vòng này dùng DR signal **đã đóng băng** thay vì tự tính lại.

@@ -51,10 +51,9 @@ Các số này là **conversion-equivalent scenario**, không phải actual reve
 
 ## Mạch phát triển — chín giai đoạn
 
-Dự án không phải một chuỗi "thử thêm model cho tới khi thắng". Mỗi vòng **đóng lại đúng
-một giả thuyết** về việc vì sao phương pháp nhân quả không thắng baseline dự đoán, và
-chính việc đóng đó sinh ra vòng kế tiếp. Bảng này đọc ngang là đi hết một giai đoạn qua
-mọi thư mục.
+Sáu vòng cải tiến, mỗi vòng kiểm một giả thuyết về nguyên nhân baseline dự đoán chưa bị
+vượt qua. Kết quả mỗi vòng xác định giả thuyết của vòng kế tiếp. Mỗi dòng dưới đây là một giai
+đoạn, trải qua mọi thư mục liên quan.
 
 | # | Giai đoạn | Câu hỏi của giai đoạn | Kết quả | Báo cáo |
 |---:|---|---|---|---|
@@ -131,7 +130,7 @@ lập: trong từng feature có ít nhất ba bin, Pearson nằm trong `[0,991; 
 pattern sentinel rời nhau, Pearson `0,769`, Spearman `0,883`, và `Q` giảm từ `861` trên
 thang cộng xuống `150` trên thang nhân — tỷ lệ **5,7 lần**.
 
-Nói cách khác `τ(x) ≈ 0,53 · p₀(x)`. Hàm `p₀` đơn điệu tăng, nên xếp hạng theo rủi ro nền
+Quan hệ rút gọn: `τ(x) ≈ 0,53 · p₀(x)`. Hàm `p₀` đơn điệu tăng, nên xếp hạng theo rủi ro nền
 cho gần đúng thứ tự xếp hạng theo uplift. Điều đó dự đoán trước — từ dữ liệu thô, trước mọi
 model — kết quả mà Sprint 1, Sprint 3 và vòng Causal Forest sau đó xác nhận: không phương
 pháp nhân quả nào tách được khỏi baseline Response.
@@ -507,8 +506,8 @@ specification** — nơi công sức kỹ thuật thực sự đổ vào:
 | Biến đổi outcome-adjusted | `src/ranking_metrics.py` | giảm phương sai của tín hiệu chấm điểm (Bokelmann & Lessmann, EJOR 2024) |
 | τ-isotonic calibration | `src/calibration.py` | đưa điểm số về thang CATE khi cần diễn giải độ lớn |
 
-Nói cách khác: bài toán ở đây không phải "tạo thêm tín hiệu từ feature", mà là "ước lượng
-một đại lượng không quan sát được từ tín hiệu 0,29% mà không đưa bias vào". Chi tiết
+Bài toán nằm ở ước lượng một đại lượng không quan sát được từ tín hiệu `0,29%` mà không
+đưa bias vào, không ở việc tạo thêm tín hiệu từ feature. Chi tiết
 phương pháp: [Sprint 3 method guide](docs/SPRINT_3_METHOD_GUIDE.md).
 
 ### Phạm vi suy luận và giới hạn dữ liệu

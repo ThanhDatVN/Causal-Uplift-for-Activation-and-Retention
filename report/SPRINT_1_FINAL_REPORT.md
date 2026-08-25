@@ -47,8 +47,7 @@ minh** randomization; nguồn xác nhận thiết kế thử nghiệm là tài l
 
 ### 2.1 Nhận xét — hiệu ứng có thật, nhưng nhỏ tuyệt đối
 
-Ba con số ở trên định hình toàn bộ phần còn lại của dự án, nên cần đọc kỹ hơn một bảng
-kiểm toán thông thường.
+Ba con số ở trên định hình toàn bộ phần còn lại của dự án.
 
 **Hiệu ứng trung bình là có thật và được đo rất chính xác.** ATE `0,11519` điểm phần trăm
 với CI `[0,10845%; 0,12192%]` không chứa 0, `z = 33,5`. Trên thang tương đối, risk ratio là
@@ -65,8 +64,7 @@ thấy ranh giới: phát hiện được hiệu ứng bằng `1/10` ATE cần `
 `13,98` triệu dòng của Criteo; nhưng `1/100` ATE cần `8,97e08`, tức **64 lần** toàn bộ
 dataset.
 
-Nói cách khác, ngay từ bước kiểm toán dữ liệu đã đọc được rằng dự án có thể trả lời chắc
-chắn câu "treatment có tác dụng không", còn câu "tác dụng với ai nhiều hơn" chỉ trả lời
+Ngay từ bước kiểm toán dữ liệu đã xác định được rằng dự án trả lời chắc chắn câu "treatment có tác dụng không", còn câu "tác dụng với ai nhiều hơn" chỉ trả lời
 được ở mức phân giải thô. Kết quả của Sprint 3 và bốn vòng cải tiến sau đó là hệ quả của
 ràng buộc này, không phải của việc chọn sai model.
 
@@ -191,7 +189,7 @@ từ `output/sprint1/score_spearman_release.csv`:
 | X-Learner | 0,439 | 0,429 | 0,474 | 1,000 | 0,424 |
 | DR-Learner | 0,679 | 0,636 | 0,598 | 0,424 | 1,000 |
 
-Đọc bảng này cùng bảng Qini cho một quan sát đáng chú ý:
+Đối chiếu bảng này với bảng Qini:
 
 **X-Learner xếp hạng khách hàng rất khác Response** — Spearman chỉ `0,439`, thấp nhất
 trong mọi cặp có Response — **nhưng chênh lệch Qini giữa hai model vẫn có CI chứa 0**

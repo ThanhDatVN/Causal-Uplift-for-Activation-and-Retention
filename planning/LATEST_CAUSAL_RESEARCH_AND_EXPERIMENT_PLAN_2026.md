@@ -17,7 +17,7 @@ tiên khác:
 3. kiểm tra direct-ranking objective sau khi hybrid đã có baseline công bằng;
 4. chỉ tối ưu forest sau khi nền tảng leakage, synthetic truth, provenance và inference hoàn tất.
 
-Điểm quan trọng nhất của dữ liệu hiện tại là Response thắng không nhất thiết có nghĩa learner nhân quả sai.
+Response thắng không nhất thiết có nghĩa learner nhân quả sai.
 Nếu treatment effect gần hằng trên log-odds, với outcome hiếm:
 
 ```text
@@ -293,7 +293,7 @@ Nhưng đó là cải tiến về **thiết kế đánh giá**, không phải v�
 
 ### 10.2 Ba hướng còn mở, xếp theo giá trị trên chi phí
 
-**Ưu tiên 1 — external validity trên dataset thứ hai.** Trả lời câu còn bỏ ngỏ quan trọng nhất:
+**Ưu tiên 1 — external validity trên dataset thứ hai.** Trả lời câu còn bỏ ngỏ:
 Response thắng *vì outcome hiếm* hay *nói chung*? Đây là hướng duy nhất biến kết quả từ "đúng
 trên một dataset" thành một phát biểu có phạm vi rộng hơn.
 

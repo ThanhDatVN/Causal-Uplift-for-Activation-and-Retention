@@ -1,7 +1,7 @@
 # Nền tảng causal learner cho binary outcome hiếm
 
-Tài liệu này mô tả ba estimator được thêm trong protocol `causal-foundation-v1`, điều kiện nhận
-dạng, cách kiểm thử và những giới hạn đã quan sát. Kết quả số nằm ở
+Ba estimator được thêm trong protocol `causal-foundation-v1`: điều kiện nhận dạng, cách
+kiểm thử và giới hạn đã quan sát. Kết quả số nằm ở
 [báo cáo thực nghiệm](../report/CAUSAL_FOUNDATION_EXPERIMENT_REPORT.md); research review được khóa
 trước khi chạy nằm ở [planning](../planning/CAUSAL_FOUNDATION_RESEARCH.md).
 

@@ -190,20 +190,7 @@ sort; unit test kiểm tra kết quả đúng với bootstrap expanded-sample ch
 - Score âm không xác định principal stratum “Sleeping Dogs” của từng người.
 - Kết quả là retrospective policy evaluation trên một RCT; chưa phải online lift.
 
-## 9. Câu hỏi phải trả lời được khi phỏng vấn
-
-1. Tại sao propensity model không đủ để target campaign?
-2. Vì sao không thể đo RMSE của CATE cá nhân trên dữ liệu quan sát?
-3. `visit` và `exposure` gây leakage ra sao?
-4. S/T/X/DR khác nhau ở nuisance model và pseudo-outcome nào?
-5. “Doubly robust” bảo đảm điều gì dưới các giả định của estimator?
-6. Vì sao under-sampling làm sai calibration nếu không correction?
-7. Vì sao phải dùng paired bootstrap?
-8. Response thắng Qini có mâu thuẫn với mục tiêu causal không?
-9. Policy top 10% được ước lượng thế nào và cần giả định gì?
-10. Điều gì cần thêm để biến uplift thành incremental profit?
-
-## 10. Nguồn phải đọc
+## 9. Nguồn tham khảo
 
 - Criteo dataset: https://ailab.criteo.com/criteo-uplift-prediction-dataset/
 - Künzel et al., meta-learners: https://doi.org/10.1073/pnas.1804597116
@@ -216,7 +203,7 @@ sort; unit test kiểm tra kết quả đúng với bootstrap expanded-sample ch
 - Efron & Tibshirani, bootstrap:
   https://doi.org/10.1201/9780429246593
 
-## 11. Research backlog đã sàng lọc
+## 10. Research backlog đã sàng lọc
 
 Không thêm model chỉ để tăng số lượng. Thứ tự thử trong Sprint 2:
 

@@ -7,6 +7,48 @@ Pipeline dùng [Criteo Uplift Prediction Dataset](https://ailab.criteo.com/crite
 (13,98 triệu dòng, randomized incrementality test), so sánh response/CATE learners, đo
 uncertainty và phát hành một dashboard policy chạy được.
 
+## Kết quả
+
+**Champion giữ nguyên Response — một model dự đoán `P(conversion)`, không phải CATE
+estimator.** Đã so 8 challenger trên retrospective confirmation; không challenger nào
+thắng ở cả hai fold seed OOF, và không paired 95% CI nào có cận dưới lớn hơn 0.
+
+Đó **không** phải "chưa tìm được model tốt hơn". Sau sáu vòng cải tiến, ba hướng sửa độc
+lập đều đóng, và phát biểu đúng là: **phép đo hết độ phân giải trước khi model hết dư
+địa** — nửa CI `±1,74e-05` so với chênh lệch giữa các model hàng đầu ở bậc `1e-06`.
+
+Metric chính là `policy_area_dr`: trung bình conversion tăng thêm trên mỗi khách
+hàng ở dải budget 1–30%, chấm bằng doubly robust signal.
+
+| Model | `policy_area_dr` | AUTOC | Qini |
+|---|---:|---:|---:|
+| Response | 0,000912 | 0,003823 | 0,192989 |
+| Ensemble-QAgg | 0,000911 | 0,003271 | 0,209845 |
+| Ensemble-RankAverage | 0,000908 | 0,003332 | 0,195022 |
+| S-Under7 | 0,000896 | 0,003116 | 0,205904 |
+| X-Renormalized | 0,000890 | 0,003283 | 0,201812 |
+| Rank-K2 | 0,000862 | 0,002454 | 0,184993 |
+| Rank-K1 | 0,000852 | 0,002400 | 0,185657 |
+| Rank-K05 | 0,000848 | 0,002388 | 0,186454 |
+
+Lưu ý metric bất đồng: theo Qini, ba model xếp trên Response; theo metric chính và
+AUTOC, Response đứng đầu. Metric hierarchy được đăng ký **trước** khi chạy chính là
+để tình huống này không trở thành lựa chọn hậu nghiệm.
+
+Kết quả "một model không phải CATE estimator xếp hạng tốt hơn mọi CATE learner" là
+chế độ đã được mô tả trong tài liệu, không phải dị thường: *causal bias–variance
+tradeoff* (Fernández-Loría & Provost, JMLR 2022), điều kiện proxy phản ánh dominant
+moderator (arXiv 2206.12532), và chính nhóm tạo Criteo đã khuyến nghị dùng `visit`
+thay `conversion` vì tín hiệu uplift của `conversion` quá yếu (Diemert et al., AdKDD
+2018). Rà soát đầy đủ:
+[research landscape](planning/RESEARCH_LANDSCAPE_2026.md).
+
+Tại budget 10%, `value=1`, `cost=0,0005`, Response đạt DR net/customer `0,000856`,
+95% CI `[0,000675; 0,001044]`; Δ so random CI `[0,000638; 0,000994]`. Với một triệu
+khách hàng, top 10% tương ứng khoảng `906` incremental conversions, CI `[725; 1.094]`.
+
+Các số này là **conversion-equivalent scenario**, không phải actual revenue/profit.
+
 ## Mạch phát triển — chín giai đoạn
 
 Dự án không phải một chuỗi "thử thêm model cho tới khi thắng". Mỗi vòng **đóng lại đúng
@@ -35,6 +77,32 @@ trước khi model hết dư địa** (`±1,74e-05` so với chênh lệch bậc
 Mạch đầy đủ, gồm bản đồ script–artifact–báo cáo của từng giai đoạn, ranh giới của kết
 luận và kiến trúc sản phẩm hai tầng:
 [**docs/END_TO_END_WORKFLOW.md**](docs/END_TO_END_WORKFLOW.md).
+
+## Demo
+
+Web application đầy đủ tính năng:
+
+```powershell
+.venv\Scripts\python.exe scripts\build_champion_scorer.py
+.venv\Scripts\python.exe scripts\serve_webapp.py --port 8000
+node scripts\smoke_webapp_browser.mjs
+```
+
+Mở `http://127.0.0.1:8000`; OpenAPI docs ở `/docs`. Hướng dẫn vận hành và tái lập:
+[scripts/README.md](scripts/README.md).
+Screenshot: [webapp_screenshot.png](output/product/screenshots/webapp_screenshot.png).
+
+App có sáu tab: tổng quan release, so sánh model kèm paired CI, budget/policy
+explorer, uplift theo decile và chẩn đoán cân bằng, batch scoring từ CSV, và bảng
+bằng chứng kèm experiment registry và export CSV.
+
+Dashboard tĩnh Sprint 2 vẫn dùng được cho bản demo một file:
+
+```powershell
+.venv\Scripts\python.exe scripts\export_dashboard_data.py
+.venv\Scripts\python.exe scripts\build_dashboard.py
+node scripts\smoke_dashboard_browser.mjs
+```
 
 ## Tiến trình dự án — chi tiết từng giai đoạn
 
@@ -234,44 +302,6 @@ tự thuyết phục mình rằng chiến dịch có hiệu quả bằng chính 
 
 Ảnh chụp màn hình và cách chạy: mục [Demo](#demo) bên dưới.
 
-## Kết quả Sprint 3
-
-Metric chính là `policy_area_dr`: trung bình conversion tăng thêm trên mỗi khách
-hàng ở dải budget 1–30%, chấm bằng doubly robust signal.
-
-| Model | `policy_area_dr` | AUTOC | Qini |
-|---|---:|---:|---:|
-| Response | 0,000912 | 0,003823 | 0,192989 |
-| Ensemble-QAgg | 0,000911 | 0,003271 | 0,209845 |
-| Ensemble-RankAverage | 0,000908 | 0,003332 | 0,195022 |
-| S-Under7 | 0,000896 | 0,003116 | 0,205904 |
-| X-Renormalized | 0,000890 | 0,003283 | 0,201812 |
-| Rank-K2 | 0,000862 | 0,002454 | 0,184993 |
-| Rank-K1 | 0,000852 | 0,002400 | 0,185657 |
-| Rank-K05 | 0,000848 | 0,002388 | 0,186454 |
-
-**Không challenger nào đạt promotion rule; champion giữ nguyên Response.** Không
-challenger nào thắng Response ở cả hai fold seed OOF, và không paired 95% CI nào có
-lower bound lớn hơn 0.
-
-Lưu ý metric bất đồng: theo Qini, ba model xếp trên Response; theo metric chính và
-AUTOC, Response đứng đầu. Metric hierarchy được đăng ký **trước** khi chạy chính là
-để tình huống này không trở thành lựa chọn hậu nghiệm.
-
-Kết quả "một model không phải CATE estimator xếp hạng tốt hơn mọi CATE learner" là
-chế độ đã được mô tả trong tài liệu, không phải dị thường: *causal bias–variance
-tradeoff* (Fernández-Loría & Provost, JMLR 2022), điều kiện proxy phản ánh dominant
-moderator (arXiv 2206.12532), và chính nhóm tạo Criteo đã khuyến nghị dùng `visit`
-thay `conversion` vì tín hiệu uplift của `conversion` quá yếu (Diemert et al., AdKDD
-2018). Rà soát đầy đủ:
-[research landscape](planning/RESEARCH_LANDSCAPE_2026.md).
-
-Tại budget 10%, `value=1`, `cost=0,0005`, Response đạt DR net/customer `0,000856`,
-95% CI `[0,000675; 0,001044]`; Δ so random CI `[0,000638; 0,000994]`. Với một triệu
-khách hàng, top 10% tương ứng khoảng `906` incremental conversions, CI `[725; 1.094]`.
-
-Các số này là **conversion-equivalent scenario**, không phải actual revenue/profit.
-
 ## Notebook
 
 Bốn notebook, đọc theo thứ tự — đây là đường vào ngắn nhất cho người muốn xem mạch phân
@@ -302,33 +332,76 @@ chiếu** kết quả với artifact đã đóng băng ở `output/eda/` do
 [`scripts/run_eda_profile.py`](scripts/run_eda_profile.py) sinh ra. Phép đối chiếu nằm ở
 mục 1.1 chứ không ở cuối: nếu nó fail thì mọi diễn giải phía sau đều đáng ngờ.
 
-## Demo
+## Chạy dự án
 
-Web application đầy đủ tính năng:
+Ba cách, từ nhanh nhất tới chi tiết nhất.
 
-```powershell
-.venv\Scripts\python.exe scripts\build_champion_scorer.py
-.venv\Scripts\python.exe scripts\serve_webapp.py --port 8000
-node scripts\smoke_webapp_browser.mjs
-```
+### Docker
 
-Mở `http://127.0.0.1:8000`; OpenAPI docs ở `/docs`. Hướng dẫn vận hành và tái lập:
-[scripts/README.md](scripts/README.md).
-Screenshot: [webapp_screenshot.png](output/product/screenshots/webapp_screenshot.png).
-
-App có sáu tab: tổng quan release, so sánh model kèm paired CI, budget/policy
-explorer, uplift theo decile và chẩn đoán cân bằng, batch scoring từ CSV, và bảng
-bằng chứng kèm experiment registry và export CSV.
-
-Dashboard tĩnh Sprint 2 vẫn dùng được cho bản demo một file:
+Cách nhanh nhất để có môi trường đúng, không cần dựng `.venv`:
 
 ```powershell
-.venv\Scripts\python.exe scripts\export_dashboard_data.py
-.venv\Scripts\python.exe scripts\build_dashboard.py
-node scripts\smoke_dashboard_browser.mjs
+docker compose build
+docker compose run --rm tests        # tap test khong can du lieu goc
+docker compose up webapp             # mo http://localhost:8000
 ```
 
-## Cấu trúc chính
+Image chứa **code và dependency**, không chứa dữ liệu. `data/` và `output/` được mount lúc
+chạy — `data/` có giấy phép riêng của Criteo nên không phân phối lại trong image, còn
+`output/` phải đọc được ở trạng thái thật chứ không phải bản chụp lúc build.
+
+Chi tiết ba service và giới hạn của từng cái:
+[docs/REPRODUCTION.md](docs/REPRODUCTION.md) mục 11.
+
+### Kiểm thử
+
+Python 3.12; môi trường mặc định không cài dependency đối chiếu CausalML:
+
+```powershell
+py -3.12 -m venv .venv
+.venv\Scripts\python.exe -m pip install -r requirements.txt
+# Chỉ khi cần đối chiếu CausalML:
+.venv\Scripts\python.exe -m pip install -r requirements-optional.txt
+```
+
+```powershell
+.venv\Scripts\python.exe -m pytest tests -q          # 294 test
+node scripts\smoke_webapp_browser.mjs                # 23 acceptance check
+```
+
+### Chạy lại từng vòng
+
+Chẩn đoán dữ liệu (khoảng 2,5 phút, sinh 17 artifact trong `output/eda/`):
+
+```powershell
+.venv\Scripts\python.exe scripts\run_eda_profile.py
+```
+
+Sprint 2:
+
+```powershell
+.venv\Scripts\python.exe scripts\run_sprint2_local.py `
+  --pool-frac 1.0 --n-boot 500 --output-dir output\sprint2
+```
+
+Sprint 3:
+
+```powershell
+.venv\Scripts\python.exe scripts\run_oof_experiment.py --pool-frac 0.20 --stage screen `
+  --n-boot 300 --output-dir output\improvement\screen
+```
+
+Lệnh đầy đủ của cả tám vòng chạy được — chẩn đoán dữ liệu, Sprint 1–3, data optimization,
+causal foundation, top-tail và Causal Forest — nằm trong một runbook duy nhất:
+[docs/REPRODUCTION.md](docs/REPRODUCTION.md).
+
+Run cần file Criteo v2.1 với SHA-256:
+
+```text
+2716e1bf0fd157a93b5bf86924d9088419dfbac2022c6cd90030220634f616dc
+```
+
+## Cấu trúc repo
 
 ```text
 src/
@@ -384,7 +457,11 @@ theo **giai đoạn** thì đọc bảng ở đầu trang, hoặc bản đồ đ
 [docs/END_TO_END_WORKFLOW.md](docs/END_TO_END_WORKFLOW.md) mục 2bis — nó ghép hai trục
 đó lại: mỗi dòng một giai đoạn, đọc ngang là đi hết giai đoạn qua mọi thư mục.
 
-## Feature engineering và nuisance specification
+## Quyết định và giới hạn
+
+Hai điều dự án **cố ý không làm**, và lý do.
+
+### Vì sao không làm feature engineering
 
 **Champion hiện hành và protocol Sprint 3 không tạo feature phái sinh.** Protocol thử nghiệm
 `data-optimization-v1` bổ sung đúng một ablation có căn cứ từ EDA: cờ sentinel fold-local và
@@ -434,70 +511,16 @@ Nói cách khác: bài toán ở đây không phải "tạo thêm tín hiệu t�
 một đại lượng không quan sát được từ tín hiệu 0,29% mà không đưa bias vào". Chi tiết
 phương pháp: [Sprint 3 method guide](docs/SPRINT_3_METHOD_GUIDE.md).
 
-## Chạy kiểm thử
+### Phạm vi suy luận và giới hạn dữ liệu
 
-Python 3.12; môi trường mặc định không cài dependency đối chiếu CausalML:
-
-```powershell
-py -3.12 -m venv .venv
-.venv\Scripts\python.exe -m pip install -r requirements.txt
-# Chỉ khi cần đối chiếu CausalML:
-.venv\Scripts\python.exe -m pip install -r requirements-optional.txt
-```
-
-```powershell
-.venv\Scripts\python.exe -m pytest tests -q          # 294 test
-node scripts\smoke_webapp_browser.mjs                # 23 acceptance check
-```
-
-## Chạy trong Docker
-
-Cách nhanh nhất để có môi trường đúng, không cần dựng `.venv`:
-
-```powershell
-docker compose build
-docker compose run --rm tests        # tap test khong can du lieu goc
-docker compose up webapp             # mo http://localhost:8000
-```
-
-Image chứa **code và dependency**, không chứa dữ liệu. `data/` và `output/` được mount lúc
-chạy — `data/` có giấy phép riêng của Criteo nên không phân phối lại trong image, còn
-`output/` phải đọc được ở trạng thái thật chứ không phải bản chụp lúc build.
-
-Chi tiết ba service và giới hạn của từng cái:
-[docs/REPRODUCTION.md](docs/REPRODUCTION.md) mục 11.
-
-## Chạy lại
-
-Chẩn đoán dữ liệu (khoảng 2,5 phút, sinh 17 artifact trong `output/eda/`):
-
-```powershell
-.venv\Scripts\python.exe scripts\run_eda_profile.py
-```
-
-Sprint 2:
-
-```powershell
-.venv\Scripts\python.exe scripts\run_sprint2_local.py `
-  --pool-frac 1.0 --n-boot 500 --output-dir output\sprint2
-```
-
-Sprint 3:
-
-```powershell
-.venv\Scripts\python.exe scripts\run_oof_experiment.py --pool-frac 0.20 --stage screen `
-  --n-boot 300 --output-dir output\improvement\screen
-```
-
-Lệnh đầy đủ của cả tám vòng chạy được — chẩn đoán dữ liệu, Sprint 1–3, data optimization,
-causal foundation, top-tail và Causal Forest — nằm trong một runbook duy nhất:
-[docs/REPRODUCTION.md](docs/REPRODUCTION.md).
-
-Run cần file Criteo v2.1 với SHA-256:
-
-```text
-2716e1bf0fd157a93b5bf86924d9088419dfbac2022c6cd90030220634f616dc
-```
+- Response là ranking policy score, không phải calibrated individual CATE.
+- Không quan sát principal stratum cá nhân.
+- Balance diagnostics không tự chứng minh randomization; cần upstream provenance.
+- Confirmation Sprint 2 đã được quan sát ở Sprint 2 và Sprint 3; kết quả trên tập đó
+  là retrospective confirmation, không phải prospective unseen test.
+- Không có claim SOTA: không challenger nào trong vòng cải tiến thắng được baseline,
+  và benchmark bên ngoài dùng outcome khác nên không so trực tiếp được.
+- Criteo không có outcome để kết luận incremental CLV hoặc observed profit.
 
 ## Đọc theo thứ tự
 
@@ -549,14 +572,3 @@ giải thích từng module, và danh mục bẫy khi đọc kết quả. Sau đ
 
 Chỉ mục đầy đủ kèm trạng thái từng tài liệu: [docs/README.md](docs/README.md) và
 [planning/README.md](planning/README.md).
-
-## Phạm vi suy luận và giới hạn dữ liệu
-
-- Response là ranking policy score, không phải calibrated individual CATE.
-- Không quan sát principal stratum cá nhân.
-- Balance diagnostics không tự chứng minh randomization; cần upstream provenance.
-- Confirmation Sprint 2 đã được quan sát ở Sprint 2 và Sprint 3; kết quả trên tập đó
-  là retrospective confirmation, không phải prospective unseen test.
-- Không có claim SOTA: không challenger nào trong vòng cải tiến thắng được baseline,
-  và benchmark bên ngoài dùng outcome khác nên không so trực tiếp được.
-- Criteo không có outcome để kết luận incremental CLV hoặc observed profit.

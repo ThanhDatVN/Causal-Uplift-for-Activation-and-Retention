@@ -48,7 +48,7 @@ thật.
 
 ## Kết quả đã dùng
 
-Ba mốc Causal Forest trong `report/CAUSAL_FOREST_REPORT.md` mục 5 dẫn số từ đây: tăng dữ liệu
+Ba mốc Causal Forest trong `report/04_CAUSAL_FOREST.md` mục 5 dẫn số từ đây: tăng dữ liệu
 từ `20%` lên `50%` làm RSS tăng `2,3` lần và thời gian tăng `2,9` lần — gần tuyến tính, và
 **không** tạo bước nhảy nào về chất lượng xếp hạng.
 

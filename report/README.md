@@ -3,51 +3,80 @@
 Thư mục này chứa **kết quả đã chạy**. Phương pháp nằm ở [`../docs/`](../docs/); bối cảnh
 nghiên cứu ở [`../planning/`](../planning/).
 
+Tám báo cáo được đánh số theo thứ tự chạy. Mỗi báo cáo gắn với method guide cùng số trong
+[`../docs/methods/`](../docs/methods/): báo cáo nói **kết quả ra sao**, guide nói **cách làm**.
+
 ## Nguồn số chính thức
 
 Tám báo cáo dưới đây là nguồn duy nhất được phép trích dẫn. Nếu một tài liệu khác trong
 repo mâu thuẫn với chúng, ưu tiên báo cáo.
 
-| Báo cáo | Phạm vi | Kết luận chính |
-|---|---|---|
-| [SPRINT_1_FINAL_REPORT.md](SPRINT_1_FINAL_REPORT.md) | Nền tảng causal, sáu model, final test 2.096.940 dòng | Response Qini `0,187886` dẫn đầu; khoảng tin cậy chỉ tách được Response khỏi T-Learner và DR-Learner |
-| [SPRINT_2_FINAL_REPORT.md](SPRINT_2_FINAL_REPORT.md) | Policy, calibration, dashboard, confirmation 1.397.959 dòng | Champion Response top-k; X-Renormalized - Response có CI chứa 0 |
-| [SPRINT_3_FINAL_REPORT.md](SPRINT_3_FINAL_REPORT.md) | Vòng cải tiến có đăng ký trước, web app, ba chẩn đoán bổ sung | Không challenger nào đạt promotion rule; champion giữ nguyên |
-| [CAUSAL_FOREST_REPORT.md](CAUSAL_FOREST_REPORT.md) | Thuật toán chuyên dụng trên ba mốc dữ liệu, chấm cùng holdout Sprint 1 | `policy_area_dr` hạng 1/6, Qini hạng 3/6; CI chứa 0 so với Response nên là hòa |
-| [DATA_OPTIMIZATION_REPORT.md](DATA_OPTIMIZATION_REPORT.md) | Quay lại từ EDA, sentinel/funnel ablation, OOF hai seed và gate từng vấn đề | Response-Sentinel đi tiếp nhưng chưa được promote; champion vẫn là Response |
-| [CAUSAL_FOUNDATION_EXPERIMENT_REPORT.md](CAUSAL_FOUNDATION_EXPERIMENT_REPORT.md) | DINA, Anchored R, Pattern R; synthetic tests, screen hai seed và full finalist | Không causal learner qua screen; Response-Sentinel không ổn định ở full; giữ Response |
-| [TOP_TAIL_RESEARCH_V2_REPORT.md](TOP_TAIL_RESEARCH_V2_REPORT.md) | Paired simultaneous audit của phát hiện hậu nghiệm ở hard budget 1–2%, event support và membership overlap | 16/16 causal point delta dương nhưng 0/16 lower bound vượt 0; không promote, giữ Response |
-| [CAUSAL_FOREST_RARE_OUTCOME_REPORT.md](CAUSAL_FOREST_RARE_OUTCOME_REPORT.md) | Sửa `min_samples_leaf` cho outcome hiếm, chạy trên split Sprint 2/3, chấm bằng DR signal đóng băng | CF hạng 1/10 theo metric chính nhưng CI chứa 0 — hòa. Phát hiện phụ: đổi tín hiệu chấm điểm làm chênh lệch đo được đổi 69 lần |
+| # | Báo cáo | Ngày | Phạm vi | Kết luận chính |
+|---|---|---|---|---|
+| 01 | [Sprint 1 — nền tảng](01_SPRINT_1_FOUNDATION.md) | 29/07/2026 | Nền tảng causal, sáu model, final test 2.096.940 dòng | Response Qini `0,187886` dẫn đầu; khoảng tin cậy chỉ tách được Response khỏi T-Learner và DR-Learner |
+| 02 | [Sprint 2 — policy](02_SPRINT_2_POLICY.md) | 31/07/2026 | Policy, calibration, dashboard, confirmation 1.397.959 dòng | Champion Response top-k; X-Renormalized - Response có CI chứa 0 |
+| 03 | [Sprint 3 — cải tiến](03_SPRINT_3_IMPROVEMENT.md) | 05/08/2026 | Vòng cải tiến có đăng ký trước, web app, ba chẩn đoán bổ sung | Không challenger nào đạt promotion rule; champion giữ nguyên |
+| 04 | [Causal Forest](04_CAUSAL_FOREST.md) | 06/08/2026 | Thuật toán chuyên dụng trên ba mốc dữ liệu, chấm cùng holdout Sprint 1 | `policy_area_dr` hạng 1/6, Qini hạng 3/6; CI chứa 0 so với Response nên là hòa |
+| 05 | [Data optimization](05_DATA_OPTIMIZATION.md) | 09/08/2026 | Quay lại từ EDA, sentinel/funnel ablation, OOF hai seed và gate từng vấn đề | Response-Sentinel đi tiếp nhưng chưa được promote; champion vẫn là Response |
+| 06 | [Causal foundation](06_CAUSAL_FOUNDATION.md) | 09/08/2026 | DINA, Anchored R, Pattern R; synthetic tests, screen hai seed và full finalist | Không causal learner qua screen; Response-Sentinel không ổn định ở full; giữ Response |
+| 07 | [Top-tail research v2](07_TOP_TAIL_RESEARCH.md) | 09/08/2026 | Paired simultaneous audit của phát hiện hậu nghiệm ở hard budget 1–2%, event support và membership overlap | 16/16 causal point delta dương nhưng 0/16 lower bound vượt 0; không promote, giữ Response |
+| 08 | [Causal Forest `rare-outcome`](08_CAUSAL_FOREST_RARE_OUTCOME.md) | 14/08/2026 | Sửa `min_samples_leaf` cho outcome hiếm, chạy trên split Sprint 2/3, chấm bằng DR signal đóng băng | CF hạng 1/10 theo metric chính nhưng CI chứa 0 — hòa. Phát hiện phụ: đổi tín hiệu chấm điểm làm chênh lệch đo được đổi 69 lần |
 
-Đọc Causal Forest rare-outcome trước nếu chỉ có ít thời gian — nó là vòng gần nhất và chứa
-phát hiện về độ nhạy của tín hiệu chấm điểm, thứ ảnh hưởng tới cách đọc mọi bảng còn lại.
+Nếu chỉ có ít thời gian, đọc [báo cáo 08](08_CAUSAL_FOREST_RARE_OUTCOME.md) trước — nó là
+vòng gần nhất và chứa phát hiện về độ nhạy của tín hiệu chấm điểm, thứ ảnh hưởng tới cách đọc
+mọi bảng còn lại.
 
-## Báo cáo tổng hợp
+## Toàn bộ thử nghiệm đã chạy
 
-[`BAO_CAO_THU_HOACH.docx`](BAO_CAO_THU_HOACH.docx) tổng hợp toàn bộ quá trình, kết quả và
-kinh nghiệm rút ra thành một tài liệu liền mạch, định dạng Word: bài toán và khung nhận
-dạng, phương pháp kèm công thức và trích dẫn, sáu vòng cải tiến, biện luận, sản phẩm, và
-phần kinh nghiệm.
+Tám báo cáo ở trên trình bày **kết luận từng vòng**. Bảng này liệt kê **mọi candidate đã
+chạy** — 31 candidate thuộc 12 họ model, cộng ba ensemble — để không thử nghiệm nào chỉ tồn
+tại trong artifact mà không có trong tài liệu.
 
-Nó **không phải nguồn số**. Mọi con số trong đó trích từ tám báo cáo ở trên; khi hai bên
-lệch nhau thì tám báo cáo đúng. Tài liệu này dùng để trình bày tổng thể, không dùng để
-trích dẫn số liệu.
+Một *candidate* là một cấu hình đã đăng ký: họ model + tiền xử lý + siêu tham số. Giải mã tên
+và ánh xạ candidate → họ: [`../docs/README.md`](../docs/README.md) mục "Candidate và họ model".
+
+| Vòng | Candidate đã chạy | Kết cục |
+|:-:|---|---|
+| 1 | `Response`, `S-Learner`, `T-Learner`, `X-Learner`, `DR-Learner` | Response dẫn đầu Qini; CI chỉ tách được Response khỏi T và DR |
+| 2 | `Response`, `X-Renormalized`, `X-Calibrated`, `T-LocalExact` | X-Renormalized cao hơn nhưng CI chứa 0; giữ Response |
+| 3 | `Response`, `X-Renormalized`, `S-Under7`, `T-Under7`, `DR-Regression`, `DR-Binary`, `DR-Binary-MC2`, `R-Regression`, `R-Binary`, `Rank-K05`, `Rank-K1`, `Rank-K2` | 6 dừng ở sàng lọc 20% (cả họ DR và R); 6 lên full development |
+| 3 | `Ensemble-QAgg`, `Ensemble-BestSingle`, `Ensemble-RankAverage` | không cái nào vượt Response theo metric chính |
+| 4 | `Causal-Forest-kaggle-safe` | hạng 1/6 metric chính nhưng CI chứa 0 — hòa |
+| 5 | `Response`, `Response-Sentinel`, `S-Under7`, `S-Sentinel-Under7`, `X-Renormalized`, `Funnel-S`, `Funnel-S-Sentinel` | Response-Sentinel qua gate đi tiếp, CI vẫn chứa 0 |
+| 6 | `Response`, `Response-Sentinel`, `Anchored-R25`, `Anchored-R25-Sentinel`, `Anchored-Pattern-R`, `DINA-CATE-Sentinel` | không causal learner nào qua screen hai seed |
+| 7 | không candidate mới — rà soát 5 challenger × 2 fold seed × 2 mức ngân sách | 16/16 delta dương, 0/16 cận dưới vượt 0 |
+| 8 | `Causal-Forest-rare-outcome` | hạng 1/10 metric chính nhưng CI chứa 0 — hòa |
+
+**31 candidate, 0 được promote.** Registry `output/improvement/registry.csv` được lập từ
+vòng 3 nên ghi `24` trong số 31 — bảy candidate còn lại thuộc vòng 1 và 2, chạy trước khi có
+registry và truy vết qua artifact release của hai vòng đó. Registry ghi `97` lần chạy, nhiều
+hơn số candidate vì mỗi candidate chạy ở nhiều fold seed và nhiều stage, và vì **cả run bị
+dừng sớm cũng được ghi** kèm lý do dừng.
+
+Ba can thiệp **không phải model** cũng đã qua đúng bộ gate như một candidate, vì chúng làm
+đổi kết quả:
+
+| Can thiệp | Vòng | Kết cục |
+|---|:-:|---|
+| Undersampling `k = 7` và khôi phục thang xác suất | 2 | vào bản phát hành |
+| τ-isotonic calibration | 2 | giảm EUCE nhưng ΔQini có CI chứa 0; giữ làm ablation |
+| Sentinel augmentation | 5, 6 | qua gate sàng lọc, trượt gate ổn định ở full |
 
 ## Cách đọc tám báo cáo cùng nhau
 
-Sprint 1 dựng nền tảng đo lường và cho ra một bảng xếp hạng. Sprint 2 biến bảng xếp hạng
-đó thành một quyết định ngân sách có khoảng tin cậy. Sprint 3 đóng băng giao thức chọn
-model trước khi chạy, rồi thử mười hai ứng viên dưới giao thức đó. Báo cáo Causal Forest
-bổ sung một thuật toán chuyên dụng ngoài họ meta-learner, chấm trên cùng holdout Sprint 1.
-Data Optimization lấy failure mode từ EDA và kết quả model để thử hai can thiệp mới mà không
-sửa artifact đã phát hành.
-Causal Foundation tiếp tục từ đó bằng estimator cho binary outcome hiếm, risk anchor và partial
-pooling; finalist được chạy full-development trước khi quyết định giữ champion.
-Top-Tail Research v2 kiểm định riêng tín hiệu 1–2% bằng familywise band và giữ nguyên quyết định vì
-không có lower bound dương.
-Causal Forest rare-outcome đóng nốt giả thuyết cuối về phía model — rằng thuật toán thua vì cấu
-hình đặt sai cho outcome hiếm — và trên đường đi phát hiện rằng tín hiệu chấm điểm, chứ không chỉ
-model, quyết định thứ hạng đọc được.
+Mỗi vòng đóng một giả thuyết về nguyên nhân baseline dự đoán chưa bị vượt qua, và kết quả của
+nó xác định giả thuyết của vòng sau.
+
+| Vòng | Nó thêm gì vào vòng trước | Giả thuyết nó đóng |
+|---|---|---|
+| 01 | dựng nền tảng đo lường và bảng xếp hạng đầu tiên | — |
+| 02 | biến bảng xếp hạng thành quyết định ngân sách có khoảng tin cậy | — |
+| 03 | đóng băng giao thức chọn model **trước** khi chạy, rồi thử mười hai ứng viên | "thua vì giao thức chọn model lỏng" |
+| 04 | thuật toán chuyên dụng ngoài họ meta-learner, chấm trên cùng holdout Sprint 1 | "thua vì chỉ dùng meta-learner" |
+| 05 | can thiệp vào **dữ liệu** thay vì vào model, không sửa artifact đã phát hành | "thua vì biểu diễn dữ liệu che mất tín hiệu" |
+| 06 | estimator cho outcome nhị phân hiếm, risk anchor và partial pooling | "thua vì estimator không hợp với outcome hiếm" |
+| 07 | familywise band cho riêng tín hiệu 1–2% | "thắng ở đuôi nhưng bị pha loãng khi tích phân" |
+| 08 | cấu hình Causal Forest đặt lại theo số học sự kiện mỗi lá | "thua vì cấu hình đặt sai cho outcome hiếm" |
 
 Kết luận xuyên suốt: **không phương pháp nhân quả nào tách được khỏi baseline dự đoán
 outcome** trên bộ dữ liệu này. Bối cảnh nghiên cứu giải thích vì sao đây là chế độ đã được
@@ -87,7 +116,7 @@ giữa các model hàng đầu nằm ở bậc `1e-06` — nhỏ hơn một bậ
 > IPW sang DR thì ra `1,8×` thay vì `2.123×` — chênh gần 7.800 lần. Khi `Δ → 0` do nhiễu, "số
 > dòng cần thêm" tiến ra vô cùng; điều đó phản ánh sự bất định của `Δ`, không phản ánh một yêu
 > cầu dữ liệu có thật. Nên phát biểu bằng **độ rộng CI**, không bằng tỷ lệ dữ liệu cần thêm.
-> Bằng chứng số: [CAUSAL_FOREST_RARE_OUTCOME_REPORT.md](CAUSAL_FOREST_RARE_OUTCOME_REPORT.md)
+> Bằng chứng số: [08_CAUSAL_FOREST_RARE_OUTCOME.md](08_CAUSAL_FOREST_RARE_OUTCOME.md)
 > mục 5.
 
 Toàn bộ tập báo cáo dựa trên phân biệt giữa hai phát biểu:
@@ -116,8 +145,8 @@ nhạy hoặc kết luận được chọn sau khi nhìn số. Bốn cơ chế t
 | Power diagnostic trên `visit` | giao thức thiếu độ nhạy | Đổi sang outcome 4,7%, ba challenger chuyển từ "thua rõ" sang "không phân biệt được" |
 | Paired CI bắt buộc | nhầm point estimate với bằng chứng | Sprint 2 giữ Response dù X-Renormalized cao hơn; Sprint 3 xác nhận quyết định đó đúng |
 
-Dòng thứ ba cho thấy pipeline **có** phản ứng khi tín hiệu mạnh lên, nên việc nó không phản ứng trên `conversion` là phát biểu về dữ liệu chứ không phải về
-pipeline.
+Dòng thứ ba cho thấy pipeline **có** phản ứng khi tín hiệu mạnh lên, nên việc nó không phản
+ứng trên `conversion` là phát biểu về dữ liệu chứ không phải về pipeline.
 
 ### Điều dự án tạo ra có giá trị
 
@@ -131,16 +160,13 @@ tiếp vào một hướng đã hết dư địa.
 
 Cập nhật **14/08/2026**.
 
-| | |
+| Hạng mục | Trạng thái |
 |---|---|
 | Champion | **Response top-k**, không đổi từ Sprint 2 qua cả sáu vòng cải tiến |
 | Số vòng cải tiến đã chạy | 6, mỗi vòng một giao thức đăng ký trước riêng |
 | Số challenger đạt promotion rule | **0** |
 | Cơ chế giải thích | `τ(x) ≈ 0,53 · p₀(x)` — đo trực tiếp trên dữ liệu thô, xem `output/eda/` |
 | Độ phân giải hiện tại | `±1,74e-05` trên `policy_area_dr`, so với chênh lệch bậc `1e-06` |
-
-Tám báo cáo trên là **đóng băng**: không sửa số trong báo cáo đã phát hành. Kết quả mới đi vào
-một báo cáo mới, kèm banner trỏ qua lại.
 
 ## Hướng kế tiếp
 
@@ -155,6 +181,26 @@ Ba hướng còn mở, xếp theo giá trị trên chi phí, ghi đầy đủ �
    giá** chứ không phải model.
 3. M1 hybrid — đã hiện thực, chưa có dòng nào trong registry.
 
+## Báo cáo tổng hợp dạng Word
+
+[`BAO_CAO_THU_HOACH.docx`](BAO_CAO_THU_HOACH.docx) gộp toàn bộ quá trình, kết quả và kinh
+nghiệm rút ra thành một tài liệu liền mạch: bài toán và khung nhận dạng, phương pháp kèm công
+thức và trích dẫn, sáu vòng cải tiến, biện luận, sản phẩm, và phần kinh nghiệm.
+
+Nó **không phải nguồn số**. Mọi con số trong đó trích từ tám báo cáo ở trên; khi hai bên
+lệch nhau thì tám báo cáo đúng. Tài liệu này dùng để trình bày tổng thể, không dùng để
+trích dẫn số liệu.
+
+## Quy tắc của thư mục này
+
+- Mọi con số trong báo cáo phải truy được về một file trong `output/`; xem
+  [`../output/README.md`](../output/README.md) để biết thư mục nào là release.
+- **Báo cáo đã phát hành là đóng băng**: không sửa số trong đó. Nếu kết quả đổi, viết một báo
+  cáo mới và thêm banner trỏ qua lại giữa hai bên.
+- Mọi claim "model A hơn B" phải kèm paired confidence interval.
+- Không claim SOTA: không challenger nào thắng được baseline, và benchmark bên ngoài dùng outcome
+  khác nên không so trực tiếp được.
+
 ## Quy ước trình bày
 
 Bố cục chung: khối metadata dạng danh sách ở đầu (ngày, protocol, nguồn số, trạng thái),
@@ -165,7 +211,7 @@ rộng".
 
 Hai chỗ lệch khỏi bố cục đó, cả hai đều có lý do:
 
-- **Sprint 1 mở bằng phát biểu bài toán**, không phải kết luận. Nó là báo cáo đầu tiên nên
+- **Báo cáo 01 mở bằng phát biểu bài toán**, không phải kết luận. Nó là báo cáo đầu tiên nên
   phải dựng khung khái niệm trước khi có gì để kết luận; bảng kết quả nằm ở mục 6.
 - **Ba báo cáo Sprint không có mục artifact gom cuối** — chúng liệt kê artifact ngay trong
   từng mục hoặc ở khối metadata đầu trang. Năm báo cáo còn lại có mục artifact riêng.
@@ -175,16 +221,6 @@ Báo cáo chỉ chứa **kết quả và diễn giải**; phần vận hành n�
 | Cần gì | Đọc ở đâu |
 |---|---|
 | Lệnh chạy lại một vòng | [`../docs/REPRODUCTION.md`](../docs/REPRODUCTION.md) |
-| Vai trò từng script | [`../scripts/README.md`](../scripts/README.md) |
 | Phương pháp và công thức | [`../docs/README.md`](../docs/README.md) |
+| Vai trò từng script | [`../scripts/README.md`](../scripts/README.md) |
 | Hướng nghiên cứu còn mở | [`../planning/README.md`](../planning/README.md) |
-
-## Quy tắc
-
-- Mọi con số trong báo cáo phải truy được về một file trong `output/`; xem
-  [`../output/README.md`](../output/README.md) để biết thư mục nào là release.
-- Không sửa số trong báo cáo đã phát hành. Nếu kết quả đổi, thêm banner cập nhật và trỏ
-  sang báo cáo mới.
-- Mọi claim "model A hơn B" phải kèm paired confidence interval.
-- Không claim SOTA: không challenger nào thắng được baseline, và benchmark bên ngoài dùng outcome
-  khác nên không so trực tiếp được.

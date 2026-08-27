@@ -1,11 +1,12 @@
 # Runbook tái lập
 
-Toàn bộ lệnh tái lập của các vòng thí nghiệm, gom về một chỗ. Trước đây các lệnh này nằm
-rải rác trong từng báo cáo; báo cáo nay chỉ giữ kết quả và diễn giải, còn phần vận hành
-nằm ở đây.
+- **Phạm vi:** lệnh chạy lại của cả tám vòng thí nghiệm, cộng web app, kiểm thử và Docker
+- **Vai trò từng script:** [`../scripts/README.md`](../scripts/README.md)
+- **Thư mục ghi ra của từng script:** [`../output/README.md`](../output/README.md)
+- **Kết quả mong đợi:** tám báo cáo trong [`../report/`](../report/)
 
-Chỉ mục vai trò từng script: [`../scripts/README.md`](../scripts/README.md). Thư mục ghi
-ra của từng script: [`../output/README.md`](../output/README.md).
+Toàn bộ phần vận hành gom về một chỗ. Trước đây các lệnh này nằm rải rác trong từng báo
+cáo; báo cáo nay chỉ giữ kết quả và diễn giải.
 
 ## Điều kiện tiên quyết
 
@@ -193,7 +194,7 @@ model.
 ### Gate tài nguyên đã dùng để quyết định chạy
 
 Quy trình dưới đây được đăng ký **trước** khi chạy, dựa trên benchmark tài nguyên ở
-[`../report/SPRINT_1_FINAL_REPORT.md`](../report/SPRINT_1_FINAL_REPORT.md) mục 8. Ghi lại vì
+[`../report/01_SPRINT_1_FOUNDATION.md`](../report/01_SPRINT_1_FOUNDATION.md) mục 8. Ghi lại vì
 nó là lý do ba mốc 20/30/50% tồn tại thay vì chạy thẳng 50%.
 
 1. Đọc RAM/CPU live của session.

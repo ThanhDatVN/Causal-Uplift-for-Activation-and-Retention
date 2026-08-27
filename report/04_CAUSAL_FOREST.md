@@ -1,6 +1,7 @@
-# Causal Forest — báo cáo kết quả
+# Báo cáo 04 — Causal Forest trên ba mốc dữ liệu
 
 - **Ngày:** 06/08/2026
+- **Phương pháp:** [`../docs/methods/04_CAUSAL_FOREST.md`](../docs/methods/04_CAUSAL_FOREST.md)
 - **Nguồn số:** `output/causal_forest/preflight_0p2/`, `output/causal_forest/preflight_0p3/`,
   `output/causal_forest/preflight_0p5/`, `output/causal_forest/release/`,
   `output/causal_forest/analysis/`
@@ -9,7 +10,7 @@
 > **Cập nhật 14/08/2026.** Cấu hình trong báo cáo này dùng `min_samples_leaf=500`, chỉ cho
 > khoảng `0,145` sự kiện control mỗi lá — không phù hợp với outcome hiếm. Một vòng riêng đã
 > chạy lại với `min_samples_leaf=10000` trên split Sprint 2/3 và vẫn hòa với Response:
-> [`CAUSAL_FOREST_RARE_OUTCOME_REPORT.md`](CAUSAL_FOREST_RARE_OUTCOME_REPORT.md). Vòng đó cũng
+> [`08_CAUSAL_FOREST_RARE_OUTCOME.md`](08_CAUSAL_FOREST_RARE_OUTCOME.md). Vòng đó cũng
 > cho thấy chấm lại chính artifact của báo cáo này bằng DR signal thay vì IPW làm chênh lệch
 > đo được đổi **69 lần** — xem mục 5 của báo cáo mới trước khi trích số ở đây.
 

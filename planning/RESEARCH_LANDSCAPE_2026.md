@@ -350,7 +350,7 @@ DR/R-Learner — vốn bị dominate rõ trên `conversion` — thu hẹp khoả
 trên cả hai outcome theo metric chính, nên kết luận "Response khó bị đánh bại" không phải
 chỉ là hệ quả của outcome hiếm.
 
-Chi tiết và bảng số: `report/SPRINT_3_FINAL_REPORT.md` mục 7bis.1.
+Chi tiết và bảng số: `report/03_SPRINT_3_IMPROVEMENT.md` mục 7bis.1.
 
 ### 5bis.2 Proxy-ordering diagnostic
 

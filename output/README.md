@@ -145,7 +145,7 @@ fit lại nuisance, nên so trực tiếp được với bảng confirmation Spr
 `signal_sensitivity/` là nguồn số cho một phát hiện cần đọc trước khi trích bất kỳ so sánh nào:
 đổi tín hiệu chấm điểm làm chênh lệch đo được giữa Causal Forest và Response đổi **69 lần**, trên
 đúng cùng bộ điểm và cùng những dòng. Chi tiết:
-`report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md` mục 5.
+`report/08_CAUSAL_FOREST_RARE_OUTCOME.md` mục 5.
 
 **Cảnh báo:** gate của run này báo `failed` vì peak RAM `90,8%` vượt ngưỡng `75%`. Đó là vi phạm
 ngân sách tài nguyên, **không** phải artifact hỏng — `all_finite` và `aligned` đều `true`. Đọc
@@ -158,7 +158,7 @@ ngân sách tài nguyên, **không** phải artifact hỏng — `all_finite` và
 | Đường dẫn | Đã bị thay bởi |
 |---|---|
 | `legacy/first_run_scores/cate_*.npy` | `optimization/cate/*_sprint1_release.npy` |
-| `legacy/qini_comparison.csv`, `legacy/qini_comparison_sprint1.csv` | `report/SPRINT_1_FINAL_REPORT.md` mục 6 |
+| `legacy/qini_comparison.csv`, `legacy/qini_comparison_sprint1.csv` | `report/01_SPRINT_1_FOUNDATION.md` mục 6 |
 | `legacy/qini_curve.png`, `legacy/segments_baseline.csv`, `legacy/eda_summary.csv` | Artifact tương ứng trong `sprint1/` |
 
 **Chỗ dễ trích nhầm nhất:** `legacy/first_run_scores/cate_response.npy` cho Qini

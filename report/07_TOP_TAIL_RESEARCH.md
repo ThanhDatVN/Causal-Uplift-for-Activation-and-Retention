@@ -1,10 +1,10 @@
-# Báo cáo top-tail research v2
+# Báo cáo 07 — Top-tail research v2: kiểm định riêng ngân sách 1–2%
 
 - **Ngày:** 09/08/2026
 - **Protocol:** [`top_tail_research_protocol_v2.json`](../configs/top_tail_research_protocol_v2.json)
 - **Nguồn số:** `output/improvement/top_tail_research_v2/`
 - **Cơ sở nghiên cứu:** [`LATEST_CAUSAL_RESEARCH_AND_EXPERIMENT_PLAN_2026.md`](../planning/LATEST_CAUSAL_RESEARCH_AND_EXPERIMENT_PLAN_2026.md)
-- **Hướng dẫn suy luận:** [`TOP_TAIL_POLICY_INFERENCE_GUIDE.md`](../docs/TOP_TAIL_POLICY_INFERENCE_GUIDE.md)
+- **Phương pháp:** [`../docs/methods/07_TOP_TAIL_INFERENCE.md`](../docs/methods/07_TOP_TAIL_INFERENCE.md)
 
 ## 1. Quyết định
 

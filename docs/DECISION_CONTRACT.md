@@ -1,8 +1,15 @@
-# Hợp đồng quyết định (Decision Contract)
+# Hợp đồng quyết định
+
+- **Hiệu lực:** nguyên văn, không đổi từ Sprint 2
+- **Cập nhật gần nhất:** 05/08/2026, sau Sprint 3
+- **Policy đang phát hành:** Response top-k — xem
+  [`cards/MODEL_CARD_RESPONSE_TOPK.md`](cards/MODEL_CARD_RESPONSE_TOPK.md)
+- **Bằng chứng số:** [`../report/02_SPRINT_2_POLICY.md`](../report/02_SPRINT_2_POLICY.md),
+  [`../report/03_SPRINT_3_IMPROVEMENT.md`](../report/03_SPRINT_3_IMPROVEMENT.md)
 
 **Cập nhật 05/08/2026.** Hợp đồng vẫn có hiệu lực nguyên văn. Sprint 3 chạy lại quyết
 định chọn model bằng một protocol chặt hơn và giữ nguyên champion; xem
-`report/SPRINT_3_FINAL_REPORT.md`. Hai điểm cần đọc kèm:
+`report/03_SPRINT_3_IMPROVEMENT.md`. Hai điểm cần đọc kèm:
 
 1. Metric chính đã đổi từ Qini sang `policy_area_dr` (trung bình DR gross policy value
    trên dải budget 1–30%). Mục 2 dưới đây mô tả lý do chọn Response theo Qini

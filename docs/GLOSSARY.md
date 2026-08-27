@@ -1,11 +1,11 @@
 # Bảng thuật ngữ
 
-Mọi thuật ngữ xuất hiện trong `report/`, `docs/` và `src/`, kèm định nghĩa ngắn và chỗ dùng
-trong repo. Sắp theo **chủ đề**, không theo bảng chữ cái — thuật ngữ cùng nhóm cần đọc cùng
-nhau.
+- **Phạm vi:** 89 thuật ngữ, mọi thuật ngữ xuất hiện trong `report/`, `docs/` và `src/`
+- **Cách sắp xếp:** theo **chủ đề**, 11 mục — thuật ngữ cùng nhóm cần đọc cùng nhau
+- **Quy ước viết:** [README.md](README.md) mục "Quy tắc viết tài liệu"
 
-Quy ước: giữ nguyên tiếng Anh cho tên định danh trong code và thuật ngữ chưa có tương đương
-ổn định. Xem quy ước viết ở [README.md](README.md).
+Giữ nguyên tiếng Anh cho tên định danh trong code và thuật ngữ chưa có tương đương ổn định;
+phần còn lại dịch.
 
 ---
 
@@ -38,6 +38,19 @@ Quy ước: giữ nguyên tiếng Anh cho tên định danh trong code và thu�
 
 ## 3. Họ model
 
+Phân biệt hai mức, vì bảng kết quả và tài liệu phương pháp nói ở hai mức khác nhau:
+
+| Thuật ngữ | Nghĩa |
+|---|---|
+| **Họ model** (family) | Thuật toán và cơ chế của nó. Dự án có **12 họ**; mỗi họ được mô tả ở một guide trong [methods/](methods/) |
+| **Candidate** | Một **cấu hình cụ thể đã đăng ký để chạy** = họ + tiền xử lý + siêu tham số. Tên trong mọi bảng kết quả là tên candidate, không phải tên họ. Dự án đã chạy **31 candidate**. Trường `family` trong `configs/*.json` ghi họ của từng cái |
+
+Nhiều candidate có thể cùng một họ: `DR-Regression`, `DR-Binary`, `DR-Binary-MC2` đều là
+DR-Learner với ba cấu hình nuisance khác nhau. Bảng ánh xạ đầy đủ candidate → họ → vòng:
+[README.md](README.md) mục "Candidate và họ model".
+
+Cơ chế từng họ:
+
 | Thuật ngữ | Cơ chế |
 |---|---|
 | **Response** | Dự đoán `P(Y=1 \| X)`, bỏ qua `T`. **Champion hiện hành.** Không phải CATE estimator |
@@ -61,7 +74,7 @@ Quy ước: giữ nguyên tiếng Anh cho tên định danh trong code và thu�
 ## 4. Tín hiệu chấm điểm
 
 Ba cách gán cho mỗi dòng một con số đại diện đóng góp hiệu ứng. **Đổi tín hiệu làm đổi thứ
-hạng** — xem `report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md` mục 5.
+hạng** — xem `report/08_CAUSAL_FOREST_RARE_OUTCOME.md` mục 5.
 
 | Thuật ngữ | Công thức | Tính chất |
 |---|---|---|
@@ -169,9 +182,9 @@ bản. Chỉ nói được về tỷ lệ ở mức nhóm.
 
 ## Đọc tiếp
 
-| Cần | Mở |
+| Cần gì | Mở |
 |---|---|
 | Mạch phát triển toàn dự án | [END_TO_END_WORKFLOW.md](END_TO_END_WORKFLOW.md) |
-| Công thức metric chi tiết | [SPRINT_3_METHOD_GUIDE.md](SPRINT_3_METHOD_GUIDE.md) |
-| Lý thuyết nền và sáu model | [SPRINT_1_THEORY_AND_METHOD_GUIDE.md](SPRINT_1_THEORY_AND_METHOD_GUIDE.md) |
+| Công thức metric chi tiết | [methods/03_EVALUATION_PROTOCOL.md](methods/03_EVALUATION_PROTOCOL.md) |
+| Lý thuyết nền và năm họ meta-learner | [methods/01_UPLIFT_FOUNDATIONS.md](methods/01_UPLIFT_FOUNDATIONS.md) |
 | Luật ra quyết định | [DECISION_CONTRACT.md](DECISION_CONTRACT.md) |

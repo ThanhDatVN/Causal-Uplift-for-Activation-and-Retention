@@ -1,12 +1,19 @@
-# Hướng dẫn phương pháp và sản phẩm Sprint 2
+# Undersampling, calibration và giá trị policy
 
-## 1. Sprint 2 bổ sung điều gì?
+- **Vòng sinh ra tài liệu:** Sprint 2 — từ bảng xếp hạng sang quyết định ngân sách
+- **Hiện thực:** [`../../src/calibration.py`](../../src/calibration.py),
+  [`../../src/policy.py`](../../src/policy.py)
+- **Kết quả:** [`../../report/02_SPRINT_2_POLICY.md`](../../report/02_SPRINT_2_POLICY.md)
+- **Đọc trước:** [`01_UPLIFT_FOUNDATIONS.md`](01_UPLIFT_FOUNDATIONS.md) —
+  **đọc tiếp:** [`03_EVALUATION_PROTOCOL.md`](03_EVALUATION_PROTOCOL.md)
 
-Sprint 1 trả lời: model nào xếp hạng khách hàng tốt theo uplift? Sprint 2 tiến thêm một
-bước: biến ranking thành policy `target top-k%`, đo uncertainty, kiểm tra chi phí hòa vốn
+## 1. Vòng này bổ sung điều gì
+
+Sprint 1 trả lời: model nào xếp hạng khách hàng tốt theo uplift? Vòng này tiến thêm một
+bước: biến ranking thành policy `target top-k%`, đo bất định, kiểm tra chi phí hòa vốn
 và đóng gói thành dashboard.
 
-Sprint 2 không mở lại final test Sprint 1. Phần bù chính xác của sample 50% Sprint 1
+Vòng này không mở lại final test Sprint 1. Phần bù chính xác của sample 50% Sprint 1
 được dùng làm pool mới, rồi chia:
 
 - fit: 4.193.877 dòng (60%);
@@ -101,7 +108,7 @@ DR/AIPW signal:
 
 Model/policy được fit từ fit/validation; confirmation chỉ dùng để tính
 \(\frac1n\sum\pi(X_i)\phi_i\). Release báo DR làm headline và IPW làm sensitivity. DR
-không có nghĩa “luôn đúng”; trong RCT này propensity được biết/ước lượng ổn định, còn
+không có nghĩa "luôn đúng"; trong RCT này propensity được biết/ước lượng ổn định, còn
 outcome models hỗ trợ giảm variance.
 
 Nguồn: Dudík et al.
@@ -152,10 +159,11 @@ node scripts\smoke_dashboard_browser.mjs
 
 ## 7. Causal Forest
 
-Profile `kaggle-safe` dùng 200 trees, cross-validation 2-fold, `max_samples=0.25`,
-`inference=False`. Vì inference tắt để giảm tài nguyên, `effect_interval()` không phải
-Definition of Done của profile này. Local 0,1% chỉ là code-path smoke; kết quả nghiên cứu
-chỉ tồn tại sau Kaggle gates 20% → 30% → 50%.
+Profile `kaggle-safe` được chốt ở vòng này (`n_estimators=200`, `cv=2`, `max_samples=0,25`,
+`inference=False`) nhưng kết quả nghiên cứu chỉ tồn tại sau các gate Kaggle 20% → 30% → 50%.
+Local 0,1% chỉ là smoke test cho code path.
 
-Kết quả ba stage: [`../report/CAUSAL_FOREST_REPORT.md`](../report/CAUSAL_FOREST_REPORT.md).
-Runbook đầy đủ: [`REPRODUCTION.md`](REPRODUCTION.md) mục 8.
+Cơ chế, số học sự kiện mỗi lá và cả ba profile:
+[`04_CAUSAL_FOREST.md`](04_CAUSAL_FOREST.md). Kết quả ba mốc dữ liệu:
+[`../../report/04_CAUSAL_FOREST.md`](../../report/04_CAUSAL_FOREST.md). Runbook:
+[`../REPRODUCTION.md`](../REPRODUCTION.md) mục 8.

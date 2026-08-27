@@ -4,7 +4,7 @@ Ngày khóa rà soát: **2026-08-09**
 Outcome duy nhất trong phạm vi chính: **`conversion`**  
 Estimand: **conditional ITT của randomized targeting assignment**, thang absolute probability difference  
 Protocol máy đọc được: [`top_tail_research_protocol_v2.json`](../configs/top_tail_research_protocol_v2.json)  
-Kết quả audit: [`TOP_TAIL_RESEARCH_V2_REPORT.md`](../report/TOP_TAIL_RESEARCH_V2_REPORT.md)
+Kết quả audit: [`07_TOP_TAIL_RESEARCH.md`](../report/07_TOP_TAIL_RESEARCH.md)
 
 ## 1. Kết luận điều hành
 
@@ -236,7 +236,7 @@ causal tail là `84`.
 
 Quyết định: giữ **Response**, không promote; chỉ mang giả thuyết sang protocol/dữ liệu randomized mới.
 Chi tiết và đường dẫn artifact nằm ở
-[`TOP_TAIL_RESEARCH_V2_REPORT.md`](../report/TOP_TAIL_RESEARCH_V2_REPORT.md).
+[`07_TOP_TAIL_RESEARCH.md`](../report/07_TOP_TAIL_RESEARCH.md).
 
 ## 9. Thứ tự thực thi
 
@@ -284,7 +284,7 @@ Trên metric chính, CI rộng gấp **119 lần** chênh lệch cần đo.
 > nó không phân biệt được với 0. Chấm lại đúng artifact đó bằng DR signal thay vì IPW cho
 > `1,8×` thay vì `2.123×` — chênh gần 7.800 lần. Phát biểu vững là phát biểu về **độ rộng CI**:
 > trên confirmation, độ phân giải là `±1,74e-05` trong khi chênh lệch cần đo ở bậc `1e-06`.
-> Bằng chứng: [`../report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md`](../report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md)
+> Bằng chứng: [`../report/08_CAUSAL_FOREST_RARE_OUTCOME.md`](../report/08_CAUSAL_FOREST_RARE_OUTCOME.md)
 > mục 5. Kết luận "hướng này đã đóng" **không đổi** — nó nay dựa trên độ phân giải và trên việc
 > vòng `rare-outcome` đã loại nốt giả thuyết cấu hình đặt sai.
 

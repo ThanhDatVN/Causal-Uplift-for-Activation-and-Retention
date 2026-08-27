@@ -113,7 +113,7 @@ Hai trục cấu hình, chọn độc lập nhau:
 smoke không thể bị nhầm thành run thật.
 
 Runbook: [`../docs/REPRODUCTION.md`](../docs/REPRODUCTION.md) mục 8. Kết quả ba mốc:
-[`../report/CAUSAL_FOREST_REPORT.md`](../report/CAUSAL_FOREST_REPORT.md). Notebook của lần
+[`../report/04_CAUSAL_FOREST.md`](../report/04_CAUSAL_FOREST.md). Notebook của lần
 chạy: [`../notebooks/03_causal_forest.ipynb`](../notebooks/03_causal_forest.ipynb).
 
 ## Tái lập release cũ — vẫn chạy được, đừng đổi đường dẫn

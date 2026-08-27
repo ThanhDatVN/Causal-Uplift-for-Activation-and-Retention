@@ -1,10 +1,11 @@
-# Báo cáo Sprint 3 — Vòng cải tiến model, quyết định champion và web application
+# Báo cáo 03 — Sprint 3: vòng cải tiến model, quyết định champion và web application
 
 - **Run ID:** `sprint3-retrospective-confirmation-v1`
 - **Protocol:** `sprint3-improvement-v1`, đăng ký trong `configs/sprint3_improvement_protocol.json`
 - **Ngày:** 05/08/2026
+- **Phương pháp:** [`../docs/methods/03_EVALUATION_PROTOCOL.md`](../docs/methods/03_EVALUATION_PROTOCOL.md)
 - **Nguồn số chính thức:** `output/sprint3/`, `output/improvement/`
-- **Trạng thái:** hoàn thành. Kết quả Causal Forest nằm ở `report/CAUSAL_FOREST_REPORT.md`
+- **Trạng thái:** hoàn thành. Kết quả Causal Forest nằm ở `report/04_CAUSAL_FOREST.md`
   và không thuộc release Sprint 3 — nó chấm trên holdout Sprint 1 với IPW signal, còn các
   challenger trong báo cáo này chấm trên confirmation Sprint 2 với DR signal
 
@@ -432,7 +433,7 @@ nhớ toàn hệ thống. Do artifact cũ không ghi chỉ số phần trăm nà
 sử không được suy diễn là pass; migration v2 đánh dấu fail bảo thủ.
 
 Causal Forest đã chạy trên Kaggle sau khi Sprint 3 chốt — xem
-`report/CAUSAL_FOREST_REPORT.md`. Kết quả đó **không** thuộc release Sprint 3 và không
+`report/04_CAUSAL_FOREST.md`. Kết quả đó **không** thuộc release Sprint 3 và không
 so trực tiếp được với các challenger trong báo cáo này: nó chạy trên final test Sprint 1
 với IPW signal, còn các challenger ở đây chạy trên confirmation Sprint 2 với DR signal
 và cross-fitting. Champion không đổi.
@@ -476,7 +477,7 @@ một test chức năng chấm điểm 2.000 dòng Criteo thật: ở budget 10%
 - **Causal Forest Kaggle 20/30/50** — đã hoàn tất sau khi báo cáo này chốt, ngày
   06/08/2026. Ba stage đều `passed`; ở `frac=0.50` holdout trùng khít final test
   Sprint 1 như đã dự kiến. Kết quả và giới hạn diễn giải:
-  `report/CAUSAL_FOREST_REPORT.md`.
+  `report/04_CAUSAL_FOREST.md`.
 - **pROCini (JMLR 2025)** nằm trong P0 của kế hoạch nhưng không được hiện thực:
   trang paper công khai không cung cấp công thức và repo không tiếp cận được bản
   đầy đủ. Hiện thực từ suy đoán sẽ vi phạm quy tắc không tự chế công thức của dự

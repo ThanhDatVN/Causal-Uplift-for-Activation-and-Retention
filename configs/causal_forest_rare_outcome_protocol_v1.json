@@ -3,7 +3,7 @@
   "created_utc": "2026-08-13",
   "status": "completed_not_promoted",
   "result": {
-    "report": "report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md",
+    "report": "report/08_CAUSAL_FOREST_RARE_OUTCOME.md",
     "policy_area_dr_causal_forest": 0.000914,
     "policy_area_dr_response": 0.000912,
     "rank_on_primary_metric": "1/10",

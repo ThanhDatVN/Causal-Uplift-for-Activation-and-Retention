@@ -1,7 +1,8 @@
-# Báo cáo Sprint 2 — Từ mô hình causal đến policy và dashboard
+# Báo cáo 02 — Sprint 2: từ mô hình causal đến policy và dashboard
 
 - **Run ID:** `sprint2-local-exact-calibration-v1`
 - **Ngày:** 31/07/2026
+- **Phương pháp:** [`../docs/methods/02_CALIBRATION_AND_POLICY_VALUE.md`](../docs/methods/02_CALIBRATION_AND_POLICY_VALUE.md)
 - **Nguồn số chính thức:** `output/sprint2/`
 - **Trạng thái:** hoàn thành pipeline local và dashboard; Causal Forest trên Kaggle còn treo
   tại thời điểm chốt báo cáo
@@ -94,7 +95,7 @@ Paired Qini:
 | T-LocalExact - X-Renormalized | -0,073889 | [-0,107381; -0,035891] | CI nằm hoàn toàn dưới 0 |
 
 Calibration cải thiện scale EUCE nhưng không chứng minh ranking tốt hơn. Kết quả cho thấy
-phương pháp “exact” không tự động cải thiện ranking so với phép xấp xỉ đang dùng cho rare
+phương pháp "exact" không tự động cải thiện ranking so với phép xấp xỉ đang dùng cho rare
 outcome.
 
 ### 4.1 Nhận xét — calibration và ranking là hai trục độc lập
@@ -177,7 +178,7 @@ Response ở cả hai fold seed, và chênh lệch trên confirmation là `-0,00
 - `output/product/screenshots/dashboard_screenshot.png`: bằng chứng visual.
 - `scripts/smoke_dashboard_browser.mjs`: replay bốn scenario.
 - `docs/DECISION_CONTRACT.md`: rule, formula và guardrails.
-- data/model cards trong `docs/data_cards/` và `docs/model_cards/`.
+- data card và model card trong `docs/cards/`.
 
 Dashboard chỉ dùng artifact freeze, không train/download implicit.
 
@@ -194,7 +195,7 @@ Full local Sprint 2:
 
 Causal Forest local smoke 0,1% pass. Kaggle run vẫn cần external session/dataset
 attachment; runbook đầy đủ ở [`../docs/REPRODUCTION.md`](../docs/REPRODUCTION.md) mục 8 và kết
-quả ba mốc ở [`CAUSAL_FOREST_REPORT.md`](CAUSAL_FOREST_REPORT.md). `inference=False` của safe
+quả ba mốc ở [`04_CAUSAL_FOREST.md`](04_CAUSAL_FOREST.md). `inference=False` của safe
 profile có nghĩa không yêu cầu `effect_interval()`.
 
 ## 8. Bằng chứng chất lượng
@@ -214,7 +215,7 @@ Lệnh đầy đủ: [`../docs/REPRODUCTION.md`](../docs/REPRODUCTION.md) mục 
 ## 10. Hạng mục chưa hoàn thành và phạm vi không được suy rộng
 
 - Causal Forest Kaggle 20/30/50 chưa chạy. *(Cập nhật 06/08/2026: đã chạy xong sau khi
-  báo cáo này chốt. Kết quả và giới hạn diễn giải ở `report/CAUSAL_FOREST_REPORT.md`;
+  báo cáo này chốt. Kết quả và giới hạn diễn giải ở `report/04_CAUSAL_FOREST.md`;
   kết luận của Sprint 2 giữ nguyên vì nó phản ánh bằng chứng có tại thời điểm chốt.)*
 - Chưa có production A/B test của learned policy.
 - Chưa có actual monetary outcome hoặc long-term CLV.

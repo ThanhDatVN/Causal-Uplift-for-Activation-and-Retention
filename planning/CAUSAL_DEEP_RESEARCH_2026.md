@@ -2,7 +2,7 @@
 
 Ngày rà soát: 2026-08-09  
 Trạng thái: follow-up `top-tail-research-v2` đã chạy retrospective inference; chưa fit model mới trên Criteo  
-Nguồn số nội bộ: [causal foundation report](../report/CAUSAL_FOUNDATION_EXPERIMENT_REPORT.md),
+Nguồn số nội bộ: [causal foundation report](../report/06_CAUSAL_FOUNDATION.md),
 [`budget_deltas.csv`](../output/improvement/causal_foundation_analysis/budget_deltas.csv) và
 [`run_manifest.json`](../output/improvement/causal_foundation_finalist_seed101/run_manifest.json)
 
@@ -10,7 +10,7 @@ Nguồn số nội bộ: [causal foundation report](../report/CAUSAL_FOUNDATION_
 > point deltas đều dương, nhưng 0/16 pointwise và 0/16 simultaneous lower bounds vượt 0; minimum causal
 > overlap là 61,31% và minimum control tail events là 84. Vì vậy champion vẫn là Response. Xem
 > [research/experiment plan mới nhất](LATEST_CAUSAL_RESEARCH_AND_EXPERIMENT_PLAN_2026.md) và
-> [báo cáo top-tail v2](../report/TOP_TAIL_RESEARCH_V2_REPORT.md).
+> [báo cáo top-tail v2](../report/07_TOP_TAIL_RESEARCH.md).
 
 ## 0. Kết luận điều hành
 

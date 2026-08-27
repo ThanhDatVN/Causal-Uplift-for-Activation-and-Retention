@@ -1,16 +1,21 @@
-# Data Card — Criteo Uplift Prediction Dataset v2.1
+# Data card — Criteo Uplift Prediction Dataset v2.1
 
-## Identity
+- **Bộ dữ liệu:** Criteo Uplift Prediction Dataset v2.1
+- **Vai trò trong dự án:** nguồn dữ liệu duy nhất của mọi vòng thí nghiệm
+- **Chẩn đoán đầy đủ:** [`../../output/eda/`](../../output/eda/)
+- **Đọc kèm:** [`../methods/01_UPLIFT_FOUNDATIONS.md`](../methods/01_UPLIFT_FOUNDATIONS.md) mục 2
 
-- Local file: `data/criteo-research-uplift-v2.1.csv.gz`
+## 1. Định danh
+
+- File cục bộ: `data/criteo-research-uplift-v2.1.csv.gz`
 - SHA-256: `2716e1bf0fd157a93b5bf86924d9088419dfbac2022c6cd90030220634f616dc`
-- Rows/columns: 13.979.592 × 16
-- Upstream description:
+- Số dòng/cột: 13.979.592 × 16
+- Mô tả từ nguồn:
   [Criteo AI Lab](https://ailab.criteo.com/criteo-uplift-prediction-dataset/)
-- Mirror/data description:
+- Bản đối chiếu:
   [Criteo trên Hugging Face](https://huggingface.co/datasets/criteo/criteo-uplift)
 
-Người tái sử dụng phải tự kiểm tra terms của upstream dataset. Dự án không tự gán một
+Người tái sử dụng phải tự kiểm tra điều khoản của nguồn. Dự án không tự gán một
 license mới cho dữ liệu.
 
 Nguồn Criteo cho biết bản public được ghép từ nhiều incrementality test và được
@@ -19,12 +24,12 @@ trên benchmark public v2.1, không phải ước lượng có thể suy ngượ
 campaign gốc. Các feature cũng đã được ẩn danh và chiếu ngẫu nhiên; dự án có thể đánh giá
 ranking/policy nhưng không thể gán ý nghĩa kinh doanh cho từng `f0`–`f11`.
 
-## Fields used
+## 2. Trường dữ liệu được dùng
 
-- Features: `f0` … `f11` (pre-treatment anonymous features).
+- Đặc trưng: `f0` … `f11` — ẩn danh, quan sát **trước** treatment.
 - Treatment: `treatment`.
-- Primary outcome: `conversion`.
-- Excluded from features: `visit`, `exposure`. Nguồn mô tả `exposure` là việc người dùng
+- Outcome chính: `conversion`.
+- **Cấm** dùng làm đặc trưng: `visit`, `exposure`. Nguồn mô tả `exposure` là việc người dùng
   thực tế đã được quảng cáo tiếp cận; cả hai trường không được coi là baseline covariate
   trước treatment trong pipeline này.
 
@@ -33,7 +38,7 @@ outcome để factorize joint probability, không phải feature của người 
 theo `source_index`; `predict(X)` vẫn chỉ nhận `f0..f11`. Không diễn giải mô hình conditional
 qua `visit` như direct hoặc mediated causal effect.
 
-## Quality contract
+## 3. Hợp đồng chất lượng
 
 - không missing;
 - mọi feature hữu hạn;
@@ -45,7 +50,7 @@ qua `visit` như direct hoặc mediated causal effect.
 Balance AUC/SMD là diagnostic, không tự chứng minh randomization. Identification dựa vào
 provenance randomized incrementality test của nguồn Criteo.
 
-## Cấu trúc feature — điều mà "không missing" không nói ra
+## 4. Cấu trúc đặc trưng — điều mà "không missing" không nói ra
 
 Contract "không missing" đúng về mặt cú pháp. Chẩn đoán đầy đủ ở `output/eda/` cho thấy cấu
 trúc thật khác hẳn ấn tượng của một bảng 12 biến liên tục:
@@ -68,12 +73,12 @@ Cách dùng đúng: giải thích vì sao không gian covariate hiệu dụng h�
 nhiều. Champion không dùng feature phái sinh; protocol data optimization chỉ kiểm tra cờ
 sentinel fold-local như một ablation, chưa đưa nó vào release.
 
-## Sprint 2 split
+## 5. Cách chia dữ liệu từ Sprint 2
 
 Phần 50% được Sprint 1 chọn bằng stratified sample seed 42 được loại hoàn toàn. Phần bù
 6.989.795 dòng được chia:
 
-| Split | Rows | Vai trò |
+| Split | Số dòng | Vai trò |
 |---|---:|---|
 | fit | 4.193.877 | fit model/nuisance |
 | validation | 1.397.959 | calibration và chọn champion |
@@ -81,8 +86,8 @@ Phần 50% được Sprint 1 chọn bằng stratified sample seed 42 được lo
 
 Index hash và seed nằm trong `output/sprint2/protocol_manifest.json`.
 
-## Missing business fields
+## 6. Trường kinh doanh không có trong dữ liệu
 
-Dataset không có customer revenue, margin, contact cost hay long-term horizon. Vì vậy
-mọi monetary/value result chỉ là scenario assumption; dataset này chưa đủ để kết luận
-incremental CLV.
+Dữ liệu không có doanh thu trên khách hàng, biên lợi nhuận, chi phí tiếp cận hay khung
+thời gian dài hạn. Vì vậy mọi kết quả quy ra tiền chỉ là **giả định kịch bản**; bộ dữ liệu
+này chưa đủ để kết luận về CLV tăng thêm.

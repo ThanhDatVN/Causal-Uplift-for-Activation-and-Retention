@@ -1,7 +1,13 @@
-# Hướng dẫn lý thuyết và phương pháp Sprint 1
+# Nền tảng uplift — đại lượng đích, họ model và khung đánh giá
 
-Tài liệu này giúp đọc code và giải thích dự án bằng tiếng Việt. Kết quả số chính thức
-nằm ở `report/SPRINT_1_FINAL_REPORT.md`.
+- **Vòng sinh ra tài liệu:** Sprint 1 — nền tảng causal và bảng xếp hạng đầu tiên
+- **Hiện thực:** [`../../src/baselines.py`](../../src/baselines.py),
+  [`../../src/evaluation.py`](../../src/evaluation.py)
+- **Kết quả:** [`../../report/01_SPRINT_1_FOUNDATION.md`](../../report/01_SPRINT_1_FOUNDATION.md)
+- **Đọc tiếp:** [`02_CALIBRATION_AND_POLICY_VALUE.md`](02_CALIBRATION_AND_POLICY_VALUE.md)
+
+Đây là tài liệu vào cửa của `docs/`. Nó dựng đại lượng đích, điều kiện nhận dạng, năm họ
+model của bảng release đầu tiên và khung metric mà mọi vòng sau đều dùng lại.
 
 ## 1. Predicted conversion khác uplift thế nào?
 
@@ -42,7 +48,11 @@ thì chênh lệch outcome trung bình giữa hai arm ước lượng ATE. Để
 
 Balance table và propensity AUC gần 0,5 là diagnostic, không thay cho provenance của RCT.
 
-## 3. Năm mô hình đang dùng
+## 3. Năm họ model của bảng release Sprint 1
+
+Causal Forest là họ thứ sáu, thêm ở một vòng sau và mô tả riêng ở
+[`04_CAUSAL_FOREST.md`](04_CAUSAL_FOREST.md); các estimator cho outcome hiếm nằm ở
+[`06_RARE_OUTCOME_LEARNERS.md`](06_RARE_OUTCOME_LEARNERS.md).
 
 ### Response model
 
@@ -94,7 +104,7 @@ Với propensity \(e(x)=P(T=1\mid X=x)\), pseudo-outcome dạng AIPW là:
 -\frac{(1-T)(Y-\hat\mu_0(x))}{1-\hat e(x)}
 \]
 
-Sau đó regress \(\phi\) lên `X`. “Doubly robust” nói về tính chất của nuisance
+Sau đó regress \(\phi\) lên `X`. "Doubly robust" nói về tính chất của nuisance
 estimators dưới điều kiện lý thuyết; nó không có nghĩa model luôn tốt hơn trong finite
 sample. Project dùng propensity prior của RCT, tránh học thêm nhiễu không cần thiết.
 
@@ -141,7 +151,7 @@ Sắp score giảm dần. Tại mỗi prefix, ước lượng incremental outcom
 chuẩn hóa theo treatment/control. Qini đo phần gain của ranking so với đường random.
 Implementation của project dùng cùng convention với `sklift.metrics.qini_curve`.
 
-Qini cao trả lời “model xếp đúng nhóm có uplift cao không?”, không trả lời score có
+Qini cao trả lời "model xếp đúng nhóm có uplift cao không?", không trả lời score có
 calibrated như xác suất hay không.
 
 ### AUUC
@@ -187,40 +197,42 @@ sort; unit test kiểm tra kết quả đúng với bootstrap expanded-sample ch
 - Chỉ X-Learner cải tiến vượt baseline ở ablation test.
 - CI chênh lệch Response–S và Response–X chứa 0: chưa đủ bằng chứng để phân biệt các ranking.
 - Top 10% theo Response giữ khoảng 72,7% uplift toàn holdout, không phải 85%.
-- Score âm không xác định principal stratum “Sleeping Dogs” của từng người.
+- Score âm không xác định principal stratum "Sleeping Dogs" của từng người.
 - Kết quả là retrospective policy evaluation trên một RCT; chưa phải online lift.
 
 ## 9. Nguồn tham khảo
 
-- Criteo dataset: https://ailab.criteo.com/criteo-uplift-prediction-dataset/
-- Künzel et al., meta-learners: https://doi.org/10.1073/pnas.1804597116
-- Kennedy, DR-Learner: https://arxiv.org/abs/2004.14497
-- Nyberg et al., rare outcomes: https://proceedings.mlr.press/v157/nyberg21a.html
-- Wager & Athey, causal forests:
-  https://doi.org/10.1080/01621459.2017.1319839
-- scikit-uplift, Qini convention:
-  https://www.uplift-modeling.com/en/v0.3.2/api/metrics/qini_curve.html
-- Efron & Tibshirani, bootstrap:
-  https://doi.org/10.1201/9780429246593
+- Criteo, [bộ dữ liệu uplift](https://ailab.criteo.com/criteo-uplift-prediction-dataset/)
+- Künzel và cộng sự,
+  [*Metalearners for estimating heterogeneous treatment effects*](https://doi.org/10.1073/pnas.1804597116),
+  PNAS 2019
+- Kennedy,
+  [*Towards Optimal Doubly Robust Estimation of Heterogeneous Causal Effects*](https://arxiv.org/abs/2004.14497)
+- Nyberg và cộng sự,
+  [*Uplift modeling with high class imbalance*](https://proceedings.mlr.press/v157/nyberg21a.html),
+  ACML 2021
+- Wager & Athey,
+  [*Estimation and Inference of Heterogeneous Treatment Effects using Random Forests*](https://doi.org/10.1080/01621459.2017.1319839),
+  JASA 2018
+- scikit-uplift,
+  [quy ước Qini](https://www.uplift-modeling.com/en/v0.3.2/api/metrics/qini_curve.html)
+- Efron & Tibshirani,
+  [*An Introduction to the Bootstrap*](https://doi.org/10.1201/9780429246593)
 
-## 10. Research backlog đã sàng lọc
+## 10. Backlog Sprint 1 và kết cục của nó
 
-Không thêm model chỉ để tăng số lượng. Thứ tự thử trong Sprint 2:
+Bốn hướng dưới đây được sàng lọc ở cuối Sprint 1. Cả bốn đều đã chạy, nên mục này giữ lại
+để đối chiếu ý định ban đầu với kết quả, không phải để mô tả việc còn phải làm.
 
-1. **Calibration sau under-sampling:** đọc bản mở rộng của Nyberg & Klami (2023), triển
-   khai inverse probability mapping/isotonic calibration đúng protocol rồi so EUCE và
-   policy value. Đây là ưu tiên cao nhất vì candidate X hiện chỉ rescale `1/k`.
-   Nguồn: https://doi.org/10.1007/s10618-023-00917-9
-2. **R-Learner:** challenger orthogonalized phù hợp để kiểm tra xem residualization có
-   ổn định hơn meta-learners khi outcome signal lớn hơn treatment signal hay không. Chỉ
-   mở test mới sau khi khóa cấu hình trên validation.
-   Nguồn: https://doi.org/10.1093/biomet/asaa076
-3. **Policy learning theo budget/cost:** sau khi CATE/ranking ổn định, tối ưu decision
-   rule trực tiếp dưới constraint thay vì mặc định chọn top-q.
-   Nguồn: https://doi.org/10.3982/ECTA15732
-4. **Causal Forest:** chạy learning curve theo runbook, không ưu tiên hơn calibration và
-   policy chỉ vì model phức tạp.
+| Hướng đã đăng ký | Nguồn | Nơi nó được chạy | Kết cục |
+|---|---|---|---|
+| Calibration sau under-sampling | [Nyberg & Klami 2023](https://doi.org/10.1007/s10618-023-00917-9) | [`02_CALIBRATION_AND_POLICY_VALUE.md`](02_CALIBRATION_AND_POLICY_VALUE.md) | τ-isotonic giảm EUCE nhưng ΔQini có CI chứa 0; giữ làm ablation |
+| R-Learner | [Nie & Wager 2021](https://doi.org/10.1093/biomet/asaa076) | [`06_RARE_OUTCOME_LEARNERS.md`](06_RARE_OUTCOME_LEARNERS.md) | Anchored R không qua gate hai fold seed |
+| Policy learning theo ngân sách | [Athey & Wager 2021](https://doi.org/10.3982/ECTA15732) | [`03_EVALUATION_PROTOCOL.md`](03_EVALUATION_PROTOCOL.md) | thành metric chính `policy_area_dr` |
+| Causal Forest | [Wager & Athey 2018](https://doi.org/10.1080/01621459.2017.1319839) | [`04_CAUSAL_FOREST.md`](04_CAUSAL_FOREST.md) | hai vòng, cả hai hòa với Response theo paired CI |
 
-Deep uplift/TARNet/DragonNet chưa ưu tiên trong sáu tuần: dữ liệu tabular 12 feature,
-outcome hiếm và mục tiêu dự án cần evaluation/policy/deployment chắc hơn là thêm
-neural architecture tốn compute nhưng chưa có hypothesis cụ thể.
+Deep uplift (TARNet, DragonNet) không được mở: dữ liệu tabular 12 đặc trưng, outcome hiếm,
+và trần phân giải của phép đo — đo ở
+[`../../report/08_CAUSAL_FOREST_RARE_OUTCOME.md`](../../report/08_CAUSAL_FOREST_RARE_OUTCOME.md)
+mục 5 — nằm dưới chênh lệch cần phân biệt, nên thêm kiến trúc mới không đổi được kết luận.
+Hướng còn mở ghi ở [`../../planning/README.md`](../../planning/README.md).

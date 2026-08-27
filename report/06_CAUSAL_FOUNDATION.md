@@ -1,7 +1,8 @@
-# Báo cáo causal foundation v1
+# Báo cáo 06 — Causal foundation: estimator cho outcome nhị phân hiếm
 
 - **Ngày:** 09/08/2026
 - **Protocol:** `configs/causal_foundation_protocol_v1.json`
+- **Phương pháp:** [`../docs/methods/06_RARE_OUTCOME_LEARNERS.md`](../docs/methods/06_RARE_OUTCOME_LEARNERS.md)
 - **Research khóa trước:** `planning/CAUSAL_FOUNDATION_RESEARCH.md`
 - **Nguồn số:** `output/improvement/causal_foundation_comparison/`,
   `output/improvement/causal_foundation_finalist_comparison/`,
@@ -9,7 +10,7 @@
 - **Phạm vi bằng chứng:** development OOF, **không đọc confirmation**
 
 > **Vòng tiếp theo:** phát hiện hậu nghiệm ở budget 1–2% đã được kiểm lại bằng paired
-> simultaneous band trong [`TOP_TAIL_RESEARCH_V2_REPORT.md`](TOP_TAIL_RESEARCH_V2_REPORT.md).
+> simultaneous band trong [`07_TOP_TAIL_RESEARCH.md`](07_TOP_TAIL_RESEARCH.md).
 > Lần kiểm đó không tìm thấy bằng chứng vượt trội và không thay đổi quyết định giữ Response
 > của báo cáo này.
 
@@ -199,7 +200,7 @@ Nguồn số:
 Lệnh tái lập đầy đủ, gồm cả bước ghép các run chạy tách tiến trình:
 [`../docs/REPRODUCTION.md`](../docs/REPRODUCTION.md) mục 6. Bước phân tích không fit model và
 không đọc confirmation. Chi tiết lý thuyết và hiện thực nằm ở
-[method guide](../docs/CAUSAL_FOUNDATION_METHOD_GUIDE.md).
+[method guide](../docs/methods/06_RARE_OUTCOME_LEARNERS.md).
 
 Kiểm thử cuối:
 

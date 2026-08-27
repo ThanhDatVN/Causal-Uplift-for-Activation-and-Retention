@@ -1,15 +1,22 @@
-# Model Card — Response top-k Policy
+# Model card — policy Response top-k
 
-**Cập nhật 05/08/2026 sau Sprint 3.** Champion không đổi; bằng chứng ủng hộ nó đã được
-mở rộng. Xem mục "Sprint 3 re-evaluation" bên dưới trước khi trích số Sprint 2.
+- **Champion hiện hành:** Response top-k, không đổi từ Sprint 2 qua cả sáu vòng cải tiến
+- **Phát hành lần đầu:** Sprint 2 — 31/07/2026
+- **Cập nhật gần nhất:** 05/08/2026, sau Sprint 3
+- **Luật quyết định:** [`../DECISION_CONTRACT.md`](../DECISION_CONTRACT.md)
+- **Bằng chứng số:** [`../../report/02_SPRINT_2_POLICY.md`](../../report/02_SPRINT_2_POLICY.md),
+  [`../../report/03_SPRINT_3_IMPROVEMENT.md`](../../report/03_SPRINT_3_IMPROVEMENT.md)
 
-## Intended use
+Champion không đổi sau Sprint 3; bằng chứng ủng hộ nó đã được mở rộng. Đọc mục 4 trước khi
+trích số của Sprint 2.
 
-Offline decision support cho bài toán chọn top `k%` khách hàng trong một campaign có
-population tương tự Criteo RCT. Không dùng để ra quyết định nhạy cảm, không dùng thay
-production experiment và không dùng để gán causal label cho cá nhân.
+## 1. Phạm vi sử dụng
 
-## Champion
+Hỗ trợ quyết định offline cho bài toán chọn top `k%` khách hàng trong một campaign có quần
+thể tương tự Criteo RCT. Không dùng để ra quyết định nhạy cảm, không dùng thay cho một thí
+nghiệm chạy thật, và không dùng để gán nhãn nhân quả cho cá nhân.
+
+## 2. Model được phát hành
 
 **Response baseline** (LightGBM classifier dự báo conversion từ `f0`–`f11`) được chọn
 trên validation theo Qini. Nó cung cấp ranking policy, không phải CATE probability.
@@ -21,9 +28,9 @@ Confirmation:
 - X-Renormalized - Response Qini `0,008768`,
   paired 95% CI `[-0,018626; 0,038772]`.
 
-Challenger chưa chứng minh hơn champion; release ưu tiên parsimony.
+Challenger chưa chứng minh hơn champion; bản phát hành ưu tiên model ít thành phần hơn.
 
-## Policy result
+## 3. Kết quả policy
 
 Tại top 10%, `value_per_conversion=1`, `contact_cost=0,0005`:
 
@@ -32,9 +39,9 @@ Tại top 10%, `value_per_conversion=1`, `contact_cost=0,0005`:
 - ΔDR net so random 95% CI `[0,000582; 0,000928]`;
 - 500 paired bootstrap resamples.
 
-Đây là conversion-equivalent scenario, không phải actual profit.
+Đây là kịch bản quy đổi theo conversion, không phải lợi nhuận thật.
 
-## Sprint 3 re-evaluation (05/08/2026)
+## 4. Đánh giá lại ở Sprint 3 — 05/08/2026
 
 Champion được đưa qua một vòng thử thách có protocol đăng ký trước với metric chính
 mới `policy_area_dr`, 3-fold cross-fitting trên 5.591.836 dòng ở hai fold seed, và 8
@@ -55,16 +62,20 @@ Tại top 10%, `value_per_conversion=1`, `contact_cost=0,0005` trên confirmatio
 Sprint 3: DR net/customer `0,000856`, 95% CI `[0,000675; 0,001044]`, ΔDR so random
 95% CI `[0,000638; 0,000994]`.
 
-**Cảnh báo diễn giải:** theo Qini, ba model (Ensemble-QAgg `0,209845`, S-Under7
-`0,205904`, X-Renormalized `0,201812`) xếp **trên** Response `0,192989`. Theo metric
-chính đã đăng ký trước và theo AUTOC, Response đứng đầu. Không trích một trong hai
-nhóm số này rời khỏi ngữ cảnh còn lại.
+**Cảnh báo diễn giải:** theo Qini, **bốn** model xếp **trên** Response `0,192989` —
+Ensemble-QAgg `0,209845`, S-Under7 `0,205904`, X-Renormalized `0,201812` và
+Ensemble-RankAverage `0,195022`. Response chỉ đứng hạng `6/9` theo Qini. Theo metric chính
+đã đăng ký trước và theo AUTOC, Response đứng đầu. Không trích một trong hai nhóm số này
+rời khỏi ngữ cảnh còn lại.
+
+*(Ensemble-BestSingle cũng ở `0,201812` nhưng không đếm riêng: nó chọn đúng X-Renormalized
+nên trùng khít mọi cột.)*
 
 Scorer phục vụ web app được fit trên development pool (Sprint 2 `fit + validation`),
 lưu tại `output/product/webapp/champion_scorer.joblib`, metadata tại
 `output/product/webapp/champion_scorer.json`.
 
-## Known limitations
+## 5. Giới hạn đã biết
 
 - Response score không calibrated về individual treatment effect.
 - Confirmation là offline RCT replay, chưa có production policy deployment.
@@ -78,7 +89,7 @@ lưu tại `output/product/webapp/champion_scorer.joblib`, metadata tại
 - Confirmation đã được dùng để lập báo cáo Sprint 2; các vòng phát triển model sau không
   được gọi nó là holdout chưa quan sát.
 
-## Monitoring nếu triển khai
+## 6. Giám sát nếu triển khai
 
 - feature/schema drift và missing rate;
 - treatment propensity và overlap;

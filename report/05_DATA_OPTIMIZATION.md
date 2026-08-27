@@ -1,7 +1,8 @@
-# Báo cáo tối ưu từ phân tích dữ liệu — protocol v1
+# Báo cáo 05 — Data optimization: can thiệp vào biểu diễn dữ liệu
 
 - **Ngày:** 09/08/2026
 - **Protocol:** `configs/data_optimization_protocol_v1.json`
+- **Phương pháp:** [`../docs/methods/05_DATA_REPRESENTATION.md`](../docs/methods/05_DATA_REPRESENTATION.md)
 - **Nguồn số:** `output/improvement/data_opt_screen_seed101/`,
   `output/improvement/data_opt_screen_seed202/`, `output/improvement/data_opt_comparison/`
 - **Phạm vi bằng chứng:** development OOF, **không đọc confirmation**
@@ -45,7 +46,7 @@ không có post-treatment feature ở thời điểm ra quyết định.
 ### 2.2 Cấu trúc sentinel-like
 
 EDA cho thấy 6/12 feature có hơn 90% khối lượng tại đúng một giá trị, chỉ có 53 pattern
-“ở mode/khác mode”, và heterogeneity theo các pattern này có ý nghĩa. Cấu trúc này có thể khó
+"ở mode/khác mode", và heterogeneity theo các pattern này có ý nghĩa. Cấu trúc này có thể khó
 được biểu diễn ổn định khi conversion hiếm.
 
 Can thiệp: trong từng OOF fold, chỉ từ `X_train`:
@@ -132,7 +133,7 @@ So sánh paired `Response-Sentinel - Response` tại seed chính:
 | AUTOC difference | `+2,4873e-05` |
 | AUTOC 95% CI | `[-2,6180e-05; 8,1354e-05]` |
 
-CI chứa 0 nên chưa có bằng chứng để nói challenger tốt hơn. Tuy nhiên gate “đi tiếp” chỉ yêu cầu
+CI chứa 0 nên chưa có bằng chứng để nói challenger tốt hơn. Tuy nhiên gate "đi tiếp" chỉ yêu cầu
 point estimate dương trên cả hai seed; `Response-Sentinel` đạt điều kiện này với chênh lệch
 `+2,0520e-06` và `+3,0349e-06`.
 

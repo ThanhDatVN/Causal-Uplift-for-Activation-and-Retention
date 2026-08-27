@@ -1,7 +1,17 @@
-# Sprint 3 — Phương pháp đánh giá, model challenger và ensemble
+# Giao thức đánh giá — metric chính, cross-fitting và promotion rule
 
-Tài liệu mô tả những gì được thêm ở Sprint 3 và ranh giới giữa phần lấy từ nguồn
-và phần tự hiện thực. Số liệu nằm trong `report/SPRINT_3_FINAL_REPORT.md`.
+- **Vòng sinh ra tài liệu:** Sprint 3 — vòng cải tiến đầu tiên có đăng ký trước
+- **Protocol:** [`../../configs/sprint3_improvement_protocol.json`](../../configs/sprint3_improvement_protocol.json)
+- **Hiện thực:** [`../../src/policy_evaluation.py`](../../src/policy_evaluation.py),
+  [`../../src/ranking_metrics.py`](../../src/ranking_metrics.py),
+  [`../../src/rank_learner.py`](../../src/rank_learner.py),
+  [`../../src/ensemble.py`](../../src/ensemble.py)
+- **Kết quả:** [`../../report/03_SPRINT_3_IMPROVEMENT.md`](../../report/03_SPRINT_3_IMPROVEMENT.md)
+- **Đọc trước:** [`02_CALIBRATION_AND_POLICY_VALUE.md`](02_CALIBRATION_AND_POLICY_VALUE.md) —
+  **đọc tiếp:** [`04_CAUSAL_FOREST.md`](04_CAUSAL_FOREST.md)
+
+Đây là tài liệu định nghĩa **metric chính hiện hành** và **luật promote** mà mọi vòng sau
+đều chạy dưới. Nó cũng ghi rõ ranh giới giữa phần lấy từ nguồn và phần tự hiện thực.
 
 ## 1. Vì sao đổi metric chính
 
@@ -121,6 +131,57 @@ Vì confirmation Sprint 2 đã được quan sát và báo cáo ở Sprint 2, m�
 trên tập đó phải gọi là **retrospective confirmation**, không phải prospective test.
 Muốn có bằng chứng hoàn toàn mới cần một randomized campaign log mới.
 
+## 5bis. Hai họ challenger của vòng này: R-Learner và DR-Learner
+
+Năm candidate của vòng thuộc hai họ chưa được mô tả ở
+[`01_UPLIFT_FOUNDATIONS.md`](01_UPLIFT_FOUNDATIONS.md). Chúng bị dừng ở bước sàng lọc 20%
+nên không xuất hiện trong bảng confirmation, nhưng vẫn thuộc phạm vi vòng này.
+
+### R-Learner — trực giao hóa theo phân rã Robinson
+
+Nguồn: Nie & Wager,
+[*Quasi-Oracle Estimation of Heterogeneous Treatment Effects*](https://doi.org/10.1093/biomet/asaa076),
+Biometrika 2021. Với `m(x) = E[Y | X = x]`, phân rã Robinson cho:
+
+```text
+Y - m(X) = [T - e(X)] · τ(X) + ε
+```
+
+Thay vì học `μ₁` và `μ₀` rồi lấy hiệu, R-Learner **trực giao hóa trước**: bỏ phần của `Y`
+giải thích được bởi `X` và phần của `T` dự đoán được từ `X`, rồi mới hồi quy phần dư này lên
+phần dư kia. Tối thiểu hóa R-loss `E{[Y - m(X)] - [T - e(X)]·τ(X)}²`.
+
+Lợi thế lý thuyết: sai số của `m` và `e` chỉ ảnh hưởng bậc hai lên `τ̂`. Trên RCT thì `e = 0,85`
+đã biết chính xác nên chỉ còn `m` phải ước lượng.
+
+### DR-Learner — hồi quy pseudo-outcome
+
+Đã mô tả ở [`01_UPLIFT_FOUNDATIONS.md`](01_UPLIFT_FOUNDATIONS.md) mục 3. Vòng này thêm hai
+biến thể nuisance so với bản Sprint 1.
+
+### Năm cấu hình đã chạy
+
+| Candidate | Họ | Khác biệt | `policy_area_dr` sàng lọc |
+|---|---|---|---:|
+| `DR-Regression` | dr_learner | nuisance là regressor | 0,000570 |
+| `DR-Binary` | dr_learner | nuisance là classifier | 0,000554 |
+| `DR-Binary-MC2` | dr_learner | classifier, `mc_iters = 2` | 0,000569 |
+| `R-Regression` | r_learner | nuisance là regressor | 0,000522 |
+| `R-Binary` | r_learner | nuisance là classifier | 0,000552 |
+
+So với Response `0,000766` ở cùng bước sàng lọc, cả năm cách một khoảng lớn — `0,00052` đến
+`0,00057` so với `0,00067`–`0,00077` của nhóm meta-learner đơn giản. Paired CI của cả năm nằm
+**hoàn toàn dưới 0**, và cả năm bị Response lẫn X-Renormalized dominate ở mọi mức ngân sách
+5–20%, nên early-stop đã đăng ký kích hoạt và không candidate nào lên full development.
+
+Đổi nuisance từ regressor sang classifier — thay đổi được kỳ vọng giúp nhiều nhất với outcome
+nhị phân hiếm — **không** đảo được thứ hạng ở cả hai họ. Đó là bằng chứng rằng vấn đề không
+nằm ở đặc tả nuisance.
+
+Vòng 6 quay lại họ R-Learner theo một hướng khác: giữ neo tiên lượng và chỉ học phần dư đã co
+lại, xem [`06_RARE_OUTCOME_LEARNERS.md`](06_RARE_OUTCOME_LEARNERS.md) mục 3. Kết quả vẫn không
+qua gate hai fold seed.
+
 ## 6. Rank-Learner (ICML 2026)
 
 Nguồn: *Rank-Learner: Orthogonal Ranking of Treatment Effects*, arXiv 2602.03517.
@@ -220,15 +281,12 @@ Promotion rule được khóa trước khi chạy confirmation:
 
 Không đạt điều kiện 3 thì giữ champion đơn giản hơn và phát hành challenger kèm CI.
 
-## 9. Phụ lục sau Sprint 3 — data optimization v1
+## 9. Vòng kế tiếp chạy dưới giao thức này
 
-Protocol `configs/data_optimization_protocol_v1.json` là vòng development riêng, không sửa
-protocol Sprint 3 đã đóng băng. Nó thêm hai giả thuyết trực tiếp từ EDA:
+Protocol `data_optimization_protocol_v1` là vòng development riêng, **không** sửa protocol
+Sprint 3 đã đóng băng: nó giữ nguyên metric chính, cross-fitting và luật promote ở trên,
+chỉ đổi giả thuyết được kiểm. Gate shortlist còn được siết thêm — lọt top-N không đủ để đi
+tiếp, challenger phải thắng Response theo `policy_area_dr` ở **từng** fold seed.
 
-1. cờ sentinel và sentinel count được fit chỉ trên `X_train` của từng fold;
-2. funnel factorization dùng `visit` làm auxiliary outcome, nhưng không đưa `visit` vào input
-   lúc scoring.
-
-Gate shortlist cũng được siết lại: top-N không đủ điều kiện đi tiếp. Challenger phải thắng
-Response theo `policy_area_dr` trên từng fold seed đã đăng ký. Kết quả và giới hạn suy luận nằm
-trong `report/DATA_OPTIMIZATION_REPORT.md`; champion chưa thay đổi.
+Phương pháp: [`05_DATA_REPRESENTATION.md`](05_DATA_REPRESENTATION.md). Kết quả:
+[`../../report/05_DATA_OPTIMIZATION.md`](../../report/05_DATA_OPTIMIZATION.md).

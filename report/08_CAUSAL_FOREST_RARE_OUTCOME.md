@@ -1,7 +1,8 @@
-# Causal Forest cấu hình `rare-outcome` — báo cáo kết quả
+# Báo cáo 08 — Causal Forest cấu hình `rare-outcome`
 
 - **Ngày:** 14/08/2026
 - **Protocol:** [`causal_forest_rare_outcome_protocol_v1.json`](../configs/causal_forest_rare_outcome_protocol_v1.json) — đăng ký **trước** khi chạy
+- **Phương pháp:** [`../docs/methods/04_CAUSAL_FOREST.md`](../docs/methods/04_CAUSAL_FOREST.md)
 - **Nguồn số:** `output/causal_forest/sprint3_rare_outcome/`,
   `output/causal_forest/release/cf_sprint3_*`, `output/causal_forest/signal_sensitivity/`
 - **Notebook:** [`04_causal_forest_rare_outcome.ipynb`](../notebooks/04_causal_forest_rare_outcome.ipynb)

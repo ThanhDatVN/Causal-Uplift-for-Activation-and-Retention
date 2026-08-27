@@ -1,11 +1,18 @@
-# Hướng dẫn inference cho hard-budget top-tail policy
+# Suy luận cho policy hard-budget ở top-tail
 
-Ngày cập nhật: 2026-08-09  
-Protocol: [`top_tail_research_protocol_v2.json`](../configs/top_tail_research_protocol_v2.json)  
-Implementation: [`policy_evaluation.py`](../src/policy_evaluation.py) và
-[`analyze_top_tail_evidence.py`](../scripts/analyze_top_tail_evidence.py)
+- **Vòng sinh ra tài liệu:** vòng 7 — top-tail research v2
+- **Ngày cập nhật:** 09/08/2026
+- **Protocol:** [`../../configs/top_tail_research_protocol_v2.json`](../../configs/top_tail_research_protocol_v2.json)
+- **Hiện thực:** [`../../src/policy_evaluation.py`](../../src/policy_evaluation.py),
+  [`../../scripts/analyze_top_tail_evidence.py`](../../scripts/analyze_top_tail_evidence.py)
+- **Kết quả:** [`../../report/07_TOP_TAIL_RESEARCH.md`](../../report/07_TOP_TAIL_RESEARCH.md)
+- **Đọc trước:** [`06_RARE_OUTCOME_LEARNERS.md`](06_RARE_OUTCOME_LEARNERS.md)
 
-## 1. Đối tượng cần ước lượng
+Vòng 7 kiểm định riêng tín hiệu quan sát được ở ngân sách 1–2%. Tài liệu này mô tả cách suy
+luận cho một **họ so sánh đã đóng băng**: hard top-k chính xác, khoảng tin cậy ghép cặp và
+đồng thời, cùng các điều kiện mà một chênh lệch có ý nghĩa thống kê vẫn chưa đủ để triển khai.
+
+## 1. Đại lượng cần ước lượng
 
 Với score `s_j(x)` và budget cố định `b`, policy lấy đúng:
 
@@ -14,14 +21,14 @@ k = floor(n*b)
 pi_jb(x_i) = 1 nếu i nằm trong k score cao nhất, ngược lại bằng 0.
 ```
 
-Estimand là gross incremental conversion ITT trên toàn population:
+Đại lượng đích là gross incremental conversion ITT trên toàn quần thể:
 
 ```text
 psi_jb = E[pi_jb(X) {Y(1)-Y(0)}].
 ```
 
-Đây không phải mean CATE trong top group. `psi_jb` đã nhân với tỷ lệ được target, nên có đơn vị
-incremental conversion trên mỗi customer của population.
+Đây không phải CATE trung bình của nhóm top. `psi_jb` đã nhân với tỷ lệ được target, nên có đơn vị
+incremental conversion trên mỗi khách hàng của quần thể.
 
 ## 2. Effect signal và factual evaluation
 
@@ -35,29 +42,29 @@ Gamma = mu1-mu0
 psi_hat_jb = mean[pi_jb(X) * Gamma].
 ```
 
-Policy score và nuisance không được fit bằng outcome của row đang chấm. Evaluation phải dùng factual
+Policy score và nuisance không được fit bằng outcome của chính dòng đang chấm. Evaluation phải dùng factual
 `T,Y`; không thay bằng trung bình counterfactual do chính outcome model dự đoán. Cảnh báo này phù hợp với
 winner's-curse failure được phân tích bởi
 [Bastani, Bastani & McLaughlin (2026)](https://arxiv.org/abs/2602.08892).
 
 ## 3. Paired bootstrap
 
-Hai policy được so trên cùng rows, nên contrast đúng là:
+Hai policy được so trên cùng những dòng dữ liệu, nên chênh lệch đúng là:
 
 ```text
 Delta_jb = psi_jb - psi_reference,b.
 ```
 
-Mỗi bootstrap draw dùng **cùng row multiplicities** cho mọi model, seed-view và budget. Làm như vậy giữ
+Mỗi lần rút bootstrap dùng **cùng bội số dòng** cho mọi model, seed-view và ngân sách. Làm như vậy giữ
 covariance ghép cặp; bootstrap riêng từng model rồi trừ hai interval sẽ rộng/sai cấu trúc hơn.
 
-Trong retrospective audit, hai fold seed có cùng source rows. Chúng được xem như hai training views của
+Trong lần rà soát hồi cứu, hai fold seed có cùng dòng nguồn. Chúng được xem như hai training views của
 cùng sample, không phải hai sample độc lập. Script cố ý dùng cùng RNG seed/draw count để row bootstrap của
 hai view căn hàng.
 
 ## 4. Simultaneous maximum-standardized band
 
-Giả sử family có các contrast cell `c=1..C`. Từ bootstrap draw `r`:
+Giả sử họ so sánh có các ô `c=1..C`. Từ bootstrap draw `r`:
 
 ```text
 D_hat_c      = observed paired difference
@@ -70,12 +77,12 @@ simultaneous CI_c = D_hat_c ± q * se_c.
 ```
 
 Nếu một cell có zero bootstrap variance, implementation chỉ cho phép nó khi mọi deviation bằng 0; nếu
-không sẽ fail thay vì chia cho 0. Một critical value duy nhất được dùng cho toàn family. Đây là finite
+không sẽ fail thay vì chia cho 0. Một critical value duy nhất được dùng cho toàn họ. Đây là finite
 frozen-family analogue của việc chọn policy bằng valid simultaneous lower confidence bound trong
 [Policy Learning with Confidence](https://arxiv.org/abs/2502.10653).
 
 `paired_policy_difference_band()` trả cả pointwise và simultaneous intervals, nhưng gate dùng
-simultaneous lower bound. Family phải được định nghĩa trước khi đọc kết quả.
+simultaneous lower bound. Họ so sánh phải được định nghĩa trước khi đọc kết quả.
 
 ## 5. Phạm vi suy luận
 
@@ -117,8 +124,8 @@ phụ thuộc stable-order convention; phải báo tie thay vì che nó bằng m
 |---|---|
 | Point delta dương, pointwise CI chứa 0 | Có tín hiệu, chưa có superiority evidence |
 | Pointwise lower bound > 0 nhưng simultaneous lower bound ≤ 0 | Không qua familywise gate |
-| Simultaneous lower bound > 0 nhưng overlap/event gate fail | Statistical contrast chưa đủ deployability |
-| Qua mọi retrospective gate trên dữ liệu đã đọc | Vẫn không phải confirmation; cần randomized data mới |
+| Simultaneous lower bound > 0 nhưng overlap/event gate fail | Chênh lệch có ý nghĩa thống kê nhưng chưa đủ điều kiện triển khai |
+| Qua mọi gate hồi cứu trên dữ liệu đã đọc | Vẫn không phải confirmation; cần randomized data mới |
 | Hybrid causal coefficient shrink gần 0 | Dữ liệu không chứng minh causal score bổ sung baseline risk; không phải bằng chứng tau(x) tuyệt đối đồng nhất |
 
 Qini, AUUC, AUTOC/RATE, calibration và CATE error trả lời câu hỏi khác. Chúng là sensitivity diagnostics,
@@ -133,12 +140,12 @@ Một audit hoàn chỉnh ghi:
 - `tail_membership_overlap.csv` — stability giữa registered fold seeds;
 - `analysis_summary.json` — decision, scope, protocol/input hashes và code state.
 
-Output namespace là immutable evidence. Runner từ chối ghi đè; sensitivity run phải dùng protocol và
+Namespace output là bằng chứng bất biến. Runner từ chối ghi đè; sensitivity run phải dùng protocol và
 namespace mới.
 
 ## 9. Tái lập
 
-Audit chính thức, dùng đúng 200 bootstrap đã đăng ký:
+Bản rà soát chính thức, dùng đúng 200 lần bootstrap đã đăng ký:
 
 ```powershell
 .venv\Scripts\python.exe scripts\analyze_top_tail_evidence.py
@@ -147,7 +154,7 @@ Audit chính thức, dùng đúng 200 bootstrap đã đăng ký:
 Nếu namespace chính thức đã tồn tại, lệnh phải fail. Để kiểm tra code path mà không thay evidence chính,
 dùng một output directory mới nhưng không được diễn giải nó như protocol result.
 
-Targeted tests:
+Test liên quan:
 
 ```powershell
 .venv\Scripts\python.exe -m pytest `

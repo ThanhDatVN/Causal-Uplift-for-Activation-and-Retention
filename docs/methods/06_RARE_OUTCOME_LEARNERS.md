@@ -1,9 +1,15 @@
-# Nền tảng causal learner cho binary outcome hiếm
+# Estimator cho outcome nhị phân hiếm — DINA, Anchored R, Pattern R
+
+- **Vòng sinh ra tài liệu:** vòng 6 — causal foundation
+- **Protocol:** [`../../configs/causal_foundation_protocol_v1.json`](../../configs/causal_foundation_protocol_v1.json)
+- **Hiện thực:** [`../../src/candidates.py`](../../src/candidates.py)
+- **Kết quả:** [`../../report/06_CAUSAL_FOUNDATION.md`](../../report/06_CAUSAL_FOUNDATION.md)
+- **Research khóa trước khi chạy:** [`../../planning/CAUSAL_FOUNDATION_RESEARCH.md`](../../planning/CAUSAL_FOUNDATION_RESEARCH.md)
+- **Đọc trước:** [`05_DATA_REPRESENTATION.md`](05_DATA_REPRESENTATION.md) —
+  **đọc tiếp:** [`07_TOP_TAIL_INFERENCE.md`](07_TOP_TAIL_INFERENCE.md)
 
 Ba estimator được thêm trong protocol `causal-foundation-v1`: điều kiện nhận dạng, cách
-kiểm thử và giới hạn đã quan sát. Kết quả số nằm ở
-[báo cáo thực nghiệm](../report/CAUSAL_FOUNDATION_EXPERIMENT_REPORT.md); research review được khóa
-trước khi chạy nằm ở [planning](../planning/CAUSAL_FOUNDATION_RESEARCH.md).
+kiểm thử và giới hạn đã quan sát.
 
 ## 1. Bài toán cần giải
 
@@ -107,7 +113,7 @@ g_k = sum_i weight_i target_i 1(pattern_i=k)
 Pattern chưa thấy nhận residual 0. Công thức là ridge shrinkage closed-form về 0; repo không diễn
 giải nó như Bayesian posterior. Mục tiêu là giảm interaction variance so với cây tự do.
 
-Sentinel mode được fit chỉ từ `X` của outer-train. Tên “sentinel” là mô tả point mass, không phải
+Sentinel mode được fit chỉ từ `X` của outer-train. Tên "sentinel" là mô tả point mass, không phải
 claim rằng Criteo xác nhận đó là missing value.
 
 ## 5. Kiểm thử tính đúng
@@ -180,7 +186,7 @@ Causal Forest không được sửa hoặc chạy lại trong protocol này.
 
 Backlog trên đã được chuyển thành protocol/audit riêng. Paired simultaneous inference, exact hard-k,
 event-support và overlap contract nằm trong
-[`TOP_TAIL_POLICY_INFERENCE_GUIDE.md`](TOP_TAIL_POLICY_INFERENCE_GUIDE.md). Thứ tự model mới dựa trên
-literature 2024–2026—hybrid prognostic–causal trước, pretraining/direct ranking sau và forest để vòng
-Kaggle tiếp theo—nằm ở
-[`LATEST_CAUSAL_RESEARCH_AND_EXPERIMENT_PLAN_2026.md`](../planning/LATEST_CAUSAL_RESEARCH_AND_EXPERIMENT_PLAN_2026.md).
+[`07_TOP_TAIL_INFERENCE.md`](07_TOP_TAIL_INFERENCE.md). Thứ tự model mới dựa trên
+literature 2024–2026 — hybrid prognostic–causal trước, pretraining/direct ranking sau và
+forest để vòng Kaggle tiếp theo — nằm ở
+[`LATEST_CAUSAL_RESEARCH_AND_EXPERIMENT_PLAN_2026.md`](../../planning/LATEST_CAUSAL_RESEARCH_AND_EXPERIMENT_PLAN_2026.md).

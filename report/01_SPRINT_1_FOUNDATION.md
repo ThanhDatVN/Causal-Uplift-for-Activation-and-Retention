@@ -1,6 +1,7 @@
-# Báo cáo Sprint 1 — Nền tảng dữ liệu, mô hình uplift và khung đánh giá
+# Báo cáo 01 — Sprint 1: nền tảng dữ liệu, mô hình uplift và khung đánh giá
 
 - **Ngày:** 29/07/2026
+- **Phương pháp:** [`../docs/methods/01_UPLIFT_FOUNDATIONS.md`](../docs/methods/01_UPLIFT_FOUNDATIONS.md)
 - **Bài toán:** nhắm mục tiêu khuyến mãi bằng hiệu ứng tăng thêm do can thiệp (*Causal Uplift Targeting*)
 - **Nguồn số chính thức:** `output/sprint1/` và `output/optimization/*sprint1_release*`
 - **Trạng thái:** hoàn thành bản release
@@ -74,7 +75,7 @@ Artifacts:
 - `output/sprint1/arm_outcome_summary.csv`
 - `output/sprint1/balance_smd.csv`
 
-## 3. Protocol chống “tune vào test”
+## 3. Protocol chống "tune vào test"
 
 1. Lấy stratified sample 50% của full data. Trong sample này, seed 42 tách final
    train/test 70/30; phần train tiếp tục tách fit/validation 80/20 cho tuning. Vì vậy
@@ -238,7 +239,7 @@ Hai điều phải ghi kèm khi trích bảng này:
 - **`policy_area_dr` được tính bổ sung** cho cả sáu model trên holdout này, dùng IPW
   signal với propensity hằng số. Cột Qini là metric gốc của Sprint 1.
 
-Chi tiết, learning curve ba mốc và biểu đồ: `report/CAUSAL_FOREST_REPORT.md`.
+Chi tiết, learning curve ba mốc và biểu đồ: `report/04_CAUSAL_FOREST.md`.
 
 Response đứng đầu về ranking không chứng minh nó ước lượng đúng CATE cá nhân. Model
 release cho sản phẩm cần được chọn đồng thời theo ranking, calibration, độ ổn định và
@@ -269,7 +270,7 @@ CI ở bảng policy là Wald normal approximation cho chênh lệch hai tỷ l�
 trên policy/model đã freeze; nó chưa cộng thêm uncertainty do model selection.
 
 Tỷ lệ score âm khác nhau giữa model (Response 0%; S 0,38%; T 53,96%; X 24,15%;
-DR 0,65%). Không được gọi trực tiếp các dòng score âm là “Sleeping Dogs”: đó là nhãn
+DR 0,65%). Không được gọi trực tiếp các dòng score âm là "Sleeping Dogs": đó là nhãn
 model-dependent, còn principal stratum cá nhân không quan sát được.
 
 Artifacts:
@@ -300,7 +301,7 @@ Free chỉ được thử theo resource gate và preflight, không bắt đầu 
 gate ba mốc rút ra từ kết luận này được ghi ở
 [`../docs/REPRODUCTION.md`](../docs/REPRODUCTION.md) mục 8.
 
-Kết quả ba mốc sau khi chạy: [`CAUSAL_FOREST_REPORT.md`](CAUSAL_FOREST_REPORT.md). Bằng chứng
+Kết quả ba mốc sau khi chạy: [`04_CAUSAL_FOREST.md`](04_CAUSAL_FOREST.md). Bằng chứng
 số của benchmark: `output/sprint1/causal_forest_feasibility.json`.
 
 ## 9. Giới hạn và phạm vi suy luận

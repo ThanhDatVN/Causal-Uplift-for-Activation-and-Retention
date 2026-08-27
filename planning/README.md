@@ -33,7 +33,7 @@ leaf — **đã chạy và không đổi kết luận**, nên căn cứ cho các
 
 | Hạng mục | Trạng thái |
 |---|---|
-| Event-aware minimum leaf | **Đã chạy 14/08/2026** — kết quả hòa, xem [`../report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md`](../report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md) |
+| Event-aware minimum leaf | **Đã chạy 14/08/2026** — kết quả hòa, xem [`../report/08_CAUSAL_FOREST_RARE_OUTCOME.md`](../report/08_CAUSAL_FOREST_RARE_OUTCOME.md) |
 | Balanced/honest sampling | Chưa làm |
 | Leaf shrinkage | Chưa làm |
 | Sentinel contract cho feature | Chưa làm |

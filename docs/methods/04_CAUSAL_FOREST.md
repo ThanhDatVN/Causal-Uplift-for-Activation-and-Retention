@@ -1,12 +1,15 @@
 # Causal Forest — phương pháp, cấu hình và ràng buộc của outcome hiếm
 
-- **Hiện thực:** [`../scripts/train_causal_forest.py`](../scripts/train_causal_forest.py),
+- **Vòng sinh ra tài liệu:** hai vòng Causal Forest — vòng 4 và vòng 8
+- **Protocol vòng thứ hai:** [`../../configs/causal_forest_rare_outcome_protocol_v1.json`](../../configs/causal_forest_rare_outcome_protocol_v1.json)
+- **Hiện thực:** [`../../scripts/train_causal_forest.py`](../../scripts/train_causal_forest.py),
   `CausalForestDML` của EconML 0.16
-- **Kết quả:** [`../report/CAUSAL_FOREST_REPORT.md`](../report/CAUSAL_FOREST_REPORT.md) và
-  [`../report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md`](../report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md)
-- **Protocol vòng thứ hai:** [`../configs/causal_forest_rare_outcome_protocol_v1.json`](../configs/causal_forest_rare_outcome_protocol_v1.json)
+- **Kết quả:** [`../../report/04_CAUSAL_FOREST.md`](../../report/04_CAUSAL_FOREST.md) và
+  [`../../report/08_CAUSAL_FOREST_RARE_OUTCOME.md`](../../report/08_CAUSAL_FOREST_RARE_OUTCOME.md)
+- **Đọc trước:** [`03_EVALUATION_PROTOCOL.md`](03_EVALUATION_PROTOCOL.md) —
+  **đọc tiếp:** [`05_DATA_REPRESENTATION.md`](05_DATA_REPRESENTATION.md)
 
-Bốn meta-learner ở [`SPRINT_1_THEORY_AND_METHOD_GUIDE.md`](SPRINT_1_THEORY_AND_METHOD_GUIDE.md)
+Bốn meta-learner ở [`01_UPLIFT_FOUNDATIONS.md`](01_UPLIFT_FOUNDATIONS.md)
 đều **ghép các model thông thường lại**: fit outcome model rồi lấy hiệu, hoặc fit trên
 pseudo-outcome. Causal Forest là thuật toán chuyên dụng duy nhất trong dự án — nó sửa
 thẳng **tiêu chí chia nhánh của cây**.
@@ -123,7 +126,7 @@ băng**. Cùng bộ điểm, cùng những dòng dữ liệu, chỉ đổi tín 
 
 Bài học vận hành, áp cho mọi so sánh chứ không riêng Causal Forest: **cố định và ghi rõ
 tín hiệu chấm điểm trước khi so sánh bất cứ thứ gì**, ngang hàng với việc cố định metric.
-Chi tiết số: `report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md` mục 5.
+Chi tiết số: [`../../report/08_CAUSAL_FOREST_RARE_OUTCOME.md`](../../report/08_CAUSAL_FOREST_RARE_OUTCOME.md) mục 5.
 
 ## 7. Kiểm bắt buộc trước khi tin một lần chạy
 
@@ -161,10 +164,10 @@ Tài nguyên tăng gần tuyến tính theo dữ liệu (`RSS ×2,3`, thời gia
 lên 50%) mà **không** có bước nhảy nào về chất lượng xếp hạng. Đó là dấu hiệu của trần
 thông tin do outcome hiếm, không phải của thiếu dữ liệu.
 
-Ở vòng `rare-outcome`, gate **fail** vì RAM đỉnh chạm `90,6%` so với ngưỡng `75%` — nhưng
+Ở vòng `rare-outcome`, gate **fail** vì RAM đỉnh chạm `90,8%` (28,46 GB trên 31,35 GB) so với ngưỡng `75%` — nhưng
 điểm số vẫn hợp lệ vì artifact đã ghi xong trước khi gate được đánh giá. Lần fail đó được
 ghi lại thay vì bỏ qua; xem cell cuối của
-[`../notebooks/04_causal_forest_rare_outcome.ipynb`](../notebooks/04_causal_forest_rare_outcome.ipynb).
+[`../../notebooks/04_causal_forest_rare_outcome.ipynb`](../../notebooks/04_causal_forest_rare_outcome.ipynb).
 
 ## 9. Điều phương pháp này **không** cho biết
 
@@ -177,8 +180,8 @@ ghi lại thay vì bỏ qua; xem cell cuối của
 
 ## 10. Chạy lại
 
-Lệnh đầy đủ: [`REPRODUCTION.md`](REPRODUCTION.md) mục 8 và 8bis.
+Lệnh đầy đủ: [`REPRODUCTION.md`](../REPRODUCTION.md) mục 8 và 8bis.
 
 Notebook của hai lần chạy Kaggle:
-[`03_causal_forest.ipynb`](../notebooks/03_causal_forest.ipynb) và
-[`04_causal_forest_rare_outcome.ipynb`](../notebooks/04_causal_forest_rare_outcome.ipynb).
+[`03_causal_forest.ipynb`](../../notebooks/03_causal_forest.ipynb) và
+[`04_causal_forest_rare_outcome.ipynb`](../../notebooks/04_causal_forest_rare_outcome.ipynb).

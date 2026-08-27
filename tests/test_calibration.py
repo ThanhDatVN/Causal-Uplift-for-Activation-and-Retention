@@ -1,7 +1,7 @@
 """Khôi phục thang xác suất sau undersampling.
 
-Undersampling phá thang xác suất — xem `docs/SPRINT_2_METHOD_AND_PRODUCT_GUIDE.md`. Hai
-điều phải đúng:
+Undersampling phá thang xác suất — xem
+`docs/methods/02_CALIBRATION_AND_POLICY_VALUE.md`. Hai điều phải đúng:
 
 - **Phép khôi phục là nghịch đảo của phép lấy mẫu.** Áp sampling map rồi áp restoration
   phải quay về giá trị ban đầu.

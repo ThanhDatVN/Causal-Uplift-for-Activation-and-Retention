@@ -8,7 +8,7 @@
 
 ## 0. Phạm vi
 
-Tám báo cáo kết quả, sáu method guide và ba tài liệu nghiên cứu đều giới hạn trong phạm vi
+Tám báo cáo kết quả, bảy method guide và ba tài liệu nghiên cứu đều giới hạn trong phạm vi
 riêng của chúng. Còn lại một câu chưa tài liệu nào trả lời: **vì sao dự án đi theo đúng
 thứ tự đó, và bước tiếp theo được suy ra từ đâu.**
 
@@ -46,7 +46,7 @@ Ba ràng buộc này được chốt trước khi chạy dòng code mô hình đ
 vì sao repo trông như hiện tại: một protocol đăng ký trước cho mỗi vòng, một registry ghi
 cả run thất bại, và một quy tắc "không claim nếu CI chứa 0".
 
-Chi tiết lý thuyết: [`SPRINT_1_THEORY_AND_METHOD_GUIDE.md`](SPRINT_1_THEORY_AND_METHOD_GUIDE.md).
+Chi tiết lý thuyết: [`methods/01_UPLIFT_FOUNDATIONS.md`](methods/01_UPLIFT_FOUNDATIONS.md).
 
 ## 2. Sơ đồ toàn cảnh
 
@@ -94,19 +94,24 @@ qua mọi thư mục.
 | # | Giai đoạn | Câu hỏi của giai đoạn | Protocol | Script chính | Artifact | Báo cáo |
 |---:|---|---|---|---|---|---|
 | 0 | Chẩn đoán dữ liệu | dữ liệu này cho phép suy luận tới đâu | — | `scripts/run_eda_profile.py` | `output/eda/` | mục 2 của Sprint 1 |
-| 1 | Sprint 1 — nền tảng | model nào xếp hạng tốt nhất | — | `scripts/audit_criteo.py`, `scripts/tune_five_models.py`, `scripts/evaluate_selected_five_models.py` | `output/sprint1/`, `output/optimization/` | [SPRINT_1](../report/SPRINT_1_FINAL_REPORT.md) |
-| 2 | Sprint 2 — tầng quyết định | biến xếp hạng thành quyết định ngân sách | — | `scripts/run_sprint2_local.py`, `scripts/build_dashboard.py` | `output/sprint2/`, `output/product/` | [SPRINT_2](../report/SPRINT_2_FINAL_REPORT.md) |
-| 3 | Sprint 3 — vòng đăng ký trước | metric nào mới là metric quyết định | `configs/sprint3_improvement_protocol.json` | `scripts/run_oof_experiment.py`, `scripts/run_sprint3_confirmation.py` | `output/improvement/`, `output/sprint3/` | [SPRINT_3](../report/SPRINT_3_FINAL_REPORT.md) |
-| 4 | Causal Forest | có cần một thuật toán chuyên dụng không | — | `scripts/kaggle_causal_forest_gate.py`, `scripts/evaluate_causal_forest.py` | `output/causal_forest/` | [CAUSAL_FOREST](../report/CAUSAL_FOREST_REPORT.md) |
-| 5 | Data optimization | biểu diễn dữ liệu có phải nút thắt | `configs/data_optimization_protocol_v1.json` | `scripts/run_oof_experiment.py`, `scripts/analyze_data_optimization.py` | `output/improvement/data_opt_comparison/` | [DATA_OPTIMIZATION](../report/DATA_OPTIMIZATION_REPORT.md) |
-| 6 | Causal foundation | estimator có sai thang không | `configs/causal_foundation_protocol_v1.json` | `scripts/merge_oof_runs.py`, `scripts/analyze_causal_foundation.py` | `output/improvement/causal_foundation_analysis/` | [CAUSAL_FOUNDATION](../report/CAUSAL_FOUNDATION_EXPERIMENT_REPORT.md) |
-| 7 | Top-tail v2 | có đang nhìn sai vùng ngân sách không | `configs/top_tail_research_protocol_v2.json` | `scripts/analyze_top_tail_evidence.py` | `output/improvement/top_tail_research_v2/` | [TOP_TAIL_V2](../report/TOP_TAIL_RESEARCH_V2_REPORT.md) |
-| 8 | Causal Forest rare-outcome | thuật toán đó có bị đặt sai cấu hình không | `configs/causal_forest_rare_outcome_protocol_v1.json` | `scripts/train_causal_forest.py`, `scripts/evaluate_causal_forest.py` | `output/causal_forest/sprint3_rare_outcome/` | [CF_RARE_OUTCOME](../report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md) |
+| 1 | Sprint 1 — nền tảng | model nào xếp hạng tốt nhất | — | `scripts/audit_criteo.py`, `scripts/tune_five_models.py`, `scripts/evaluate_selected_five_models.py` | `output/sprint1/`, `output/optimization/` | [báo cáo 01](../report/01_SPRINT_1_FOUNDATION.md) |
+| 2 | Sprint 2 — tầng quyết định | biến xếp hạng thành quyết định ngân sách | — | `scripts/run_sprint2_local.py`, `scripts/build_dashboard.py` | `output/sprint2/`, `output/product/` | [báo cáo 02](../report/02_SPRINT_2_POLICY.md) |
+| 3 | Sprint 3 — vòng đăng ký trước | metric nào mới là metric quyết định | `configs/sprint3_improvement_protocol.json` | `scripts/run_oof_experiment.py`, `scripts/run_sprint3_confirmation.py` | `output/improvement/`, `output/sprint3/` | [báo cáo 03](../report/03_SPRINT_3_IMPROVEMENT.md) |
+| 4 | Causal Forest | có cần một thuật toán chuyên dụng không | — | `scripts/kaggle_causal_forest_gate.py`, `scripts/evaluate_causal_forest.py` | `output/causal_forest/` | [báo cáo 04](../report/04_CAUSAL_FOREST.md) |
+| 5 | Data optimization | biểu diễn dữ liệu có phải nút thắt | `configs/data_optimization_protocol_v1.json` | `scripts/run_oof_experiment.py`, `scripts/analyze_data_optimization.py` | `output/improvement/data_opt_comparison/` | [báo cáo 05](../report/05_DATA_OPTIMIZATION.md) |
+| 6 | Causal foundation | estimator có sai thang không | `configs/causal_foundation_protocol_v1.json` | `scripts/merge_oof_runs.py`, `scripts/analyze_causal_foundation.py` | `output/improvement/causal_foundation_analysis/` | [báo cáo 06](../report/06_CAUSAL_FOUNDATION.md) |
+| 7 | Top-tail v2 | có đang nhìn sai vùng ngân sách không | `configs/top_tail_research_protocol_v2.json` | `scripts/analyze_top_tail_evidence.py` | `output/improvement/top_tail_research_v2/` | [báo cáo 07](../report/07_TOP_TAIL_RESEARCH.md) |
+| 8 | Causal Forest rare-outcome | thuật toán đó có bị đặt sai cấu hình không | `configs/causal_forest_rare_outcome_protocol_v1.json` | `scripts/train_causal_forest.py`, `scripts/evaluate_causal_forest.py` | `output/causal_forest/sprint3_rare_outcome/` | [báo cáo 08](../report/08_CAUSAL_FOREST_RARE_OUTCOME.md) |
 | 9 | Sản phẩm | đưa quyết định tới người dùng | — | `scripts/build_champion_scorer.py`, `scripts/serve_webapp.py` | `output/product/webapp/` | mục 9 của Sprint 3 |
 
 Notebook cắt ngang bảng này chứ không thuộc về một dòng nào: `01` trình bày giai đoạn 0,
 `02` trình bày giai đoạn 3, `03` và `04` là bản chạy Kaggle của giai đoạn 4 và 8. Chỉ mục
 đầy đủ: [`../notebooks/README.md`](../notebooks/README.md).
+
+Số giai đoạn 1–8 cũng là số của method guide tương ứng trong
+[`methods/`](methods/): giai đoạn `n` có guide `0n` nói **cách làm** và báo cáo `0n` nói
+**kết quả ra sao**. Giai đoạn 8 là ngoại lệ duy nhất — nó dùng chung guide `04` với giai
+đoạn 4 vì cùng một thuật toán, chỉ khác cấu hình.
 
 Ba thư mục còn lại phục vụ **mọi** giai đoạn, nên chúng không nằm trong bảng:
 [`../src/`](../src/) là thư viện dùng chung — chỉ mục theo tầng pipeline ở
@@ -181,7 +186,7 @@ EDA giải thích kết quả của cả sáu vòng.
 ### 3.1 Bước 0 — hợp đồng dữ liệu, chốt trước khi nhìn kết quả
 
 Criteo Uplift v2.1: `13.979.592` dòng, 12 feature ẩn danh, treatment `85%`, conversion
-`0,2917%`. Chi tiết nguồn gốc và giới hạn: [`data_cards/CRITEO_V2_1.md`](data_cards/CRITEO_V2_1.md).
+`0,2917%`. Chi tiết nguồn gốc và giới hạn: [`cards/DATA_CARD_CRITEO_V2_1.md`](cards/DATA_CARD_CRITEO_V2_1.md).
 
 Bốn điều được chốt ở bước này, và cả bốn về sau đều có lần cứu dự án khỏi một kết luận sai:
 
@@ -476,12 +481,12 @@ Bài toán A đã đi trọn vòng này và dừng ở trạng thái đó. Bài 
 | Giai đoạn | Trạng thái | Nguồn |
 |---|---|---|
 | 0 — chẩn đoán dữ liệu | **Xong.** 17 artifact, và nó dự đoán trước kết quả sáu vòng sau | [`../output/eda/`](../output/eda/) |
-| 1 — nền tảng model và đánh giá | **Xong** | [SPRINT_1](../report/SPRINT_1_FINAL_REPORT.md) |
-| 2 — tầng quyết định và CI | **Xong** | [SPRINT_2](../report/SPRINT_2_FINAL_REPORT.md) |
-| 3 — vòng đăng ký trước, đổi metric chính | **Xong** | [SPRINT_3](../report/SPRINT_3_FINAL_REPORT.md) |
-| 4 — Causal Forest ba mốc | **Xong** | [CAUSAL_FOREST](../report/CAUSAL_FOREST_REPORT.md) |
+| 1 — nền tảng model và đánh giá | **Xong** | [báo cáo 01](../report/01_SPRINT_1_FOUNDATION.md) |
+| 2 — tầng quyết định và CI | **Xong** | [báo cáo 02](../report/02_SPRINT_2_POLICY.md) |
+| 3 — vòng đăng ký trước, đổi metric chính | **Xong** | [báo cáo 03](../report/03_SPRINT_3_IMPROVEMENT.md) |
+| 4 — Causal Forest ba mốc | **Xong** | [báo cáo 04](../report/04_CAUSAL_FOREST.md) |
 | 5, 6, 7 — ba vòng đóng giả thuyết còn lại | **Xong** | Data optimization, Causal foundation, Top-tail v2 |
-| 8 — Causal Forest rare-outcome | **Xong** | [CF_RARE_OUTCOME](../report/CAUSAL_FOREST_RARE_OUTCOME_REPORT.md) |
+| 8 — Causal Forest rare-outcome | **Xong** | [báo cáo 08](../report/08_CAUSAL_FOREST_RARE_OUTCOME.md) |
 | Kết luận và tiêu chí dừng | **Xong.** Cả ba tiêu chí đều chạm | Mục 3.6 |
 | 9 — sản phẩm, tầng nhắm mục tiêu | **Chạy được**, `30/30` và `12/12` acceptance. Đã qua vòng thiết kế đầu tiên | Mục 5.2 |
 

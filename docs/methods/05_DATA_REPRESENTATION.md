@@ -1,9 +1,12 @@
-# Data optimization — biểu diễn sentinel và funnel S-learner
+# Biểu diễn dữ liệu — sentinel augmentation và funnel S-learner
 
-- **Hiện thực:** [`../src/candidates.py`](../src/candidates.py) —
+- **Vòng sinh ra tài liệu:** vòng 5 — can thiệp vào dữ liệu thay vì vào model
+- **Protocol:** [`../../configs/data_optimization_protocol_v1.json`](../../configs/data_optimization_protocol_v1.json)
+- **Hiện thực:** [`../../src/candidates.py`](../../src/candidates.py) —
   `SentinelFeatureAugmenter` và `build_funnel_s_learner`
-- **Protocol:** [`../configs/data_optimization_protocol_v1.json`](../configs/data_optimization_protocol_v1.json)
-- **Kết quả:** [`../report/DATA_OPTIMIZATION_REPORT.md`](../report/DATA_OPTIMIZATION_REPORT.md)
+- **Kết quả:** [`../../report/05_DATA_OPTIMIZATION.md`](../../report/05_DATA_OPTIMIZATION.md)
+- **Đọc trước:** [`04_CAUSAL_FOREST.md`](04_CAUSAL_FOREST.md) —
+  **đọc tiếp:** [`06_RARE_OUTCOME_LEARNERS.md`](06_RARE_OUTCOME_LEARNERS.md)
 
 Bốn vòng trước đều can thiệp vào **model**. Vòng này can thiệp vào **dữ liệu đưa vào
 model** — và đó là lý do nó tồn tại như một vòng riêng thay vì một tinh chỉnh.
@@ -156,8 +159,8 @@ thuật, cả hai đều không vượt được Response.
 Kết hợp với vòng trước đó (thuật toán chuyên dụng) và vòng sau (estimator sai thang), ba
 hướng sửa **độc lập** đều đóng — và đó là điều cho phép phát biểu mạnh hơn: ràng buộc nằm ở
 **phép đo**, không ở model. Mạch đầy đủ:
-[`END_TO_END_WORKFLOW.md`](END_TO_END_WORKFLOW.md) mục 3.3.
+[`END_TO_END_WORKFLOW.md`](../END_TO_END_WORKFLOW.md) mục 3.3.
 
 ## 7. Chạy lại
 
-[`REPRODUCTION.md`](REPRODUCTION.md) mục 5.
+[`REPRODUCTION.md`](../REPRODUCTION.md) mục 5.

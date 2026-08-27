@@ -2,8 +2,8 @@
 
 > **Trạng thái 2026-08-09:** research/protocol đã được hiện thực và chạy xong. Không causal
 > candidate nào qua screen stability gate; Response-Sentinel qua screen nhưng thất bại full seed
-> stability. Xem [báo cáo](../report/CAUSAL_FOUNDATION_EXPERIMENT_REPORT.md) và
-> [method guide](../docs/CAUSAL_FOUNDATION_METHOD_GUIDE.md). Các giả thuyết mới sinh sau kết quả
+> stability. Xem [báo cáo](../report/06_CAUSAL_FOUNDATION.md) và
+> [method guide](../docs/methods/06_RARE_OUTCOME_LEARNERS.md). Các giả thuyết mới sinh sau kết quả
 > phải dùng protocol ID mới.
 
 Ngày chốt research: 2026-08-09  

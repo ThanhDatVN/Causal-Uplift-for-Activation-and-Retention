@@ -25,3 +25,8 @@ _noi-bo/
 *.jpg
 *.mp4
 *.pdf
+
+# Tru anh chup web app dung trong README: tests/test_documentation_integrity.py kiem
+# moi link markdown, va trong container khong co .git nen khong the phan biet "vang mat
+# vi .gitignore". Thieu file nay thi `docker compose run --rm tests` do.
+!docs/assets/

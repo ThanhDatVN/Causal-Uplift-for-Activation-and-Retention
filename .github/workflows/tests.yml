@@ -21,6 +21,14 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+# Push lien tiep len cung mot branch thi chi lan cuoi con y nghia.
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   data-free-tests:
     runs-on: ubuntu-latest

@@ -49,7 +49,7 @@ COPY report/ ./report/
 COPY planning/ ./planning/
 COPY notebooks/ ./notebooks/
 COPY benchmarks/ ./benchmarks/
-COPY README.md requirements.txt ./
+COPY README.md LICENSE requirements.txt ./
 
 # Chay bang user thuong. Container ghi vao output/ khi chay test, nen uid phai khop
 # quyen cua thu muc duoc mount; xem ghi chu trong compose.yaml.

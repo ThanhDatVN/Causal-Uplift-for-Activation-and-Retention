@@ -6,18 +6,21 @@ nằm ở [`../planning/`](../planning/).
 
 ```text
 docs/
+├── PROJECT_OVERVIEW.md      bản đầy đủ của README: chín giai đoạn, chi tiết từng vòng
 ├── END_TO_END_WORKFLOW.md   mạch phát triển toàn dự án, từ câu hỏi tới sản phẩm
 ├── GLOSSARY.md              89 thuật ngữ, xếp theo 11 chủ đề
 ├── DECISION_CONTRACT.md     policy phát hành, công thức giá trị, guardrail
 ├── REPRODUCTION.md          runbook tái lập cho mọi vòng thí nghiệm
 ├── methods/                 bảy method guide, đánh số theo thứ tự nên đọc
-└── cards/                   data card và model card
+├── cards/                   data card và model card
+└── assets/                  ảnh chụp web app dùng trong README
 ```
 
-## Bốn cửa vào
+## Năm cửa vào
 
 | Cần gì | Mở |
 |---|---|
+| Toàn cảnh dự án, chi tiết chín giai đoạn | [PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md) |
 | Hiểu dự án làm gì và vì sao đi theo thứ tự đó | [END_TO_END_WORKFLOW.md](END_TO_END_WORKFLOW.md) |
 | Tra một thuật ngữ | [GLOSSARY.md](GLOSSARY.md) |
 | Biết luật ra quyết định | [DECISION_CONTRACT.md](DECISION_CONTRACT.md) |

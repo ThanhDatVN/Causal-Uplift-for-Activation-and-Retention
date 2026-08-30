@@ -161,8 +161,9 @@ def test_documented_test_count_matches_reality():
     actual = int(match.group(1))
     documented = []
     # CLAUDE.md la tai lieu noi bo, khong nam trong repo public. Tren may dev no ton tai
-    # va van duoc kiem; tren CI thi bo qua.
-    for name in ("README.md", "CLAUDE.md"):
+    # va van duoc kiem; tren CI thi bo qua. docs/PROJECT_OVERVIEW.md giu ban day du cua
+    # README nen cung ghi so test, va cung co the troi.
+    for name in ("README.md", "CLAUDE.md", "docs/PROJECT_OVERVIEW.md"):
         path = REPO_ROOT / name
         if not path.exists():
             continue

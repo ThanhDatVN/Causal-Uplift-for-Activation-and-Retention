@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "started_at_utc": "2026-09-30T01:23:22.572463+00:00",
+  "completed_at_utc": "2026-09-30T01:27:03.272354+00:00",
+  "run_role": "causal_development_screening_only",
+  "run_argv": [
+    "python",
+    "scripts/reproduce_screening.py",
+    "--output",
+    "reports/v4/screening_reproduction"
+  ],
+  "run_command": "python scripts/reproduce_screening.py --output reports/v4/screening_reproduction",
+  "split_salt": "hillstrom-v4.1",
+  "seed": 20260921,
+  "treatment_arm": "Mens E-Mail",
+  "git_revision": null,
+  "producer_source_sha256": "828b3d284469537aed8ea23dfc9912408a386950ac0e69a697dedc125ee79ec5",
+  "dataset": {
+    "path": "D:\\GitHub\\machine\\data\\raw\\hillstrom.csv",
+    "sha256": "0e5893329d8b93cefecc571777672028290ab69865718020c78c7284f291aece"
+  },
+  "split": {
+    "path": "D:\\GitHub\\machine\\data\\splits\\hillstrom_split.csv",
+    "sha256": "df260bff7c8c3791aa75e174f9907797fc2519c96dcc1f8e68755ac07408f5f5"
+  },
+  "screening": {
+    "path": "D:\\GitHub\\machine\\reports\\v4\\screening_reproduction\\screening.json",
+    "sha256": "e78e02291ea438e1757174b31c78df5c78945bed2852004df97075f70fab1e82"
+  },
+  "report": {
+    "path": "D:\\GitHub\\machine\\reports\\v4\\screening_reproduction\\SCREENING_REPORT.md",
+    "sha256": "65356311fb2110249e9af14cdbe2bd94ee8bc6e6657490f553a1cb7e15993a51"
+  },
+  "protocol": {
+    "capacity_fraction": 0.2,
+    "outer_folds": 3,
+    "baseline": "M01",
+    "evaluator": "cross-fitted paired DR under the known design propensity",
+    "nuisance_fitted_on": "training side of each outer fold only",
+    "split": "development only; the confirmation split is not opened"
+  },
+  "gate": "reports/v4/validity_unshrunk/validity_suite.json: PASS at 2000 worlds with the skewness_adjusted_t interval -- SELECTED AFTER LOOKING: 1 other run(s) at the same 2000 worlds disagree (reports/v4/validity_confirm/validity_suite.json (skewness_adjusted_t: FAIL)), so this verdict is a post-hoc choice of interval method and needs independent confirmation, but this cohort's asymmetry index is 0.0007, at or below the 0.100 that the skewness_adjusted_t interval was measured to cover (measured over 18 cells at 1000 worlds each, but tightened from 0.584 because the transfer study saw a design fail at A = 0.100, its lowest clean level, so the licence stops strictly below that (28 out-of-sample designs at 1000 worlds each))",
+  "cohort": {
+    "n_units": 34092,
+    "n_treated": 17000,
+    "n_events": 302,
+    "propensity": 0.49865070984395166,
+    "declared_design": {
+      "n_units": 34092,
+      "propensity": 0.49865070984395166,
+      "event_rate": 0.008858383198404318,
+      "acted_fraction": 0.2,
+      "asymmetry_index": 0.000694
+    }
+  },
+  "n_completed": 8,
+  "n_failed": 0,
+  "shortlist": [
+    "M01",
+    "M03",
+    "M07"
+  ],
+  "research_lock": {
+    "path": "D:\\GitHub\\machine\\locks\\research.lock.txt",
+    "sha256": "623d1ac4b560c674ad7522c12d1b76ce2f2cd0fe198da156a4803199ad172279",
+    "satisfied": true,
+    "missing": [],
+    "changed": [],
+    "extra_count": 56
+  },
+  "caution": "Development fold variation is not a population confidence interval or confirmation result."
+}

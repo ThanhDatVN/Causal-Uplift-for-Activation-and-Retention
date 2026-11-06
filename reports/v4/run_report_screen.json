@@ -1,0 +1,147 @@
+{
+  "run_id": "a55ea31ac8124dfc",
+  "protocol_revision": "v4.1-draft",
+  "profile": "screen",
+  "config_hash": "786d0d97ccb31590",
+  "status": "COMPLETE",
+  "exit_code": 0,
+  "started_at": "2026-09-21T08:54:13+00:00",
+  "finished_at": "2026-09-21T08:54:24+00:00",
+  "root": ".",
+  "environment": {
+    "python": "3.11.9",
+    "executable": "C:\\Users\\thanh\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "machine": "AMD64"
+  },
+  "n_stages": 5,
+  "n_failed": 0,
+  "n_skipped": 0,
+  "stages": [
+    {
+      "name": "lint",
+      "command": [
+        "C:\\Users\\thanh\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "-m",
+        "ruff",
+        "check",
+        "."
+      ],
+      "status": "SUCCESS",
+      "returncode": 0,
+      "duration_s": 0.081,
+      "missing_artifacts": [],
+      "stale_artifacts": [],
+      "stderr_tail": "",
+      "artifacts": [],
+      "started_at": "2026-09-21T08:54:13+00:00",
+      "detail": ""
+    },
+    {
+      "name": "environment_lock",
+      "command": [
+        "C:\\Users\\thanh\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "-m",
+        "telco_churn.environment",
+        "--lock",
+        "locks/research.lock.txt"
+      ],
+      "status": "SUCCESS",
+      "returncode": 0,
+      "duration_s": 0.282,
+      "missing_artifacts": [],
+      "stale_artifacts": [],
+      "stderr_tail": "",
+      "artifacts": [
+        {
+          "path": "reports/v4/environment.json",
+          "exists": true,
+          "sha256": "6d040f51b7f872e994480e2a0ba7490aece7a9abf520c2db5cfd041d0048ec32",
+          "size_bytes": 220,
+          "modified_at": "2026-09-21T08:54:13.972+00:00",
+          "written_by_this_stage": true
+        }
+      ],
+      "started_at": "2026-09-21T08:54:13+00:00",
+      "detail": ""
+    },
+    {
+      "name": "contract_validation",
+      "command": [
+        "C:\\Users\\thanh\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "-m",
+        "telco_churn.problem_contract_cli"
+      ],
+      "status": "SUCCESS",
+      "returncode": 0,
+      "duration_s": 0.089,
+      "missing_artifacts": [],
+      "stale_artifacts": [],
+      "stderr_tail": "",
+      "artifacts": [
+        {
+          "path": "reports/v4/contracts.json",
+          "exists": true,
+          "sha256": "2bf02089cad280a5fe61c5fc11bd257e3672fdc23ea5be013ec836eb14f34a81",
+          "size_bytes": 20706,
+          "modified_at": "2026-09-21T08:54:14.062+00:00",
+          "written_by_this_stage": true
+        }
+      ],
+      "started_at": "2026-09-21T08:54:13+00:00",
+      "detail": ""
+    },
+    {
+      "name": "model_screening",
+      "command": [
+        "C:\\Users\\thanh\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "-m",
+        "telco_churn.screening"
+      ],
+      "status": "SUCCESS",
+      "returncode": 0,
+      "duration_s": 8.759,
+      "missing_artifacts": [],
+      "stale_artifacts": [],
+      "stderr_tail": "",
+      "artifacts": [
+        {
+          "path": "reports/screening/screening.json",
+          "exists": true,
+          "sha256": "08577b385fef4305cb4cd07e0da09f7aebd742e5bcb16f123a827a162c9ba28c",
+          "size_bytes": 7392,
+          "modified_at": "2026-09-21T08:54:22.661+00:00",
+          "written_by_this_stage": true
+        }
+      ],
+      "started_at": "2026-09-21T08:54:14+00:00",
+      "detail": ""
+    },
+    {
+      "name": "evidence_index",
+      "command": [
+        "C:\\Users\\thanh\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "-m",
+        "telco_churn.evidence"
+      ],
+      "status": "SUCCESS",
+      "returncode": 0,
+      "duration_s": 1.662,
+      "missing_artifacts": [],
+      "stale_artifacts": [],
+      "stderr_tail": "",
+      "artifacts": [
+        {
+          "path": "reports/v4/evidence_index.json",
+          "exists": true,
+          "sha256": "651e76f48b4a12b8c809ecfe8212abe61e36b922e764919ac38683ba11de13e0",
+          "size_bytes": 13946,
+          "modified_at": "2026-09-21T08:54:24.337+00:00",
+          "written_by_this_stage": true
+        }
+      ],
+      "started_at": "2026-09-21T08:54:22+00:00",
+      "detail": ""
+    }
+  ]
+}

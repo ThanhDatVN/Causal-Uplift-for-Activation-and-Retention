@@ -1,0 +1,798 @@
+{
+  "stage": "R05_learning_curves",
+  "dataset": "hillstrom Mens E-Mail vs No E-Mail (development)",
+  "started_at": "2026-09-21T11:28:31+00:00",
+  "runtime_seconds": 11.55,
+  "gate": "reports/v4/validity_unshrunk/validity_suite.json: PASS at 2000 worlds with the skewness_adjusted_t interval -- SELECTED AFTER LOOKING: 1 other run(s) at the same 2000 worlds disagree (reports/v4/validity_confirm/validity_suite.json (skewness_adjusted_t: FAIL)), so this verdict is a post-hoc choice of interval method and needs independent confirmation",
+  "protocol": {
+    "training_fractions": [
+      0.25,
+      0.5,
+      1.0
+    ],
+    "extra_seeds_at_full_fraction": [
+      101,
+      202
+    ],
+    "outer_folds": 3,
+    "capacity_fraction": 0.2,
+    "nuisance_budget": "nuisances follow the same training fraction",
+    "evaluation_rows": "outer evaluation rows are never subsampled",
+    "split": "development only; the confirmation split is not opened"
+  },
+  "seeds_are_not_worlds": "Three learner seeds describe optimiser jitter at one data budget. No confidence interval is formed from them, because it would be read as sampling uncertainty and it is not.",
+  "finalists": [
+    "M01",
+    "M03",
+    "M07"
+  ],
+  "cohort": {
+    "n_units": 34092,
+    "n_events": 302,
+    "propensity": 0.49865070984395166
+  },
+  "candidate_fits": 45,
+  "curves": {
+    "M01": [
+      {
+        "candidate_id": "M01",
+        "training_fraction": 0.25,
+        "seed_offset": 0,
+        "fold_values": [
+          0.0021754824607716056,
+          0.001915771356161052,
+          0.001956469110417538
+        ],
+        "n_train_rows": [
+          5682,
+          5682,
+          5682
+        ],
+        "n_train_events_treated": [
+          35,
+          34,
+          34
+        ],
+        "n_train_events_control": [
+          16,
+          16,
+          16
+        ],
+        "fit_seconds": 0.30174039999837987,
+        "mean_value": 0.002015907642450065,
+        "mean_train_rows": 5682.0,
+        "mean_train_events_treated": 34.333333333333336,
+        "mean_train_events_control": 16.0
+      },
+      {
+        "candidate_id": "M01",
+        "training_fraction": 0.5,
+        "seed_offset": 0,
+        "fold_values": [
+          0.0022316602149535375,
+          0.0013717983103286257,
+          0.0017701024528203257
+        ],
+        "n_train_rows": [
+          11364,
+          11364,
+          11364
+        ],
+        "n_train_events_treated": [
+          69,
+          69,
+          69
+        ],
+        "n_train_events_control": [
+          32,
+          32,
+          32
+        ],
+        "fit_seconds": 0.3531378000006953,
+        "mean_value": 0.0017911869927008297,
+        "mean_train_rows": 11364.0,
+        "mean_train_events_treated": 69.0,
+        "mean_train_events_control": 32.0
+      },
+      {
+        "candidate_id": "M01",
+        "training_fraction": 1.0,
+        "seed_offset": 0,
+        "fold_values": [
+          0.0032287093107036683,
+          0.002220878825354736,
+          0.00251375477459932
+        ],
+        "n_train_rows": [
+          22728,
+          22728,
+          22728
+        ],
+        "n_train_events_treated": [
+          138,
+          137,
+          137
+        ],
+        "n_train_events_control": [
+          64,
+          64,
+          64
+        ],
+        "fit_seconds": 0.4470227999991039,
+        "mean_value": 0.002654447636885908,
+        "mean_train_rows": 22728.0,
+        "mean_train_events_treated": 137.33333333333334,
+        "mean_train_events_control": 64.0
+      }
+    ],
+    "M03": [
+      {
+        "candidate_id": "M03",
+        "training_fraction": 0.25,
+        "seed_offset": 0,
+        "fold_values": [
+          0.0015758430976274215,
+          0.002367669080200629,
+          0.0025560221123168683
+        ],
+        "n_train_rows": [
+          5682,
+          5682,
+          5682
+        ],
+        "n_train_events_treated": [
+          35,
+          34,
+          34
+        ],
+        "n_train_events_control": [
+          16,
+          16,
+          16
+        ],
+        "fit_seconds": 0.5115112999992562,
+        "mean_value": 0.0021665114300483063,
+        "mean_train_rows": 5682.0,
+        "mean_train_events_treated": 34.333333333333336,
+        "mean_train_events_control": 16.0
+      },
+      {
+        "candidate_id": "M03",
+        "training_fraction": 0.5,
+        "seed_offset": 0,
+        "fold_values": [
+          0.0019342601989321031,
+          0.0012169819708981533,
+          0.0014870103330066832
+        ],
+        "n_train_rows": [
+          11364,
+          11364,
+          11364
+        ],
+        "n_train_events_treated": [
+          69,
+          69,
+          69
+        ],
+        "n_train_events_control": [
+          32,
+          32,
+          32
+        ],
+        "fit_seconds": 0.6274918000017351,
+        "mean_value": 0.0015460841676123132,
+        "mean_train_rows": 11364.0,
+        "mean_train_events_treated": 69.0,
+        "mean_train_events_control": 32.0
+      },
+      {
+        "candidate_id": "M03",
+        "training_fraction": 1.0,
+        "seed_offset": 0,
+        "fold_values": [
+          0.00199336130488524,
+          0.002758142598282696,
+          0.0012292550515970932
+        ],
+        "n_train_rows": [
+          22728,
+          22728,
+          22728
+        ],
+        "n_train_events_treated": [
+          138,
+          137,
+          137
+        ],
+        "n_train_events_control": [
+          64,
+          64,
+          64
+        ],
+        "fit_seconds": 0.8379444000020158,
+        "mean_value": 0.0019935863182550095,
+        "mean_train_rows": 22728.0,
+        "mean_train_events_treated": 137.33333333333334,
+        "mean_train_events_control": 64.0
+      }
+    ],
+    "M07": [
+      {
+        "candidate_id": "M07",
+        "training_fraction": 0.25,
+        "seed_offset": 0,
+        "fold_values": [
+          0.0011084446261741415,
+          0.0019602234556770418,
+          0.001526268108229965
+        ],
+        "n_train_rows": [
+          5682,
+          5682,
+          5682
+        ],
+        "n_train_events_treated": [
+          35,
+          34,
+          34
+        ],
+        "n_train_events_control": [
+          16,
+          16,
+          16
+        ],
+        "fit_seconds": 0.7213579999988724,
+        "mean_value": 0.001531645396693716,
+        "mean_train_rows": 5682.0,
+        "mean_train_events_treated": 34.333333333333336,
+        "mean_train_events_control": 16.0
+      },
+      {
+        "candidate_id": "M07",
+        "training_fraction": 0.5,
+        "seed_offset": 0,
+        "fold_values": [
+          0.0011318915835389206,
+          0.001630764583205994,
+          0.0016126756398841286
+        ],
+        "n_train_rows": [
+          11364,
+          11364,
+          11364
+        ],
+        "n_train_events_treated": [
+          69,
+          69,
+          69
+        ],
+        "n_train_events_control": [
+          32,
+          32,
+          32
+        ],
+        "fit_seconds": 0.9197371999980533,
+        "mean_value": 0.0014584439355430142,
+        "mean_train_rows": 11364.0,
+        "mean_train_events_treated": 69.0,
+        "mean_train_events_control": 32.0
+      },
+      {
+        "candidate_id": "M07",
+        "training_fraction": 1.0,
+        "seed_offset": 0,
+        "fold_values": [
+          0.0008286461913664833,
+          0.0007838156855898209,
+          0.0009793614489482865
+        ],
+        "n_train_rows": [
+          22728,
+          22728,
+          22728
+        ],
+        "n_train_events_treated": [
+          138,
+          137,
+          137
+        ],
+        "n_train_events_control": [
+          64,
+          64,
+          64
+        ],
+        "fit_seconds": 1.292160099998,
+        "mean_value": 0.0008639411086348636,
+        "mean_train_rows": 22728.0,
+        "mean_train_events_treated": 137.33333333333334,
+        "mean_train_events_control": 64.0
+      }
+    ]
+  },
+  "seed_spread": [
+    {
+      "candidate_id": "M01",
+      "seeds": 3,
+      "mean_value": 0.002654447636885908,
+      "iqr_value": 0.0,
+      "min_value": 0.002654447636885908,
+      "max_value": 0.002654447636885908,
+      "selected_action_agreement": 1.0,
+      "mean_fit_seconds": 0.5293456999982785
+    },
+    {
+      "candidate_id": "M03",
+      "seeds": 3,
+      "mean_value": 0.0019935863182550095,
+      "iqr_value": 0.0,
+      "min_value": 0.0019935863182550095,
+      "max_value": 0.0019935863182550095,
+      "selected_action_agreement": 1.0,
+      "mean_fit_seconds": 0.8831065666672657
+    },
+    {
+      "candidate_id": "M07",
+      "seeds": 3,
+      "mean_value": 0.0009273028065051561,
+      "iqr_value": 5.8306045146185774e-05,
+      "min_value": 0.0008639411086348636,
+      "max_value": 0.0009805531989272353,
+      "selected_action_agreement": 0.9761418045070841,
+      "mean_fit_seconds": 1.2898674666660856
+    }
+  ],
+  "points": [
+    {
+      "candidate_id": "M01",
+      "training_fraction": 0.25,
+      "seed_offset": 0,
+      "fold_values": [
+        0.0021754824607716056,
+        0.001915771356161052,
+        0.001956469110417538
+      ],
+      "n_train_rows": [
+        5682,
+        5682,
+        5682
+      ],
+      "n_train_events_treated": [
+        35,
+        34,
+        34
+      ],
+      "n_train_events_control": [
+        16,
+        16,
+        16
+      ],
+      "fit_seconds": 0.30174039999837987,
+      "mean_value": 0.002015907642450065,
+      "mean_train_rows": 5682.0,
+      "mean_train_events_treated": 34.333333333333336,
+      "mean_train_events_control": 16.0
+    },
+    {
+      "candidate_id": "M01",
+      "training_fraction": 0.5,
+      "seed_offset": 0,
+      "fold_values": [
+        0.0022316602149535375,
+        0.0013717983103286257,
+        0.0017701024528203257
+      ],
+      "n_train_rows": [
+        11364,
+        11364,
+        11364
+      ],
+      "n_train_events_treated": [
+        69,
+        69,
+        69
+      ],
+      "n_train_events_control": [
+        32,
+        32,
+        32
+      ],
+      "fit_seconds": 0.3531378000006953,
+      "mean_value": 0.0017911869927008297,
+      "mean_train_rows": 11364.0,
+      "mean_train_events_treated": 69.0,
+      "mean_train_events_control": 32.0
+    },
+    {
+      "candidate_id": "M01",
+      "training_fraction": 1.0,
+      "seed_offset": 0,
+      "fold_values": [
+        0.0032287093107036683,
+        0.002220878825354736,
+        0.00251375477459932
+      ],
+      "n_train_rows": [
+        22728,
+        22728,
+        22728
+      ],
+      "n_train_events_treated": [
+        138,
+        137,
+        137
+      ],
+      "n_train_events_control": [
+        64,
+        64,
+        64
+      ],
+      "fit_seconds": 0.4470227999991039,
+      "mean_value": 0.002654447636885908,
+      "mean_train_rows": 22728.0,
+      "mean_train_events_treated": 137.33333333333334,
+      "mean_train_events_control": 64.0
+    },
+    {
+      "candidate_id": "M01",
+      "training_fraction": 1.0,
+      "seed_offset": 101,
+      "fold_values": [
+        0.0032287093107036683,
+        0.002220878825354736,
+        0.00251375477459932
+      ],
+      "n_train_rows": [
+        22728,
+        22728,
+        22728
+      ],
+      "n_train_events_treated": [
+        138,
+        137,
+        137
+      ],
+      "n_train_events_control": [
+        64,
+        64,
+        64
+      ],
+      "fit_seconds": 0.5675884999982372,
+      "mean_value": 0.002654447636885908,
+      "mean_train_rows": 22728.0,
+      "mean_train_events_treated": 137.33333333333334,
+      "mean_train_events_control": 64.0
+    },
+    {
+      "candidate_id": "M01",
+      "training_fraction": 1.0,
+      "seed_offset": 202,
+      "fold_values": [
+        0.0032287093107036683,
+        0.002220878825354736,
+        0.00251375477459932
+      ],
+      "n_train_rows": [
+        22728,
+        22728,
+        22728
+      ],
+      "n_train_events_treated": [
+        138,
+        137,
+        137
+      ],
+      "n_train_events_control": [
+        64,
+        64,
+        64
+      ],
+      "fit_seconds": 0.5734257999974943,
+      "mean_value": 0.002654447636885908,
+      "mean_train_rows": 22728.0,
+      "mean_train_events_treated": 137.33333333333334,
+      "mean_train_events_control": 64.0
+    },
+    {
+      "candidate_id": "M03",
+      "training_fraction": 0.25,
+      "seed_offset": 0,
+      "fold_values": [
+        0.0015758430976274215,
+        0.002367669080200629,
+        0.0025560221123168683
+      ],
+      "n_train_rows": [
+        5682,
+        5682,
+        5682
+      ],
+      "n_train_events_treated": [
+        35,
+        34,
+        34
+      ],
+      "n_train_events_control": [
+        16,
+        16,
+        16
+      ],
+      "fit_seconds": 0.5115112999992562,
+      "mean_value": 0.0021665114300483063,
+      "mean_train_rows": 5682.0,
+      "mean_train_events_treated": 34.333333333333336,
+      "mean_train_events_control": 16.0
+    },
+    {
+      "candidate_id": "M03",
+      "training_fraction": 0.5,
+      "seed_offset": 0,
+      "fold_values": [
+        0.0019342601989321031,
+        0.0012169819708981533,
+        0.0014870103330066832
+      ],
+      "n_train_rows": [
+        11364,
+        11364,
+        11364
+      ],
+      "n_train_events_treated": [
+        69,
+        69,
+        69
+      ],
+      "n_train_events_control": [
+        32,
+        32,
+        32
+      ],
+      "fit_seconds": 0.6274918000017351,
+      "mean_value": 0.0015460841676123132,
+      "mean_train_rows": 11364.0,
+      "mean_train_events_treated": 69.0,
+      "mean_train_events_control": 32.0
+    },
+    {
+      "candidate_id": "M03",
+      "training_fraction": 1.0,
+      "seed_offset": 0,
+      "fold_values": [
+        0.00199336130488524,
+        0.002758142598282696,
+        0.0012292550515970932
+      ],
+      "n_train_rows": [
+        22728,
+        22728,
+        22728
+      ],
+      "n_train_events_treated": [
+        138,
+        137,
+        137
+      ],
+      "n_train_events_control": [
+        64,
+        64,
+        64
+      ],
+      "fit_seconds": 0.8379444000020158,
+      "mean_value": 0.0019935863182550095,
+      "mean_train_rows": 22728.0,
+      "mean_train_events_treated": 137.33333333333334,
+      "mean_train_events_control": 64.0
+    },
+    {
+      "candidate_id": "M03",
+      "training_fraction": 1.0,
+      "seed_offset": 101,
+      "fold_values": [
+        0.00199336130488524,
+        0.002758142598282696,
+        0.0012292550515970932
+      ],
+      "n_train_rows": [
+        22728,
+        22728,
+        22728
+      ],
+      "n_train_events_treated": [
+        138,
+        137,
+        137
+      ],
+      "n_train_events_control": [
+        64,
+        64,
+        64
+      ],
+      "fit_seconds": 0.8778300000012678,
+      "mean_value": 0.0019935863182550095,
+      "mean_train_rows": 22728.0,
+      "mean_train_events_treated": 137.33333333333334,
+      "mean_train_events_control": 64.0
+    },
+    {
+      "candidate_id": "M03",
+      "training_fraction": 1.0,
+      "seed_offset": 202,
+      "fold_values": [
+        0.00199336130488524,
+        0.002758142598282696,
+        0.0012292550515970932
+      ],
+      "n_train_rows": [
+        22728,
+        22728,
+        22728
+      ],
+      "n_train_events_treated": [
+        138,
+        137,
+        137
+      ],
+      "n_train_events_control": [
+        64,
+        64,
+        64
+      ],
+      "fit_seconds": 0.9335452999985137,
+      "mean_value": 0.0019935863182550095,
+      "mean_train_rows": 22728.0,
+      "mean_train_events_treated": 137.33333333333334,
+      "mean_train_events_control": 64.0
+    },
+    {
+      "candidate_id": "M07",
+      "training_fraction": 0.25,
+      "seed_offset": 0,
+      "fold_values": [
+        0.0011084446261741415,
+        0.0019602234556770418,
+        0.001526268108229965
+      ],
+      "n_train_rows": [
+        5682,
+        5682,
+        5682
+      ],
+      "n_train_events_treated": [
+        35,
+        34,
+        34
+      ],
+      "n_train_events_control": [
+        16,
+        16,
+        16
+      ],
+      "fit_seconds": 0.7213579999988724,
+      "mean_value": 0.001531645396693716,
+      "mean_train_rows": 5682.0,
+      "mean_train_events_treated": 34.333333333333336,
+      "mean_train_events_control": 16.0
+    },
+    {
+      "candidate_id": "M07",
+      "training_fraction": 0.5,
+      "seed_offset": 0,
+      "fold_values": [
+        0.0011318915835389206,
+        0.001630764583205994,
+        0.0016126756398841286
+      ],
+      "n_train_rows": [
+        11364,
+        11364,
+        11364
+      ],
+      "n_train_events_treated": [
+        69,
+        69,
+        69
+      ],
+      "n_train_events_control": [
+        32,
+        32,
+        32
+      ],
+      "fit_seconds": 0.9197371999980533,
+      "mean_value": 0.0014584439355430142,
+      "mean_train_rows": 11364.0,
+      "mean_train_events_treated": 69.0,
+      "mean_train_events_control": 32.0
+    },
+    {
+      "candidate_id": "M07",
+      "training_fraction": 1.0,
+      "seed_offset": 0,
+      "fold_values": [
+        0.0008286461913664833,
+        0.0007838156855898209,
+        0.0009793614489482865
+      ],
+      "n_train_rows": [
+        22728,
+        22728,
+        22728
+      ],
+      "n_train_events_treated": [
+        138,
+        137,
+        137
+      ],
+      "n_train_events_control": [
+        64,
+        64,
+        64
+      ],
+      "fit_seconds": 1.292160099998,
+      "mean_value": 0.0008639411086348636,
+      "mean_train_rows": 22728.0,
+      "mean_train_events_treated": 137.33333333333334,
+      "mean_train_events_control": 64.0
+    },
+    {
+      "candidate_id": "M07",
+      "training_fraction": 1.0,
+      "seed_offset": 101,
+      "fold_values": [
+        0.001008397468930783,
+        0.0007855469920341992,
+        0.001018297874895126
+      ],
+      "n_train_rows": [
+        22728,
+        22728,
+        22728
+      ],
+      "n_train_events_treated": [
+        138,
+        137,
+        137
+      ],
+      "n_train_events_control": [
+        64,
+        64,
+        64
+      ],
+      "fit_seconds": 1.2639280000003055,
+      "mean_value": 0.0009374141119533694,
+      "mean_train_rows": 22728.0,
+      "mean_train_events_treated": 137.33333333333334,
+      "mean_train_events_control": 64.0
+    },
+    {
+      "candidate_id": "M07",
+      "training_fraction": 1.0,
+      "seed_offset": 202,
+      "fold_values": [
+        0.0011716416046800137,
+        0.0007866972044967941,
+        0.0009833207876048982
+      ],
+      "n_train_rows": [
+        22728,
+        22728,
+        22728
+      ],
+      "n_train_events_treated": [
+        138,
+        137,
+        137
+      ],
+      "n_train_events_control": [
+        64,
+        64,
+        64
+      ],
+      "fit_seconds": 1.3135142999999516,
+      "mean_value": 0.0009805531989272353,
+      "mean_train_rows": 22728.0,
+      "mean_train_events_treated": 137.33333333333334,
+      "mean_train_events_control": 64.0
+    }
+  ],
+  "scope_note": "Development only. The curve is over training rows inside three outer folds of one dataset, so it describes this cohort's budget, not a general sample-size law."
+}

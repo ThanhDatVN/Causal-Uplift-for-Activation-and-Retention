@@ -1,0 +1,120 @@
+{
+  "protocol": "docs/NEXT_RESEARCH_EXPERIMENTS_EN.md",
+  "role": "known_truth_synthetic",
+  "data": "generated_in_memory; no real customer data or external inputs",
+  "data_sha256": null,
+  "split_sha256": null,
+  "research_lock_sha256": "623d1ac4b560c674ad7522c12d1b76ce2f2cd0fe198da156a4803199ad172279",
+  "planned_outputs": [
+    "DRY_RUN_MANIFEST.json",
+    "TRANSFER_RESULT.json",
+    "TRANSFER_REPORT.md",
+    "RUN_RECEIPT.json"
+  ],
+  "declared_cpu_wall_cap_seconds": 1800,
+  "requested_worlds_per_cell": 2000,
+  "declared_worlds_per_cell": 2000,
+  "n_rows_per_world": 4000,
+  "seed": 90371,
+  "batch_bootstrap_resamples": 600,
+  "rng_key": "[seed, sha256(cell_id)[:8], world_index]",
+  "selected_interval": "skewness_adjusted_t",
+  "effective_df_floor": 1.0,
+  "coverage_wilson_floor": 0.92,
+  "null_promotion_wilson_ceiling": 0.05,
+  "false_coverage_gate_failure_at_nominal": {
+    "nominal_coverage": 0.95,
+    "minimum_covered_to_pass": 1864,
+    "one_cell_failure_probability_at_nominal_coverage": 0.00017760552280845208,
+    "six_cell_familywise_union_bound": 0.0010656331368507125,
+    "assumption": "Each cell has true independent-world coverage 0.95; union bound needs no cross-cell independence."
+  },
+  "truth_reference_draws_per_nonnull_batch_cell": 20000,
+  "target_T1_T2": "fixed_rule_population_reward_contrast",
+  "target_T3_T6": "future_batch_population_reward_contrast_vs_no_contact",
+  "batch_resampling_unit": "customer; T5/T6 aggregate two records before resampling",
+  "batch_interval": "paired percentile bootstrap with full top-K reallocation on each resample",
+  "batch_method_status": "unvalidated candidate; not the existing batch_policy_contrast",
+  "negative_controls": {
+    "wrong_logged_propensity": "PENDING",
+    "row_iid_t5_clusters": "PENDING",
+    "evaluation_outcome_ranking_leakage": "PENDING"
+  },
+  "truth_T1": 0.0,
+  "truth_T2": 0.0001875,
+  "no_promotion": true,
+  "source_sha256": {
+    "src/telco_churn/next_evaluator_transfer.py": "422ece0db41bf0b0a446f177677eccffb0866aa4723805323061271f21867c91",
+    "docs/NEXT_RESEARCH_EXPERIMENTS_EN.md": "01b007d6282448f20bb991b7955830c09b3d8b3cd34373b3856f46de3f94cfa5",
+    "src/telco_churn/policy_comparison.py": "6134fba624b34089d6b9ff44fffa64902f6455b45d94775dd2687934dcf2073e",
+    "src/telco_churn/validity_suite.py": "91e7c13aebbd669f61023c1eb67158b10432b6c5623d301ed1320a1b18b941db"
+  },
+  "environment": {
+    "python": "3.11.9",
+    "numpy": "2.4.6",
+    "pandas": "2.3.3",
+    "scipy": "1.17.1"
+  },
+  "cells": [
+    {
+      "cell_id": "T1",
+      "population": "independent",
+      "policy": "fixed",
+      "effect": "null",
+      "assignment": "variable",
+      "method": "skewness_adjusted_t",
+      "status": "IMPLEMENTED",
+      "reason": null
+    },
+    {
+      "cell_id": "T2",
+      "population": "independent",
+      "policy": "fixed",
+      "effect": "rare_heterogeneous",
+      "assignment": "variable",
+      "method": "skewness_adjusted_t",
+      "status": "IMPLEMENTED",
+      "reason": null
+    },
+    {
+      "cell_id": "T3",
+      "population": "independent",
+      "policy": "batch_cap_20pct",
+      "effect": "null",
+      "assignment": "constant_085",
+      "method": "paired_reallocation_bootstrap_candidate",
+      "status": "IMPLEMENTED_UNVALIDATED",
+      "reason": null
+    },
+    {
+      "cell_id": "T4",
+      "population": "independent",
+      "policy": "batch_cap_20pct",
+      "effect": "rare_heterogeneous",
+      "assignment": "variable",
+      "method": "paired_reallocation_bootstrap_candidate",
+      "status": "IMPLEMENTED_UNVALIDATED",
+      "reason": null
+    },
+    {
+      "cell_id": "T5",
+      "population": "two_records_per_customer",
+      "policy": "customer_batch_cap_20pct",
+      "effect": "null",
+      "assignment": "cluster_05",
+      "method": "customer_cluster_reallocation_bootstrap_candidate",
+      "status": "IMPLEMENTED_UNVALIDATED",
+      "reason": null
+    },
+    {
+      "cell_id": "T6",
+      "population": "two_records_per_customer",
+      "policy": "customer_batch_cap_20pct",
+      "effect": "heterogeneous",
+      "assignment": "cluster_05",
+      "method": "customer_cluster_reallocation_bootstrap_candidate",
+      "status": "IMPLEMENTED_UNVALIDATED",
+      "reason": null
+    }
+  ]
+}

@@ -1,0 +1,407 @@
+{
+  "status": "UNVALIDATED_DIAGNOSTIC",
+  "causal_promotion": false,
+  "complete_protocol": false,
+  "created_at": "2026-09-30T00:51:11+00:00",
+  "runtime_seconds": 441.85,
+  "manifest": {
+    "protocol": "docs/NEXT_RESEARCH_EXPERIMENTS_EN.md",
+    "role": "known_truth_synthetic",
+    "data": "generated_in_memory; no real customer data or external inputs",
+    "data_sha256": null,
+    "split_sha256": null,
+    "research_lock_sha256": "623d1ac4b560c674ad7522c12d1b76ce2f2cd0fe198da156a4803199ad172279",
+    "planned_outputs": [
+      "DRY_RUN_MANIFEST.json",
+      "TRANSFER_RESULT.json",
+      "TRANSFER_REPORT.md",
+      "RUN_RECEIPT.json"
+    ],
+    "declared_cpu_wall_cap_seconds": 1800,
+    "requested_worlds_per_cell": 2000,
+    "declared_worlds_per_cell": 2000,
+    "n_rows_per_world": 4000,
+    "seed": 90371,
+    "batch_bootstrap_resamples": 600,
+    "rng_key": "[seed, sha256(cell_id)[:8], world_index]",
+    "selected_interval": "skewness_adjusted_t",
+    "effective_df_floor": 1.0,
+    "coverage_wilson_floor": 0.92,
+    "null_promotion_wilson_ceiling": 0.05,
+    "false_coverage_gate_failure_at_nominal": {
+      "nominal_coverage": 0.95,
+      "minimum_covered_to_pass": 1864,
+      "one_cell_failure_probability_at_nominal_coverage": 0.00017760552280845208,
+      "six_cell_familywise_union_bound": 0.0010656331368507125,
+      "assumption": "Each cell has true independent-world coverage 0.95; union bound needs no cross-cell independence."
+    },
+    "truth_reference_draws_per_nonnull_batch_cell": 20000,
+    "target_T1_T2": "fixed_rule_population_reward_contrast",
+    "target_T3_T6": "future_batch_population_reward_contrast_vs_no_contact",
+    "batch_resampling_unit": "customer; T5/T6 aggregate two records before resampling",
+    "batch_interval": "paired percentile bootstrap with full top-K reallocation on each resample",
+    "batch_method_status": "unvalidated candidate; not the existing batch_policy_contrast",
+    "negative_controls": {
+      "wrong_logged_propensity": "PENDING",
+      "row_iid_t5_clusters": "PENDING",
+      "evaluation_outcome_ranking_leakage": "PENDING"
+    },
+    "truth_T1": 0.0,
+    "truth_T2": 0.0001875,
+    "no_promotion": true,
+    "source_sha256": {
+      "src/telco_churn/next_evaluator_transfer.py": "422ece0db41bf0b0a446f177677eccffb0866aa4723805323061271f21867c91",
+      "docs/NEXT_RESEARCH_EXPERIMENTS_EN.md": "01b007d6282448f20bb991b7955830c09b3d8b3cd34373b3856f46de3f94cfa5",
+      "src/telco_churn/policy_comparison.py": "6134fba624b34089d6b9ff44fffa64902f6455b45d94775dd2687934dcf2073e",
+      "src/telco_churn/validity_suite.py": "91e7c13aebbd669f61023c1eb67158b10432b6c5623d301ed1320a1b18b941db"
+    },
+    "environment": {
+      "python": "3.11.9",
+      "numpy": "2.4.6",
+      "pandas": "2.3.3",
+      "scipy": "1.17.1"
+    },
+    "cells": [
+      {
+        "cell_id": "T1",
+        "population": "independent",
+        "policy": "fixed",
+        "effect": "null",
+        "assignment": "variable",
+        "method": "skewness_adjusted_t",
+        "status": "IMPLEMENTED",
+        "reason": null
+      },
+      {
+        "cell_id": "T2",
+        "population": "independent",
+        "policy": "fixed",
+        "effect": "rare_heterogeneous",
+        "assignment": "variable",
+        "method": "skewness_adjusted_t",
+        "status": "IMPLEMENTED",
+        "reason": null
+      },
+      {
+        "cell_id": "T3",
+        "population": "independent",
+        "policy": "batch_cap_20pct",
+        "effect": "null",
+        "assignment": "constant_085",
+        "method": "paired_reallocation_bootstrap_candidate",
+        "status": "IMPLEMENTED_UNVALIDATED",
+        "reason": null
+      },
+      {
+        "cell_id": "T4",
+        "population": "independent",
+        "policy": "batch_cap_20pct",
+        "effect": "rare_heterogeneous",
+        "assignment": "variable",
+        "method": "paired_reallocation_bootstrap_candidate",
+        "status": "IMPLEMENTED_UNVALIDATED",
+        "reason": null
+      },
+      {
+        "cell_id": "T5",
+        "population": "two_records_per_customer",
+        "policy": "customer_batch_cap_20pct",
+        "effect": "null",
+        "assignment": "cluster_05",
+        "method": "customer_cluster_reallocation_bootstrap_candidate",
+        "status": "IMPLEMENTED_UNVALIDATED",
+        "reason": null
+      },
+      {
+        "cell_id": "T6",
+        "population": "two_records_per_customer",
+        "policy": "customer_batch_cap_20pct",
+        "effect": "heterogeneous",
+        "assignment": "cluster_05",
+        "method": "customer_cluster_reallocation_bootstrap_candidate",
+        "status": "IMPLEMENTED_UNVALIDATED",
+        "reason": null
+      }
+    ]
+  },
+  "readouts": [
+    {
+      "cell": "T1",
+      "method": "selected_dr",
+      "population_truth": 0.0,
+      "truth_reference": {
+        "truth": 0.0,
+        "mc_truth": 0.0,
+        "mcse": 0.0,
+        "draws": 0
+      },
+      "worlds": 2000,
+      "effective_independent_units_per_world": 4000,
+      "minimum_logged_action_probability": 0.3382590150100182,
+      "mean_logged_weight_ess_ratio": 0.9618279113822255,
+      "bias": -5.966379350992146e-06,
+      "coverage": 0.937,
+      "coverage_wilson": [
+        0.9254914002053398,
+        0.9468331004708452
+      ],
+      "promotion_rate": 0.0315,
+      "promotion_wilson": [
+        0.02469804258437448,
+        0.0400982307181595
+      ],
+      "mean_interval_width": 0.009148138624206843,
+      "truth_mcse_below_tenth_median_half_width": true,
+      "coverage_rule_pass": true,
+      "null_promotion_rule_pass": true
+    },
+    {
+      "cell": "T1",
+      "method": "normal_dr_reference",
+      "population_truth": 0.0,
+      "truth_reference": {
+        "truth": 0.0,
+        "mc_truth": 0.0,
+        "mcse": 0.0,
+        "draws": 0
+      },
+      "worlds": 2000,
+      "effective_independent_units_per_world": 4000,
+      "minimum_logged_action_probability": 0.3382590150100182,
+      "mean_logged_weight_ess_ratio": 0.9618279113822255,
+      "bias": -5.966379350992146e-06,
+      "coverage": 0.95,
+      "coverage_wilson": [
+        0.9395558910656041,
+        0.9587187663812682
+      ],
+      "promotion_rate": 0.018,
+      "promotion_wilson": [
+        0.01302999144428223,
+        0.024818042134845595
+      ],
+      "mean_interval_width": 0.008838494541451003,
+      "truth_mcse_below_tenth_median_half_width": true,
+      "coverage_rule_pass": true,
+      "null_promotion_rule_pass": true
+    },
+    {
+      "cell": "T2",
+      "method": "selected_dr",
+      "population_truth": 0.0001875,
+      "truth_reference": {
+        "truth": 0.0001875,
+        "mc_truth": 0.0001875,
+        "mcse": 0.0,
+        "draws": 0
+      },
+      "worlds": 2000,
+      "effective_independent_units_per_world": 4000,
+      "minimum_logged_action_probability": 0.33825899906935364,
+      "mean_logged_weight_ess_ratio": 0.9617763669411034,
+      "bias": 1.983615117392015e-05,
+      "coverage": 0.882,
+      "coverage_wilson": [
+        0.8671236116591076,
+        0.8954117642180152
+      ],
+      "promotion_rate": 0.0595,
+      "promotion_wilson": [
+        0.04995260683841223,
+        0.07073631181637158
+      ],
+      "mean_interval_width": 0.005082091313463859,
+      "truth_mcse_below_tenth_median_half_width": true,
+      "coverage_rule_pass": false,
+      "null_promotion_rule_pass": null
+    },
+    {
+      "cell": "T2",
+      "method": "normal_dr_reference",
+      "population_truth": 0.0001875,
+      "truth_reference": {
+        "truth": 0.0001875,
+        "mc_truth": 0.0001875,
+        "mcse": 0.0,
+        "draws": 0
+      },
+      "worlds": 2000,
+      "effective_independent_units_per_world": 4000,
+      "minimum_logged_action_probability": 0.33825899906935364,
+      "mean_logged_weight_ess_ratio": 0.9617763669411034,
+      "bias": 1.983615117392015e-05,
+      "coverage": 0.941,
+      "coverage_wilson": [
+        0.9298033851481019,
+        0.9505057791498329
+      ],
+      "promotion_rate": 0.0155,
+      "promotion_wilson": [
+        0.010940972933704062,
+        0.021916645881830028
+      ],
+      "mean_interval_width": 0.004241570572102723,
+      "truth_mcse_below_tenth_median_half_width": true,
+      "coverage_rule_pass": true,
+      "null_promotion_rule_pass": null
+    },
+    {
+      "cell": "T3",
+      "method": "batch_reallocation_candidate",
+      "population_truth": 0.0,
+      "truth_reference": {
+        "truth": 0.0,
+        "mc_truth": 0.0,
+        "mcse": 0.0,
+        "draws": 20000
+      },
+      "worlds": 2000,
+      "effective_independent_units_per_world": 4000,
+      "minimum_logged_action_probability": 0.15000000000000002,
+      "mean_logged_weight_ess_ratio": 0.5101171024919755,
+      "bias": 9.000426609030532e-05,
+      "coverage": 0.907,
+      "coverage_wilson": [
+        0.8934795252227157,
+        0.9189599982903445
+      ],
+      "promotion_rate": 0.009,
+      "promotion_wilson": [
+        0.005700499728577407,
+        0.014182040701612969
+      ],
+      "mean_interval_width": 0.010695863199814908,
+      "truth_mcse_below_tenth_median_half_width": true,
+      "coverage_rule_pass": false,
+      "null_promotion_rule_pass": true
+    },
+    {
+      "cell": "T3",
+      "method": "selected_fixed_interval_out_of_domain",
+      "population_truth": 0.0,
+      "truth_reference": {
+        "truth": 0.0,
+        "mc_truth": 0.0,
+        "mcse": 0.0,
+        "draws": 20000
+      },
+      "worlds": 2000,
+      "effective_independent_units_per_world": 4000,
+      "minimum_logged_action_probability": 0.15000000000000002,
+      "mean_logged_weight_ess_ratio": 0.5101171024919755,
+      "bias": 9.000426609030534e-05,
+      "coverage": 0.8945,
+      "coverage_wilson": [
+        0.880272153863572,
+        0.9072152958315192
+      ],
+      "promotion_rate": 0.028,
+      "promotion_wilson": [
+        0.021625209947844046,
+        0.03618448268565872
+      ],
+      "mean_interval_width": 0.012844921164027032,
+      "truth_mcse_below_tenth_median_half_width": true,
+      "coverage_rule_pass": false,
+      "null_promotion_rule_pass": true
+    },
+    {
+      "cell": "T4",
+      "method": "batch_reallocation_candidate",
+      "population_truth": 0.00015,
+      "truth_reference": {
+        "truth": 0.00015,
+        "mc_truth": 0.00014998451875,
+        "mcse": 1.2467039622992699e-08,
+        "draws": 20000
+      },
+      "worlds": 2000,
+      "effective_independent_units_per_world": 4000,
+      "minimum_logged_action_probability": 0.338259021803833,
+      "mean_logged_weight_ess_ratio": 0.9618160603362435,
+      "bias": 3.6010338199075995e-06,
+      "coverage": 0.8275,
+      "coverage_wilson": [
+        0.810317992553644,
+        0.8434263414771354
+      ],
+      "promotion_rate": 0.0345,
+      "promotion_wilson": [
+        0.027351694147721588,
+        0.04343307687112489
+      ],
+      "mean_interval_width": 0.003796047049345607,
+      "truth_mcse_below_tenth_median_half_width": true,
+      "coverage_rule_pass": false,
+      "null_promotion_rule_pass": null
+    },
+    {
+      "cell": "T5",
+      "method": "batch_reallocation_candidate",
+      "population_truth": 0.0,
+      "truth_reference": {
+        "truth": 0.0,
+        "mc_truth": 0.0,
+        "mcse": 0.0,
+        "draws": 20000
+      },
+      "worlds": 2000,
+      "effective_independent_units_per_world": 2000,
+      "minimum_logged_action_probability": 0.5,
+      "mean_logged_weight_ess_ratio": 1.0,
+      "bias": -4.158098235551859e-05,
+      "coverage": 0.943,
+      "coverage_wilson": [
+        0.9319642649870394,
+        0.9523372311217704
+      ],
+      "promotion_rate": 0.027,
+      "promotion_wilson": [
+        0.020752396241488,
+        0.035061130486577274
+      ],
+      "mean_interval_width": 0.007849555228530218,
+      "truth_mcse_below_tenth_median_half_width": true,
+      "coverage_rule_pass": true,
+      "null_promotion_rule_pass": true
+    },
+    {
+      "cell": "T6",
+      "method": "batch_reallocation_candidate",
+      "population_truth": 0.0006,
+      "truth_reference": {
+        "truth": 0.0006,
+        "mc_truth": 0.00060007085,
+        "mcse": 7.09509211746808e-08,
+        "draws": 20000
+      },
+      "worlds": 2000,
+      "effective_independent_units_per_world": 2000,
+      "minimum_logged_action_probability": 0.5,
+      "mean_logged_weight_ess_ratio": 1.0,
+      "bias": -5.7777697225840186e-05,
+      "coverage": 0.9495,
+      "coverage_wilson": [
+        0.9390120477558316,
+        0.958264526738322
+      ],
+      "promotion_rate": 0.0455,
+      "promotion_wilson": [
+        0.03720527135020145,
+        0.05553732462845745
+      ],
+      "mean_interval_width": 0.007609251509172383,
+      "truth_mcse_below_tenth_median_half_width": true,
+      "coverage_rule_pass": true,
+      "null_promotion_rule_pass": null
+    }
+  ],
+  "failed_intervals": [],
+  "negative_controls": {
+    "wrong_logged_propensity": "PENDING",
+    "row_iid_t5_clusters": "PENDING",
+    "evaluation_outcome_ranking_leakage": "PENDING"
+  },
+  "blocked_cells": [],
+  "scope_note": "T1/T2 test the selected fixed-rule interval; T3-T6 test a new, unvalidated no-contact future-batch candidate. Negative controls remain pending. No real telecom treatment effect or ROI is measured."
+}

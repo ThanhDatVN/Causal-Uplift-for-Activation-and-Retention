@@ -1,0 +1,80 @@
+{
+  "n_rows": 11896,
+  "n_features": 178,
+  "treatment_share": 0.7573974445191661,
+  "model_kind": "logistic",
+  "folds": 3,
+  "seed": 20260920,
+  "treatment_predictability": {
+    "oof_roc_auc": 0.6355298994033733,
+    "oof_log_loss": 0.5499773465222813,
+    "constant_propensity_log_loss": 0.5540613189533007,
+    "log_loss_improvement": 0.004083972431019434,
+    "oof_brier": 0.17967105736737476,
+    "constant_propensity_brier": 0.18374655555500283,
+    "brier_skill_vs_constant": 0.022179997743729696
+  },
+  "permutation_test": {
+    "permutations": 100,
+    "null_auc_mean": 0.5003420112249192,
+    "null_auc_sd": 0.008813411480187895,
+    "null_auc_q95": 0.5142727646112774,
+    "n_null_at_or_above_observed": 0,
+    "p_value_add_one": 0.009900990099009901,
+    "null_hypothesis": "treatment labels are exchangeable across rows given the pooled frame"
+  },
+  "estimated_propensity": {
+    "min": 3.3763246583362713e-13,
+    "q01": 0.3921345184911157,
+    "q05": 0.5168540433411154,
+    "median": 0.7721658399760469,
+    "q95": 0.9383299282232805,
+    "q99": 0.9685280337367388,
+    "max": 0.9999999999960874,
+    "support": [
+      {
+        "min_action_propensity": 0.025,
+        "n_outside_support": 16,
+        "share_outside_support": 0.0013449899125756557
+      },
+      {
+        "min_action_propensity": 0.05,
+        "n_outside_support": 38,
+        "share_outside_support": 0.003194351042367182
+      },
+      {
+        "min_action_propensity": 0.1,
+        "n_outside_support": 190,
+        "share_outside_support": 0.01597175521183591
+      }
+    ],
+    "effective_sample_size_estimated_e": 3.87721700096577,
+    "effective_sample_size_constant_e": 8743.396099529258
+  },
+  "runtime": {
+    "cross_fit_seconds": 2.26,
+    "permutation_seconds": 302.89,
+    "seconds_per_permutation": 3.029
+  },
+  "interpretation_limits": [
+    "Diagnostic on a pooled frame. Campaign and customer identifiers are absent, so campaign-level variation in treatment rates, post-randomization preselection, a non-pre-treatment covariate and non-uniform assignment are not distinguishable here.",
+    "The permutation null assumes exchangeable rows. Repeated customers would break it, and the file does not let that be checked.",
+    "An estimated propensity strictly inside (0, 1) does not demonstrate positivity or ignorability; it is a fitted value, not a design probability.",
+    "Rejecting the pooled-IID null does not certify any particular alternative, and does not show the dataset paper's per-campaign randomization was wrong."
+  ],
+  "dataset": "OpenML 45580 / Orange Belgium",
+  "verdict": {
+    "alpha": 0.05,
+    "pooled_iid_exchangeability_rejected": true,
+    "constant_propensity_justified_by_design": false,
+    "reweighting": {
+      "ess_ratio_estimated_over_constant": 0.00044344519644655216,
+      "ess_collapsed": true,
+      "reweighting_is_a_usable_repair": false,
+      "note": "Reweighting by the estimated propensity leaves an effective sample size of 4 out of 8,743. A handful of extreme weights would carry the whole estimate, so estimating e(X) is not a repair for the identification problem here; it relocates it into the variance."
+    },
+    "evidence_state": "EXPLORATORY",
+    "decision": "Keep the dataset as a conditional benchmark. Do not promote a causal claim from a constant propensity; report IPW and DR results as sensitivity analyses under stated identification assumptions.",
+    "headline": "out-of-fold treatment ROC-AUC 0.6355, permutation p = 0.009901"
+  }
+}

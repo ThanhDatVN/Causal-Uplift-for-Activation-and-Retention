@@ -1,0 +1,31 @@
+{
+  "role": "synthetic_negative_controls_only",
+  "source_hashes": {
+    "reports/v4/next_evaluator_transfer/negative_controls.py": "883bcf568c6f01b6e8a03061343e04cf6e8884ebed869e7dc9fdf028880b603d",
+    "src/telco_churn/next_evaluator_transfer.py": "422ece0db41bf0b0a446f177677eccffb0866aa4723805323061271f21867c91",
+    "src/telco_churn/policy_comparison.py": "6134fba624b34089d6b9ff44fffa64902f6455b45d94775dd2687934dcf2073e"
+  },
+  "worlds_per_stochastic_control": 500,
+  "bootstrap_resamples": 300,
+  "rows_per_world": 4000,
+  "independent_customers_T5": 2000,
+  "seed": 53109,
+  "rng_namespaces": {
+    "T5_cluster": "[seed, 5, world_index]",
+    "T3_leakage": "[seed, 3, world_index]",
+    "bootstrap": "[seed, cell_number, world_index, variant_number]"
+  },
+  "controls": {
+    "wrong_logged_propensity": "Inject e=0.50 where generator logged e=0.85; control-harness provenance guard must reject. Production scoring cannot independently prove a self-declared probability is true.",
+    "row_iid_T5": "Compare customer bootstrap to deliberately invalid row-IID bootstrap under two records and one assignment per customer; truth is zero.",
+    "outcome_leakage_T3": "Compare clean pre-treatment rank to forbidden rank built from evaluation DR score; truth is zero and leakage guard must reject."
+  },
+  "planned_outputs": [
+    "NEGATIVE_CONTROL_PROTOCOL.json",
+    "NEGATIVE_CONTROL_RESULT.json",
+    "NEGATIVE_CONTROL_REPORT.md",
+    "NEGATIVE_CONTROL_RECEIPT.json"
+  ],
+  "promotion": false,
+  "relation_to_R1": "Separate negative controls; do not retroactively change the frozen R1 coverage study."
+}

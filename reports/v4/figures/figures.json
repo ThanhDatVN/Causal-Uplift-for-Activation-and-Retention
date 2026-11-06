@@ -1,0 +1,33 @@
+{
+  "source": "reports/v4/overlap_boundary/overlap_boundary.json",
+  "worlds_per_cell": 1000,
+  "seed": 20260924,
+  "figures": [
+    {
+      "figure": "boundary",
+      "path": "reports/v4/figures/boundary.png",
+      "caption": "coverage against A, per interval method, with the measured licensed region",
+      "bytes": 182028
+    },
+    {
+      "figure": "why_not_imbalance",
+      "path": "reports/v4/figures/why_not_imbalance.png",
+      "caption": "the same coverages against imbalance and against A, side by side",
+      "bytes": 146033
+    },
+    {
+      "figure": "formula",
+      "path": "reports/v4/figures/formula.png",
+      "caption": "predicted A against the realised skewness, one point per design",
+      "bytes": 100473
+    },
+    {
+      "figure": "correction",
+      "path": "reports/v4/figures/correction.png",
+      "caption": "licensed asymmetry region per interval method",
+      "bytes": 43556
+    }
+  ],
+  "skipped": [],
+  "scope_note": "Drawn from one sweep of one generator family with a constant propensity. Every value plotted is read from the artifact; none is recomputed here."
+}

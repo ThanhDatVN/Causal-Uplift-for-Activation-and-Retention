@@ -1,0 +1,81 @@
+{
+  "dataset_id": "hillstrom_minethatdata",
+  "version": "2008.03.20",
+  "source_url": "http://www.minethatdata.com/Kevin_Hillstrom_MineThatData_E-MailAnalytics_DataMiningChallenge_2008.03.20.csv",
+  "source_description": "Kevin Hillstrom, MineThatData E-Mail Analytics And Data Mining Challenge, published 2008-03-20. Released publicly for analysis; the author asks that the source be credited. Raw data is not redistributed by this repository.",
+  "retrieved_at": "2026-09-21T05:41:19+00:00",
+  "raw_sha256": "0e5893329d8b93cefecc571777672028290ab69865718020c78c7284f291aece",
+  "raw_bytes": 3964977,
+  "rows": 64000,
+  "redistributed": false,
+  "treatment_column": "segment",
+  "arms": {
+    "Womens E-Mail": 21387,
+    "Mens E-Mail": 21307,
+    "No E-Mail": 21306
+  },
+  "control_arm": "No E-Mail",
+  "post_treatment_columns": [
+    "visit",
+    "conversion",
+    "spend"
+  ],
+  "feature_recipe": {
+    "numeric": [
+      "recency",
+      "history"
+    ],
+    "numeric_transform": {
+      "history": "log1p"
+    },
+    "binary": [
+      "mens",
+      "womens",
+      "newbie"
+    ],
+    "categorical": [
+      "history_segment",
+      "zip_code",
+      "channel"
+    ],
+    "excluded_as_treatment": [
+      "segment"
+    ],
+    "excluded_as_post_treatment": [
+      "visit",
+      "conversion",
+      "spend"
+    ]
+  },
+  "split": {
+    "rule": "sha256('hillstrom-v4.1:' + row_id), first 8 hex digits as a uniform draw",
+    "development_fraction": 0.8,
+    "counts": {
+      "development": 51174,
+      "confirmation": 12826
+    }
+  },
+  "outcome_by_arm_development_only": {
+    "Mens E-Mail": {
+      "visit": 0.18382352941176472,
+      "conversion": 206.0,
+      "spend": 1.3704129411764707
+    },
+    "No E-Mail": {
+      "visit": 0.10443482330915048,
+      "conversion": 96.0,
+      "spend": 0.6713807629300257
+    },
+    "Womens E-Mail": {
+      "visit": 0.15033368458025992,
+      "conversion": 155.0,
+      "spend": 1.0981003395386957
+    }
+  },
+  "confirmation_outcomes_read": false,
+  "data_roles": {
+    "development": "model selection, tuning, all exploratory readouts",
+    "confirmation": "unopened; one primary contrast, after the protocol is frozen"
+  },
+  "scope_note": "Randomised three-arm e-mail campaign with a two-week readout. The design is documented by the author but this repository has not verified assignment independently; treat the design probability as declared, not measured, until an assignment audit has been run."
+}

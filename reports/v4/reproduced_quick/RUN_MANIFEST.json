@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "started_at_utc": "2026-09-30T01:29:35.314245+00:00",
+  "completed_at_utc": "2026-09-30T01:31:59.331077+00:00",
+  "run_role": "predictive_frozen_test_smoke",
+  "run_argv": [
+    "python",
+    "scripts/reproduce_benchmark.py",
+    "--output",
+    "reports/v4/reproduced_quick",
+    "--model-dir",
+    "artifacts/reproduced_quick"
+  ],
+  "run_command": "python scripts/reproduce_benchmark.py --output reports/v4/reproduced_quick --model-dir artifacts/reproduced_quick",
+  "git_revision": null,
+  "producer_source_sha256": "828b3d284469537aed8ea23dfc9912408a386950ac0e69a697dedc125ee79ec5",
+  "source_hash_scope": [
+    "src",
+    "scripts",
+    "pyproject.toml",
+    "requirements-api.txt",
+    ".github/workflows"
+  ],
+  "dataset": {
+    "path": "D:\\GitHub\\machine\\data\\raw\\Telco-Customer-Churn.csv",
+    "sha256": "16320c9c1ec72448db59aa0a26a0b95401046bef5d02fd3aeb906448e3055e91"
+  },
+  "split": {
+    "path": "D:\\GitHub\\machine\\data\\splits\\split_manifest.csv",
+    "sha256": "08a34a4e87b8fbf143299650fad0fecb459552336db34587c47a5ca376950630"
+  },
+  "model": {
+    "path": "D:\\GitHub\\machine\\artifacts\\reproduced_quick\\champion.joblib",
+    "sha256": "6e408e2beb7c442e93f0473c52a8d63f1a1ac59c24dc807897bb78960f19419d"
+  },
+  "report": {
+    "path": "D:\\GitHub\\machine\\reports\\v4\\reproduced_quick\\BENCHMARK_REPORT.md",
+    "sha256": "6cd37e90705ed050ec29bc05feb7ea2c8e54f9076fd48c4c7aeef9f08633d03e"
+  },
+  "benchmark_protocol": "v1",
+  "champion_model": "logistic",
+  "test_metrics": {
+    "average_precision": 0.6443857680218135,
+    "roc_auc": 0.850468883205456,
+    "brier_score": 0.1342895868132489,
+    "brier_skill_score": 0.3112646537027729,
+    "log_loss": 0.41256399149729317,
+    "accuracy_at_0_5": 0.808374733853797,
+    "precision_at_0_5": 0.6538461538461539,
+    "recall_at_0_5": 0.5909090909090909,
+    "f1_at_0_5": 0.6207865168539326,
+    "prevalence": 0.2654364797728886
+  },
+  "research_lock": {
+    "path": "D:\\GitHub\\machine\\locks\\research.lock.txt",
+    "sha256": "623d1ac4b560c674ad7522c12d1b76ce2f2cd0fe198da156a4803199ad172279",
+    "satisfied": true,
+    "missing": [],
+    "changed": [],
+    "extra_count": 56
+  },
+  "caution": "Quick mode is a smoke reproduction; IBM has no treatment outcomes or validated 30-day horizon."
+}

@@ -1,0 +1,9 @@
+# R1 negative-control interpretation
+
+The [separately frozen control suite](NEGATIVE_CONTROL_REPORT.md) ran 500 worlds per stochastic control with 300 bootstrap draws after the six-cell R1 run. It does not change the R1 coverage results or authorize method promotion.
+
+The control harness rejected injected wrong assignment probabilities and outcome-derived ranking columns against the generator's own provenance. These are **harness checks**; a production evaluator cannot discover that an externally supplied propensity is false without an assignment log. When outcome-derived scores were deliberately used to rank the evaluation batch, sharp-null coverage collapsed to 0.000 and positive-lower-bound promotion rose to 1.000. This confirms that the policy-ranking leakage control is destructive as intended.
+
+The deliberately row-IID T5 bootstrap did **not** demonstrate the expected failure: its sharp-null coverage was 0.946 versus 0.948 for customer resampling, and both had a positive-lower-bound rate of 0.032. The current generator's shared intercept, two records per customer, and outcome construction did not make this control discriminating at this scale. Moreover, row resampling changes the allocation unit as well as the variance estimator, so the contrast is not a clean isolation of clustering. This negative control is **inconclusive**, not a pass. A future protocol should hold customer-level allocation fixed and vary only resampling units under a stronger, prespecified within-customer dependence design with new seeds.
+
+The R1 selected fixed-rule interval fails T2 coverage, and the new batch bootstrap fails T3/T4 coverage. Those failures already prevent promotion, independently of the inconclusive row-IID control. Synthetic diagnostics do not establish telecom uplift or ROI.

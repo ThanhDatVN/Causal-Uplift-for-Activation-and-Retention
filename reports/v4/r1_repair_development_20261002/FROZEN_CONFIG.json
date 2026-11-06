@@ -1,0 +1,84 @@
+{
+  "protocol": "R1_repair_v1",
+  "role": "development_only",
+  "worlds_per_cell": 100,
+  "n_customers": 2000,
+  "bootstrap_resamples": 299,
+  "seed": 884212,
+  "rng_key": "[seed, sha256(cell_name)[:8], world_index]; bootstrap adds 99",
+  "cells": [
+    {
+      "name": "F1_fixed_null",
+      "policy": "fixed",
+      "effect": "null",
+      "assignment": "constant_085",
+      "clustered": false
+    },
+    {
+      "name": "F2_fixed_rare",
+      "policy": "fixed",
+      "effect": "rare",
+      "assignment": "variable",
+      "clustered": false
+    },
+    {
+      "name": "B1_batch_null",
+      "policy": "batch",
+      "effect": "null",
+      "assignment": "constant_085",
+      "clustered": false
+    },
+    {
+      "name": "B2_batch_rare",
+      "policy": "batch",
+      "effect": "rare",
+      "assignment": "variable",
+      "clustered": false
+    },
+    {
+      "name": "C1_cluster_null",
+      "policy": "batch",
+      "effect": "null",
+      "assignment": "constant_05",
+      "clustered": true
+    },
+    {
+      "name": "C2_cluster_effect",
+      "policy": "batch",
+      "effect": "effect",
+      "assignment": "constant_05",
+      "clustered": true
+    }
+  ],
+  "estimands": {
+    "fixed": "population value of frozen policy minus no contact",
+    "batch": "expected future-batch top-20%-cap value minus no contact"
+  },
+  "candidate_methods": {
+    "fixed": "paired_dr_normal",
+    "batch": "studentized_customer_reallocation"
+  },
+  "reference_methods": {
+    "fixed": "previously selected skewness_adjusted_t (descriptive only)",
+    "batch": "percentile_customer_reallocation (same draws, descriptive only)"
+  },
+  "cluster_control": "fixed selected-customer variance, customer vs invalid row-IID; same point and unique-customer cap",
+  "studentizing_floor": "max(1e-12, 0.01 * original SE)",
+  "coverage_wilson_floor": 0.92,
+  "null_promotion_wilson_ceiling": 0.05,
+  "source_sha256": {
+    "src/telco_churn/r1_repair.py": "dd552d9ba6b2aed10bf1cbc2fb35c4c41a4acd84713df75223e9fb3d3e2d86b8",
+    "src/telco_churn/policy_comparison.py": "6134fba624b34089d6b9ff44fffa64902f6455b45d94775dd2687934dcf2073e",
+    "src/telco_churn/validity_suite.py": "91e7c13aebbd669f61023c1eb67158b10432b6c5623d301ed1320a1b18b941db",
+    "docs/R1_REPAIR_DESIGN_EN.md": "a6ee07566db7396da440b3b0df5e4a8e83b93cb4ef615da456d9d4f0a0e9ec96"
+  },
+  "research_lock_sha256": "623d1ac4b560c674ad7522c12d1b76ce2f2cd0fe198da156a4803199ad172279",
+  "environment": {
+    "python": "3.11.9",
+    "numpy": "2.4.6",
+    "pandas": "2.3.3",
+    "scipy": "1.17.1"
+  },
+  "confirmation_data_accessed": false,
+  "causal_promotion": false
+}

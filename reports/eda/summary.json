@@ -1,0 +1,30 @@
+{
+  "rows": 7043,
+  "columns_raw": 21,
+  "sha256": "16320c9c1ec72448db59aa0a26a0b95401046bef5d02fd3aeb906448e3055e91",
+  "source_url": "https://raw.githubusercontent.com/IBM/telco-customer-churn-on-icp4d/master/data/Telco-Customer-Churn.csv",
+  "duplicate_rows": 0,
+  "duplicate_customer_ids": 0,
+  "blank_total_charges": 11,
+  "numeric_missing_total_charges_after_parse": 11,
+  "blank_total_charges_with_tenure_zero": 11,
+  "invalid_churn_labels": 0,
+  "tenure_min": 0,
+  "tenure_max": 72,
+  "monthly_charges_min": 18.25,
+  "monthly_charges_max": 118.75,
+  "negative_total_charges": 0,
+  "phone_service_structural_inconsistencies": 0,
+  "internet_service_structural_inconsistencies": 0,
+  "churners": 1869,
+  "non_churners": 5174,
+  "churn_rate": 0.2653698707936959,
+  "unique_customer_ids": 7043,
+  "analysis_environment": {
+    "python": "3.11.9",
+    "pandas": "2.3.3",
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "matplotlib": "3.11.2"
+  }
+}

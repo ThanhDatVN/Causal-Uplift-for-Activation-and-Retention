@@ -1,0 +1,128 @@
+{
+  "scenario": "V09_two_stage_recruitment",
+  "status": "PASS",
+  "gate_passed": true,
+  "worlds": 1000,
+  "seed": 20260921,
+  "started_at": "2026-09-21T07:31:08+00:00",
+  "runtime_seconds": 114.48,
+  "design": {
+    "frame_size": 10000,
+    "q_high_when_x1": 0.6,
+    "q_low_when_x0": 0.1,
+    "treatment_propensity": 0.5,
+    "studies": [
+      "fixed_frame",
+      "redrawn_frame"
+    ]
+  },
+  "failures": [],
+  "controls_that_did_not_break": [],
+  "readouts": [
+    {
+      "study": "fixed_frame",
+      "variance_target": "superpopulation",
+      "q_design": "q=0.6/0.1",
+      "worlds": 1000,
+      "coverage": 0.941,
+      "coverage_ci_low": 0.9246390972285408,
+      "coverage_ci_high": 0.9539857017871995,
+      "mean_ci_width": 0.013870999276608417,
+      "bias": -0.00011614958656075623,
+      "mc_se": 0.0001140935561327792,
+      "is_negative_control": false
+    },
+    {
+      "study": "fixed_frame",
+      "variance_target": "finite_frame",
+      "q_design": "q=0.6/0.1",
+      "worlds": 1000,
+      "coverage": 0.765,
+      "coverage_ci_low": 0.7377374064289094,
+      "coverage_ci_high": 0.7902344115737464,
+      "mean_ci_width": 0.008773324069189983,
+      "bias": -0.00011614958656075623,
+      "mc_se": 0.0001140935561327792,
+      "is_negative_control": true
+    },
+    {
+      "study": "fixed_frame",
+      "variance_target": "superpopulation",
+      "q_design": "q=1 boundary",
+      "worlds": 1000,
+      "coverage": 0.947,
+      "coverage_ci_low": 0.9313253831625082,
+      "coverage_ci_high": 0.9592534947514054,
+      "mean_ci_width": 0.0107336087837096,
+      "bias": 0.00018328901161054854,
+      "mc_se": 8.684015020773332e-05,
+      "is_negative_control": false
+    },
+    {
+      "study": "fixed_frame",
+      "variance_target": "finite_frame",
+      "q_design": "q=1 boundary",
+      "worlds": 1000,
+      "coverage": 0.0,
+      "coverage_ci_low": 2.168404344971009e-19,
+      "coverage_ci_high": 0.0038267584855551234,
+      "mean_ci_width": 0.0,
+      "bias": 0.00018328901161054854,
+      "mc_se": 8.684015020773332e-05,
+      "is_negative_control": true
+    },
+    {
+      "study": "redrawn_frame",
+      "variance_target": "superpopulation",
+      "q_design": "q=0.6/0.1",
+      "worlds": 1000,
+      "coverage": 0.948,
+      "coverage_ci_low": 0.93244426068072,
+      "coverage_ci_high": 0.9601269637162226,
+      "mean_ci_width": 0.013819629532513797,
+      "bias": -0.00013603422935340548,
+      "mc_se": 0.00011088774704514864,
+      "is_negative_control": false
+    },
+    {
+      "study": "redrawn_frame",
+      "variance_target": "finite_frame",
+      "q_design": "q=0.6/0.1",
+      "worlds": 1000,
+      "coverage": 0.781,
+      "coverage_ci_low": 0.7543184071059555,
+      "coverage_ci_high": 0.8055309546251624,
+      "mean_ci_width": 0.008744191385605556,
+      "bias": -0.00013603422935340548,
+      "mc_se": 0.00011088774704514864,
+      "is_negative_control": true
+    },
+    {
+      "study": "redrawn_frame",
+      "variance_target": "superpopulation",
+      "q_design": "q=1 boundary",
+      "worlds": 1000,
+      "coverage": 0.947,
+      "coverage_ci_low": 0.9313253831625082,
+      "coverage_ci_high": 0.9592534947514054,
+      "mean_ci_width": 0.010716149130044778,
+      "bias": 3.6874960346123194e-05,
+      "mc_se": 8.659593941698041e-05,
+      "is_negative_control": false
+    },
+    {
+      "study": "redrawn_frame",
+      "variance_target": "finite_frame",
+      "q_design": "q=1 boundary",
+      "worlds": 1000,
+      "coverage": 0.0,
+      "coverage_ci_low": 2.168404344971009e-19,
+      "coverage_ci_high": 0.0038267584855551234,
+      "mean_ci_width": 0.0,
+      "bias": 3.6874960346123194e-05,
+      "mc_se": 8.659593941698041e-05,
+      "is_negative_control": true
+    }
+  ],
+  "scope_note": "Recruitment-only intervals are scored as declared negative controls: they condition on the realised scores and must under-cover a target that also carries outcome and assignment noise. A pass means the superpopulation interval covered and the recruitment-only one did not."
+}

@@ -1,0 +1,66 @@
+{
+  "development_rows": 9516,
+  "test_rows_touched": 0,
+  "repeats": 3,
+  "folds": 3,
+  "nuisance_models": [
+    "logistic",
+    "hgb",
+    "catboost"
+  ],
+  "nuisance_selection": {
+    "criterion": "lowest repeated OOF factual Brier; AP and DR-score variance are supporting",
+    "winner": "catboost",
+    "factual_brier_mean": 0.031172544168216465,
+    "factual_ap_mean": 0.14925947782464732
+  },
+  "policy_robustness_gate": "positive mean Qini under every preregistered DR nuisance evaluator",
+  "component_winners": [
+    {
+      "component": "risk base learner",
+      "winner": "risk_logistic",
+      "selection_metric": "maximum worst-evaluator mean Qini-DR",
+      "minimum_evaluator_qini": 0.0025500791377026,
+      "qini_all_mean": 0.0026794063897805595,
+      "positive_across_all_evaluators": true,
+      "decision": "retain for confirmation"
+    },
+    {
+      "component": "S-learner base learner",
+      "winner": "s_logistic",
+      "selection_metric": "maximum worst-evaluator mean Qini-DR",
+      "minimum_evaluator_qini": -0.0006863569154271094,
+      "qini_all_mean": -0.0002789210377811667,
+      "positive_across_all_evaluators": false,
+      "decision": "no robust winner"
+    },
+    {
+      "component": "T-learner base learner",
+      "winner": "t_hgb",
+      "selection_metric": "maximum worst-evaluator mean Qini-DR",
+      "minimum_evaluator_qini": -0.000742500087898738,
+      "qini_all_mean": -0.0006474948164766266,
+      "positive_across_all_evaluators": false,
+      "decision": "no robust winner"
+    },
+    {
+      "component": "DR second-stage learner",
+      "winner": "dr_extratrees",
+      "selection_metric": "maximum worst-evaluator mean Qini-DR",
+      "minimum_evaluator_qini": 0.0007200534567739838,
+      "qini_all_mean": 0.0008262888852542425,
+      "positive_across_all_evaluators": true,
+      "decision": "retain for confirmation"
+    },
+    {
+      "component": "causal meta-learner",
+      "winner": "dr_extratrees",
+      "selection_metric": "maximum worst-evaluator mean Qini-DR",
+      "minimum_evaluator_qini": 0.0007200534567739838,
+      "qini_all_mean": 0.0008262888852542425,
+      "positive_across_all_evaluators": true,
+      "decision": "retain for confirmation"
+    }
+  ],
+  "warning": "evaluator sensitivity is a robustness audit, not permission to choose the evaluator that makes a preferred policy look best"
+}

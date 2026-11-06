@@ -1,0 +1,393 @@
+{
+  "stage": "R04_component_factorial",
+  "dataset": "hillstrom Mens E-Mail vs No E-Mail (development)",
+  "started_at": "2026-09-21T11:23:47+00:00",
+  "runtime_seconds": 5.91,
+  "gate": "reports/v4/validity_unshrunk/validity_suite.json: PASS at 2000 worlds with the skewness_adjusted_t interval -- SELECTED AFTER LOOKING: 1 other run(s) at the same 2000 worlds disagree (reports/v4/validity_confirm/validity_suite.json (skewness_adjusted_t: FAIL)), so this verdict is a post-hoc choice of interval method and needs independent confirmation",
+  "protocol": {
+    "factors": {
+      "representation": [
+        "base",
+        "base_plus_interactions"
+      ],
+      "final_stage": [
+        "ridge",
+        "hgb"
+      ],
+      "allocator": [
+        "rank",
+        "net_value"
+      ]
+    },
+    "interactions": [
+      "log1p_history x recency",
+      "log1p_history x newbie",
+      "recency x newbie",
+      "mens x womens"
+    ],
+    "cost_regimes": {
+      "homogeneous": "every contact costs the same; C is a null fixture here",
+      "heterogeneous": "contact cost varies by channel, so net value reranks"
+    },
+    "outer_folds": 3,
+    "capacity_fraction": 0.2,
+    "effect_fits": 12,
+    "split": "development only; the confirmation split is not opened"
+  },
+  "cohort": {
+    "n_units": 34092,
+    "n_events": 302,
+    "propensity": 0.49865070984395166
+  },
+  "cost_source": "assumed, not measured; Hillstrom has no cost ledger",
+  "null_fixture": {
+    "claim": "with a homogeneous cost, net value is the score minus a constant, so a rank allocator must contact exactly the same accounts",
+    "held": true,
+    "mismatched_cells": []
+  },
+  "main_effects": {
+    "homogeneous": {
+      "representation": {
+        "factor": "representation",
+        "from": "base",
+        "to": "base_plus_interactions",
+        "mean_effect": 9.828079614698228e-05,
+        "n_paired_readouts": 12,
+        "se": 0.0002087815310928804
+      },
+      "final_stage": {
+        "factor": "final_stage",
+        "from": "ridge",
+        "to": "hgb",
+        "mean_effect": 0.00034934313606121574,
+        "n_paired_readouts": 12,
+        "se": 0.00025630031037734215
+      },
+      "allocator": {
+        "factor": "allocator",
+        "from": "rank",
+        "to": "net_value",
+        "mean_effect": 0.0,
+        "n_paired_readouts": 12,
+        "se": 0.0
+      }
+    },
+    "heterogeneous": {
+      "representation": {
+        "factor": "representation",
+        "from": "base",
+        "to": "base_plus_interactions",
+        "mean_effect": -5.5708052624419405e-05,
+        "n_paired_readouts": 12,
+        "se": 0.0002292916623650136
+      },
+      "final_stage": {
+        "factor": "final_stage",
+        "from": "ridge",
+        "to": "hgb",
+        "mean_effect": 0.00021306217211228298,
+        "n_paired_readouts": 12,
+        "se": 0.0002939795345599658
+      },
+      "allocator": {
+        "factor": "allocator",
+        "from": "rank",
+        "to": "net_value",
+        "mean_effect": 7.851529804764387e-05,
+        "n_paired_readouts": 12,
+        "se": 0.00010875731810399923
+      }
+    }
+  },
+  "cells": [
+    {
+      "representation": "base",
+      "final_stage": "ridge",
+      "allocator": "rank",
+      "cost_regime": "homogeneous",
+      "fold_values": [
+        0.0008286461913664833,
+        0.0007838156855898209,
+        0.0009793614489482865
+      ],
+      "fold_signatures": [
+        "10000,10039,10051,10120,10134,10145,10161,10229,10263,10273,1029",
+        "10031,10070,10109,10130,10137,10151,10160,10174,10191,10222,1025",
+        "1,10016,10019,10021,10042,10090,10101,1011,10139,10270,10308,103"
+      ],
+      "cell_id": "base|ridge|rank",
+      "mean_value": 0.0008639411086348636
+    },
+    {
+      "representation": "base",
+      "final_stage": "ridge",
+      "allocator": "rank",
+      "cost_regime": "heterogeneous",
+      "fold_values": [
+        0.0008286461913664833,
+        0.0007838156855898209,
+        0.0009793614489482865
+      ],
+      "fold_signatures": [
+        "10000,10039,10051,10120,10134,10145,10161,10229,10263,10273,1029",
+        "10031,10070,10109,10130,10137,10151,10160,10174,10191,10222,1025",
+        "1,10016,10019,10021,10042,10090,10101,1011,10139,10270,10308,103"
+      ],
+      "cell_id": "base|ridge|rank",
+      "mean_value": 0.0008639411086348636
+    },
+    {
+      "representation": "base",
+      "final_stage": "ridge",
+      "allocator": "net_value",
+      "cost_regime": "homogeneous",
+      "fold_values": [
+        0.0008286461913664833,
+        0.0007838156855898209,
+        0.0009793614489482865
+      ],
+      "fold_signatures": [
+        "10000,10039,10051,10120,10134,10145,10161,10229,10263,10273,1029",
+        "10031,10070,10109,10130,10137,10151,10160,10174,10191,10222,1025",
+        "1,10016,10019,10021,10042,10090,10101,1011,10139,10270,10308,103"
+      ],
+      "cell_id": "base|ridge|net_value",
+      "mean_value": 0.0008639411086348636
+    },
+    {
+      "representation": "base",
+      "final_stage": "ridge",
+      "allocator": "net_value",
+      "cost_regime": "heterogeneous",
+      "fold_values": [
+        0.0011699547434824444,
+        0.0016402079895960436,
+        0.0012330323049911155
+      ],
+      "fold_signatures": [
+        "10000,10039,10051,10134,10161,10229,10263,10273,10293,10313,1034",
+        "10031,10070,10109,10130,10137,10160,10174,10191,10222,10240,1025",
+        "1,10016,10021,10042,10090,1011,10139,10143,10166,10270,10308,103"
+      ],
+      "cell_id": "base|ridge|net_value",
+      "mean_value": 0.0013477316793565348
+    },
+    {
+      "representation": "base",
+      "final_stage": "hgb",
+      "allocator": "rank",
+      "cost_regime": "homogeneous",
+      "fold_values": [
+        0.001069919472507219,
+        0.001032629877791224,
+        0.001138543010610728
+      ],
+      "fold_signatures": [
+        "10000,10007,10039,10040,10047,10074,10120,10134,10161,10292,1031",
+        "1002,10031,10050,10070,1008,10082,10093,10151,10160,10199,10235,",
+        "10016,10019,10032,10042,10097,10139,10143,10214,10236,10270,1027"
+      ],
+      "cell_id": "base|hgb|rank",
+      "mean_value": 0.001080364120303057
+    },
+    {
+      "representation": "base",
+      "final_stage": "hgb",
+      "allocator": "rank",
+      "cost_regime": "heterogeneous",
+      "fold_values": [
+        0.001069919472507219,
+        0.001032629877791224,
+        0.001138543010610728
+      ],
+      "fold_signatures": [
+        "10000,10007,10039,10040,10047,10074,10120,10134,10161,10292,1031",
+        "1002,10031,10050,10070,1008,10082,10093,10151,10160,10199,10235,",
+        "10016,10019,10032,10042,10097,10139,10143,10214,10236,10270,1027"
+      ],
+      "cell_id": "base|hgb|rank",
+      "mean_value": 0.001080364120303057
+    },
+    {
+      "representation": "base",
+      "final_stage": "hgb",
+      "allocator": "net_value",
+      "cost_regime": "homogeneous",
+      "fold_values": [
+        0.001069919472507219,
+        0.001032629877791224,
+        0.001138543010610728
+      ],
+      "fold_signatures": [
+        "10000,10007,10039,10040,10047,10074,10120,10134,10161,10292,1031",
+        "1002,10031,10050,10070,1008,10082,10093,10151,10160,10199,10235,",
+        "10016,10019,10032,10042,10097,10139,10143,10214,10236,10270,1027"
+      ],
+      "cell_id": "base|hgb|net_value",
+      "mean_value": 0.001080364120303057
+    },
+    {
+      "representation": "base",
+      "final_stage": "hgb",
+      "allocator": "net_value",
+      "cost_regime": "heterogeneous",
+      "fold_values": [
+        0.0010500883355883772,
+        0.0011809902794364066,
+        0.0009536669146336477
+      ],
+      "fold_signatures": [
+        "10000,10007,10039,10040,10047,10074,10120,10134,10161,10292,1031",
+        "1002,10031,10050,10070,1008,10082,10093,10151,10160,10199,10235,",
+        "10016,10019,10032,10042,10097,10139,10143,10214,10236,10270,1027"
+      ],
+      "cell_id": "base|hgb|net_value",
+      "mean_value": 0.0010615818432194771
+    },
+    {
+      "representation": "base_plus_interactions",
+      "final_stage": "ridge",
+      "allocator": "rank",
+      "cost_regime": "homogeneous",
+      "fold_values": [
+        7.353389070523087e-05,
+        0.00113070204042783,
+        0.0012836694100334097
+      ],
+      "fold_signatures": [
+        "10039,10051,10075,10134,10145,10161,10229,10253,10273,10293,1034",
+        "10031,10070,10103,10109,10130,10137,10151,10160,10174,10191,1022",
+        "1,10016,10021,10042,10052,10090,1011,10139,10143,10251,10270,103"
+      ],
+      "cell_id": "base_plus_interactions|ridge|rank",
+      "mean_value": 0.0008293017803888235
+    },
+    {
+      "representation": "base_plus_interactions",
+      "final_stage": "ridge",
+      "allocator": "rank",
+      "cost_regime": "heterogeneous",
+      "fold_values": [
+        7.353389070523087e-05,
+        0.00113070204042783,
+        0.0012836694100334097
+      ],
+      "fold_signatures": [
+        "10039,10051,10075,10134,10145,10161,10229,10253,10273,10293,1034",
+        "10031,10070,10103,10109,10130,10137,10151,10160,10174,10191,1022",
+        "1,10016,10021,10042,10052,10090,1011,10139,10143,10251,10270,103"
+      ],
+      "cell_id": "base_plus_interactions|ridge|rank",
+      "mean_value": 0.0008293017803888235
+    },
+    {
+      "representation": "base_plus_interactions",
+      "final_stage": "ridge",
+      "allocator": "net_value",
+      "cost_regime": "homogeneous",
+      "fold_values": [
+        7.353389070523087e-05,
+        0.00113070204042783,
+        0.0012836694100334097
+      ],
+      "fold_signatures": [
+        "10039,10051,10075,10134,10145,10161,10229,10253,10273,10293,1034",
+        "10031,10070,10103,10109,10130,10137,10151,10160,10174,10191,1022",
+        "1,10016,10021,10042,10052,10090,1011,10139,10143,10251,10270,103"
+      ],
+      "cell_id": "base_plus_interactions|ridge|net_value",
+      "mean_value": 0.0008293017803888235
+    },
+    {
+      "representation": "base_plus_interactions",
+      "final_stage": "ridge",
+      "allocator": "net_value",
+      "cost_regime": "heterogeneous",
+      "fold_values": [
+        -0.00038387145780561095,
+        0.0016166843678335385,
+        0.0010924982909529897
+      ],
+      "fold_signatures": [
+        "10000,10039,10051,10075,10134,10145,10161,10229,10253,10263,1029",
+        "10031,10070,10109,10137,10160,10174,10191,10222,10240,10254,1032",
+        "1,1000,10016,10021,10042,10052,10090,1011,10139,10143,10251,1027"
+      ],
+      "cell_id": "base_plus_interactions|ridge|net_value",
+      "mean_value": 0.0007751037336603058
+    },
+    {
+      "representation": "base_plus_interactions",
+      "final_stage": "hgb",
+      "allocator": "rank",
+      "cost_regime": "homogeneous",
+      "fold_values": [
+        0.0019611461995396222,
+        0.00011591326756486072,
+        0.0018576356554247018
+      ],
+      "fold_signatures": [
+        "10000,10039,10040,10041,10074,10075,10120,10134,10161,1020,10292",
+        "10031,10050,10070,1008,10093,10125,10151,10184,10199,10203,10235",
+        "1000,10016,10019,10032,10072,10097,10116,10123,10139,10143,10154"
+      ],
+      "cell_id": "base_plus_interactions|hgb|rank",
+      "mean_value": 0.0013115650408430616
+    },
+    {
+      "representation": "base_plus_interactions",
+      "final_stage": "hgb",
+      "allocator": "rank",
+      "cost_regime": "heterogeneous",
+      "fold_values": [
+        0.0019611461995396222,
+        0.00011591326756486072,
+        0.0018576356554247018
+      ],
+      "fold_signatures": [
+        "10000,10039,10040,10041,10074,10075,10120,10134,10161,1020,10292",
+        "10031,10050,10070,1008,10093,10125,10151,10184,10199,10203,10235",
+        "1000,10016,10019,10032,10072,10097,10116,10123,10139,10143,10154"
+      ],
+      "cell_id": "base_plus_interactions|hgb|rank",
+      "mean_value": 0.0013115650408430616
+    },
+    {
+      "representation": "base_plus_interactions",
+      "final_stage": "hgb",
+      "allocator": "net_value",
+      "cost_regime": "homogeneous",
+      "fold_values": [
+        0.0019611461995396222,
+        0.00011591326756486072,
+        0.0018576356554247018
+      ],
+      "fold_signatures": [
+        "10000,10039,10040,10041,10074,10075,10120,10134,10161,1020,10292",
+        "10031,10050,10070,1008,10093,10125,10151,10184,10199,10203,10235",
+        "1000,10016,10019,10032,10072,10097,10116,10123,10139,10143,10154"
+      ],
+      "cell_id": "base_plus_interactions|hgb|net_value",
+      "mean_value": 0.0013115650408430616
+    },
+    {
+      "representation": "base_plus_interactions",
+      "final_stage": "hgb",
+      "allocator": "net_value",
+      "cost_regime": "heterogeneous",
+      "fold_values": [
+        0.0017905163463823172,
+        0.0003265183244745366,
+        0.0015274132875153373
+      ],
+      "fold_signatures": [
+        "10000,10039,10040,10041,10074,10075,10120,10134,10161,1020,10292",
+        "10031,10050,10070,1008,10093,10125,10151,10184,10199,10203,10235",
+        "1000,10016,10019,10032,10072,10097,10116,10123,10139,10143,10154"
+      ],
+      "cell_id": "base_plus_interactions|hgb|net_value",
+      "mean_value": 0.0012148159861240636
+    }
+  ],
+  "scope_note": "Development only, three outer folds of one dataset. Main effects are paired across folds but three folds are not three datasets, and the contact costs are declared prices rather than postings."
+}

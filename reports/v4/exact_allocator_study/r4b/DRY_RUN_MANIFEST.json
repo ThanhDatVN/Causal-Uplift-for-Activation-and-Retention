@@ -1,0 +1,71 @@
+{
+  "status": "DRY_RUN_FROZEN_NO_EVALUATION_OUTCOMES_READ",
+  "created_at_utc": "2026-09-30T00:45:23.887076+00:00",
+  "config": {
+    "protocol_revision": "R4b-allocation-1.2-cap-exploratory-v1",
+    "role": "post-R4_exploratory_new_known_truth_synthetic_worlds",
+    "mechanisms": [
+      "aligned",
+      "opposed",
+      "sharp_null"
+    ],
+    "worlds_per_mechanism": 30,
+    "train_units": 10000,
+    "selection_units_reserved_unused": 5000,
+    "evaluation_batches": 50,
+    "evaluation_batch_size": 20,
+    "contact_fraction": 0.2,
+    "hard_contacts_per_batch": 4,
+    "money_cap_cents": 120,
+    "cost_cents_by_X2": {
+      "0": 20,
+      "1": 120
+    },
+    "constraint_geometry": "A single expensive contact uses the 120-cent budget; four cheap contacts cost 80 cents. A high individual expensive score can block a better bundle of cheap contacts.",
+    "value_per_prevented_event": 100.0,
+    "score_recipe": "M07 DR-Ridge, alpha=10, 3-fold cross-fitted logistic nuisances, e=0.5",
+    "generator": "R04 V03 p0; tau=+/-0.01(2X1-1) or sharp null; X1/X2 binary, Z normal",
+    "primary_contrast": "exact minus feasible rank; paired true expected net CU per 1000 eligible",
+    "secondary_contrasts": [
+      "predicted objective gain",
+      "true gross prevented-event value gain",
+      "true contact-cost saving"
+    ],
+    "interval": "two-sided 95% Student t across 30 independent world differences",
+    "practical_margin_opposed_CU_per_1000": 1.0,
+    "seed_namespace": {
+      "base": 940000,
+      "world": "base + mechanism_index*10000 + world_index*10",
+      "train_features": "+1",
+      "train_assignment_and_outcome": "+2",
+      "selection_features": "+3",
+      "evaluation_features": "+4",
+      "model": "+5"
+    },
+    "expected_outputs": [
+      "WORLD_RESULTS.csv",
+      "RESULT.json",
+      "ALLOCATOR_STUDY.md",
+      "RUN_MANIFEST.json"
+    ],
+    "resource_cap": "90 model fits; 4500 paired 20-unit batches; CPU only",
+    "external_data_and_splits": "none; independent generated train/selection/evaluation roles"
+  },
+  "source_sha256": "6ec4e4aedf84327db2476a093a87adcea42a0ec376bde24f88926b4a67a207c1",
+  "protocol_sha256": "d4a6e216fc3e946c971d7ca49909bcb7aae3b667dcac14021c1cfc4e42ed40c8",
+  "research_lock_sha256": "623d1ac4b560c674ad7522c12d1b76ce2f2cd0fe198da156a4803199ad172279",
+  "python_version": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+  "package_versions": {
+    "numpy": "2.4.6",
+    "pandas": "2.3.3",
+    "scipy": "1.17.1",
+    "scikit-learn": "1.7.2"
+  },
+  "schema_checks": {
+    "disjoint_role_seed_namespaces": true,
+    "known_design_propensity": 0.5,
+    "oracle_only_for_post_decision_evaluation": true,
+    "contact_cap": 4,
+    "costs_integer_cents": true
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "protocol": "R1_repair_v1",
+  "frozen_config_sha256": "d111e6a25bbb6bfdc7a6f3016a5abaead2c24674fdfc3c077891391787a6ca79",
+  "command": "run",
+  "started_utc": "2026-10-01T18:14:38.981807+00:00",
+  "status": "COMPLETE",
+  "result_sha256": "1d8914d41e916bbaf95e0314d4b9801d009f322233e354e1b0c07a5f5a2ee3fb",
+  "report_sha256": "688499677a778bbd9e371fcc9d3defb8c2256987d779df4939615c8c49d3859b",
+  "study_status": "SYNTHETIC_GATE_FAILED",
+  "finished_utc": "2026-10-01T18:16:22.092158+00:00",
+  "elapsed_seconds": 103.11001419999957
+}

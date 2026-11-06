@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "started_at_utc": "2026-09-30T01:21:59.580861+00:00",
+  "completed_at_utc": "2026-09-30T01:28:42.743679+00:00",
+  "run_role": "predictive_frozen_test_full",
+  "run_argv": [
+    "python",
+    "scripts/reproduce_benchmark.py",
+    "--full",
+    "--output",
+    "reports/v4/reproduced_full",
+    "--model-dir",
+    "artifacts/reproduced_full"
+  ],
+  "run_command": "python scripts/reproduce_benchmark.py --full --output reports/v4/reproduced_full --model-dir artifacts/reproduced_full",
+  "git_revision": null,
+  "producer_source_sha256": "828b3d284469537aed8ea23dfc9912408a386950ac0e69a697dedc125ee79ec5",
+  "source_hash_scope": [
+    "src",
+    "scripts",
+    "pyproject.toml",
+    "requirements-api.txt",
+    ".github/workflows"
+  ],
+  "dataset": {
+    "path": "D:\\GitHub\\machine\\data\\raw\\Telco-Customer-Churn.csv",
+    "sha256": "16320c9c1ec72448db59aa0a26a0b95401046bef5d02fd3aeb906448e3055e91"
+  },
+  "split": {
+    "path": "D:\\GitHub\\machine\\data\\splits\\split_manifest.csv",
+    "sha256": "08a34a4e87b8fbf143299650fad0fecb459552336db34587c47a5ca376950630"
+  },
+  "model": {
+    "path": "D:\\GitHub\\machine\\artifacts\\reproduced_full\\champion.joblib",
+    "sha256": "289c7af82c574f23d92fe59d21197b76b6ee860b2b4a7c12fa0caf0de609e896"
+  },
+  "report": {
+    "path": "D:\\GitHub\\machine\\reports\\v4\\reproduced_full\\BENCHMARK_REPORT.md",
+    "sha256": "d23770429a2021da49f965b7b464c2b4677b336a5515c13dcee07f22007f364c"
+  },
+  "benchmark_protocol": "v1",
+  "champion_model": "logistic",
+  "test_metrics": {
+    "average_precision": 0.6396005898933755,
+    "roc_auc": 0.8499160401973702,
+    "brier_score": 0.13446225106148166,
+    "brier_skill_score": 0.31037910498956467,
+    "log_loss": 0.41335731691011873,
+    "accuracy_at_0_5": 0.8112136266855926,
+    "precision_at_0_5": 0.6626506024096386,
+    "recall_at_0_5": 0.5882352941176471,
+    "f1_at_0_5": 0.623229461756374,
+    "prevalence": 0.2654364797728886
+  },
+  "research_lock": {
+    "path": "D:\\GitHub\\machine\\locks\\research.lock.txt",
+    "sha256": "623d1ac4b560c674ad7522c12d1b76ce2f2cd0fe198da156a4803199ad172279",
+    "satisfied": true,
+    "missing": [],
+    "changed": [],
+    "extra_count": 56
+  },
+  "caution": "Full protocol reproduces predictive metrics only; IBM has no treatment outcomes or validated 30-day horizon."
+}

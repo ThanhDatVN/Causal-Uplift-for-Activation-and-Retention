@@ -1,0 +1,10 @@
+{
+  "lock_path": "locks/research.lock.txt",
+  "python_version": "3.11.9",
+  "platform_name": "Windows-10-10.0.26200-SP0",
+  "n_locked": 180,
+  "missing": [],
+  "changed": [],
+  "extra": [],
+  "satisfied": true
+}

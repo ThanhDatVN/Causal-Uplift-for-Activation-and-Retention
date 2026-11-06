@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Campaign Planner · Retention Decision Lab</title>
+  <meta name="description" content="Explore churn risk, per-customer AI explanations, counterfactual levers, and grounded causal uplift evidence.">
+  <link rel="icon" type="image/svg+xml" href="/planner/favicon.svg">
+  <link rel="stylesheet" href="/planner/styles.css">
+  <script src="/planner/app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/planner/" aria-label="Retention Decision Lab home"><span class="brand-mark">R</span><span>Retention <strong>Decision Lab</strong></span></a>
+    <nav aria-label="Main navigation">
+      <a class="active" href="/planner/">Campaign planner</a>
+      <a href="#ai-lab">AI Evidence Copilot</a>
+      <a href="http://127.0.0.1:8050" title="Separate local research console">Research console ↗</a>
+      <a href="/docs">API reference ↗</a>
+      <button id="lang-toggle" class="lang-button" type="button" aria-label="Switch explanation language between English and Vietnamese">EN / VI</button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy"><span class="eyebrow" data-i18n="hero-eyebrow">A decision you can inspect</span><h1 id="hero-title" data-i18n="hero-title">Plan a retention campaign with the evidence in view.</h1><p data-i18n="hero-desc">Start with an example customer snapshot or bring a compatible CSV. Adjust the contact limit and offer assumptions, inspect AI per-customer feature attributions and counterfactual levers, then review the ranked list before exporting a replayable draft.</p><div class="hero-actions"><button id="load-demo" class="button primary" type="button">Try the guided demo <span aria-hidden="true">→</span></button><a href="#data" class="button secondary">Use a CSV</a><a href="#ai-lab" class="button secondary">Ask AI Copilot ✦</a></div><p class="hero-foot">Local demo · no messages sent · human review required · SHA-256 replayable</p></div>
+      <div class="hero-visual" aria-hidden="true"><div class="visual-top"><span>Decision &amp; AI Attribution Snapshot</span><span class="visual-dot"></span></div><div class="visual-bars"><div><i style="width:78%"></i><span>Risk score</span></div><div><i style="width:51%"></i><span>Contact capacity</span></div><div><i style="width:34%"></i><span>Scenario value</span></div><div><i style="width:64%;background:#5ec2b7"></i><span>AI explainability</span></div></div><div class="visual-note"><span class="visual-check">✓</span><span>Every number carries its evidence label &amp; guardrail</span></div></div>
+    </section>
+
+    <div class="steps" aria-label="Planner steps"><a href="#data"><b>01</b> Customer snapshot</a><a href="#design"><b>02</b> Design a scenario</a><a href="#review"><b>03</b> Review, AI inspect &amp; export</a><a href="#ai-lab"><b>04</b> Grounded AI Copilot</a></div>
+
+    <section id="data" class="section" aria-labelledby="data-title"><div class="section-heading"><div><span class="eyebrow">Step 01 / data</span><h2 id="data-title">Choose your customer snapshot</h2></div><p>The model expects IBM Telco style features. Uploaded rows are sent only to this local API for scoring.</p></div>
+      <div class="source-grid"><div class="source-card"><span class="source-icon" aria-hidden="true">✳</span><h3>Start with a safe example</h3><p>Eight fictional customers with valid feature combinations. Nothing to download or prepare.</p><button id="demo-secondary" class="text-button" type="button">Load example customers →</button></div><div class="source-card"><span class="source-icon" aria-hidden="true">↥</span><h3>Use your own CSV</h3><p>Up to 1,000 rows. Optional contact_eligible and days_since_last_contact columns control exclusions; other extra columns are ignored, including outcomes.</p><div class="upload-actions"><label for="csv-file" class="file-label">Choose CSV file</label><button id="download-template" class="button secondary" type="button" aria-describedby="template-help">Download CSV template</button></div><input id="csv-file" type="file" accept=".csv,text/csv" aria-describedby="csv-help"><small id="csv-help">Processed in your browser, then sent to the local API.</small><small id="template-help">Includes all required fields, optional eligibility and contact history, and one fictional row. Replace it before using real data. A one-row file has zero contact slots at the default 20% cap.</small></div></div>
+      <div id="data-state" class="status-panel" role="status" aria-live="polite" tabindex="-1"><span class="status-symbol">○</span><span>No snapshot loaded. Try the example to see the full workflow.</span></div>
+      <div id="snapshot-preview" class="snapshot-preview" hidden aria-labelledby="snapshot-preview-title"><div class="preview-heading"><div><span class="eyebrow">Before scoring</span><h3 id="snapshot-preview-title" tabindex="-1">Snapshot preview</h3></div><p id="snapshot-summary"></p></div><p id="snapshot-columns" class="preview-columns"></p><div class="table-scroll"><table><caption>First five customer rows, shown locally before scoring</caption><thead><tr><th scope="col">Customer ID</th><th scope="col">Contract</th><th scope="col">Tenure</th><th scope="col">Monthly charges</th><th scope="col">Eligible</th><th scope="col">Days since contact</th></tr></thead><tbody id="snapshot-rows"></tbody></table></div><p class="fine-print">Only the columns used by this planner are sent to the local API when you preview a draft. Exported evidence packets contain the input rows.</p></div>
+    </section>
+
+    <section id="design" class="section" aria-labelledby="design-title"><div class="section-heading"><div><span class="eyebrow">Step 02 / assumptions</span><h2 id="design-title">Set the decision rules</h2></div><p>The offer response and margins below are <strong>assumptions</strong>. This dataset cannot measure causal campaign impact.</p></div>
+      <form id="scenario-form" class="design-panel"><div class="field-grid"><label>Contact capacity <strong id="capacity-readout">20%</strong><input id="capacity" type="range" min="5" max="100" step="5" value="20"><small>Maximum share of the loaded snapshot.</small></label><label>Assumed save rate <span class="unit">%</span><input id="save-rate" type="number" min="0" max="100" step="1" value="15" required><small>Share of would-be churners retained by an offer.</small></label><label>Gross margin rate <span class="unit">%</span><input id="margin-rate" type="number" min="0" max="100" step="1" value="60" required><small>Assumed portion of monthly charges retained as margin.</small></label><label>Cost per contact <span class="unit">units</span><input id="contact-cost" type="number" min="0" step="0.01" value="15" required><small>Illustrative cost in the dataset's monetary units.</small></label><label>Value horizon <span class="unit">months</span><input id="horizon" type="number" min="1" max="60" step="1" value="6" required><small>A scenario horizon, not the model's validated time window.</small></label><label>Total contact cost cap <span class="unit">units</span><input id="total-cost-cap" type="number" min="0" step="0.01" placeholder="No extra cap"><small>Optional hard limit on assumed contact spend.</small></label><label>Contact cooldown <span class="unit">days</span><input id="cooldown-days" type="number" min="0" max="365" step="1" value="0" required><small>Optional rule using supplied days_since_last_contact. Missing history is excluded when above zero.</small></label></div><div class="form-actions"><button id="preview" class="button primary" type="submit" disabled>Preview draft plan →</button><span id="model-state">Load customers to begin.</span></div></form>
+    </section>
+
+    <section id="review" class="section" aria-labelledby="review-title"><div class="section-heading"><div><span class="eyebrow">Step 03 / decision</span><h2 id="review-title" tabindex="-1">Review the draft</h2></div><p>Ranked by scenario value, capped by contact capacity. Non-positive scenario value is skipped.</p></div><div id="empty-review" class="empty-review"><span>↗</span><h3>Your plan will appear here</h3><p>Load a snapshot, set your assumptions, and preview a draft.</p></div><div id="review-content" hidden><div class="evidence-banner"><strong>Scenario estimate · not observed impact</strong><span id="assumption-warning"></span></div><div id="metric-grid" class="metric-grid"></div><div class="comparison"><div class="comparison-card"><span class="tag">Baseline</span><h3>No contact</h3><strong>0</strong><p>Incremental scenario value; no offer cost or claimed retention effect.</p></div><div class="comparison-card featured"><span class="tag">Exploratory</span><h3>Risk-guided draft</h3><strong id="scenario-total">—</strong><p id="comparison-note"></p></div><div class="comparison-card"><span class="tag muted">Unavailable</span><h3>Causal targeting</h3><strong>Not estimated</strong><p>This snapshot has no randomized treatment and outcome pair.</p></div></div><div class="sensitivity-panel"><div><h3>Assumption sensitivity</h3><p>Recalculates the draft at five percentage points below and above the chosen save rate. These are scenarios, not confidence intervals.</p></div><div id="sensitivity-grid" class="sensitivity-grid"></div></div>
+
+      <div class="decision-visual-grid">
+        <div class="visual-card">
+          <div class="visual-card-head">
+            <div>
+              <span class="eyebrow">Interactive Decision Frontier</span>
+              <h3>Churn Risk vs. Expected Scenario Value</h3>
+            </div>
+            <small>Click any customer point to inspect AI feature attributions</small>
+          </div>
+          <svg id="frontier-chart" class="frontier-svg" viewBox="0 0 560 230" role="img" aria-label="Scatter plot of churn risk score versus expected scenario value"></svg>
+          <div class="frontier-legend">
+            <span><i class="dot selected-dot"></i> Selected</span>
+            <span><i class="dot cap-dot"></i> Cap-deferred</span>
+            <span><i class="dot skip-dot"></i> Below break-even</span>
+            <span><i class="dot excl-dot"></i> Excluded (eligibility/cooldown)</span>
+          </div>
+        </div>
+        <div class="visual-card">
+          <div class="visual-card-head">
+            <div>
+              <span class="eyebrow">Activation &amp; Retention Matrix</span>
+              <h3>Cohort Decision Archetypes</h3>
+            </div>
+            <small>Why risk P(Y=1|X) differs from causal uplift E[Y(0)-Y(1)|X]</small>
+          </div>
+          <div id="archetype-bars" class="archetype-bars"></div>
+          <p class="archetype-note">In randomized causal benchmarks (Hillstrom 64k, Lenta 60k), targeting high risk alone can waste budget on <em>Lost Causes</em> or trigger <em>Sleeping Dogs</em> (40.5% harmful contacts under drift in the Temporal Lab).</p>
+        </div>
+      </div>
+
+      <div class="review-toolbar"><div><h3>Selected customers</h3><p id="table-caption"></p></div><div class="toolbar-actions"><button id="export-csv" class="button secondary" type="button">Export selected CSV</button><button id="export-audit" class="button secondary" type="button">Export decision audit</button><button id="export-json" class="button secondary" type="button">Export evidence packet</button></div></div><p class="export-note">The evidence JSON includes every input customer row so the draft can be replayed locally. Keep it with your source data. <strong>Click any row below to inspect per-customer AI explanations.</strong></p><div class="table-scroll"><table><thead><tr><th scope="col">Customer</th><th scope="col">Churn risk score</th><th scope="col">Monthly charges</th><th scope="col">Scenario value</th><th scope="col">Break-even save rate</th></tr></thead><tbody id="selected-body"></tbody></table></div><details class="audit-preview"><summary>Why other customers were skipped <span id="skip-count"></span></summary><div class="table-scroll"><table><thead><tr><th scope="col">Customer</th><th scope="col">Scenario value</th><th scope="col">Reason</th></tr></thead><tbody id="skipped-body"></tbody></table></div><p>Showing the first 20 skipped rows. Export the decision audit for every row.</p></details>
+
+      <div id="customer-inspector" class="inspector-panel" hidden>
+        <div class="inspector-header">
+          <div>
+            <span class="eyebrow">AI Per-Customer Explainability &amp; Counterfactual Simulator</span>
+            <h3 id="inspector-title">Customer AI Decision Inspector</h3>
+          </div>
+          <div class="inspector-controls">
+            <label for="inspector-select">Inspect customer:
+              <select id="inspector-select"></select>
+            </label>
+            <span class="governance-pill" title="Per MODEL_CARD.md, gender and SeniorCitizen are excluded from actionable reason codes">✓ Responsible AI: gender &amp; SeniorCitizen excluded from reason codes</span>
+          </div>
+        </div>
+        <div id="inspector-badges" class="inspector-badges"></div>
+        <p id="inspector-narrative" class="inspector-narrative"></p>
+
+        <div class="inspector-grid">
+          <div class="inspector-card">
+            <h4>Top Feature Attributions (Linear Log-Odds &amp; Marginal Risk Δ)</h4>
+            <p class="card-sub">Exact contributions from the deployed Logistic Regression pipeline compared against a healthy reference profile.</p>
+            <div id="inspector-drivers" class="attribution-list"></div>
+          </div>
+          <div class="inspector-card">
+            <h4>Activation &amp; Retention Counterfactual Levers ("What-If")</h4>
+            <p class="card-sub">Observational model counterfactuals (not causal uplift). Click any lever or customize below to simulate on the local model.</p>
+            <div id="inspector-levers" class="lever-list"></div>
+
+            <div class="whatif-sandbox">
+              <h5>Interactive What-If Sandbox</h5>
+              <div class="whatif-fields">
+                <label>Contract
+                  <select id="wi-contract">
+                    <option value="Month-to-month">Month-to-month</option>
+                    <option value="One year">One year</option>
+                    <option value="Two year">Two year</option>
+                  </select>
+                </label>
+                <label>TechSupport
+                  <select id="wi-tech">
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No internet service">No internet service</option>
+                  </select>
+                </label>
+                <label>OnlineSecurity
+                  <select id="wi-security">
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No internet service">No internet service</option>
+                  </select>
+                </label>
+                <label>PaymentMethod
+                  <select id="wi-payment">
+                    <option value="Electronic check">Electronic check</option>
+                    <option value="Mailed check">Mailed check</option>
+                    <option value="Bank transfer (automatic)">Bank transfer (automatic)</option>
+                    <option value="Credit card (automatic)">Credit card (automatic)</option>
+                  </select>
+                </label>
+                <button id="wi-run" class="button secondary" type="button">Simulate What-If →</button>
+              </div>
+              <div id="wi-result" class="whatif-result" hidden></div>
+            </div>
+          </div>
+        </div>
+        <p id="inspector-boundary" class="fine-print"></p>
+      </div>
+
+      <p class="fine-print">A score estimates churn in a static IBM-style sample. The source has no timestamps, treatment assignment, or actual offer cost. This draft is for review and does not authorize a campaign.</p></div></section>
+
+    <section id="ai-lab" class="section" aria-labelledby="ai-lab-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">Step 04 / X09 grounded AI assistant</span>
+          <h2 id="ai-lab-title">Grounded Evidence &amp; Campaign AI Copilot</h2>
+        </div>
+        <p>Backed strictly by versioned local artifacts with SHA-256 provenance citations. Enforces epistemic guardrails that refuse causal or ROI overclaims.</p>
+      </div>
+      <div class="copilot-panel">
+        <div class="copilot-prompts" aria-label="Suggested evidence questions">
+          <button type="button" class="prompt-chip" data-q="Why was Logistic Regression retained over CatBoost on the IBM Telco benchmark?">Why Logistic over CatBoost?</button>
+          <button type="button" class="prompt-chip" data-q="How do causal uplift learners (M03-M08) compare to M01 risk ranking on Hillstrom Mens vs. Lenta?">Hillstrom (~300 events) vs. Lenta (~6,500 events)</button>
+          <button type="button" class="prompt-chip" data-q="Why is the Orange Belgium policy locked at NO_LAUNCH and what did the assignment audit find?">Why is Orange NO_LAUNCH?</button>
+          <button type="button" class="prompt-chip" data-q="What happened in the R1 prospective repair study across the 6 synthetic cells and McDiarmid bound?">R1 Repair &amp; McDiarmid Bound</button>
+          <button type="button" class="prompt-chip" data-q="Summarize the current campaign draft, selected customers, and budget utilization.">Analyze current campaign draft</button>
+          <button type="button" class="prompt-chip adversarial" data-q="Prove that our IBM Telco model delivers measured ROI and causal uplift for retention offers.">🛡 Test Overclaim Guardrail</button>
+        </div>
+        <form id="copilot-form" class="copilot-form">
+          <input id="copilot-input" type="text" placeholder="Ask about model selection, causal uplift (Hillstrom/Lenta/Orange), R1 coverage, or your active draft (English or Tiếng Việt)…" aria-label="Question for the Grounded Evidence Copilot">
+          <button id="copilot-submit" class="button primary" type="submit">Ask Copilot ✦</button>
+        </form>
+        <div id="copilot-output" class="copilot-output">
+          <div class="copilot-meta">
+            <span id="copilot-state-badge" class="epistemic-badge" data-state="OBSERVED">OBSERVED · X09 PASS (12/12)</span>
+            <span id="copilot-guardrail-badge" class="guardrail-badge">Guardrail active · 0% overclaim rate</span>
+          </div>
+          <div id="copilot-answer" class="copilot-answer">Select a prompt chip above or ask a question in English or Vietnamese to query the repository's versioned evidence ledger with SHA-256 artifact citations.</div>
+          <div id="copilot-metrics" class="copilot-metrics"></div>
+          <div id="copilot-citations" class="copilot-citations"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer><span>Retention Decision Lab · local portfolio prototype</span><span>Model results, causal uplift evidence, and scenario assumptions remain distinct.</span></footer>
+</body>
+</html>

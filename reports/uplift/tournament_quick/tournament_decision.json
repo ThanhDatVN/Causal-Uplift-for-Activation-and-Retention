@@ -1,0 +1,19 @@
+{
+  "development_champion": "risk_logistic",
+  "mean_best_model": "risk_logistic",
+  "one_standard_error_floor": 0.0023405903748086546,
+  "selection_reason": "simplest model within one SE of best eligible mean Qini-DR",
+  "causal_replacement": "none",
+  "causal_replacement_gate": "paired Qini-DR delta lower 95% CI > 0 and wins at least 80% of repeats",
+  "profile": "quick",
+  "candidate_count": 8,
+  "repeats": 2,
+  "folds": 3,
+  "development_rows": 9516,
+  "test_rows_touched": 0,
+  "primary_metric": "mean normalized Qini using a common cross-fitted DR evaluator",
+  "sensitivity_metric": "mean normalized Qini using known-propensity IPW",
+  "operational_capacity": 0.2,
+  "gate_positive_repeat_rate": 1.0,
+  "promotion_status": "future challenger only; requires a new campaign/holdout"
+}

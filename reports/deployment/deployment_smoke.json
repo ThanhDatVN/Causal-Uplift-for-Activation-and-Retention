@@ -1,0 +1,206 @@
+{
+  "started_at": "2026-09-21T02:40:23+00:00",
+  "status": "PASS",
+  "n_checks": 12,
+  "n_failed": 0,
+  "n_skipped": 0,
+  "checks": [
+    {
+      "name": "api_live",
+      "passed": true,
+      "detail": "GET /health/live -> 200",
+      "measured": {},
+      "required": true
+    },
+    {
+      "name": "api_ready",
+      "passed": true,
+      "detail": "GET /health/ready -> 200",
+      "measured": {},
+      "required": true
+    },
+    {
+      "name": "api_model_info",
+      "passed": true,
+      "detail": "artifact_version 1.0.0",
+      "measured": {
+        "artifact_version": "1.0.0",
+        "created_at_utc": "2026-09-13T09:03:47.514598+00:00",
+        "champion_model": "logistic",
+        "calibration": "none",
+        "complexity_gate_decision": "logistic retained; complex model did not clear the predeclared gate",
+        "feature_columns": [
+          "gender",
+          "SeniorCitizen",
+          "Partner",
+          "Dependents",
+          "PhoneService",
+          "MultipleLines",
+          "InternetService",
+          "OnlineSecurity",
+          "OnlineBackup",
+          "DeviceProtection",
+          "TechSupport",
+          "StreamingTV",
+          "StreamingMovies",
+          "Contract",
+          "PaperlessBilling",
+          "PaymentMethod",
+          "tenure",
+          "MonthlyCharges",
+          "TotalCharges"
+        ],
+        "dataset_sha256": "16320c9c1ec72448db59aa0a26a0b95401046bef5d02fd3aeb906448e3055e91",
+        "split_manifest_sha256": "08a34a4e87b8fbf143299650fad0fecb459552336db34587c47a5ca376950630",
+        "split_seed": 20260913,
+        "development_rows": 5634,
+        "test_rows": 1409,
+        "benchmark_protocol": "v1",
+        "test_metrics": {
+          "average_precision": 0.6396005898933755,
+          "roc_auc": 0.8499160401973702,
+          "brier_score": 0.13446225106148166,
+          "brier_skill_score": 0.31037910498956467,
+          "log_loss": 0.41335731691011873,
+          "accuracy_at_0_5": 0.8112136266855926,
+          "precision_at_0_5": 0.6626506024096386,
+          "recall_at_0_5": 0.5882352941176471,
+          "f1_at_0_5": 0.623229461756374,
+          "prevalence": 0.2654364797728886
+        },
+        "budget_10pct": {
+          "budget_fraction": 0.1,
+          "k": 141.0,
+          "true_positives": 101.0,
+          "precision_at_budget": 0.7163120567375887,
+          "recall_at_budget": 0.2700534759358289,
+          "lift_at_budget": 2.6986194864793114,
+          "contacts_per_captured_churner": 1.396039603960396
+        },
+        "best_params": {
+          "model__C": 10.0,
+          "model__class_weight": null
+        },
+        "mlflow_run_ids": {
+          "dummy_prior": "a75e8863cb2e4eed8b205de68b52a840",
+          "dummy_most_frequent": "2c245130759342a1be76bb1b0c4fef9b",
+          "logistic": "3f7f8cb38b4d41feb8dd938329539c7b",
+          "logistic_no_sensitive": "f697c73a2aca4bb784d43774f5ac47da",
+          "hist_gradient_boosting": "d03e550d6dfe4930a648eebb6e5b0141",
+          "catboost": "1375a59e35ff41c3a5dcb30335548495"
+        },
+        "environment": {
+          "python": "3.11.9",
+          "platform": "Windows-10-10.0.26200-SP0",
+          "scikit_learn": "1.7.2",
+          "pandas": "2.3.3",
+          "numpy": "2.4.6"
+        },
+        "limitations": [
+          "IBM sample is small/fictitious and has no timestamp for out-of-time validation.",
+          "No treatment/control outcomes; business value is scenario-based, not causal uplift.",
+          "Probabilities are not validated for a real telecom population."
+        ],
+        "champion_mlflow_run_id": "4529c3ed6a3e41eeb7ccf97b25e1d7f7"
+      },
+      "required": true
+    },
+    {
+      "name": "api_rejects_invalid_input",
+      "passed": true,
+      "detail": "inconsistent phone/lines record -> 422 (expected 422)",
+      "measured": {},
+      "required": true
+    },
+    {
+      "name": "host_container_parity",
+      "passed": true,
+      "detail": "max |host - container| = 1.110e-16 over 50 records (tolerance 1e-12)",
+      "measured": {
+        "max_absolute_gap": 1.1102230246251565e-16,
+        "n_records": 50
+      },
+      "required": true
+    },
+    {
+      "name": "console_live",
+      "passed": true,
+      "detail": "GET /health/live -> 200",
+      "measured": {},
+      "required": true
+    },
+    {
+      "name": "console_ready",
+      "passed": true,
+      "detail": "GET /health/ready -> 200, release tier ENGINEERING_FOUNDATION",
+      "measured": {},
+      "required": true
+    },
+    {
+      "name": "console_deployment_info",
+      "passed": true,
+      "detail": "snapshot cd1feaf04ea897fb, 13/13 artifacts, tier ENGINEERING_FOUNDATION",
+      "measured": {
+        "package_version": "0.1.0",
+        "evidence_snapshot": "cd1feaf04ea897fb",
+        "release_tier": "ENGINEERING_FOUNDATION",
+        "artifacts_present": 13,
+        "artifacts_declared": 13,
+        "artifacts_stale_against_code": [],
+        "generated_at": "2026-09-21T02:40:24+00:00",
+        "started_at": "2026-09-21T02:40:21+00:00",
+        "artifact_root": "/app",
+        "read_only": true,
+        "in_container": true,
+        "security_note": "This console has no authentication and serves evidence artifacts verbatim. Bind it to localhost or a trusted network; do not expose it to the public internet.",
+        "operational_bounds": [
+          "Serves stored artifacts and recomputes readouts from them; it never refits a model and never writes to the artifact root.",
+          "Sends nothing to any customer and triggers no campaign action.",
+          "Every readout other than the locked policy decision is exploratory."
+        ]
+      },
+      "required": true
+    },
+    {
+      "name": "evidence_snapshot_matches_host",
+      "passed": true,
+      "detail": "container cd1feaf04ea897fb vs host cd1feaf04ea897fb",
+      "measured": {
+        "container": "cd1feaf04ea897fb",
+        "host": "cd1feaf04ea897fb"
+      },
+      "required": false
+    },
+    {
+      "name": "console_exposes_no_write_path",
+      "passed": true,
+      "detail": "POST /api/evidence -> 405 (expected 405 or 404)",
+      "measured": {},
+      "required": true
+    },
+    {
+      "name": "locked_decision_reproduced",
+      "passed": true,
+      "detail": "deployed DR 0.0333090725 vs published 0.0333090725 (gap 1.4e-17), decision no_launch",
+      "measured": {
+        "deployed": 0.033309072500723486,
+        "published": 0.0333090725007235
+      },
+      "required": true
+    },
+    {
+      "name": "database_schema",
+      "passed": true,
+      "detail": "4 tables present; migration applied",
+      "measured": {
+        "tables": [
+          "campaign_decisions",
+          "churn_scores",
+          "model_versions",
+          "scoring_runs"
+        ]
+      },
+      "required": true
+    }
+  ]
+}

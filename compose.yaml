@@ -1,0 +1,83 @@
+# Local deployment of the two services and the operational database.
+#
+#   docker compose up --build -d
+#   docker compose ps          # all three healthy
+#   docker compose down -v
+#
+# Bindings are 127.0.0.1 on purpose.  Neither service authenticates: the API
+# returns risk scores and the console serves research evidence verbatim, so
+# both belong on localhost or a trusted network, never on a public address.
+
+services:
+  api:
+    image: telcochurn-api:local
+    build:
+      context: .
+      target: api
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      TELCO_MODEL_PATH: /app/artifacts/models/champion.joblib
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/ready')"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 20s
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  console:
+    image: telcochurn-console:local
+    build:
+      context: .
+      target: console
+    ports:
+      - "127.0.0.1:8050:8050"
+    environment:
+      TELCO_ARTIFACT_ROOT: /app
+      TELCO_CONSOLE_HOST: 0.0.0.0
+    # The console only ever reads its artifacts.  Enforcing that here means a
+    # bug cannot quietly rewrite the evidence the image was built from.
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8050/health/ready')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  postgres:
+    image: postgres:17-alpine
+    # Bound to loopback so the migration and the serving schema can be checked
+    # from the host. The credentials below are local-development only and the
+    # volume is tmpfs: this database is disposable, never a system of record.
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_DB: telco_churn
+      POSTGRES_USER: telco
+      POSTGRES_PASSWORD: local-development-only
+    volumes:
+      - ./sql/001_initial.sql:/docker-entrypoint-initdb.d/001_initial.sql:ro
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U telco -d telco_churn"]
+      interval: 5s
+      timeout: 3s
+      retries: 10

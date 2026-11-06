@@ -1,0 +1,67 @@
+{
+  "status": "SMOKE_ONLY",
+  "note": "One canonical scenario, fixed policies, correct design propensity. The V3/V4 coverage gate scores every canonical scenario (null, constant effect, heterogeneous, non-constant propensity, rare outcomes, clustered, heavy-tailed) and the full selection pipeline; neither is exercised here, so no false-promotion rate may be read off this run.",
+  "scenarios_covered": [
+    "heterogeneous_effect_stratified_propensity"
+  ],
+  "scenarios_required_for_gate": [
+    "null",
+    "constant_effect",
+    "heterogeneous_effect",
+    "non_constant_known_propensity",
+    "rare_outcome",
+    "clustered_outcome",
+    "heavy_tailed_finite_variance",
+    "full_selection_pipeline"
+  ],
+  "config": {
+    "worlds": 1000,
+    "n_per_world": 2000,
+    "seed": 20260920,
+    "alpha": 0.05,
+    "misspecified_outcome_model": false,
+    "known_design_propensity": true
+  },
+  "true_contrast": 0.075,
+  "paired": {
+    "estimator": "paired_dr",
+    "worlds": 1000,
+    "n_per_world": 2000,
+    "alpha": 0.05,
+    "true_contrast": 0.075,
+    "bias": 0.0006265420077735042,
+    "bias_mc_se": 0.0010902850708754623,
+    "bias_within_2_mc_se": true,
+    "rmse": 0.03446629323158559,
+    "coverage": 0.957,
+    "coverage_ci_low": 0.942580996155916,
+    "coverage_ci_high": 0.9679213465882865,
+    "nominal_inside_coverage_ci": true,
+    "mean_ci_width": 0.1353100124782087,
+    "mean_se": 0.03449759439442998
+  },
+  "unpaired": {
+    "estimator": "unpaired_diagnostic",
+    "worlds": 1000,
+    "n_per_world": 2000,
+    "alpha": 0.05,
+    "true_contrast": 0.075,
+    "bias": 0.0006265420077734949,
+    "bias_mc_se": 0.001090285070875462,
+    "bias_within_2_mc_se": true,
+    "rmse": 0.034466293231585586,
+    "coverage": 0.987,
+    "coverage_ci_low": 0.9778855576244203,
+    "coverage_ci_high": 0.9923871796106489,
+    "nominal_inside_coverage_ci": false,
+    "mean_ci_width": 0.17111025639651561,
+    "mean_se": 0.043624947731377664
+  },
+  "se_variance_ratio_unpaired_over_paired": 1.5991610963404297,
+  "budget": {
+    "elapsed_s": 3.487,
+    "seconds_per_world": 0.0035,
+    "projected_seconds_for_1000_worlds": 3.5,
+    "projection_caveat": "Linear extrapolation from one setting; a gate run also refits nuisance models, which this smoke does not."
+  }
+}

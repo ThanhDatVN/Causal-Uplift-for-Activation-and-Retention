@@ -1,0 +1,20 @@
+﻿{
+    "created_at_utc":  "2026-09-30T01:11:54.3896823Z",
+    "role":  "development_only",
+    "original_run_command_recorded":  "run",
+    "reproducible_command":  ".\\.venv\\Scripts\\python.exe -m telco_churn.learner_comparison run --root . --output reports/v4/learner_comparison",
+    "command_note":  "Reproducible command reconstructed from CLI defaults; exact original shell invocation was not captured.",
+    "original_elapsed_field_note":  "RUN_MANIFEST elapsed_seconds was written before model fitting and is not total runtime.",
+    "original_source_matches_run_manifest":  true,
+    "non_import_ast_equivalent_after_lint_format":  true,
+    "hashes_sha256":  {
+                          "reports/v4/learner_comparison/PRODUCER_SOURCE.py":  "69b55b108271d64910eb91785b1bc2f6ff8270b3728ee757fd390aad1fa6267c",
+                          "src/telco_churn/learner_comparison.py":  "709cdc7cb859756e28c34942b41d0d12e7ece6315742f1b3779c650a66b0bcdd",
+                          "reports/v4/learner_comparison/DRY_RUN_MANIFEST.json":  "eb7c52829074a4b6608d3cf89e8d7142bae625282cf0729a2b561adcf8424bed",
+                          "reports/v4/learner_comparison/PRE_RUN_AMENDMENT.md":  "fb07933930c235f20a45b7ed0d8cfb0c278c56cae0f651a55b62a57ac1d7b411",
+                          "reports/v4/learner_comparison/hillstrom_mens.json":  "767e25873cd6fc2380a0471fe39f7ed15a78833ff450cd3a95665453f869960c",
+                          "reports/v4/learner_comparison/hillstrom_womens.json":  "c573a7ca187ce0ce1d5da1b450570d20f501b18622394161b7f638cc6c1fd295",
+                          "reports/v4/learner_comparison/lenta_sms.json":  "6efd2ffa6e134cd2eba8c3fcf61260d7783d3d07a7bee16c025d9969aaea5e3c"
+                      },
+    "causal_promotion":  false
+}

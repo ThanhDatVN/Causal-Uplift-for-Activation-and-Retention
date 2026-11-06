@@ -1,0 +1,68 @@
+{
+  "summary": {
+    "aligned": {
+      "independent_worlds": 30,
+      "mean_delta_CU_per_1000": 0.0,
+      "mcse_CU_per_1000": 0.0,
+      "ci95_CU_per_1000": [
+        0.0,
+        0.0
+      ],
+      "mean_rank_true_CU_per_1000": 125.60000000000004,
+      "mean_exact_true_CU_per_1000": 125.60000000000004,
+      "mean_disagreement_fraction": 0.0,
+      "total_rank_unused_slots": 780,
+      "total_exact_unused_slots": 780,
+      "total_constraint_violations": 0,
+      "max_rank_objective_excess": 0.0,
+      "mean_fit_seconds": 0.10005669000000239,
+      "mean_allocation_seconds": 0.0449882400000007
+    },
+    "opposed": {
+      "independent_worlds": 30,
+      "mean_delta_CU_per_1000": 0.0,
+      "mcse_CU_per_1000": 0.0,
+      "ci95_CU_per_1000": [
+        0.0,
+        0.0
+      ],
+      "mean_rank_true_CU_per_1000": 124.02666666666671,
+      "mean_exact_true_CU_per_1000": 124.02666666666671,
+      "mean_disagreement_fraction": 0.0,
+      "total_rank_unused_slots": 469,
+      "total_exact_unused_slots": 469,
+      "total_constraint_violations": 0,
+      "max_rank_objective_excess": 0.0,
+      "mean_fit_seconds": 0.10251353999999917,
+      "mean_allocation_seconds": 0.04611516666666375
+    },
+    "sharp_null": {
+      "independent_worlds": 30,
+      "mean_delta_CU_per_1000": 0.0,
+      "mcse_CU_per_1000": 0.0,
+      "ci95_CU_per_1000": [
+        0.0,
+        0.0
+      ],
+      "mean_rank_true_CU_per_1000": -29.886666666666663,
+      "mean_exact_true_CU_per_1000": -29.886666666666663,
+      "mean_disagreement_fraction": 0.0,
+      "total_rank_unused_slots": 2312,
+      "total_exact_unused_slots": 2312,
+      "total_constraint_violations": 0,
+      "max_rank_objective_excess": 0.0,
+      "mean_fit_seconds": 0.100699480000002,
+      "mean_allocation_seconds": 0.040344620000000005
+    },
+    "decision": "RETAIN_FEASIBLE_RANK_OR_INCONCLUSIVE"
+  },
+  "mechanical_controls": {
+    "brute_force_optimality": true,
+    "zero_money_no_contact": true,
+    "all_negative_no_contact": true,
+    "tie_order_invariant": true,
+    "infeasible_action_skipped": true,
+    "homogeneous_cost_equivalence": true,
+    "second_brute_force_optimality": true
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "status": "SMOKE_ONLY",
+  "release_gate": "NOT_EVALUATED",
+  "cellwise_diagnostic_pass": null,
+  "created_at": "2026-09-28T12:51:31+00:00",
+  "worlds_per_scenario": 100,
+  "n_units": 4000,
+  "seed": 40637,
+  "selected_interval_method": "skewness_adjusted_t",
+  "effective_df_floor": 1.0,
+  "note": "This interval was selected after earlier results. Fresh worlds test transfer, but this study alone does not resolve every prior selection and multiple-cell issue.",
+  "scenarios": [
+    {
+      "name": "F01_null_imbalanced",
+      "assignment": "constant_085",
+      "effect": "zero"
+    },
+    {
+      "name": "F02_effect_imbalanced",
+      "assignment": "constant_085",
+      "effect": "heterogeneous"
+    },
+    {
+      "name": "F03_effect_variable",
+      "assignment": "variable",
+      "effect": "heterogeneous"
+    }
+  ],
+  "readouts": [
+    {
+      "scenario": "F01_null_imbalanced",
+      "method": "selected_dr",
+      "worlds": 100,
+      "bias_vs_finite_truth": 0.000506145822151988,
+      "coverage": 0.95,
+      "coverage_wilson": [
+        0.8882495307680808,
+        0.9784563208456319
+      ],
+      "promotion_rate": 0.01,
+      "promotion_wilson": [
+        0.0017674320641406505,
+        0.054486196178705315
+      ],
+      "mean_interval_width": 0.020879400493410433,
+      "cell_coverage_pass": false,
+      "null_promotion_pass": false
+    },
+    {
+      "scenario": "F01_null_imbalanced",
+      "method": "normal_dr_reference",
+      "worlds": 100,
+      "bias_vs_finite_truth": 0.000506145822151988,
+      "coverage": 0.95,
+      "coverage_wilson": [
+        0.8882495307680808,
+        0.9784563208456319
+      ],
+      "promotion_rate": 0.01,
+      "promotion_wilson": [
+        0.0017674320641406505,
+        0.054486196178705315
+      ],
+      "mean_interval_width": 0.019942831475005432,
+      "cell_coverage_pass": false,
+      "null_promotion_pass": false
+    },
+    {
+      "scenario": "F02_effect_imbalanced",
+      "method": "selected_dr",
+      "worlds": 100,
+      "bias_vs_finite_truth": -0.00031677138572667524,
+      "coverage": 0.97,
+      "coverage_wilson": [
+        0.9154806357094724,
+        0.9897454759759611
+      ],
+      "promotion_rate": 0.03,
+      "promotion_wilson": [
+        0.010254524024038925,
+        0.0845193642905276
+      ],
+      "mean_interval_width": 0.020418599960651512,
+      "cell_coverage_pass": false,
+      "null_promotion_pass": null
+    },
+    {
+      "scenario": "F02_effect_imbalanced",
+      "method": "normal_dr_reference",
+      "worlds": 100,
+      "bias_vs_finite_truth": -0.00031677138572667524,
+      "coverage": 0.94,
+      "coverage_wilson": [
+        0.8752318455410406,
+        0.9722138760368118
+      ],
+      "promotion_rate": 0.01,
+      "promotion_wilson": [
+        0.0017674320641406505,
+        0.054486196178705315
+      ],
+      "mean_interval_width": 0.01943288603918776,
+      "cell_coverage_pass": false,
+      "null_promotion_pass": null
+    },
+    {
+      "scenario": "F03_effect_variable",
+      "method": "selected_dr",
+      "worlds": 100,
+      "bias_vs_finite_truth": 0.0004932863206976707,
+      "coverage": 0.96,
+      "coverage_wilson": [
+        0.9016292856411208,
+        0.9843366960084523
+      ],
+      "promotion_rate": 0.09,
+      "promotion_wilson": [
+        0.04807254000256516,
+        0.1622621285271631
+      ],
+      "mean_interval_width": 0.017418213167796,
+      "cell_coverage_pass": false,
+      "null_promotion_pass": null
+    },
+    {
+      "scenario": "F03_effect_variable",
+      "method": "normal_dr_reference",
+      "worlds": 100,
+      "bias_vs_finite_truth": 0.0004932863206976707,
+      "coverage": 0.96,
+      "coverage_wilson": [
+        0.9016292856411208,
+        0.9843366960084523
+      ],
+      "promotion_rate": 0.04,
+      "promotion_wilson": [
+        0.01566330399154762,
+        0.0983707143588792
+      ],
+      "mean_interval_width": 0.01689179981251878,
+      "cell_coverage_pass": false,
+      "null_promotion_pass": null
+    }
+  ]
+}

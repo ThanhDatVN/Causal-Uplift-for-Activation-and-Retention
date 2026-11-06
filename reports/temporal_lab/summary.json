@@ -1,0 +1,44 @@
+{
+  "simulation": {
+    "rows": 80157,
+    "unique_customers": 6000,
+    "months": 18,
+    "factual_churn_rate": 0.04096959716556258,
+    "treatment_rate": 0.5011290342702447,
+    "true_ate_pre_drift": 0.006485415409371728,
+    "true_ate_post_drift": -0.0010462473047233793,
+    "harmful_offer_share_pre_drift": 0.46359065167638364,
+    "harmful_offer_share_post_drift": 0.6431809223492314,
+    "offer_cost": 4.0,
+    "disclaimer": "Synthetic mechanism test only; not external-validity evidence."
+  },
+  "split": {
+    "train_months": "0-11",
+    "validation_months": "12-14",
+    "test_months": "15-17",
+    "train_rows": 59861,
+    "validation_rows": 11119,
+    "test_rows": 9177
+  },
+  "selected": {
+    "policy": "no_contact",
+    "budget_fraction": 0.0,
+    "selection_metric": "maximum DR-estimated net value among policies with cluster-robust 95% lower bound > 0; otherwise no_contact"
+  },
+  "test": {
+    "policy": "no_contact",
+    "budget_fraction": 0.0,
+    "selected_n": 0,
+    "estimated_net_value": 0.0,
+    "estimated_net_value_per_contact": 0.0,
+    "estimated_value_per_contact_ci95_low": 0.0,
+    "estimated_value_per_contact_ci95_high": 0.0,
+    "true_net_value": 0.0,
+    "true_net_value_per_contact": 0.0,
+    "true_mean_cate": 0.0,
+    "true_expected_churns_prevented": 0.0,
+    "harmful_offer_share": 0.0,
+    "regret_vs_oracle_value": 0.0,
+    "regret_vs_best_oracle_available": 6806.398787572005
+  }
+}

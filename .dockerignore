@@ -1,0 +1,29 @@
+# Build context: source, packaging metadata, and the artifacts a service serves.
+.git
+.github
+.pytest_cache
+.ruff_cache
+__pycache__
+*.pyc
+.coverage
+
+# Raw data never enters an image; loaders fetch it and licences stay upstream.
+data
+
+# Training/experiment by-products.
+mlruns
+mlflow.db
+runs
+notebooks
+tests
+scripts
+
+# Heavy report files no service reads.
+reports/batch
+reports/uplift/oof_predictions.csv
+reports/uplift/split_manifest.csv
+reports/benchmark/test_predictions.csv
+
+# Only the claim ledger is served; the rest of docs/ is for readers of the repo.
+docs
+!docs/CLAIM_LEDGER_V4.md

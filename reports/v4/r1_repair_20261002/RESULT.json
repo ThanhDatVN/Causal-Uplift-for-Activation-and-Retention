@@ -1,0 +1,524 @@
+{
+  "status": "SYNTHETIC_GATE_FAILED",
+  "worlds_per_cell": 2000,
+  "cells": [
+    {
+      "cell": {
+        "name": "F1_fixed_null",
+        "policy": "fixed",
+        "effect": "null",
+        "assignment": "constant_085",
+        "clustered": false
+      },
+      "truth": 0.0,
+      "truth_method": "exact Bernoulli ranking/binomial expectation; no Monte Carlo truth error",
+      "candidate": {
+        "worlds": 2000,
+        "valid_intervals": 2000,
+        "coverage": 0.755,
+        "coverage_wilson": [
+          0.735673828496995,
+          0.773348477389566
+        ],
+        "promotion_rate": 0.0005,
+        "promotion_wilson": [
+          8.826773070546787e-05,
+          0.0028268625032662133
+        ],
+        "bias": 5.488254100981821e-05,
+        "mean_width": 0.013389660313284342,
+        "median_half_width": 0.00705275544970841,
+        "coverage_gate_pass": false,
+        "truth_mcse": 0.0,
+        "truth_mcse_below_tenth_median_half_width": true,
+        "null_promotion_gate_pass": true
+      },
+      "historical_reference": {
+        "worlds": 2000,
+        "valid_intervals": 2000,
+        "coverage": 0.68,
+        "coverage_wilson": [
+          0.6592277789546314,
+          0.7000820840241176
+        ],
+        "promotion_rate": 0.026,
+        "promotion_wilson": [
+          0.019882087677964753,
+          0.033935273144663027
+        ],
+        "bias": 5.488254100981821e-05,
+        "mean_width": 0.018614604342902474,
+        "median_half_width": 0.011635896157211131,
+        "coverage_gate_pass": false,
+        "truth_mcse": 0.0,
+        "truth_mcse_below_tenth_median_half_width": true,
+        "null_promotion_gate_pass": true
+      },
+      "bounded_safety_reference": {
+        "worlds": 2000,
+        "valid_intervals": 2000,
+        "coverage": 1.0,
+        "coverage_wilson": [
+          0.9980829527187469,
+          0.9999999999999998
+        ],
+        "promotion_rate": 0.0,
+        "promotion_wilson": [
+          1.0842021724855044e-19,
+          0.001917047281252934
+        ],
+        "bias": 5.488254100981821e-05,
+        "mean_width": 0.9312875749260684,
+        "median_half_width": 0.465643787463034,
+        "coverage_gate_pass": true,
+        "truth_mcse": 0.0,
+        "truth_mcse_below_tenth_median_half_width": true,
+        "null_promotion_gate_pass": true
+      },
+      "bounded_half_width_per_1000": 465.64378746303396,
+      "bounded_precision_meets_one_per_1000": false,
+      "bootstrap_se_floor_count": 0,
+      "failures": []
+    },
+    {
+      "cell": {
+        "name": "F2_fixed_rare",
+        "policy": "fixed",
+        "effect": "rare",
+        "assignment": "variable",
+        "clustered": false
+      },
+      "truth": 0.00018899999999999999,
+      "truth_method": "exact Bernoulli ranking/binomial expectation; no Monte Carlo truth error",
+      "candidate": {
+        "worlds": 2000,
+        "valid_intervals": 2000,
+        "coverage": 0.956,
+        "coverage_wilson": [
+          0.9461034732959137,
+          0.9641481795835833
+        ],
+        "promotion_rate": 0.007,
+        "promotion_wilson": [
+          0.0041743460559210965,
+          0.011715862563394297
+        ],
+        "bias": 7.479924062635743e-07,
+        "mean_width": 0.005704753258328479,
+        "median_half_width": 0.002936503618709008,
+        "coverage_gate_pass": true,
+        "truth_mcse": 0.0,
+        "truth_mcse_below_tenth_median_half_width": true,
+        "null_promotion_gate_pass": null
+      },
+      "historical_reference": {
+        "worlds": 2000,
+        "valid_intervals": 2000,
+        "coverage": 0.8915,
+        "coverage_wilson": [
+          0.8771114791991816,
+          0.9043874727795971
+        ],
+        "promotion_rate": 0.032,
+        "promotion_wilson": [
+          0.025139125203291417,
+          0.04065523105196132
+        ],
+        "bias": 7.479924062635743e-07,
+        "mean_width": 0.008114602539397105,
+        "median_half_width": 0.004314150521373265,
+        "coverage_gate_pass": false,
+        "truth_mcse": 0.0,
+        "truth_mcse_below_tenth_median_half_width": true,
+        "null_promotion_gate_pass": null
+      },
+      "bounded_safety_reference": {
+        "worlds": 2000,
+        "valid_intervals": 2000,
+        "coverage": 1.0,
+        "coverage_wilson": [
+          0.9980829527187469,
+          0.9999999999999998
+        ],
+        "promotion_rate": 0.0,
+        "promotion_wilson": [
+          1.0842021724855044e-19,
+          0.001917047281252934
+        ],
+        "bias": 7.479924062635743e-07,
+        "mean_width": 0.4805826019135208,
+        "median_half_width": 0.24029130095676035,
+        "coverage_gate_pass": true,
+        "truth_mcse": 0.0,
+        "truth_mcse_below_tenth_median_half_width": true,
+        "null_promotion_gate_pass": null
+      },
+      "bounded_half_width_per_1000": 240.29130095676035,
+      "bounded_precision_meets_one_per_1000": false,
+      "bootstrap_se_floor_count": 0,
+      "failures": []
+    },
+    {
+      "cell": {
+        "name": "B1_batch_null",
+        "policy": "batch",
+        "effect": "null",
+        "assignment": "constant_085",
+        "clustered": false
+      },
+      "truth": 0.0,
+      "truth_method": "exact Bernoulli ranking/binomial expectation; no Monte Carlo truth error",
+      "candidate": {
+        "worlds": 2000,
+        "valid_intervals": 2000,
+        "coverage": 0.6835,
+        "coverage_wilson": [
+          0.6627807410547264,
+          0.7035157025930536
+        ],
+        "promotion_rate": 0.0195,
+        "promotion_wilson": [
+          0.014297256348690845,
+          0.026545026088593226
+        ],
+        "bias": 3.0821366554863796e-05,
+        "mean_width": 0.01882851408447842,
+        "median_half_width": 0.007987932697918837,
+        "coverage_gate_pass": false,
+        "truth_mcse": 0.0,
+        "truth_mcse_below_tenth_median_half_width": true,
+        "null_promotion_gate_pass": true
+      },
+      "historical_reference": {
+        "worlds": 2000,
+        "valid_intervals": 2000,
+        "coverage": 0.726,
+        "coverage_wilson": [
+          0.7060338412002534,
+          0.7450996534286203
+        ],
+        "promotion_rate": 0.006,
+        "promotion_wilson": [
+          0.003435594376936234,
+          0.010458448336941664
+        ],
+        "bias": 3.0821366554863796e-05,
+        "mean_width": 0.013000427896689076,
+        "median_half_width": 0.006735753331009069,
+        "coverage_gate_pass": false,
+        "truth_mcse": 0.0,
+        "truth_mcse_below_tenth_median_half_width": true,
+        "null_promotion_gate_pass": true
+      },
+      "bounded_safety_reference": {
+        "worlds": 2000,
+        "valid_intervals": 2000,
+        "coverage": 1.0,
+        "coverage_wilson": [
+          0.9980829527187469,
+          0.9999999999999998
+        ],
+        "promotion_rate": 0.0,
+        "promotion_wilson": [
+          1.0842021724855044e-19,
+          0.001917047281252934
+        ],
+        "bias": 3.0821366554863796e-05,
+        "mean_width": 0.9312875749260684,
+        "median_half_width": 0.465643787463034,
+        "coverage_gate_pass": true,
+        "truth_mcse": 0.0,
+        "truth_mcse_below_tenth_median_half_width": true,
+        "null_promotion_gate_pass": true
+      },
+      "bounded_half_width_per_1000": 465.64378746303396,
+      "bounded_precision_meets_one_per_1000": false,
+      "bootstrap_se_floor_count": 0,
+      "failures": []
+    },
+    {
+      "cell": {
+        "name": "B2_batch_rare",
+        "policy": "batch",
+        "effect": "rare",
+        "assignment": "variable",
+        "clustered": false
+      },
+      "truth": 0.000189,
+      "truth_method": "exact Bernoulli ranking/binomial expectation; no Monte Carlo truth error",
+      "candidate": {
+        "worlds": 2000,
+        "valid_intervals": 2000,
+        "coverage": 0.758,
+        "coverage_wilson": [
+          0.7387464009628544,
+          0.7762644026400192
+        ],
+        "promotion_rate": 0.0655,
+        "promotion_wilson": [
+          0.05546852874487852,
+          0.07719738534253028
+        ],
+        "bias": -1.0937369072034126e-05,
+        "mean_width": 0.014372300609512731,
+        "median_half_width": 0.0051336758287084065,
+        "coverage_gate_pass": false,
+        "truth_mcse": 0.0,
+        "truth_mcse_below_tenth_median_half_width": true,
+        "null_promotion_gate_pass": null
+      },
+      "historical_reference": {
+        "worlds": 2000,
+        "valid_intervals": 2000,
+        "coverage": 0.7915,
+        "coverage_wilson": [
+          0.7731457240372476,
+          0.8087366373977819
+        ],
+        "promotion_rate": 0.033,
+        "promotion_wilson": [
+          0.026022752700289677,
+          0.041767769460400554
+        ],
+        "bias": -1.0937369072034126e-05,
+        "mean_width": 0.00550815363220185,
+        "median_half_width": 0.0028961717215273443,
+        "coverage_gate_pass": false,
+        "truth_mcse": 0.0,
+        "truth_mcse_below_tenth_median_half_width": true,
+        "null_promotion_gate_pass": null
+      },
+      "bounded_safety_reference": {
+        "worlds": 2000,
+        "valid_intervals": 2000,
+        "coverage": 1.0,
+        "coverage_wilson": [
+          0.9980829527187469,
+          0.9999999999999998
+        ],
+        "promotion_rate": 0.0,
+        "promotion_wilson": [
+          1.0842021724855044e-19,
+          0.001917047281252934
+        ],
+        "bias": -1.0937369072034126e-05,
+        "mean_width": 0.4805826019135208,
+        "median_half_width": 0.24029130095676035,
+        "coverage_gate_pass": true,
+        "truth_mcse": 0.0,
+        "truth_mcse_below_tenth_median_half_width": true,
+        "null_promotion_gate_pass": null
+      },
+      "bounded_half_width_per_1000": 240.29130095676035,
+      "bounded_precision_meets_one_per_1000": false,
+      "bootstrap_se_floor_count": 0,
+      "failures": []
+    },
+    {
+      "cell": {
+        "name": "C1_cluster_null",
+        "policy": "batch",
+        "effect": "null",
+        "assignment": "constant_05",
+        "clustered": true
+      },
+      "truth": 0.0,
+      "truth_method": "exact Bernoulli ranking/binomial expectation; no Monte Carlo truth error",
+      "candidate": {
+        "worlds": 2000,
+        "valid_intervals": 2000,
+        "coverage": 0.8925,
+        "coverage_wilson": [
+          0.8781646699770789,
+          0.9053304479071373
+        ],
+        "promotion_rate": 0.054,
+        "promotion_wilson": [
+          0.0449221548758202,
+          0.0647878512990574
+        ],
+        "bias": -0.00010899795772483786,
+        "mean_width": 0.010321786844803617,
+        "median_half_width": 0.005160814345919789,
+        "coverage_gate_pass": false,
+        "truth_mcse": 0.0,
+        "truth_mcse_below_tenth_median_half_width": true,
+        "null_promotion_gate_pass": false
+      },
+      "historical_reference": {
+        "worlds": 2000,
+        "valid_intervals": 2000,
+        "coverage": 0.93,
+        "coverage_wilson": [
+          0.9179739154089434,
+          0.9403774239291792
+        ],
+        "promotion_rate": 0.036,
+        "promotion_wilson": [
+          0.02868460672278366,
+          0.04509441315421905
+        ],
+        "bias": -0.00010899795772483786,
+        "mean_width": 0.00993447739998729,
+        "median_half_width": 0.004996063777248125,
+        "coverage_gate_pass": false,
+        "truth_mcse": 0.0,
+        "truth_mcse_below_tenth_median_half_width": true,
+        "null_promotion_gate_pass": true
+      },
+      "bounded_safety_reference": {
+        "worlds": 2000,
+        "valid_intervals": 2000,
+        "coverage": 1.0,
+        "coverage_wilson": [
+          0.9980829527187469,
+          0.9999999999999998
+        ],
+        "promotion_rate": 0.0,
+        "promotion_wilson": [
+          1.0842021724855044e-19,
+          0.001917047281252934
+        ],
+        "bias": -0.00010899795772483786,
+        "mean_width": 0.364416877144983,
+        "median_half_width": 0.18220843857249155,
+        "coverage_gate_pass": true,
+        "truth_mcse": 0.0,
+        "truth_mcse_below_tenth_median_half_width": true,
+        "null_promotion_gate_pass": true
+      },
+      "bounded_half_width_per_1000": 182.20843857249156,
+      "bounded_precision_meets_one_per_1000": false,
+      "bootstrap_se_floor_count": 0,
+      "failures": [],
+      "cluster_negative_control": {
+        "customer_fixed_selection": {
+          "worlds": 2000,
+          "valid_intervals": 2000,
+          "coverage": 0.9545,
+          "coverage_wilson": [
+            0.9444626753715425,
+            0.9627947286497985
+          ],
+          "promotion_rate": 0.019,
+          "promotion_wilson": [
+            0.013873784918301425,
+            0.025970414566263898
+          ],
+          "bias": -0.00010899795772483787,
+          "mean_width": 0.009952036246346326,
+          "median_half_width": 0.005034557730889559,
+          "coverage_gate_pass": true,
+          "truth_mcse": 0.0,
+          "truth_mcse_below_tenth_median_half_width": true,
+          "null_promotion_gate_pass": true
+        },
+        "invalid_row_iid_fixed_selection": {
+          "worlds": 2000,
+          "valid_intervals": 2000,
+          "coverage": 0.844,
+          "coverage_wilson": [
+            0.8274395607225219,
+            0.859241510747976
+          ],
+          "promotion_rate": 0.074,
+          "promotion_wilson": [
+            0.06332620153509969,
+            0.08630712274852781
+          ],
+          "bias": -0.00010899795772483789,
+          "mean_width": 0.007225085438845974,
+          "median_half_width": 0.0036343633083471237,
+          "coverage_gate_pass": false,
+          "truth_mcse": 0.0,
+          "truth_mcse_below_tenth_median_half_width": true,
+          "null_promotion_gate_pass": false
+        },
+        "discriminates_at_declared_coverage_floor": true,
+        "note": "Variance-only control isolates the resampling unit; it does not validate reallocation coverage."
+      }
+    },
+    {
+      "cell": {
+        "name": "C2_cluster_effect",
+        "policy": "batch",
+        "effect": "effect",
+        "assignment": "constant_05",
+        "clustered": true
+      },
+      "truth": 0.00054,
+      "truth_method": "exact Bernoulli ranking/binomial expectation; no Monte Carlo truth error",
+      "candidate": {
+        "worlds": 2000,
+        "valid_intervals": 2000,
+        "coverage": 0.8935,
+        "coverage_wilson": [
+          0.8792182266916742,
+          0.9062730570979796
+        ],
+        "promotion_rate": 0.0795,
+        "promotion_wilson": [
+          0.06843435071112523,
+          0.0921778860524085
+        ],
+        "bias": 1.3490942900935303e-05,
+        "mean_width": 0.010052244932721823,
+        "median_half_width": 0.005029448726623144,
+        "coverage_gate_pass": false,
+        "truth_mcse": 0.0,
+        "truth_mcse_below_tenth_median_half_width": true,
+        "null_promotion_gate_pass": null
+      },
+      "historical_reference": {
+        "worlds": 2000,
+        "valid_intervals": 2000,
+        "coverage": 0.934,
+        "coverage_wilson": [
+          0.9222654015999561,
+          0.9440706013599165
+        ],
+        "promotion_rate": 0.0525,
+        "promotion_wilson": [
+          0.04355496702511128,
+          0.06316079029161008
+        ],
+        "bias": 1.3490942900935303e-05,
+        "mean_width": 0.0095422074808641,
+        "median_half_width": 0.004820295582724914,
+        "coverage_gate_pass": true,
+        "truth_mcse": 0.0,
+        "truth_mcse_below_tenth_median_half_width": true,
+        "null_promotion_gate_pass": null
+      },
+      "bounded_safety_reference": {
+        "worlds": 2000,
+        "valid_intervals": 2000,
+        "coverage": 1.0,
+        "coverage_wilson": [
+          0.9980829527187469,
+          0.9999999999999998
+        ],
+        "promotion_rate": 0.0,
+        "promotion_wilson": [
+          1.0842021724855044e-19,
+          0.001917047281252934
+        ],
+        "bias": 1.3490942900935303e-05,
+        "mean_width": 0.364416877144983,
+        "median_half_width": 0.18220843857249155,
+        "coverage_gate_pass": true,
+        "truth_mcse": 0.0,
+        "truth_mcse_below_tenth_median_half_width": true,
+        "null_promotion_gate_pass": null
+      },
+      "bounded_half_width_per_1000": 182.20843857249156,
+      "bounded_precision_meets_one_per_1000": false,
+      "bootstrap_se_floor_count": 0,
+      "failures": []
+    }
+  ],
+  "elapsed_seconds": 103.09811659999832,
+  "confirmation_data_accessed": false,
+  "causal_promotion": false,
+  "scope": "Known-truth synthetic designs only; no telecom treatment effect or ROI."
+}

@@ -1,0 +1,38 @@
+# Exact dependency set of the deployed api image.
+# Captured from the running container with importlib.metadata.
+# Python 3.11.16 on Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.41
+annotated-doc==0.0.5
+annotated-types==0.8.0
+anyio==4.15.1
+click==8.5.0
+cloudpickle==3.1.2
+fastapi==0.141.1
+h11==0.16.0
+httptools==0.8.0
+idna==3.20
+joblib==1.6.0
+numpy==2.4.6
+packaging==26.3
+pandas==2.3.3
+pip==24.0
+pydantic==2.13.5
+pydantic-core==2.46.5
+python-dateutil==2.9.0.post0
+python-dotenv==1.2.3
+pytz==2026.3.post1
+pyyaml==6.0.3
+scikit-learn==1.7.2
+scipy==1.17.1
+setuptools==79.0.1
+six==1.17.0
+starlette==1.6.0
+telcochurn-decision-system==0.1.0
+threadpoolctl==3.7.0
+typing-extensions==4.16.0
+typing-inspection==0.4.4
+tzdata==2026.4
+uvicorn==0.53.0
+uvloop==0.22.1
+watchfiles==1.2.0
+websockets==17.1
+wheel==0.46.3

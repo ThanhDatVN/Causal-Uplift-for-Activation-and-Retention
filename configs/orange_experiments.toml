@@ -1,0 +1,136 @@
+[protocol]
+dataset = "OpenML 45580 / Orange Belgium"
+estimand = "E[Y(0)-Y(1)|X], positive means churn prevented"
+population = "high-risk eligible customers selected by the historical Orange pipeline"
+development_rows = 9516
+locked_test_rows = 2380
+selection_data = "development OOF only"
+primary_metric = "normalized Qini using cross-fitted DR scores"
+sensitivity_metric = "normalized Qini using known-propensity IPW scores"
+capacities = [0.10, 0.20, 0.30]
+
+[gates]
+require_positive_dr_ci_lower = true
+require_positive_ipw_ci_lower = true
+require_positive_qini = true
+minimum_churn_events_per_selected_arm = 20
+allow_no_launch = true
+
+[[hypotheses]]
+id = "H01"
+claim = "A causal learner beats control-trained risk ranking consistently"
+experiment = "5 repeats x 3 folds on development"
+result = "rejected"
+evidence = "risk-logistic rank 1.0; no causal learner beat it in any repeat"
+
+[[hypotheses]]
+id = "H02"
+claim = "X-learner benefits from 75/25 treatment imbalance"
+experiment = "X-HGB vs risk/T/S/DR with identical repeated OOF protocol"
+result = "rejected"
+evidence = "X-HGB Qini-DR 0.000008 +/- 0.000754; positive 2/5; beats risk 0/5"
+
+[[hypotheses]]
+id = "H03"
+claim = "Feature compression improves risk-policy stability"
+experiment = "4 feature sets x 6 Logistic C x 3 repeats x 3 folds"
+result = "rejected"
+evidence = "all 178 features remain inside the one-standard-error winner set"
+
+[[hypotheses]]
+id = "H04"
+claim = "Stronger Logistic regularization is preferable within uncertainty"
+experiment = "one-standard-error rule on repeated development Qini-DR"
+result = "retained"
+evidence = "mean-best C=3.0; one-SE choice C=0.3, matching locked baseline"
+
+[[hypotheses]]
+id = "H05"
+claim = "A nonlinear or causal family robustly replaces risk Logistic"
+experiment = "14-candidate tournament, 3 repeats x 3 folds, common DR/IPW evaluation"
+result = "rejected"
+evidence = "risk Logistic mean Qini-DR 0.002707; every alternative paired delta mean was negative"
+
+[[hypotheses]]
+id = "H06"
+claim = "The selected policy remains positive under Logistic, HGB, and CatBoost nuisance evaluators"
+experiment = "fixed OOF score evaluator-sensitivity ablation"
+result = "partially retained"
+evidence = "risk Logistic positive under all evaluators; DR-ExtraTrees is the robust causal component winner but does not beat risk"
+
+[[candidates]]
+name = "risk_logistic"
+role = "operational baseline"
+status = "locked real-data policy candidate; no-launch gate failed"
+
+[[candidates]]
+name = "risk_rf"
+role = "nonlinear outcome baseline"
+status = "rejected on stability/performance"
+
+[[candidates]]
+name = "s_hgb"
+role = "single-model CATE challenger"
+status = "rejected: IPW/DR disagreement on repeated OOF"
+
+[[candidates]]
+name = "t_logistic/t_rf/t_hgb"
+role = "two-model CATE challengers"
+status = "rejected: high variance or negative repeated Qini"
+
+[[candidates]]
+name = "dr_hgb"
+role = "orthogonal-score CATE challenger"
+status = "research only; unstable across seeds"
+
+[[candidates]]
+name = "x_hgb"
+role = "arm-imbalance challenger"
+status = "rejected for current data; no stable gain"
+
+[[candidates]]
+name = "risk_hgb/risk_catboost"
+role = "nonlinear outcome-policy challengers"
+status = "passed basic development gate but did not beat risk Logistic"
+
+[[candidates]]
+name = "s_logistic"
+role = "shared linear surface with explicit treatment interactions"
+status = "rejected because DR and IPW mean had opposite signs"
+
+[[candidates]]
+name = "to_hgb/r_hgb"
+role = "transformed-outcome and residualized causal challengers"
+status = "rejected for repeat/evaluator instability"
+
+[[candidates]]
+name = "dr_extratrees"
+role = "bagged DR effect-stage challenger"
+status = "stable positive screen but paired delta did not beat risk Logistic"
+
+[tournament]
+candidate_count = 14
+repeats = 3
+folds = 3
+operational_capacity = 0.20
+development_champion = "risk_logistic"
+causal_replacement = "none"
+one_standard_error_floor = 0.002115388522150656
+test_rows_touched = 0
+
+[component_ablation]
+nuisance_models = ["logistic", "hgb", "catboost"]
+representations = ["factors_only", "pc20_plus_factors", "pc40_plus_factors", "all_178"]
+effect_second_stages = ["hist_gradient_boosting", "extra_trees"]
+capacity_grid = [0.10, 0.20, 0.30]
+selection_rule = "maximize worst-evaluator mean Qini, then one-SE complexity rule"
+nuisance_winner = "catboost"
+nuisance_winner_brier = 0.031172544168216465
+risk_component_winner = "risk_logistic"
+causal_component_winner = "dr_extratrees"
+causal_component_worst_evaluator_qini = 0.0007200534567739838
+
+[future_only]
+methods = ["causal forest", "R-learner", "multi-arm policy", "survival-uplift"]
+start_condition = "new campaign/time/customer IDs and enough control events"
+stop_condition = "no preregistered stability/value hypothesis or no new future holdout"

@@ -1,0 +1,8 @@
+{
+  "repeats": 5,
+  "folds": 3,
+  "test_rows_touched": 0,
+  "best_mean_qini_model": "risk_logistic",
+  "best_mean_qini": 0.002667630693899264,
+  "risk_logistic_mean_qini": 0.002667630693899264
+}

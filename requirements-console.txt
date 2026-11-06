@@ -1,0 +1,9 @@
+# Read-only evidence console.  Deliberately no catboost, scikit-learn, scipy or
+# mlflow: the console renders stored results and recomputes a bootstrap over
+# them, so a training stack in this image would be unused attack surface and
+# several hundred megabytes of it.
+fastapi>=0.115,<1
+numpy>=1.26,<3
+pandas>=2.2,<3
+pydantic>=2.9,<3
+uvicorn[standard]>=0.30,<1

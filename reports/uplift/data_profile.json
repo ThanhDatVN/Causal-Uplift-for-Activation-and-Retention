@@ -1,0 +1,30 @@
+{
+  "openml_id": 45580,
+  "raw_md5": "bd328613c1c4ef793ab04cd4dd1c6db0",
+  "expected_md5": "bd328613c1c4ef793ab04cd4dd1c6db0",
+  "rows": 11896,
+  "numeric_features": 160,
+  "categorical_features": 18,
+  "duplicate_rows": 0,
+  "missing_cells": 0,
+  "manifest_sha256": "e2828178d09952fe97d3a360a7511ae75f600949546ab4aaa1ffc06862f4efe3",
+  "seed": 20260914,
+  "development_rows": 9516,
+  "test_rows": 2380,
+  "max_absolute_numeric_smd": 0.21974257304669276,
+  "max_absolute_categorical_share_difference": 0.17619815666430538,
+  "power": {
+    "control_churn_rate": 0.036382536382536385,
+    "treated_churn_rate": 0.03362930077691454,
+    "ate_prevented_churn": 0.002753235605621844,
+    "standard_error": 0.003969815647037522,
+    "ci95_low": -0.005027460087835271,
+    "ci95_high": 0.01053393129907896,
+    "control_n": 2886,
+    "treated_n": 9010,
+    "treatment_fraction": 0.7573974445191661,
+    "mde_80pct_power_two_sided_alpha_0_05": 0.011120149646517837,
+    "required_n_for_observed_effect_80pct_power": 194060,
+    "required_n_for_one_percentage_point_80pct_power": 14711
+  }
+}

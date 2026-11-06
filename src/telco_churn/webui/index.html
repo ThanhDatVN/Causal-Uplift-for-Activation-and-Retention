@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Retention Decision Console</title>
+<meta name="description" content="Evidence state, validity gates and policy readouts for the TelcoChurn retention decision lab.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>&#128200;</text></svg>">
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="wordmark">
+      <h1>Retention decision console</h1>
+      <span id="root-label">reading artifacts…</span>
+    </div>
+    <nav>
+      <a href="#gates">Gates</a>
+      <a href="#falsification">Falsification</a>
+      <a href="#validity">Estimator validity</a>
+      <a href="#capacity">Capacity</a>
+      <a href="#identification">Identification</a>
+      <a href="#mechanism">Mechanism</a>
+      <a href="#cross-domain">Cross-domain</a>
+      <a href="#console-copilot">AI Copilot</a>
+      <a href="#artifacts">Artifacts</a>
+    </nav>
+    <button class="icon-button" id="theme-toggle" type="button" aria-label="Switch colour theme">Theme</button>
+  </div>
+</header>
+
+<main class="shell">
+
+  <!-- release state --------------------------------------------------- -->
+  <section id="state">
+    <div class="card hero">
+      <div class="hero-figure">
+        Release tier, computed from the gates below
+        <strong id="tier">—</strong>
+        <p class="hero-note" id="tier-note">
+          A tier is the highest one whose gates all pass. It is derived from artifacts on
+          disk, never asserted.
+        </p>
+      </div>
+      <div>
+        <h3 style="font-size:13px;margin:0 0 10px;color:var(--text-secondary);">
+          What the next tier needs
+        </h3>
+        <ul class="blockers" id="blockers"></ul>
+      </div>
+    </div>
+
+    <div class="grid kpi" style="margin-top:14px;" id="kpis"></div>
+  </section>
+
+  <!-- gates ------------------------------------------------------------ -->
+  <section id="gates">
+    <div class="section-head">
+      <h2>Validity gates</h2>
+      <p>
+        <code>NOT_MET</code> is a defined gate that has not been satisfied; it is not a
+        failure and it is not a pass. <code>NOT_RUN</code> means the study was never
+        started. Neither is rounded up.
+      </p>
+    </div>
+    <div class="card scroll-x">
+      <table id="gates-table">
+        <caption>One row per gate, with the artifact it was scored from.</caption>
+        <thead>
+          <tr><th>Gate</th><th>Status</th><th>What the artifact says</th><th>Blocker</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- falsification ---------------------------------------------------- -->
+  <section id="falsification">
+    <div class="section-head">
+      <h2>Falsification suite</h2>
+      <p>
+        Every cell is a declared fault with a clean fixture and a broken copy. A pass means
+        that declared fault was caught — not that the pipeline is safe against faults
+        nobody wrote down.
+      </p>
+    </div>
+    <div class="card">
+      <div class="grid kpi" id="suite-kpis" style="margin-bottom:16px;"></div>
+      <div class="matrix" id="matrix"></div>
+      <div class="legend" style="margin-top:12px;">
+        <span><i class="key dot" style="background:var(--status-good)"></i> caught, clean fixture accepted</span>
+        <span><i class="key dot" style="background:var(--status-critical)"></i> missed or false block</span>
+      </div>
+      <button class="toggle-table" data-target="suite-table">Show the table view</button>
+      <div class="scroll-x" id="suite-table" hidden style="margin-top:12px;">
+        <table>
+          <thead>
+            <tr><th>ID</th><th>Node</th><th>Severity</th><th>Mutation</th><th>Detector</th><th>Evidence</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- estimator validity ------------------------------------------------ -->
+  <section id="validity">
+    <div class="section-head">
+      <h2>Estimator validity</h2>
+      <p>
+        Coverage measured against a contrast known by construction. One scenario has been
+        run at gate size; the gate itself asks for every canonical scenario plus the full
+        selection pipeline, so this is a smoke result and is labelled as one.
+      </p>
+    </div>
+    <div class="grid halves">
+      <div class="card">
+        <figure>
+          <div class="chart-wrap">
+            <svg class="chart" id="coverage-chart" role="img" aria-label="Interval coverage by estimator"></svg>
+            <div class="tooltip" id="coverage-tip"></div>
+          </div>
+          <figcaption id="coverage-caption"></figcaption>
+        </figure>
+        <button class="toggle-table" data-target="coverage-table">Show the table view</button>
+        <div class="scroll-x" id="coverage-table" hidden style="margin-top:12px;"></div>
+      </div>
+      <div class="card">
+        <div class="grid kpi" id="smoke-kpis"></div>
+        <p class="note" id="smoke-note"></p>
+        <h3 style="font-size:13px;margin:16px 0 8px;color:var(--text-secondary);">
+          Scenarios the gate requires
+        </h3>
+        <div id="scenarios"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- capacity ---------------------------------------------------------- -->
+  <section id="capacity">
+    <div class="section-head">
+      <h2>Capacity and the locked decision</h2>
+      <p>
+        Live re-read of the Orange holdout scores. The locked point — one model, one budget,
+        declared before the holdout was opened — is the only pre-declared readout here.
+        Moving the slider is exploratory by construction: reading a maximum off this curve
+        would be selecting on the evaluation set.
+      </p>
+      <p style="margin:6px 0 0;color:var(--text-muted);font-size:12.5px;" id="cohort-line"></p>
+    </div>
+    <div class="card">
+      <div class="controls">
+        <label class="field">Scoring model
+          <select id="model-select"></select>
+        </label>
+        <label class="field">Capacity cap
+          <select id="cap-rule">
+            <option value="floor">floor(fraction × N) — deployment cap</option>
+            <option value="ceil">ceil(fraction × N) — published budget curves</option>
+          </select>
+        </label>
+        <label class="field">Contact budget <span id="fraction-label">30%</span>
+          <input type="range" id="fraction" min="5" max="100" step="5" value="30">
+        </label>
+        <label class="switch">
+          <input type="checkbox" id="require-positive">
+          Skip units with a non-positive score
+        </label>
+      </div>
+
+      <div class="grid kpi" id="capacity-kpis" style="margin-bottom:18px;"></div>
+
+      <figure>
+        <div class="chart-wrap">
+          <svg class="chart" id="capacity-chart" role="img" aria-label="Doubly robust uplift by contact budget"></svg>
+          <div class="tooltip" id="capacity-tip"></div>
+        </div>
+        <figcaption id="capacity-caption"></figcaption>
+      </figure>
+      <div class="legend" style="margin-top:10px;">
+        <span><i class="key" style="background:var(--series-1)"></i> DR estimate</span>
+        <span><i class="key" style="background:var(--series-1-wash);height:10px;"></i> 95% bootstrap interval</span>
+        <span><i class="key dot" style="background:var(--series-2)"></i> locked policy (pre-declared)</span>
+      </div>
+      <p class="note" id="capacity-note"></p>
+      <button class="toggle-table" data-target="capacity-table">Show the table view</button>
+      <div class="scroll-x" id="capacity-table" hidden style="margin-top:12px;"></div>
+    </div>
+  </section>
+
+  <!-- identification ---------------------------------------------------- -->
+  <section id="identification">
+    <div class="section-head">
+      <h2>Assignment integrity</h2>
+      <p>
+        Can treatment be predicted from 178 pre-treatment covariates? The permutation null
+        refits the whole pipeline on shuffled labels, so an optimistic cross-fit would show
+        up as a null centred away from 0.5.
+      </p>
+    </div>
+    <div class="grid halves">
+      <div class="card">
+        <figure>
+          <div class="chart-wrap">
+            <svg class="chart" id="permutation-chart" role="img" aria-label="Permutation null against the observed AUC"></svg>
+            <div class="tooltip" id="permutation-tip"></div>
+          </div>
+          <figcaption id="permutation-caption"></figcaption>
+        </figure>
+      </div>
+      <div class="card">
+        <div class="grid kpi" id="audit-kpis"></div>
+        <p class="note" id="audit-note"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- mechanism --------------------------------------------------------- -->
+  <section id="mechanism">
+    <div class="section-head">
+      <h2>Known-counterfactual mechanism lab</h2>
+      <p>
+        Synthetic panel where the true conditional effect is known, so a policy's realised
+        value can be computed rather than estimated. Value units are synthetic; this
+        measures mechanism, not market.
+      </p>
+    </div>
+    <div class="card">
+      <div class="controls">
+        <label class="field">Contact budget
+          <select id="temporal-fraction"></select>
+        </label>
+      </div>
+      <figure>
+        <div class="chart-wrap">
+          <svg class="chart" id="temporal-chart" role="img" aria-label="True net value by policy"></svg>
+          <div class="tooltip" id="temporal-tip"></div>
+        </div>
+        <figcaption id="temporal-caption"></figcaption>
+      </figure>
+      <button class="toggle-table" data-target="temporal-table">Show the table view</button>
+      <div class="scroll-x" id="temporal-table" hidden style="margin-top:12px;"></div>
+    </div>
+  </section>
+
+  <!-- cross-domain causal uplift & R1 repair ---------------------------- -->
+  <section id="cross-domain">
+    <div class="section-head">
+      <h2>Cross-domain causal uplift &amp; R1 prospective repair</h2>
+      <p>
+        Compares 8 causal uplift candidates (<code>M01</code> control-outcome ranking through
+        <code>M08</code> DR-Learner) across low-event Hillstrom (~300 conversions) and
+        high-event Lenta Retail SMS (~6,500 visits), alongside the 6-cell R1 prospective
+        repair study (2,000 worlds per cell).
+      </p>
+    </div>
+    <div class="card">
+      <div class="controls">
+        <label class="field">Screening benchmark
+          <select id="cd-benchmark">
+            <option value="hillstrom_r02">Hillstrom Mens E-Mail vs No E-Mail (R02 · ~300 events)</option>
+            <option value="lenta_r10">Lenta Retail SMS Campaign (R10 · ~6,500 events)</option>
+          </select>
+        </label>
+      </div>
+      <div class="grid kpi" id="cd-kpis" style="margin-bottom:16px;"></div>
+      <figure>
+        <div class="chart-wrap">
+          <svg class="chart" id="cd-chart" role="img" aria-label="Candidate uplift vs M01 per 1000"></svg>
+          <div class="tooltip" id="cd-tip"></div>
+        </div>
+        <figcaption id="cd-caption"></figcaption>
+      </figure>
+      <button class="toggle-table" data-target="cd-table">Show the table view</button>
+      <div class="scroll-x" id="cd-table" hidden style="margin-top:12px;"></div>
+
+      <div class="grid halves" style="margin-top:20px;">
+        <div>
+          <h3 style="font-size:13px;margin:0 0 8px;color:var(--text-secondary);">
+            R4 nested cross-domain comparisons (5×2 repeated CV)
+          </h3>
+          <div class="scroll-x" id="r4-summary-table"></div>
+        </div>
+        <div>
+          <h3 style="font-size:13px;margin:0 0 8px;color:var(--text-secondary);">
+            R1 prospective repair (6 cells × 2,000 worlds · McDiarmid vs studentized t)
+          </h3>
+          <div class="scroll-x" id="r1-repair-table"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- grounded evidence AI copilot -------------------------------------- -->
+  <section id="console-copilot">
+    <div class="section-head">
+      <h2>Grounded evidence AI copilot (X09)</h2>
+      <p>
+        Answers research, governance, and causal methodology questions strictly from
+        versioned local artifacts with SHA-256 citations. Passes 12/12 X09 evaluation gates
+        with 0.0% overclaim rate.
+      </p>
+    </div>
+    <div class="card">
+      <div class="copilot-chips">
+        <button type="button" class="console-chip" data-q="Compare uplift learners M03-M08 against M01 risk ranking on Hillstrom Mens vs Lenta.">Sample-Size Scaling Law (Hillstrom vs Lenta)</button>
+        <button type="button" class="console-chip" data-q="Why did the R01 DR estimator under-cover at 91.9% and how does the R1 repair behave across all 6 cells?">R01 Skewness Formula &amp; R1 Repair</button>
+        <button type="button" class="console-chip" data-q="What did the Orange Belgium assignment audit and permutation test find?">Orange Assignment Audit (p = 0.0099)</button>
+        <button type="button" class="console-chip" data-q="How do uplift policies compare to churn risk policies after temporal drift?">Temporal Drift &amp; Harmful Contacts (40.5%)</button>
+        <button type="button" class="console-chip" data-q="Prove that our system increases production revenue by 25% with guaranteed ROI.">🛡 Test Anti-Overclaim Guardrail</button>
+      </div>
+      <form id="console-ai-form" class="console-ai-form">
+        <input id="console-ai-input" type="text" placeholder="Ask about any gate, theorem, causal learner, or dataset (English or Tiếng Việt)…" aria-label="Question for the research console AI copilot">
+        <select id="console-ai-lang" aria-label="Response language">
+          <option value="en">EN</option>
+          <option value="vi">VI</option>
+        </select>
+        <button type="submit" class="icon-button" style="height:36px;padding:0 14px;font-weight:600;">Ask Copilot</button>
+      </form>
+      <div id="console-ai-output" class="console-ai-output">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px;">
+          <span id="console-ai-state" class="chip" data-status="OBSERVED"><i class="dot"></i><span>OBSERVED · X09 PASS (12/12)</span></span>
+          <span id="console-ai-guardrail" style="font-size:12px;color:var(--text-muted);">0% overclaim rate · SHA-256 citation enforced</span>
+        </div>
+        <div id="console-ai-answer" style="font-size:13.5px;line-height:1.65;white-space:pre-line;color:var(--text-primary);">Select a prompt above or enter a question to inspect the repository's causal, statistical, and engineering evidence.</div>
+        <div id="console-ai-citations" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- artifacts --------------------------------------------------------- -->
+  <section id="artifacts">
+    <div class="section-head">
+      <h2>Artifacts and freshness</h2>
+      <p>
+        An artifact whose producer module was edited after it was written describes a
+        pipeline that no longer exists. It is flagged rather than quietly reused.
+      </p>
+    </div>
+    <div class="card scroll-x">
+      <table id="artifacts-table">
+        <thead>
+          <tr><th>Artifact</th><th>Path</th><th>Written</th><th>State</th><th>SHA-256</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- forbidden claims --------------------------------------------------- -->
+  <section id="forbidden">
+    <div class="section-head">
+      <h2>Statements this evidence does not support</h2>
+      <p>Kept on the page on purpose: the console is where a conditional number turns into a claim.</p>
+    </div>
+    <div class="card">
+      <ul class="forbidden">
+        <li>“The system reduces churn by X%” or “increases ROI” for Orange — the interval crosses zero and there is no real margin or cost ledger.</li>
+        <li>“Uplift modelling beats risk modelling” — the evidence here says the opposite on Orange and is conditional on the synthetic mechanism elsewhere.</li>
+        <li>“Randomisation was recovered by estimating e(X)” — reweighting collapses the effective sample size to 3.9.</li>
+        <li>“Orange is not a randomised experiment” — the audit rejects pooled-IID exchangeability, not the per-campaign design the source paper describes.</li>
+        <li>“The pipeline is safe” because the mutation suite passes — it proves 24 declared faults are caught.</li>
+        <li>“Coverage is 95%” from the smoke run — one scenario is not the coverage gate.</li>
+        <li>“Production ready” — no partner, no prospective trial, no serving path for a policy bundle.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <p id="footer-line">Read-only console. Nothing here sends a message to a customer or authorises a campaign.</p>
+  </footer>
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

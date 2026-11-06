@@ -1,0 +1,80 @@
+{
+  "artifact_version": "1.0.0",
+  "created_at_utc": "2026-09-30T01:31:58.076422+00:00",
+  "champion_model": "logistic",
+  "calibration": "none",
+  "complexity_gate_decision": "logistic retained; complex model did not clear the predeclared gate",
+  "feature_columns": [
+    "gender",
+    "SeniorCitizen",
+    "Partner",
+    "Dependents",
+    "PhoneService",
+    "MultipleLines",
+    "InternetService",
+    "OnlineSecurity",
+    "OnlineBackup",
+    "DeviceProtection",
+    "TechSupport",
+    "StreamingTV",
+    "StreamingMovies",
+    "Contract",
+    "PaperlessBilling",
+    "PaymentMethod",
+    "tenure",
+    "MonthlyCharges",
+    "TotalCharges"
+  ],
+  "dataset_sha256": "16320c9c1ec72448db59aa0a26a0b95401046bef5d02fd3aeb906448e3055e91",
+  "split_manifest_sha256": "08a34a4e87b8fbf143299650fad0fecb459552336db34587c47a5ca376950630",
+  "split_seed": 20260913,
+  "development_rows": 5634,
+  "test_rows": 1409,
+  "benchmark_protocol": "v1",
+  "test_metrics": {
+    "average_precision": 0.6443857680218135,
+    "roc_auc": 0.850468883205456,
+    "brier_score": 0.1342895868132489,
+    "brier_skill_score": 0.3112646537027729,
+    "log_loss": 0.41256399149729317,
+    "accuracy_at_0_5": 0.808374733853797,
+    "precision_at_0_5": 0.6538461538461539,
+    "recall_at_0_5": 0.5909090909090909,
+    "f1_at_0_5": 0.6207865168539326,
+    "prevalence": 0.2654364797728886
+  },
+  "budget_10pct": {
+    "budget_fraction": 0.1,
+    "k": 141.0,
+    "true_positives": 104.0,
+    "precision_at_budget": 0.7375886524822695,
+    "recall_at_budget": 0.27807486631016043,
+    "lift_at_budget": 2.7787765009291916,
+    "contacts_per_captured_churner": 1.3557692307692308
+  },
+  "best_params": {
+    "model__C": 1.0,
+    "model__class_weight": null
+  },
+  "mlflow_run_ids": {
+    "dummy_prior": "a59a99a9e9a34977a27d30bd671cbe81",
+    "dummy_most_frequent": "499debe04958491baafc1a0a11a0293a",
+    "logistic": "60157662f72745b5a331768a143aaa08",
+    "logistic_no_sensitive": "3dbe68552f2b4c9e8c4a1d28fef2f42b",
+    "hist_gradient_boosting": "e43091a2c0254b06a6a8cd998feb5a87",
+    "catboost": "813dd5b0f9e94481bdfe3231c3c668cb"
+  },
+  "environment": {
+    "python": "3.11.9",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "scikit_learn": "1.7.2",
+    "pandas": "2.3.3",
+    "numpy": "2.4.6"
+  },
+  "limitations": [
+    "IBM sample is small/fictitious and has no timestamp for out-of-time validation.",
+    "No treatment/control outcomes; business value is scenario-based, not causal uplift.",
+    "Probabilities are not validated for a real telecom population."
+  ],
+  "champion_mlflow_run_id": "17ac1b06c1954ac1a3d1cb003271314e"
+}

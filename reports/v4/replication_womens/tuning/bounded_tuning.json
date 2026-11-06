@@ -1,0 +1,869 @@
+{
+  "stage": "R03_bounded_tuning",
+  "dataset": "hillstrom Womens E-Mail vs No E-Mail (development)",
+  "started_at": "2026-09-21T11:33:31+00:00",
+  "runtime_seconds": 48.41,
+  "gate": "reports/v4/validity_unshrunk/validity_suite.json: PASS at 2000 worlds with the skewness_adjusted_t interval -- SELECTED AFTER LOOKING: 1 other run(s) at the same 2000 worlds disagree (reports/v4/validity_confirm/validity_suite.json (skewness_adjusted_t: FAIL)), so this verdict is a post-hoc choice of interval method and needs independent confirmation",
+  "protocol": {
+    "outer_folds": 3,
+    "inner_folds": 3,
+    "configurations_per_family": 8,
+    "capacity_fraction": 0.2,
+    "baseline": "M01",
+    "selection": "inner search on the training side of each outer fold only",
+    "split": "development only; the confirmation split is not opened"
+  },
+  "shortlist": [
+    "M01",
+    "M03",
+    "M07"
+  ],
+  "cohort": {
+    "n_units": 34174,
+    "n_events": 251,
+    "propensity": 0.49985368993972024
+  },
+  "candidate_fits": 237,
+  "tuned_beat_their_default": [
+    "M01",
+    "M07"
+  ],
+  "degenerate_grids": [
+    "M07"
+  ],
+  "any_tuned_candidate_beat_the_baseline": [
+    "M03",
+    "M07"
+  ],
+  "results": [
+    {
+      "candidate_id": "M01",
+      "family": "outcome_ranking",
+      "status": "COMPLETED",
+      "error": "",
+      "chosen_per_fold": [
+        {
+          "C": 0.3
+        },
+        {
+          "C": 0.01
+        },
+        {
+          "C": 0.03
+        }
+      ],
+      "configuration_stable": false,
+      "grid_size": 8,
+      "distinct_configurations_searched": [
+        8,
+        8,
+        8
+      ],
+      "grid_is_degenerate": false,
+      "fold_values": [
+        0.0007917777550752619,
+        0.001739894652302202,
+        0.00011317003953814251
+      ],
+      "fold_deltas_vs_baseline": [
+        0.0,
+        0.0006885642568184209,
+        0.0006691268731038055
+      ],
+      "default_fold_values": [
+        0.0007917777550752619,
+        0.001051330395483781,
+        -0.000555956833565663
+      ],
+      "mean_value": 0.0008816141489718688,
+      "mean_delta_vs_baseline": 0.00045256370997407547,
+      "mean_gain_from_tuning": 0.00045256370997407547,
+      "inner_trials": [
+        [
+          {
+            "configuration": {
+              "C": 0.003
+            },
+            "inner_value": 0.0010249363451992034,
+            "folds_scored": 3,
+            "allocation_signature": "5cf369331e7e5810",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 0.01
+            },
+            "inner_value": 0.0009468468654078268,
+            "folds_scored": 3,
+            "allocation_signature": "b2c28ee3d82aa67d",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 0.03
+            },
+            "inner_value": 0.0007906720124448091,
+            "folds_scored": 3,
+            "allocation_signature": "7f0611f0ef1012ee",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 0.1
+            },
+            "inner_value": 0.0009941309860202498,
+            "folds_scored": 3,
+            "allocation_signature": "e4c8a1b8a0f0006b",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 0.3
+            },
+            "inner_value": 0.0011498371051383305,
+            "folds_scored": 3,
+            "allocation_signature": "86dc374c4e56e0ce",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 1.0
+            },
+            "inner_value": 0.0007822813533754897,
+            "folds_scored": 3,
+            "allocation_signature": "a60240f50b10e86a",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 3.0
+            },
+            "inner_value": 0.0005196474671602248,
+            "folds_scored": 3,
+            "allocation_signature": "824ae61ae81f36f9",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 10.0
+            },
+            "inner_value": 0.00044810716974283204,
+            "folds_scored": 3,
+            "allocation_signature": "e9a6446c71896357",
+            "error": ""
+          }
+        ],
+        [
+          {
+            "configuration": {
+              "C": 0.003
+            },
+            "inner_value": 0.0008347203036536405,
+            "folds_scored": 3,
+            "allocation_signature": "f93511a4960af3f0",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 0.01
+            },
+            "inner_value": 0.001015977024082162,
+            "folds_scored": 3,
+            "allocation_signature": "9116a43819d0dafd",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 0.03
+            },
+            "inner_value": 0.0010145086549722038,
+            "folds_scored": 3,
+            "allocation_signature": "f0a3957022f4702d",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 0.1
+            },
+            "inner_value": 0.0006506050282893517,
+            "folds_scored": 3,
+            "allocation_signature": "6fea7c0a267332da",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 0.3
+            },
+            "inner_value": 0.0007620378106463847,
+            "folds_scored": 3,
+            "allocation_signature": "7b7eb3fbb7165d29",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 1.0
+            },
+            "inner_value": 0.0005381050723999625,
+            "folds_scored": 3,
+            "allocation_signature": "590345be46068f98",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 3.0
+            },
+            "inner_value": 0.0005545974706061475,
+            "folds_scored": 3,
+            "allocation_signature": "c4de60c5258b8a5f",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 10.0
+            },
+            "inner_value": 0.0005591021477929459,
+            "folds_scored": 3,
+            "allocation_signature": "d91914b59768d575",
+            "error": ""
+          }
+        ],
+        [
+          {
+            "configuration": {
+              "C": 0.003
+            },
+            "inner_value": 0.001346297511372904,
+            "folds_scored": 3,
+            "allocation_signature": "0d7ed9d2fecc0f18",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 0.01
+            },
+            "inner_value": 0.0015332748920770113,
+            "folds_scored": 3,
+            "allocation_signature": "8f798350da1c0007",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 0.03
+            },
+            "inner_value": 0.0018110596638849293,
+            "folds_scored": 3,
+            "allocation_signature": "ad8f0a8ce019ac42",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 0.1
+            },
+            "inner_value": 0.0015089521968615687,
+            "folds_scored": 3,
+            "allocation_signature": "087d3cedf2ba7f46",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 0.3
+            },
+            "inner_value": 0.0014378859410029135,
+            "folds_scored": 3,
+            "allocation_signature": "6870bd8a3a0b6244",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 1.0
+            },
+            "inner_value": 0.0008433612119060893,
+            "folds_scored": 3,
+            "allocation_signature": "3a238365c22ae952",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 3.0
+            },
+            "inner_value": 0.0010585159332101171,
+            "folds_scored": 3,
+            "allocation_signature": "90e47c1e72587170",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 10.0
+            },
+            "inner_value": 0.0011403720949453528,
+            "folds_scored": 3,
+            "allocation_signature": "c2c71286734b997a",
+            "error": ""
+          }
+        ]
+      ]
+    },
+    {
+      "candidate_id": "M03",
+      "family": "s_learner",
+      "status": "COMPLETED",
+      "error": "",
+      "chosen_per_fold": [
+        {
+          "C": 10.0
+        },
+        {
+          "C": 0.1
+        },
+        {
+          "C": 0.003
+        }
+      ],
+      "configuration_stable": false,
+      "grid_size": 8,
+      "distinct_configurations_searched": [
+        8,
+        8,
+        8
+      ],
+      "grid_is_degenerate": false,
+      "fold_values": [
+        0.0010344517250156435,
+        0.000774200480733763,
+        0.0014785389758925163
+      ],
+      "fold_deltas_vs_baseline": [
+        0.0002426739699403816,
+        -0.000277129914750018,
+        0.002034495809458179
+      ],
+      "default_fold_values": [
+        0.0026665190000689505,
+        0.000926233957471236,
+        0.0019303891142004156
+      ],
+      "mean_value": 0.001095730393880641,
+      "mean_delta_vs_baseline": 0.0006666799548828476,
+      "mean_gain_from_tuning": -0.0007453169633662264,
+      "inner_trials": [
+        [
+          {
+            "configuration": {
+              "C": 0.003
+            },
+            "inner_value": 0.0010427692665698172,
+            "folds_scored": 3,
+            "allocation_signature": "eb3ec3914125c181",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 0.01
+            },
+            "inner_value": 0.0008843115793603619,
+            "folds_scored": 3,
+            "allocation_signature": "285a7d536f6dae6b",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 0.03
+            },
+            "inner_value": 0.0008621948911294658,
+            "folds_scored": 3,
+            "allocation_signature": "b6f85b0656501967",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 0.1
+            },
+            "inner_value": 0.0009916449864792564,
+            "folds_scored": 3,
+            "allocation_signature": "2f66548d25e9dd31",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 0.3
+            },
+            "inner_value": 0.0010021760505206328,
+            "folds_scored": 3,
+            "allocation_signature": "ea940a4849622c54",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 1.0
+            },
+            "inner_value": 0.0009511649188745771,
+            "folds_scored": 3,
+            "allocation_signature": "f6f31e65c68ff7a7",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 3.0
+            },
+            "inner_value": 0.00105014831486535,
+            "folds_scored": 3,
+            "allocation_signature": "07b55676b11e52cd",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 10.0
+            },
+            "inner_value": 0.0010667755463766812,
+            "folds_scored": 3,
+            "allocation_signature": "9131d10dc17897ce",
+            "error": ""
+          }
+        ],
+        [
+          {
+            "configuration": {
+              "C": 0.003
+            },
+            "inner_value": 0.0015498905918315386,
+            "folds_scored": 3,
+            "allocation_signature": "e341b6208d15ddf7",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 0.01
+            },
+            "inner_value": 0.0014628274999174795,
+            "folds_scored": 3,
+            "allocation_signature": "548db812c14c6f06",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 0.03
+            },
+            "inner_value": 0.0017319360202533874,
+            "folds_scored": 3,
+            "allocation_signature": "db85c51fbbe35d05",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 0.1
+            },
+            "inner_value": 0.0018548110483715006,
+            "folds_scored": 3,
+            "allocation_signature": "8819d41638bfc5a1",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 0.3
+            },
+            "inner_value": 0.0017562775002983606,
+            "folds_scored": 3,
+            "allocation_signature": "cdde7b25812bea4f",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 1.0
+            },
+            "inner_value": 0.0018464462693803696,
+            "folds_scored": 3,
+            "allocation_signature": "8a8fc8e9bd7df763",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 3.0
+            },
+            "inner_value": 0.0016668127018977224,
+            "folds_scored": 3,
+            "allocation_signature": "6c74edcf0210dfe8",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 10.0
+            },
+            "inner_value": 0.001671275801782903,
+            "folds_scored": 3,
+            "allocation_signature": "9e290a66c9c6ee24",
+            "error": ""
+          }
+        ],
+        [
+          {
+            "configuration": {
+              "C": 0.003
+            },
+            "inner_value": 0.0012502780907738128,
+            "folds_scored": 3,
+            "allocation_signature": "e517384b80f8558b",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 0.01
+            },
+            "inner_value": 0.000966640452130374,
+            "folds_scored": 3,
+            "allocation_signature": "706a0643dd49c033",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 0.03
+            },
+            "inner_value": 0.0007891666278462254,
+            "folds_scored": 3,
+            "allocation_signature": "35eb42b7331c6265",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 0.1
+            },
+            "inner_value": 0.0010226804165005261,
+            "folds_scored": 3,
+            "allocation_signature": "98642286152883a3",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 0.3
+            },
+            "inner_value": 0.0005480913687127513,
+            "folds_scored": 3,
+            "allocation_signature": "547e97ec1da7e4e5",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 1.0
+            },
+            "inner_value": 0.0007426716958130784,
+            "folds_scored": 3,
+            "allocation_signature": "5f07a42f841d55e6",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 3.0
+            },
+            "inner_value": 0.0009117631560816452,
+            "folds_scored": 3,
+            "allocation_signature": "5eac2e7d61cb2930",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "C": 10.0
+            },
+            "inner_value": 0.0008085190660152393,
+            "folds_scored": 3,
+            "allocation_signature": "cb39e4b52933c225",
+            "error": ""
+          }
+        ]
+      ]
+    },
+    {
+      "candidate_id": "M07",
+      "family": "dr_learner",
+      "status": "COMPLETED",
+      "error": "",
+      "chosen_per_fold": [
+        {
+          "alpha": 10.0,
+          "shrinkage": 0.5
+        },
+        {
+          "alpha": 100.0,
+          "shrinkage": 0.5
+        },
+        {
+          "alpha": 100.0,
+          "shrinkage": 0.5
+        }
+      ],
+      "configuration_stable": false,
+      "grid_size": 8,
+      "distinct_configurations_searched": [
+        4,
+        4,
+        3
+      ],
+      "grid_is_degenerate": true,
+      "fold_values": [
+        0.001577453139793175,
+        0.0004057616146615724,
+        0.0015782694984746376
+      ],
+      "fold_deltas_vs_baseline": [
+        0.0007856753847179131,
+        -0.0006455687808222085,
+        0.0021342263320403006
+      ],
+      "default_fold_values": [
+        0.001577453139793175,
+        0.00022920978002597057,
+        0.0015974410862462185
+      ],
+      "mean_value": 0.0011871614176431284,
+      "mean_delta_vs_baseline": 0.0007581109786453351,
+      "mean_gain_from_tuning": 5.246008228800698e-05,
+      "inner_trials": [
+        [
+          {
+            "configuration": {
+              "alpha": 0.1,
+              "shrinkage": 0.5
+            },
+            "inner_value": 0.00014542970844028049,
+            "folds_scored": 3,
+            "allocation_signature": "54b2d651acd5354f",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "alpha": 0.1,
+              "shrinkage": 1.0
+            },
+            "inner_value": 0.00014542970844028049,
+            "folds_scored": 3,
+            "allocation_signature": "54b2d651acd5354f",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "alpha": 1.0,
+              "shrinkage": 0.5
+            },
+            "inner_value": 0.00023708484163839841,
+            "folds_scored": 3,
+            "allocation_signature": "cfbdf93883c0cdb7",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "alpha": 1.0,
+              "shrinkage": 1.0
+            },
+            "inner_value": 0.00023708484163839841,
+            "folds_scored": 3,
+            "allocation_signature": "cfbdf93883c0cdb7",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "alpha": 10.0,
+              "shrinkage": 0.5
+            },
+            "inner_value": 0.0003224777175977178,
+            "folds_scored": 3,
+            "allocation_signature": "544f05a70727e361",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "alpha": 10.0,
+              "shrinkage": 1.0
+            },
+            "inner_value": 0.0003224777175977178,
+            "folds_scored": 3,
+            "allocation_signature": "544f05a70727e361",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "alpha": 100.0,
+              "shrinkage": 0.5
+            },
+            "inner_value": 0.00014318482173708778,
+            "folds_scored": 3,
+            "allocation_signature": "783e62b623dd0516",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "alpha": 100.0,
+              "shrinkage": 1.0
+            },
+            "inner_value": 0.00014318482173708778,
+            "folds_scored": 3,
+            "allocation_signature": "783e62b623dd0516",
+            "error": ""
+          }
+        ],
+        [
+          {
+            "configuration": {
+              "alpha": 0.1,
+              "shrinkage": 0.5
+            },
+            "inner_value": 0.0011387506998237146,
+            "folds_scored": 3,
+            "allocation_signature": "14628cdf1d5aecfb",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "alpha": 0.1,
+              "shrinkage": 1.0
+            },
+            "inner_value": 0.0011387506998237146,
+            "folds_scored": 3,
+            "allocation_signature": "14628cdf1d5aecfb",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "alpha": 1.0,
+              "shrinkage": 0.5
+            },
+            "inner_value": 0.0011407538931513799,
+            "folds_scored": 3,
+            "allocation_signature": "46b4d0eb2a962eb0",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "alpha": 1.0,
+              "shrinkage": 1.0
+            },
+            "inner_value": 0.0011407538931513799,
+            "folds_scored": 3,
+            "allocation_signature": "46b4d0eb2a962eb0",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "alpha": 10.0,
+              "shrinkage": 0.5
+            },
+            "inner_value": 0.001143633240488881,
+            "folds_scored": 3,
+            "allocation_signature": "75afa746dd416fbf",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "alpha": 10.0,
+              "shrinkage": 1.0
+            },
+            "inner_value": 0.001143633240488881,
+            "folds_scored": 3,
+            "allocation_signature": "75afa746dd416fbf",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "alpha": 100.0,
+              "shrinkage": 0.5
+            },
+            "inner_value": 0.0012149698823915578,
+            "folds_scored": 3,
+            "allocation_signature": "22d811ab75514302",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "alpha": 100.0,
+              "shrinkage": 1.0
+            },
+            "inner_value": 0.0012149698823915578,
+            "folds_scored": 3,
+            "allocation_signature": "22d811ab75514302",
+            "error": ""
+          }
+        ],
+        [
+          {
+            "configuration": {
+              "alpha": 0.1,
+              "shrinkage": 0.5
+            },
+            "inner_value": 0.00020391081728408824,
+            "folds_scored": 3,
+            "allocation_signature": "40f3be751e2e10f7",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "alpha": 0.1,
+              "shrinkage": 1.0
+            },
+            "inner_value": 0.00020391081728408824,
+            "folds_scored": 3,
+            "allocation_signature": "40f3be751e2e10f7",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "alpha": 1.0,
+              "shrinkage": 0.5
+            },
+            "inner_value": 0.00020391081728408824,
+            "folds_scored": 3,
+            "allocation_signature": "40f3be751e2e10f7",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "alpha": 1.0,
+              "shrinkage": 1.0
+            },
+            "inner_value": 0.00020391081728408824,
+            "folds_scored": 3,
+            "allocation_signature": "40f3be751e2e10f7",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "alpha": 10.0,
+              "shrinkage": 0.5
+            },
+            "inner_value": 0.00020142104054696584,
+            "folds_scored": 3,
+            "allocation_signature": "48a20335bf23b363",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "alpha": 10.0,
+              "shrinkage": 1.0
+            },
+            "inner_value": 0.00020142104054696584,
+            "folds_scored": 3,
+            "allocation_signature": "48a20335bf23b363",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "alpha": 100.0,
+              "shrinkage": 0.5
+            },
+            "inner_value": 0.00028373837539349744,
+            "folds_scored": 3,
+            "allocation_signature": "f657eddcb8481ef6",
+            "error": ""
+          },
+          {
+            "configuration": {
+              "alpha": 100.0,
+              "shrinkage": 1.0
+            },
+            "inner_value": 0.00028373837539349744,
+            "folds_scored": 3,
+            "allocation_signature": "f657eddcb8481ef6",
+            "error": ""
+          }
+        ]
+      ]
+    }
+  ],
+  "scope_note": "Development only, three outer folds of one dataset. A tuned score here is not a confirmation, and the fold-to-fold instability of the chosen configuration is reported rather than averaged away."
+}

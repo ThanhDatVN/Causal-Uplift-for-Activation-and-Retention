@@ -1,0 +1,83 @@
+{
+  "status": "NEGATIVE_CONTROLS_ONLY",
+  "promotion": false,
+  "runtime_seconds": 40.02,
+  "wrong_logged_propensity": {
+    "status": "REJECTED_BY_CONTROL_HARNESS",
+    "reason": "design-provenance mismatch: claimed probabilities differ from generator log",
+    "mismatched_rows": 4000,
+    "production_api_has_independent_design_provenance": false
+  },
+  "leakage_guard": {
+    "status": "REJECTED_BY_CONTROL_HARNESS",
+    "reason": "policy-rank provenance mismatch: evaluation outcome used in ranking"
+  },
+  "T5_point_estimate_mismatch_worlds": 0,
+  "readouts": {
+    "T5_customer_cluster_bootstrap": {
+      "worlds": 500,
+      "truth": 0.0,
+      "mean_point_bias": -1.3145870903424034e-05,
+      "coverage": 0.948,
+      "coverage_wilson": [
+        0.9248988560621544,
+        0.9642697348842947
+      ],
+      "positive_lower_bound_rate": 0.032,
+      "positive_lower_bound_wilson": [
+        0.019791513626571118,
+        0.051344869045441784
+      ],
+      "mean_interval_width": 0.007743146798719146
+    },
+    "T5_invalid_row_iid_bootstrap": {
+      "worlds": 500,
+      "truth": 0.0,
+      "mean_point_bias": -1.314587090342407e-05,
+      "coverage": 0.946,
+      "coverage_wilson": [
+        0.9225734384893529,
+        0.9626256498189425
+      ],
+      "positive_lower_bound_rate": 0.032,
+      "positive_lower_bound_wilson": [
+        0.019791513626571118,
+        0.051344869045441784
+      ],
+      "mean_interval_width": 0.0077447741615125545
+    },
+    "T3_clean_feature_rank": {
+      "worlds": 500,
+      "truth": 0.0,
+      "mean_point_bias": 9.280779150147814e-05,
+      "coverage": 0.916,
+      "coverage_wilson": [
+        0.888400685539819,
+        0.9372558631961696
+      ],
+      "positive_lower_bound_rate": 0.01,
+      "positive_lower_bound_wilson": [
+        0.004278753896590496,
+        0.023193099755730702
+      ],
+      "mean_interval_width": 0.010701612718571703
+    },
+    "T3_forbidden_outcome_rank": {
+      "worlds": 500,
+      "truth": 0.0,
+      "mean_point_bias": 0.019664960353979525,
+      "coverage": 0.0,
+      "coverage_wilson": [
+        4.336808689942018e-19,
+        0.007624340461552241
+      ],
+      "positive_lower_bound_rate": 1.0,
+      "positive_lower_bound_wilson": [
+        0.9923756595384479,
+        1.0
+      ],
+      "mean_interval_width": 0.018443029054073367
+    }
+  },
+  "scope": "Intentional violations. No real telecom effect or licensed interval follows."
+}

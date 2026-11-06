@@ -1,0 +1,34 @@
+{
+  "dataset": "lenta",
+  "source_url": "https://sklift.s3.eu-west-2.amazonaws.com/lenta_dataset.csv.gz",
+  "path": "data/raw/lenta.csv.gz",
+  "sha256": "b531544f6c072d22f232d91e20ffcaca265acf224e02687502a40e6d56135682",
+  "expected_sha256": "b531544f6c072d22f232d91e20ffcaca265acf224e02687502a40e6d56135682",
+  "n_rows": 687029,
+  "n_columns": 196,
+  "treatment_column": "group",
+  "outcome_column": "response_att",
+  "post_treatment_columns_excluded": [
+    "response_att",
+    "response_sms",
+    "response_viber"
+  ],
+  "n_features": 191,
+  "treated_share_whole_file": 0.7509028003184727,
+  "split_salt": "lenta-v4.1",
+  "development_fraction": 0.8,
+  "n_development": 549867,
+  "n_confirmation": 137162,
+  "outcome_by_arm_development_only": {
+    "control": {
+      "n": 136921,
+      "outcome_rate": 0.10238020464355359
+    },
+    "test": {
+      "n": 412946,
+      "outcome_rate": 0.11023475224363476
+    }
+  },
+  "confirmation_outcomes_read": false,
+  "scope_note": "An SMS campaign by a grocery retailer: a different channel, outcome and population from the e-mail study, which is what makes it a replication rather than another slice of the same experiment. The raw file is not redistributed; only this manifest and derived summaries are."
+}

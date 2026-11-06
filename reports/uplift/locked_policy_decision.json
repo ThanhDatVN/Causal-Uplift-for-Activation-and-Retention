@@ -1,0 +1,23 @@
+{
+  "model": "risk_logistic",
+  "budget_fraction": 0.3,
+  "selected_on": "development OOF only",
+  "development_dr_incremental_churns_prevented": 42.76367090568594,
+  "test_dr_uplift": 0.0333090725007235,
+  "test_ci95_low": -0.015071051590753939,
+  "test_ci95_high": 0.08269016173110566,
+  "test_ipw_uplift": 0.010760879340815961,
+  "test_ipw_ci95_low": -0.0358656400266897,
+  "test_ipw_ci95_high": 0.06018756195760055,
+  "test_qini_dr": 0.004415201003298136,
+  "selected_control_churn_events": 15,
+  "selected_treated_churn_events": 41,
+  "gates": {
+    "positive_dr_ci_lower": false,
+    "positive_ipw_ci_lower": false,
+    "positive_qini": true,
+    "at_least_20_control_churn_events": false,
+    "at_least_20_treated_churn_events": true
+  },
+  "test_decision": "no_launch"
+}

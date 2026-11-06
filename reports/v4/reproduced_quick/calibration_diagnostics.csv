@@ -1,0 +1,2 @@
+calibration_intercept,calibration_slope,ece_equal_frequency,max_calibration_error,ece_bins
+-0.09189201409524067,1.0234024414172147,0.018820488383680452,0.07811622471575658,10

@@ -1,0 +1,68 @@
+{
+  "n_rows": 60000,
+  "n_features": 190,
+  "treatment_share": 0.7501166666666667,
+  "model_kind": "logistic",
+  "folds": 3,
+  "seed": 20260920,
+  "treatment_predictability": {
+    "oof_roc_auc": 0.5037269664378863,
+    "oof_log_loss": 0.5645633600010173,
+    "constant_propensity_log_loss": 0.562206936885069,
+    "log_loss_improvement": -0.002356423115948303,
+    "oof_brier": 0.18831182499984322,
+    "constant_propensity_brier": 0.18744165305555555,
+    "brier_skill_vs_constant": -0.004642361663497407
+  },
+  "permutation_test": {
+    "permutations": 50,
+    "null_auc_mean": 0.4996837470390842,
+    "null_auc_sd": 0.003598529097806651,
+    "null_auc_q95": 0.5053367271840123,
+    "n_null_at_or_above_observed": 8,
+    "p_value_add_one": 0.17647058823529413,
+    "null_hypothesis": "treatment labels are exchangeable across rows given the pooled frame"
+  },
+  "estimated_propensity": {
+    "min": 0.1583891545397549,
+    "q01": 0.6651641582691565,
+    "q05": 0.7014306097068123,
+    "median": 0.7509588071199362,
+    "q95": 0.800429974122727,
+    "q99": 0.8318631741917157,
+    "max": 0.9998615456615966,
+    "support": [
+      {
+        "min_action_propensity": 0.025,
+        "n_outside_support": 0,
+        "share_outside_support": 0.0
+      },
+      {
+        "min_action_propensity": 0.05,
+        "n_outside_support": 0,
+        "share_outside_support": 0.0
+      },
+      {
+        "min_action_propensity": 0.1,
+        "n_outside_support": 5,
+        "share_outside_support": 8.333333333333333e-05
+      }
+    ],
+    "effective_sample_size_estimated_e": 44046.64675519261,
+    "effective_sample_size_constant_e": 44985.99673333337
+  },
+  "runtime": {
+    "cross_fit_seconds": 13.61,
+    "permutation_seconds": 910.25,
+    "seconds_per_permutation": 18.205
+  },
+  "interpretation_limits": [
+    "Diagnostic on a pooled frame. Campaign and customer identifiers are absent, so campaign-level variation in treatment rates, post-randomization preselection, a non-pre-treatment covariate and non-uniform assignment are not distinguishable here.",
+    "The permutation null assumes exchangeable rows. Repeated customers would break it, and the file does not let that be checked.",
+    "An estimated propensity strictly inside (0, 1) does not demonstrate positivity or ignorability; it is a fitted value, not a design probability.",
+    "Rejecting the pooled-IID null does not certify any particular alternative, and does not show the dataset paper's per-campaign randomization was wrong."
+  ],
+  "audited_rows": 60000,
+  "audited_of_development": 549867,
+  "subsample_note": "audited on a 60,000-row stratified-free random subsample of the development split; the permutation null uses the same subsample, so the p-value is valid for it and the ESS figures describe it"
+}

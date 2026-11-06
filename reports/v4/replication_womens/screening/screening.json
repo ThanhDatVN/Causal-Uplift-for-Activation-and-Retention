@@ -1,0 +1,262 @@
+{
+  "stage": "R02_model_screening",
+  "dataset": "hillstrom Womens E-Mail vs No E-Mail (development)",
+  "started_at": "2026-09-21T11:33:20+00:00",
+  "runtime_seconds": 8.85,
+  "gate": "reports/v4/validity_unshrunk/validity_suite.json: PASS at 2000 worlds with the skewness_adjusted_t interval -- SELECTED AFTER LOOKING: 1 other run(s) at the same 2000 worlds disagree (reports/v4/validity_confirm/validity_suite.json (skewness_adjusted_t: FAIL)), so this verdict is a post-hoc choice of interval method and needs independent confirmation",
+  "protocol": {
+    "capacity_fraction": 0.2,
+    "outer_folds": 3,
+    "baseline": "M01",
+    "evaluator": "cross-fitted paired DR under the known design propensity",
+    "nuisance_fitted_on": "training side of each outer fold only",
+    "split": "development only; the confirmation split is not opened"
+  },
+  "cohort": {
+    "n_units": 34174,
+    "n_treated": 17082,
+    "n_events": 251,
+    "propensity": 0.49985368993972024,
+    "declared_design": {
+      "n_units": 34174,
+      "propensity": 0.49985368993972024,
+      "event_rate": 0.007344765026043191,
+      "acted_fraction": 0.2,
+      "asymmetry_index": 8.3e-05
+    }
+  },
+  "n_completed": 8,
+  "n_failed": 0,
+  "shortlist": [
+    "M02",
+    "M03",
+    "M07"
+  ],
+  "results": [
+    {
+      "candidate_id": "M01",
+      "name": "Control-outcome Logistic ranking",
+      "family": "outcome_ranking",
+      "score_kind": "outcome_ranking",
+      "status": "COMPLETED",
+      "fold_values": [
+        0.0007917777550752619,
+        0.001051330395483781,
+        -0.000555956833565663
+      ],
+      "fold_deltas_vs_baseline": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "n_selected": [
+        2278,
+        2278,
+        2278
+      ],
+      "mean_value": 0.00042905043899779324,
+      "mean_delta_vs_baseline": 0.0,
+      "delta_ci_low": NaN,
+      "delta_ci_high": NaN,
+      "seconds": 0.168096900000819,
+      "error": ""
+    },
+    {
+      "candidate_id": "M02",
+      "name": "Control-outcome HGB ranking",
+      "family": "outcome_ranking",
+      "score_kind": "outcome_ranking",
+      "status": "COMPLETED",
+      "fold_values": [
+        0.0007688513889890035,
+        0.000292586157941551,
+        0.0017144486325660862
+      ],
+      "fold_deltas_vs_baseline": [
+        -2.2926366086258357e-05,
+        -0.00075874423754223,
+        0.002270405466131749
+      ],
+      "n_selected": [
+        2278,
+        2278,
+        2278
+      ],
+      "mean_value": 0.0009252953931655469,
+      "mean_delta_vs_baseline": 0.0004962449541677537,
+      "delta_ci_low": -0.0012915498957071208,
+      "delta_ci_high": 0.002284039804042628,
+      "seconds": 1.1383010000026843,
+      "error": ""
+    },
+    {
+      "candidate_id": "M03",
+      "name": "S-Logistic",
+      "family": "s_learner",
+      "score_kind": "reward_difference",
+      "status": "COMPLETED",
+      "fold_values": [
+        0.0026665190000689505,
+        0.000926233957471236,
+        0.0019303891142004156
+      ],
+      "fold_deltas_vs_baseline": [
+        0.0018747412449936886,
+        -0.00012509643801254496,
+        0.0024863459477660788
+      ],
+      "n_selected": [
+        2278,
+        2278,
+        2278
+      ],
+      "mean_value": 0.0018410473572468675,
+      "mean_delta_vs_baseline": 0.0014119969182490742,
+      "delta_ci_low": -0.00013356323690045233,
+      "delta_ci_high": 0.002957557073398601,
+      "seconds": 0.5303427000035299,
+      "error": ""
+    },
+    {
+      "candidate_id": "M04",
+      "name": "S-HGB",
+      "family": "s_learner",
+      "score_kind": "reward_difference",
+      "status": "COMPLETED",
+      "fold_values": [
+        -4.773597836126948e-05,
+        0.00034881857844394664,
+        0.00040661631654415677
+      ],
+      "fold_deltas_vs_baseline": [
+        -0.0008395137334365314,
+        -0.0007025118170398343,
+        0.0009625731501098197
+      ],
+      "n_selected": [
+        2278,
+        2278,
+        2278
+      ],
+      "mean_value": 0.00023589963887561132,
+      "mean_delta_vs_baseline": -0.00019315080012218198,
+      "delta_ci_low": -0.0013283889253196805,
+      "delta_ci_high": 0.0009420873250753165,
+      "seconds": 1.5658447999994678,
+      "error": ""
+    },
+    {
+      "candidate_id": "M05",
+      "name": "T-Logistic",
+      "family": "t_learner",
+      "score_kind": "reward_difference",
+      "status": "COMPLETED",
+      "fold_values": [
+        0.0014531593247475252,
+        0.00041186202078664685,
+        0.0017627203707400066
+      ],
+      "fold_deltas_vs_baseline": [
+        0.0006613815696722633,
+        -0.0006394683746971341,
+        0.0023186772043056695
+      ],
+      "n_selected": [
+        2278,
+        2278,
+        2278
+      ],
+      "mean_value": 0.0012092472387580596,
+      "mean_delta_vs_baseline": 0.0007801967997602662,
+      "delta_ci_low": -0.0008975461513047425,
+      "delta_ci_high": 0.002457939750825275,
+      "seconds": 0.3725813000019116,
+      "error": ""
+    },
+    {
+      "candidate_id": "M06",
+      "name": "T-HGB",
+      "family": "t_learner",
+      "score_kind": "reward_difference",
+      "status": "COMPLETED",
+      "fold_values": [
+        0.0004533879599252186,
+        0.00019272636998591557,
+        0.0011581149842224232
+      ],
+      "fold_deltas_vs_baseline": [
+        -0.0003383897951500433,
+        -0.0008586040254978654,
+        0.0017140718177880861
+      ],
+      "n_selected": [
+        2278,
+        2278,
+        2278
+      ],
+      "mean_value": 0.0006014097713778524,
+      "mean_delta_vs_baseline": 0.00017235933238005913,
+      "delta_ci_low": -0.001366894175449819,
+      "delta_ci_high": 0.0017116128402099374,
+      "seconds": 2.090266999999585,
+      "error": ""
+    },
+    {
+      "candidate_id": "M07",
+      "name": "DR-Ridge",
+      "family": "dr_learner",
+      "score_kind": "reward_difference",
+      "status": "COMPLETED",
+      "fold_values": [
+        0.001577453139793175,
+        -8.77015745101693e-05,
+        0.0015766933615864417
+      ],
+      "fold_deltas_vs_baseline": [
+        0.0007856753847179131,
+        -0.0011390319699939504,
+        0.002132650195152105
+      ],
+      "n_selected": [
+        2278,
+        2278,
+        2278
+      ],
+      "mean_value": 0.0010221483089564824,
+      "mean_delta_vs_baseline": 0.0005930978699586892,
+      "delta_ci_low": -0.001267591996150716,
+      "delta_ci_high": 0.0024537877360680943,
+      "seconds": 0.9454143999973894,
+      "error": ""
+    },
+    {
+      "candidate_id": "M08",
+      "name": "DR-HGB",
+      "family": "dr_learner",
+      "score_kind": "reward_difference",
+      "status": "COMPLETED",
+      "fold_values": [
+        0.0006253467126416774,
+        0.00012782171532841637,
+        0.0010430598517025007
+      ],
+      "fold_deltas_vs_baseline": [
+        -0.0001664310424335845,
+        -0.0009235086801553646,
+        0.0015990166852681638
+      ],
+      "n_selected": [
+        2278,
+        2278,
+        2278
+      ],
+      "mean_value": 0.0005987427598908648,
+      "mean_delta_vs_baseline": 0.0001696923208930716,
+      "delta_ci_low": -0.001295052526815739,
+      "delta_ci_high": 0.001634437168601882,
+      "seconds": 1.799570200000744,
+      "error": ""
+    }
+  ],
+  "scope_note": "Development shortlist only. These are not confirmatory results and the ranking may not be read as evidence that one method beats another; the intervals are over three outer folds of one dataset."
+}

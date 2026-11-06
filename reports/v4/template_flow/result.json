@@ -1,0 +1,11 @@
+{
+  "checked_at_utc": "2026-09-30T00:41:41.761122+00:00",
+  "status": "PASS",
+  "checks": [
+    "accessible button downloads CSV with keyboard Enter",
+    "required and optional headers plus one fictional row",
+    "template roundtrip uploads, previews, and calls model API; one-row cap explained"
+  ],
+  "model": "artifacts/reproduced_quick/champion.joblib",
+  "browser_page_errors": []
+}

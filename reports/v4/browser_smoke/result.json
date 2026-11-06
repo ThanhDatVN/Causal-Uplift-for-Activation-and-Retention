@@ -1,0 +1,16 @@
+{
+  "checked_at_utc": "2026-09-29T01:55:07.463525+00:00",
+  "url": "http://127.0.0.1:8000/planner/",
+  "browser": "153.0.8010.53",
+  "checks": [
+    "keyboard demo activation and snapshot preview",
+    "real-model planner decision and causal warning",
+    "invalid CSV clears stale draft and identifies line/field",
+    "category and cross-field errors fail before API scoring",
+    "duplicate customer ID reports both lines",
+    "extra target column ignored, zero-contact draft, browser packet replay",
+    "mobile decision flow without page-level horizontal overflow"
+  ],
+  "page_errors": [],
+  "note": "Automated browser smoke only; no screen-reader or first-user session was conducted."
+}

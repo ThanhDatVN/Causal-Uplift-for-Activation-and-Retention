@@ -1,0 +1,145 @@
+{
+  "run_id": "8e5775bc724842e3",
+  "protocol_revision": "v4.1-draft",
+  "profile": "smoke",
+  "config_hash": "8151e03037a74e68",
+  "status": "COMPLETE",
+  "exit_code": 0,
+  "started_at": "2026-09-21T06:55:43+00:00",
+  "finished_at": "2026-09-21T06:56:20+00:00",
+  "root": ".",
+  "environment": {
+    "python": "3.11.9",
+    "executable": "C:\\Users\\thanh\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "machine": "AMD64"
+  },
+  "n_stages": 5,
+  "n_failed": 0,
+  "n_skipped": 0,
+  "stages": [
+    {
+      "name": "lint",
+      "command": [
+        "C:\\Users\\thanh\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "-m",
+        "ruff",
+        "check",
+        "."
+      ],
+      "status": "SUCCESS",
+      "returncode": 0,
+      "duration_s": 0.087,
+      "missing_artifacts": [],
+      "stale_artifacts": [],
+      "stderr_tail": "",
+      "artifacts": [],
+      "started_at": "2026-09-21T06:55:43+00:00",
+      "detail": ""
+    },
+    {
+      "name": "unit_tests",
+      "command": [
+        "C:\\Users\\thanh\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "-m",
+        "pytest",
+        "-q"
+      ],
+      "status": "SUCCESS",
+      "returncode": 0,
+      "duration_s": 32.272,
+      "missing_artifacts": [],
+      "stale_artifacts": [],
+      "stderr_tail": "",
+      "artifacts": [],
+      "started_at": "2026-09-21T06:55:43+00:00",
+      "detail": ""
+    },
+    {
+      "name": "contract_validation",
+      "command": [
+        "C:\\Users\\thanh\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "-m",
+        "telco_churn.problem_contract_cli"
+      ],
+      "status": "SUCCESS",
+      "returncode": 0,
+      "duration_s": 0.104,
+      "missing_artifacts": [],
+      "stale_artifacts": [],
+      "stderr_tail": "",
+      "artifacts": [
+        {
+          "path": "reports/v4/contracts.json",
+          "exists": true,
+          "sha256": "2bf02089cad280a5fe61c5fc11bd257e3672fdc23ea5be013ec836eb14f34a81",
+          "size_bytes": 20706,
+          "modified_at": "2026-09-21T06:56:15.876+00:00",
+          "written_by_this_stage": true
+        }
+      ],
+      "started_at": "2026-09-21T06:56:15+00:00",
+      "detail": ""
+    },
+    {
+      "name": "challenge_suite",
+      "command": [
+        "C:\\Users\\thanh\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "-m",
+        "telco_churn.challenge_suite"
+      ],
+      "status": "SUCCESS",
+      "returncode": 0,
+      "duration_s": 2.685,
+      "missing_artifacts": [],
+      "stale_artifacts": [],
+      "stderr_tail": "",
+      "artifacts": [
+        {
+          "path": "reports/v4/challenge_suite.json",
+          "exists": true,
+          "sha256": "e0579678b3f37fa7fb5e19968a96b3c1902d240039ab682fe0c88fcb87772ef3",
+          "size_bytes": 13620,
+          "modified_at": "2026-09-21T06:56:18.370+00:00",
+          "written_by_this_stage": true
+        },
+        {
+          "path": "reports/v4/CHALLENGE_SUITE_REPORT.md",
+          "exists": true,
+          "sha256": "25d25dbc9daecb11d79913162e61677144c6182b717109166ee42fad48578ee2",
+          "size_bytes": 8819,
+          "modified_at": "2026-09-21T06:56:18.370+00:00",
+          "written_by_this_stage": true
+        }
+      ],
+      "started_at": "2026-09-21T06:56:15+00:00",
+      "detail": ""
+    },
+    {
+      "name": "evidence_index",
+      "command": [
+        "C:\\Users\\thanh\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "-m",
+        "telco_churn.evidence"
+      ],
+      "status": "SUCCESS",
+      "returncode": 0,
+      "duration_s": 1.887,
+      "missing_artifacts": [],
+      "stale_artifacts": [],
+      "stderr_tail": "",
+      "artifacts": [
+        {
+          "path": "reports/v4/evidence_index.json",
+          "exists": true,
+          "sha256": "19d610dcd9599018ff3d8868ef083b3147aa51acfda59100ea14e063f70a3af1",
+          "size_bytes": 12895,
+          "modified_at": "2026-09-21T06:56:20.258+00:00",
+          "written_by_this_stage": true
+        }
+      ],
+      "started_at": "2026-09-21T06:56:18+00:00",
+      "detail": ""
+    }
+  ]
+}

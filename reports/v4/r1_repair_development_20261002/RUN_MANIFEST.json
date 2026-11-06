@@ -1,0 +1,12 @@
+{
+  "protocol": "R1_repair_v1",
+  "frozen_config_sha256": "b158a1cf5589d934865fba85ed5fdd883e3e982187593433cba283cb9d8896dc",
+  "command": "run",
+  "started_utc": "2026-10-01T18:12:18.342940+00:00",
+  "status": "COMPLETE",
+  "result_sha256": "d351fbe6a4c7989c81acad47f24c9aaed653ec696ca877e4a7c1c3c2adc0633b",
+  "report_sha256": "a76052168838d69a75537744a3a87ebea013174d4208cdd70b692f2922525b58",
+  "study_status": "DEVELOPMENT_DIAGNOSTIC",
+  "finished_utc": "2026-10-01T18:12:23.969874+00:00",
+  "elapsed_seconds": 5.626523399998405
+}

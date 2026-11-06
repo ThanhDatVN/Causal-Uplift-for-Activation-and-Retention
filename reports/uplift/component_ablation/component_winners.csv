@@ -1,0 +1,6 @@
+component,winner,selection_metric,minimum_evaluator_qini,qini_all_mean,positive_across_all_evaluators,decision
+risk base learner,risk_logistic,maximum worst-evaluator mean Qini-DR,0.0025500791377026,0.0026794063897805595,True,retain for confirmation
+S-learner base learner,s_logistic,maximum worst-evaluator mean Qini-DR,-0.0006863569154271094,-0.0002789210377811667,False,no robust winner
+T-learner base learner,t_hgb,maximum worst-evaluator mean Qini-DR,-0.000742500087898738,-0.0006474948164766266,False,no robust winner
+DR second-stage learner,dr_extratrees,maximum worst-evaluator mean Qini-DR,0.0007200534567739838,0.0008262888852542425,True,retain for confirmation
+causal meta-learner,dr_extratrees,maximum worst-evaluator mean Qini-DR,0.0007200534567739838,0.0008262888852542425,True,retain for confirmation

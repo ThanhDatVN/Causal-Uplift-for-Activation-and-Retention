@@ -1,0 +1,10 @@
+{
+  "wheel": "dist/portfolio_20260930/telcochurn_decision_system-0.1.0-py3-none-any.whl",
+  "wheel_sha256": "9d9f0476cb619f40b5cb64915cc7ce71dae2cc699555d384c74d724086a3362e",
+  "isolated_target_import": "PASS",
+  "installed_target": "reports/v4/portfolio_completion/wheel_smoke_target_20261001",
+  "imported_package_from_installed_target": true,
+  "planner_html_exists": true,
+  "api_routes": 11,
+  "dependency_limit": "Package code came from the wheel target under Python -I; dependencies were reused from the existing research environment. This is not a clean-host install."
+}

@@ -1,0 +1,282 @@
+{
+  "status": "DIAGNOSTIC",
+  "release_gate": "NOT_EVALUATED",
+  "cellwise_diagnostic_pass": true,
+  "family_false_failure_upper_bound": 0.001119113834147144,
+  "family_gate_calibrated": true,
+  "created_at": "2026-09-28T17:44:44+00:00",
+  "worlds_per_scenario": 2000,
+  "n_units": 4000,
+  "seed": 40637,
+  "selected_interval_method": "skewness_adjusted_t",
+  "effective_df_floor": 1.0,
+  "note": "This interval was selected after earlier results. Two fresh generator families test transfer, but this study alone does not resolve every prior selection and release-gate issue.",
+  "scenarios": [
+    {
+      "name": "F01_null_imbalanced",
+      "family": "smooth",
+      "assignment": "constant_085",
+      "effect": "zero"
+    },
+    {
+      "name": "F02_effect_imbalanced",
+      "family": "smooth",
+      "assignment": "constant_085",
+      "effect": "heterogeneous"
+    },
+    {
+      "name": "F03_effect_variable",
+      "family": "smooth",
+      "assignment": "variable",
+      "effect": "heterogeneous"
+    },
+    {
+      "name": "F04_piecewise_null",
+      "family": "piecewise",
+      "assignment": "stratified",
+      "effect": "zero"
+    },
+    {
+      "name": "F05_piecewise_harm_constant",
+      "family": "piecewise",
+      "assignment": "constant_085",
+      "effect": "piecewise_harm"
+    },
+    {
+      "name": "F06_piecewise_harm_stratified",
+      "family": "piecewise",
+      "assignment": "stratified",
+      "effect": "piecewise_harm"
+    }
+  ],
+  "readouts": [
+    {
+      "scenario": "F01_null_imbalanced",
+      "method": "selected_dr",
+      "worlds": 2000,
+      "bias_vs_finite_truth": -0.0001525731663426567,
+      "coverage": 0.9475,
+      "coverage_wilson": [
+        0.9368392097083899,
+        0.9564450329748887
+      ],
+      "promotion_rate": 0.0255,
+      "promotion_wilson": [
+        0.019447915824308683,
+        0.033371362045600345
+      ],
+      "mean_interval_width": 0.02058605278351206,
+      "cell_coverage_pass": true,
+      "null_promotion_pass": true
+    },
+    {
+      "scenario": "F01_null_imbalanced",
+      "method": "normal_dr_reference",
+      "worlds": 2000,
+      "bias_vs_finite_truth": -0.0001525731663426567,
+      "coverage": 0.938,
+      "coverage_wilson": [
+        0.9265682210429607,
+        0.9477524455386617
+      ],
+      "promotion_rate": 0.0095,
+      "promotion_wilson": [
+        0.006090240228609851,
+        0.014790383154299275
+      ],
+      "mean_interval_width": 0.019642072375063314,
+      "cell_coverage_pass": true,
+      "null_promotion_pass": true
+    },
+    {
+      "scenario": "F02_effect_imbalanced",
+      "method": "selected_dr",
+      "worlds": 2000,
+      "bias_vs_finite_truth": -4.605041113114055e-05,
+      "coverage": 0.955,
+      "coverage_wilson": [
+        0.9450093040187729,
+        0.9632461829552866
+      ],
+      "promotion_rate": 0.0475,
+      "promotion_wilson": [
+        0.03901402059617837,
+        0.05772090719335553
+      ],
+      "mean_interval_width": 0.020533190385033633,
+      "cell_coverage_pass": true,
+      "null_promotion_pass": null
+    },
+    {
+      "scenario": "F02_effect_imbalanced",
+      "method": "normal_dr_reference",
+      "worlds": 2000,
+      "bias_vs_finite_truth": -4.605041113114055e-05,
+      "coverage": 0.941,
+      "coverage_wilson": [
+        0.9298033851481019,
+        0.9505057791498329
+      ],
+      "promotion_rate": 0.024,
+      "promotion_wilson": [
+        0.018149556703294482,
+        0.03167547230845831
+      ],
+      "mean_interval_width": 0.019554020610777597,
+      "cell_coverage_pass": true,
+      "null_promotion_pass": null
+    },
+    {
+      "scenario": "F03_effect_variable",
+      "method": "selected_dr",
+      "worlds": 2000,
+      "bias_vs_finite_truth": 6.904723748241094e-05,
+      "coverage": 0.9505,
+      "coverage_wilson": [
+        0.9400999950103993,
+        0.9591727453891917
+      ],
+      "promotion_rate": 0.0695,
+      "promotion_wilson": [
+        0.059160340573897574,
+        0.08149023713526121
+      ],
+      "mean_interval_width": 0.017446113341199308,
+      "cell_coverage_pass": true,
+      "null_promotion_pass": null
+    },
+    {
+      "scenario": "F03_effect_variable",
+      "method": "normal_dr_reference",
+      "worlds": 2000,
+      "bias_vs_finite_truth": 6.904723748241094e-05,
+      "coverage": 0.9485,
+      "coverage_wilson": [
+        0.9379251286390549,
+        0.9573552799496612
+      ],
+      "promotion_rate": 0.0405,
+      "promotion_wilson": [
+        0.03270494331440327,
+        0.05005682313706816
+      ],
+      "mean_interval_width": 0.01690959881272834,
+      "cell_coverage_pass": true,
+      "null_promotion_pass": null
+    },
+    {
+      "scenario": "F04_piecewise_null",
+      "method": "selected_dr",
+      "worlds": 2000,
+      "bias_vs_finite_truth": -0.00013513428030302718,
+      "coverage": 0.9535,
+      "coverage_wilson": [
+        0.9433703066271119,
+        0.9618909314887917
+      ],
+      "promotion_rate": 0.0235,
+      "promotion_wilson": [
+        0.017718224361690932,
+        0.031108721697343113
+      ],
+      "mean_interval_width": 0.023483862037528516,
+      "cell_coverage_pass": true,
+      "null_promotion_pass": true
+    },
+    {
+      "scenario": "F04_piecewise_null",
+      "method": "normal_dr_reference",
+      "worlds": 2000,
+      "bias_vs_finite_truth": -0.00013513428030302718,
+      "coverage": 0.9335,
+      "coverage_wilson": [
+        0.9217283654429757,
+        0.9436095545641779
+      ],
+      "promotion_rate": 0.008,
+      "promotion_wilson": [
+        0.0049302968532159265,
+        0.012956077671536958
+      ],
+      "mean_interval_width": 0.021979170433971455,
+      "cell_coverage_pass": true,
+      "null_promotion_pass": true
+    },
+    {
+      "scenario": "F05_piecewise_harm_constant",
+      "method": "selected_dr",
+      "worlds": 2000,
+      "bias_vs_finite_truth": -0.00011949681372546606,
+      "coverage": 0.944,
+      "coverage_wilson": [
+        0.9330459959530119,
+        0.9532516660612355
+      ],
+      "promotion_rate": 0.047,
+      "promotion_wilson": [
+        0.038561402365168564,
+        0.05717544247164658
+      ],
+      "mean_interval_width": 0.020968751241363826,
+      "cell_coverage_pass": true,
+      "null_promotion_pass": null
+    },
+    {
+      "scenario": "F05_piecewise_harm_constant",
+      "method": "normal_dr_reference",
+      "worlds": 2000,
+      "bias_vs_finite_truth": -0.00011949681372546606,
+      "coverage": 0.923,
+      "coverage_wilson": [
+        0.9104884888455166,
+        0.9338896891545435
+      ],
+      "promotion_rate": 0.021,
+      "promotion_wilson": [
+        0.015573520825817387,
+        0.028263010469622922
+      ],
+      "mean_interval_width": 0.01994653182732729,
+      "cell_coverage_pass": false,
+      "null_promotion_pass": null
+    },
+    {
+      "scenario": "F06_piecewise_harm_stratified",
+      "method": "selected_dr",
+      "worlds": 2000,
+      "bias_vs_finite_truth": 5.909469696969299e-06,
+      "coverage": 0.9565,
+      "coverage_wilson": [
+        0.9466510236907602,
+        0.9645987121414559
+      ],
+      "promotion_rate": 0.0405,
+      "promotion_wilson": [
+        0.03270494331440327,
+        0.05005682313706816
+      ],
+      "mean_interval_width": 0.02342917313986598,
+      "cell_coverage_pass": true,
+      "null_promotion_pass": null
+    },
+    {
+      "scenario": "F06_piecewise_harm_stratified",
+      "method": "normal_dr_reference",
+      "worlds": 2000,
+      "bias_vs_finite_truth": 5.909469696969299e-06,
+      "coverage": 0.928,
+      "coverage_wilson": [
+        0.9158321408445089,
+        0.9385268666827387
+      ],
+      "promotion_rate": 0.0115,
+      "promotion_wilson": [
+        0.007675227286212753,
+        0.01719772790757136
+      ],
+      "mean_interval_width": 0.02189183240500192,
+      "cell_coverage_pass": false,
+      "null_promotion_pass": null
+    }
+  ]
+}

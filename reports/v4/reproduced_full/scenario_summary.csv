@@ -1,0 +1,4 @@
+name,save_rate,gross_margin_rate,contact_offer_cost,horizon_months,budget_fraction,selected_customers,budget_capacity,budget_utilization,simulated_total_expected_value,mean_selected_risk
+conservative,0.05,0.4,20.0,6,0.1,0,140,0.0,0.0,
+base,0.1,0.6,15.0,6,0.1,140,140,1.0,1214.0734604769345,0.721211247519145
+optimistic,0.2,0.7,10.0,6,0.1,140,140,1.0,6332.838074446181,0.721211247519145

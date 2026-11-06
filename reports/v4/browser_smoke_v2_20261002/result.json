@@ -1,0 +1,19 @@
+{
+  "checked_at_utc": "2026-10-02T01:15:39.067857+00:00",
+  "url": "http://127.0.0.1:8765/planner/",
+  "browser": "154.0.8037.58",
+  "checks": [
+    "keyboard demo activation and snapshot preview",
+    "real-model planner decision and causal warning",
+    "late API response cannot restore a draft after assumptions change",
+    "model unavailable gives a visible, focused error",
+    "invalid CSV clears stale draft and identifies line/field",
+    "category and cross-field errors fail before API scoring",
+    "duplicate customer ID reports both lines",
+    "extra target column ignored, zero-contact draft, browser packet replay",
+    "mobile decision flow without page-level horizontal overflow",
+    "zero money cap produces an empty draft"
+  ],
+  "page_errors": [],
+  "note": "Automated browser smoke only; no screen-reader or first-user session was conducted."
+}

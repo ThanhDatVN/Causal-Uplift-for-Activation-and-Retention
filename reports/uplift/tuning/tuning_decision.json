@@ -1,0 +1,22 @@
+{
+  "selection_scope": "development only; do not reuse the already-opened holdout",
+  "repeats": 3,
+  "folds": 3,
+  "configs": 24,
+  "best_mean_config": {
+    "feature_set": "all_178",
+    "C": 3.0,
+    "qini_dr_mean": 0.0030074435386553064,
+    "qini_dr_std": 0.0009169994126286006
+  },
+  "one_standard_error_floor": 0.0024780136809274553,
+  "recommended_future_challenger": {
+    "feature_set": "all_178",
+    "feature_count": 178,
+    "C": 0.3,
+    "qini_dr_mean": 0.002766458561263276,
+    "qini_dr_std": 0.0009589662341271743
+  },
+  "promotion_status": "requires a new future campaign/holdout",
+  "test_rows_touched": 0
+}

@@ -1,0 +1,34 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+.venv/
+build/
+dist/
+*.egg-info/
+
+# Large raw external files are fetched locally; provenance and checksums are documented.
+data/raw/*.csv
+!data/raw/Telco-Customer-Churn.csv
+data/raw/*.arff
+data/raw/*.gz
+data/raw/*.download
+data/synthetic/
+
+# Runtime state & caches
+mlruns/
+mlflow.db
+artifacts/models/*
+!artifacts/models/champion.joblib
+!artifacts/models/model_metadata.json
+!artifacts/models/orange_retention_policy.joblib
+.env
+reports/batch/
+reports/v4/portfolio_completion/wheel_smoke_target*/
+
+# Immutable per-run directories from research_runner
+runs/
+
+# Hillstrom raw CSV is fetched locally; provenance and checksum are in the manifest.
+data/raw/hillstrom.csv

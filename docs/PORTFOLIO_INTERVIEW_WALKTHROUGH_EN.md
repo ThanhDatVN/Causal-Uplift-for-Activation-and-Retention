@@ -1,0 +1,21 @@
+# Three-minute interview walkthrough
+
+**Project:** Retention Decision Lab  
+**Audience:** junior ML Engineer, AI Engineer, or Data Scientist interviewer  
+**Setup:** run the [local release guide](PORTFOLIO_RELEASE_2026_EN.md) before the interview; open the [planner](../src/telco_churn/planner/index.html) on localhost. Use only the fictional guided-demo customers.
+
+## Spoken script and on-screen cues
+
+**0:00–0:35 — Frame the decision.** [Show the planner.] “A retention analyst has a limited number of contacts. I built a local decision-support prototype that turns a customer snapshot into a reviewable draft: whom to contact, whom to skip, and why. It scores churn risk, then applies eligibility, cooldown, contact-cap, and money-cap rules. The analyst approves the draft; the app does not send offers.”
+
+**0:35–1:15 — Show the modeling judgment.** [Open the [full benchmark comparison](../reports/v4/portfolio_completion/FULL_BENCHMARK_COMPARISON.md).] “The prediction benchmark uses a checksum-pinned, 7,043-row IBM sample and a frozen 1,409-row test set. I reran the full logistic, histogram-boosting, and CatBoost comparison. All eight metric rows and all 1,409 test predictions matched the archived run numerically. The selected logistic model reached test average precision 0.6396 and Brier score 0.1345. CatBoost's test average precision was higher, 0.6766, but the declared development stability and complexity gate retained logistic. I did not change that gate after seeing the test result.”
+
+**1:15–2:15 — Demonstrate a decision and its audit.** [Choose **Try the guided demo**, set a 25% contact cap, a money cap of 30, and a 30-day cooldown; preview.] “The eight demo records are fictional. The row preview and skipped reasons make the input and decision inspectable. The save-rate and money figures are scenario assumptions, so I can change them and see how the draft changes. Setting the money cap to zero produces a valid zero-contact draft.” [Export the evidence JSON.] “The packet records the inputs, assumptions, ranked decisions, model version, and exact bundle SHA-256. Replaying it with the same bundle returns `MATCH`. A [recorded wrong-bundle replay](../reports/v4/planner_replay/REPLAY_REPORT.md) returned `MISMATCH` even though both bundles had version `1.0.0`; the digest catches that difference. Replay proves deterministic agreement, not that a campaign ran.”
+
+**2:15–3:00 — State the evidence boundary and next step.** [Show the current [evidence index](../reports/v4/EVIDENCE_INDEX.md).] “A high churn score does not tell us whether an offer will save that customer. IBM has no treatment assignment, observed offer response, or validated 30-day outcome clock. The index grants `ENGINEERING_FOUNDATION` because its engineering gates pass; independent causal evaluator confirmation is still `NOT_MET` and the partner trial is `NOT_RUN`. There is no measured telecom uplift or ROI here. My next real-world gate is a preregistered randomized pilot with assignment probabilities, delivery and cost logs, mature outcomes, and a held-out policy-value analysis. Until then, this is a transparent planning prototype, not a launch recommendation.”
+
+## If the interviewer asks for proof
+
+- **Reproduction:** [full run manifest](../reports/v4/reproduced_full/RUN_MANIFEST.json) records the data, split, source, environment, model, and report hashes; the [comparison](../reports/v4/portfolio_completion/FULL_BENCHMARK_COMPARISON.md) records exact prediction agreement and the explained contact-cap convention difference.
+- **Product checks:** [Chrome and Edge browser verification](../reports/v4/portfolio_completion/BROWSER_VERIFICATION.md) covers CSV feedback, a late-response race, no-contact drafts, export, replay, and mobile overflow. It does not replace first-user or screen-reader testing.
+- **Research limit:** the [R1 evaluator transfer](../reports/v4/next_evaluator_transfer/TRANSFER_REPORT.md) failed coverage in rare and batch cells, so the interval is not promoted. The [nested learner comparison](../reports/v4/learner_comparison/LEARNER_REPORT.md) retained M01 in Hillstrom Mens development; [R4/R4b](RESEARCH_EXECUTION_2026_EN.md) report structural and exploratory allocator results. The [completion record](../reports/v4/portfolio_completion/IMPLEMENTATION_REPORT.md) lists the remaining external evidence gates.

@@ -1,0 +1,4 @@
+metric_delta_champion_minus_logistic,mean,ci95_low,ci95_high,bootstrap_repeats
+average_precision_delta,0.0,0.0,0.0,2000
+brier_score_delta,0.0,0.0,0.0,2000
+recall_at_10pct_delta,0.0,0.0,0.0,2000

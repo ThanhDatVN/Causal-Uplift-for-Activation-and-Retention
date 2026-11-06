@@ -1,0 +1,788 @@
+{
+  "generated_at": "2026-10-02T01:15:48+00:00",
+  "root": ".",
+  "release_tier": "ENGINEERING_FOUNDATION",
+  "tier_blockers": [
+    {
+      "tier": "RESEARCH_INTERIM",
+      "gate": "inference_coverage",
+      "reason": "mechanical coverage passed, but the interval was selected after equally powered runs disagreed; independent confirmation is missing"
+    }
+  ],
+  "n_failing_gates": 0,
+  "claims": {
+    "OBSERVED": 57,
+    "CONDITIONAL": 6,
+    "PLANNED": 5
+  },
+  "gates": [
+    {
+      "gate_id": "contracts",
+      "title": "Problem contracts validated",
+      "status": "PASS",
+      "summary": "4 contract revision(s) load and validate; 2 promotable, 2 declared negative control(s)",
+      "evidence": [
+        "reports/v4/contracts.json"
+      ],
+      "blocker": ""
+    },
+    {
+      "gate_id": "mutation_suite",
+      "title": "Declared mutations are caught",
+      "status": "PASS",
+      "summary": "21/21 critical mutations detected across 24 declared cases; 0 clean fixture(s) blocked. Covers declared faults only.",
+      "evidence": [
+        "reports/v4/challenge_suite.json"
+      ],
+      "blocker": ""
+    },
+    {
+      "gate_id": "runner_failure_propagation",
+      "title": "Runner propagates failure",
+      "status": "PASS",
+      "summary": "last smoke run is COMPLETE over 5 stage(s); run_id 8e5775bc724842e3",
+      "evidence": [
+        "reports/v4/run_report.json"
+      ],
+      "blocker": ""
+    },
+    {
+      "gate_id": "environment_lock",
+      "title": "Dependency lock is present and satisfied",
+      "status": "PASS",
+      "summary": "180 packages locked for the research environment (3 lock file(s): research, api, console); live interpreter matches",
+      "evidence": [
+        "locks/research.lock.txt",
+        "locks/api.lock.txt",
+        "locks/console.lock.txt"
+      ],
+      "blocker": ""
+    },
+    {
+      "gate_id": "inference_coverage",
+      "title": "Estimator coverage gate (R00/R01)",
+      "status": "NOT_MET",
+      "summary": "reports/v4/validity_unshrunk/validity_suite.json: 9/9 declared scenarios at 2,000 worlds each; R00 identities pass; 0 undercovering mode(s), 0 false-promotion failure(s); negative controls fired: 4; independent confirmation: required; valid over: measured design region: asymmetry index up to 0.100 for the skewness_adjusted_t interval (measured over 18 cells at 1000 worlds each, but tightened from 0.584 because the transfer study saw a design fail at A = 0.100, its lowest clean level, so the licence stops strictly below that (28 out-of-sample designs at 1000 worlds each)); scenario-level region (coarse; ignores event rate and frame size): propensity imbalance up to 0.40 (V01, V02, V03, V04, V05, V05B, V06, B01, V07); no scenario failed",
+      "evidence": [
+        "reports/v4/validity/validity_suite.json"
+      ],
+      "blocker": "mechanical coverage passed, but the interval was selected after equally powered runs disagreed; independent confirmation is missing"
+    },
+    {
+      "gate_id": "external_replication",
+      "title": "Independent-domain replication (R10)",
+      "status": "PASS",
+      "summary": "lenta SMS campaign (development): 60,000 units, 6,498 events, stages R02, R03, R05; 2/3 registered predictions held",
+      "evidence": [
+        "reports/v4/replication_lenta/external_replication.json"
+      ],
+      "blocker": "registered predictions falsified: P2_configurations_stabilise; R04 not transferable: its representation factor is defined by Hillstrom's own columns and its cost model keys on a channel column Lenta lacks; running a different factorial under the same name would be a quiet substitution"
+    },
+    {
+      "gate_id": "real_domain_identification",
+      "title": "Real-domain assignment diagnostics",
+      "status": "PASS",
+      "summary": "Orange: AUC 0.6355, p 0.0099, ESS kept 0.0%; Hillstrom: AUC 0.4975, p 0.6832, ESS kept 99.9%; Lenta: AUC 0.5037, p 0.1765, ESS kept 97.9%. Assignment diagnostics passed: Hillstrom, Lenta; verify design probabilities separately",
+      "evidence": [
+        "reports/v4/assignment_audit.json",
+        "reports/v4/assignment_audit_hillstrom.json"
+      ],
+      "blocker": ""
+    },
+    {
+      "gate_id": "model_screening",
+      "title": "Declared candidates screened (R02)",
+      "status": "PASS",
+      "summary": "8 candidates completed, 0 failed on hillstrom Mens E-Mail vs No E-Mail (development); shortlist M01, M03, M07",
+      "evidence": [
+        "reports/screening/screening.json"
+      ],
+      "blocker": ""
+    },
+    {
+      "gate_id": "deployment_replay",
+      "title": "Deployment agrees with the host",
+      "status": "PASS",
+      "summary": "12/12 checks passed on 2026-09-21T02:40:23+00:00; host/container score gap 1.1e-16",
+      "evidence": [
+        "reports/deployment/deployment_smoke.json"
+      ],
+      "blocker": ""
+    },
+    {
+      "gate_id": "partner_trial",
+      "title": "Prospective partner trial",
+      "status": "NOT_RUN",
+      "summary": "no partner, no live campaign, no cost ledger",
+      "evidence": [],
+      "blocker": "business validation needs an owner, a budget and a mature follow-up window"
+    }
+  ],
+  "artifacts": [
+    {
+      "key": "contracts",
+      "path": "reports/v4/contracts.json",
+      "role": "Validated problem/action/timing contracts",
+      "exists": true,
+      "sha256": "2bf02089cad280a5fe61c5fc11bd257e3672fdc23ea5be013ec836eb14f34a81",
+      "size_bytes": 20706,
+      "modified_at": "2026-09-21T08:54:14+00:00",
+      "producers": [
+        "src/telco_churn/problem_contract.py",
+        "configs/problem_contracts.toml"
+      ],
+      "producer_newer": [
+        "src/telco_churn/problem_contract.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "challenge_suite",
+      "path": "reports/v4/challenge_suite.json",
+      "role": "Falsification suite: declared mutations and whether they were caught",
+      "exists": true,
+      "sha256": "e0579678b3f37fa7fb5e19968a96b3c1902d240039ab682fe0c88fcb87772ef3",
+      "size_bytes": 13620,
+      "modified_at": "2026-09-21T06:56:18+00:00",
+      "producers": [
+        "src/telco_churn/challenge_suite.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/challenge_suite.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "hillstrom_manifest",
+      "path": "reports/hillstrom/dataset_manifest.json",
+      "role": "Real-data primary: provenance, arms and the frozen split",
+      "exists": true,
+      "sha256": "7834337e79cdec6099d6aa742ca470bbe4b7c25bad89356c1bc7195c648a1024",
+      "size_bytes": 2534,
+      "modified_at": "2026-09-21T05:41:19+00:00",
+      "producers": [
+        "src/telco_churn/hillstrom_data.py"
+      ],
+      "producer_newer": [],
+      "stale_against_code": false
+    },
+    {
+      "key": "screening",
+      "path": "reports/screening/screening.json",
+      "role": "R02 model screening over the declared candidates",
+      "exists": true,
+      "sha256": "08577b385fef4305cb4cd07e0da09f7aebd742e5bcb16f123a827a162c9ba28c",
+      "size_bytes": 7392,
+      "modified_at": "2026-09-21T08:54:22+00:00",
+      "producers": [
+        "src/telco_churn/screening.py",
+        "src/telco_churn/candidates.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/screening.py",
+        "src/telco_churn/candidates.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "environment_lock",
+      "path": "locks/research.lock.txt",
+      "role": "Exact dependency set the reports were produced under",
+      "exists": true,
+      "sha256": "623d1ac4b560c674ad7522c12d1b76ce2f2cd0fe198da156a4803199ad172279",
+      "size_bytes": 3595,
+      "modified_at": "2026-09-21T02:57:54+00:00",
+      "producers": [
+        "src/telco_churn/environment.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/environment.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "lenta_manifest",
+      "path": "reports/v4/lenta_manifest.json",
+      "role": "Replication domain: provenance, arms and the frozen split",
+      "exists": true,
+      "sha256": "89514597ee4c9de46658a84a3174ce3e435d33ad7c7cda9fc8e37af7178d0ab9",
+      "size_bytes": 1284,
+      "modified_at": "2026-09-21T11:39:22+00:00",
+      "producers": [
+        "src/telco_churn/lenta_data.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/lenta_data.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "external_replication",
+      "path": "reports/v4/replication_lenta/external_replication.json",
+      "role": "R10: the Hillstrom protocol, unchanged, on an independent domain",
+      "exists": true,
+      "sha256": "b5f9854d826a56ad5638c9220a0852ce59d1337dd7159c815b8f5f1edf280845",
+      "size_bytes": 71457,
+      "modified_at": "2026-09-21T12:30:14+00:00",
+      "producers": [
+        "src/telco_churn/external_replication.py",
+        "src/telco_churn/screening.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/external_replication.py",
+        "src/telco_churn/screening.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "assignment_audit_lenta",
+      "path": "reports/v4/assignment_audit_lenta.json",
+      "role": "Whether Lenta's treatment assignment survives a predictability audit",
+      "exists": true,
+      "sha256": "a75589671641b595d351d3eab9c48caaa62275d0e6e2abcc2196d0d1c56cc2f9",
+      "size_bytes": 2843,
+      "modified_at": "2026-09-21T11:55:34+00:00",
+      "producers": [
+        "src/telco_churn/assignment_audit.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/assignment_audit.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "temporal_replay",
+      "path": "reports/v4/temporal_replay/temporal_replay.json",
+      "role": "R07: refresh strategies replayed in their own trajectories",
+      "exists": true,
+      "sha256": "0410f10e75f41551d8cc9277447efedb5cf884f5515fdf18453da20e72c31769",
+      "size_bytes": 226834,
+      "modified_at": "2026-09-21T11:32:41+00:00",
+      "producers": [
+        "src/telco_churn/temporal_replay.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/temporal_replay.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "learning_curves",
+      "path": "reports/v4/learning_curves/learning_curves.json",
+      "role": "R05: whether the result is the data budget or the seed",
+      "exists": true,
+      "sha256": "db90b7912154d0a2cdf91425350132a35937f50f71a791aef03af8d543811846",
+      "size_bytes": 19816,
+      "modified_at": "2026-09-21T11:28:43+00:00",
+      "producers": [
+        "src/telco_churn/learning_curves.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/learning_curves.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "sampling_economics",
+      "path": "reports/v4/sampling_economics/sampling_economics.json",
+      "role": "R08: what the enriched sampling design costs at matched precision",
+      "exists": true,
+      "sha256": "6c64a398409ae7c357ef8fc66a1899ffc147f24c1f7709e84736158d306290e3",
+      "size_bytes": 17755,
+      "modified_at": "2026-09-21T11:33:24+00:00",
+      "producers": [
+        "src/telco_churn/sampling_economics.py",
+        "src/telco_churn/policy_comparison.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/sampling_economics.py",
+        "src/telco_churn/policy_comparison.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "selection_stress",
+      "path": "reports/v4/selection_stress/selection_stress.json",
+      "role": "R06: what selecting the best of four costs in false promotion and regret",
+      "exists": true,
+      "sha256": "4918e6215c3cb0e78257aa4619243b38896cdb835d1971ed2e7e79c3e41c5f08",
+      "size_bytes": 317621,
+      "modified_at": "2026-09-21T11:28:17+00:00",
+      "producers": [
+        "src/telco_churn/selection_stress.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/selection_stress.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "component_factorial",
+      "path": "reports/v4/factorial/component_factorial.json",
+      "role": "R04: which component of the pipeline is doing the work",
+      "exists": true,
+      "sha256": "2a329802105ed6a72aa8f9e188fb5391d3ef85e7912922ed782ce6d866c99c72",
+      "size_bytes": 13720,
+      "modified_at": "2026-09-21T11:23:52+00:00",
+      "producers": [
+        "src/telco_churn/component_factorial.py",
+        "src/telco_churn/candidates.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/component_factorial.py",
+        "src/telco_churn/candidates.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "bounded_tuning",
+      "path": "reports/v4/tuning/bounded_tuning.json",
+      "role": "R03: whether tuning changes the screening verdict",
+      "exists": true,
+      "sha256": "693ff714f214016f5f2034f10e05629a350ea6d24d8e9f1a5844e9b0255dd19e",
+      "size_bytes": 24888,
+      "modified_at": "2026-09-21T11:21:43+00:00",
+      "producers": [
+        "src/telco_churn/bounded_tuning.py",
+        "src/telco_churn/candidates.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/bounded_tuning.py",
+        "src/telco_churn/candidates.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "validity_v08",
+      "path": "reports/v4/validity_v08/v08_batch_cap.json",
+      "role": "V08: coverage of the capped batch-policy interval, both targets",
+      "exists": true,
+      "sha256": "07ae61e287eb5e07d147a092f60a589ac66932671cfb0ac86738f0ec906ea8c1",
+      "size_bytes": 4750,
+      "modified_at": "2026-09-21T11:39:49+00:00",
+      "producers": [
+        "src/telco_churn/batch_validation.py",
+        "src/telco_churn/policy_comparison.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/batch_validation.py",
+        "src/telco_churn/policy_comparison.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "asymmetry_transfer",
+      "path": "reports/v4/asymmetry_transfer/asymmetry_transfer.json",
+      "role": "Whether the asymmetry index transfers to frames the sweep never saw",
+      "exists": true,
+      "sha256": "0112a3686f6eb53eaff7a0cebef10a86e19253971a2f78f59628c22d52c31a01",
+      "size_bytes": 22412,
+      "modified_at": "2026-09-21T11:04:38+00:00",
+      "producers": [
+        "src/telco_churn/asymmetry_transfer.py",
+        "src/telco_churn/policy_comparison.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/asymmetry_transfer.py",
+        "src/telco_churn/policy_comparison.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "figures",
+      "path": "reports/v4/figures/figures.json",
+      "role": "Figures for the boundary result, drawn from artifacts only",
+      "exists": true,
+      "sha256": "5739a38322fa316169446c8ea7a2b230a6eee6bfdfb8beb719d89b3eaff37c8a",
+      "size_bytes": 1143,
+      "modified_at": "2026-09-21T10:36:49+00:00",
+      "producers": [
+        "src/telco_churn/figures.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/figures.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "overlap_boundary",
+      "path": "reports/v4/overlap_boundary/overlap_boundary.json",
+      "role": "Where the DR interval stops covering, as a function of design imbalance",
+      "exists": true,
+      "sha256": "c59e5fbe8718d9fa685f2ebe7052511f003a5031f7c098d3c5b480887864c6cd",
+      "size_bytes": 22153,
+      "modified_at": "2026-09-21T10:35:56+00:00",
+      "producers": [
+        "src/telco_churn/overlap_boundary.py",
+        "src/telco_churn/policy_comparison.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/overlap_boundary.py",
+        "src/telco_churn/policy_comparison.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "validity_v09",
+      "path": "reports/v4/validity_v09/v09_recruitment.json",
+      "role": "V09 two-stage recruitment: superpopulation interval vs its negative control",
+      "exists": true,
+      "sha256": "5b40177e3a0b0bcca6cc74046bff0f25b751c951c873752f41ff7a5b4d990358",
+      "size_bytes": 4166,
+      "modified_at": "2026-09-21T07:33:02+00:00",
+      "producers": [
+        "src/telco_churn/recruitment_validation.py",
+        "src/telco_churn/policy_comparison.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/recruitment_validation.py",
+        "src/telco_churn/policy_comparison.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "validity_suite",
+      "path": "reports/v4/validity/validity_suite.json",
+      "role": "R00 exact identities and R01 evaluator validation",
+      "exists": true,
+      "sha256": "7eeda72ea4a744afd6af77d0820254f5311f5f5f8d98cc299900245e995e4d40",
+      "size_bytes": 32125,
+      "modified_at": "2026-09-21T06:38:29+00:00",
+      "producers": [
+        "src/telco_churn/validity_suite.py",
+        "src/telco_churn/policy_comparison.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/validity_suite.py",
+        "src/telco_churn/policy_comparison.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "fresh_evaluator_diagnostic",
+      "path": "reports/v4/fresh_evaluator/FRESH_EVALUATOR.json",
+      "role": "Two new generator families: transfer diagnostic, not a release gate",
+      "exists": true,
+      "sha256": "a428144048fe7fcc60d5e9bbe4e45e490a363b9934f552e19e0122c0eae00220",
+      "size_bytes": 8132,
+      "modified_at": "2026-09-28T17:44:44+00:00",
+      "producers": [
+        "src/telco_churn/fresh_evaluator.py",
+        "src/telco_churn/policy_comparison.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/policy_comparison.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "next_evaluator_transfer",
+      "path": "reports/v4/next_evaluator_transfer/TRANSFER_RESULT.json",
+      "role": "R1 six-cell known-truth transfer; failed cells block method promotion",
+      "exists": true,
+      "sha256": "23bea5221cbe767571831d92e59f9f33a866b575ccd1797c6ae43723c8f97b3a",
+      "size_bytes": 13586,
+      "modified_at": "2026-09-30T00:51:11+00:00",
+      "producers": [
+        "src/telco_churn/next_evaluator_transfer.py"
+      ],
+      "producer_newer": [],
+      "stale_against_code": false
+    },
+    {
+      "key": "r1_repair_validation",
+      "path": "reports/v4/r1_repair_20261002/RESULT.json",
+      "role": "New 2,000-world six-cell repair validation; candidate coverage gate failed",
+      "exists": true,
+      "sha256": "1d8914d41e916bbaf95e0314d4b9801d009f322233e354e1b0c07a5f5a2ee3fb",
+      "size_bytes": 17080,
+      "modified_at": "2026-10-01T18:16:22+00:00",
+      "producers": [
+        "src/telco_churn/r1_repair.py",
+        "src/telco_churn/policy_comparison.py"
+      ],
+      "producer_newer": [],
+      "stale_against_code": false
+    },
+    {
+      "key": "next_evaluator_negative_controls",
+      "path": "reports/v4/next_evaluator_transfer/NEGATIVE_CONTROL_RESULT.json",
+      "role": "R1 separate broken-control diagnostic; row-IID control did not discriminate",
+      "exists": true,
+      "sha256": "199417912c2a482c341f34684ec2a747a24551555f3a5387f3190aea6f0b2ae6",
+      "size_bytes": 2515,
+      "modified_at": "2026-09-30T01:10:03+00:00",
+      "producers": [
+        "reports/v4/next_evaluator_transfer/negative_controls.py"
+      ],
+      "producer_newer": [],
+      "stale_against_code": false
+    },
+    {
+      "key": "r4_learner_mens",
+      "path": "reports/v4/learner_comparison/hillstrom_mens.json",
+      "role": "R4 nested-fold Hillstrom Mens development comparison only",
+      "exists": true,
+      "sha256": "767e25873cd6fc2380a0471fe39f7ed15a78833ff450cd3a95665453f869960c",
+      "size_bytes": 9110,
+      "modified_at": "2026-09-30T00:47:03+00:00",
+      "producers": [
+        "reports/v4/learner_comparison/PRODUCER_SOURCE.py"
+      ],
+      "producer_newer": [],
+      "stale_against_code": false
+    },
+    {
+      "key": "r4_learner_womens",
+      "path": "reports/v4/learner_comparison/hillstrom_womens.json",
+      "role": "R4 nested-fold Hillstrom Womens development sensitivity only",
+      "exists": true,
+      "sha256": "c573a7ca187ce0ce1d5da1b450570d20f501b18622394161b7f638cc6c1fd295",
+      "size_bytes": 9140,
+      "modified_at": "2026-09-30T00:47:14+00:00",
+      "producers": [
+        "reports/v4/learner_comparison/PRODUCER_SOURCE.py"
+      ],
+      "producer_newer": [],
+      "stale_against_code": false
+    },
+    {
+      "key": "r4_learner_lenta",
+      "path": "reports/v4/learner_comparison/lenta_sms.json",
+      "role": "R4 Lenta development subsample; assumed propensity, exploratory only",
+      "exists": true,
+      "sha256": "6efd2ffa6e134cd2eba8c3fcf61260d7783d3d07a7bee16c025d9969aaea5e3c",
+      "size_bytes": 9197,
+      "modified_at": "2026-09-30T00:55:40+00:00",
+      "producers": [
+        "reports/v4/learner_comparison/PRODUCER_SOURCE.py"
+      ],
+      "producer_newer": [],
+      "stale_against_code": false
+    },
+    {
+      "key": "r4_allocator",
+      "path": "reports/v4/exact_allocator_study/RESULT.json",
+      "role": "R4 frozen synthetic allocator comparison; rank and exact agree",
+      "exists": true,
+      "sha256": "5fae069fa9b6b22d8d1d7ac007a2ee2a514c139b6aca5782c116b17e6685c9f5",
+      "size_bytes": 2238,
+      "modified_at": "2026-09-30T00:42:38+00:00",
+      "producers": [
+        "src/telco_churn/exact_allocator_study.py"
+      ],
+      "producer_newer": [],
+      "stale_against_code": false
+    },
+    {
+      "key": "r4b_allocator_exploratory",
+      "path": "reports/v4/exact_allocator_study/r4b/RESULT.json",
+      "role": "R4b post-R4 synthetic cost revision; exploratory, no promotion",
+      "exists": true,
+      "sha256": "957087b33a8ad1bb03e8f90c1449cc4608fc65f37abc5886aad56eae193d284f",
+      "size_bytes": 3124,
+      "modified_at": "2026-09-30T00:45:40+00:00",
+      "producers": [
+        "src/telco_churn/exact_allocator_followup.py"
+      ],
+      "producer_newer": [],
+      "stale_against_code": false
+    },
+    {
+      "key": "inference_smoke",
+      "path": "reports/v4/inference_smoke.json",
+      "role": "Known-truth estimator smoke run (one scenario)",
+      "exists": true,
+      "sha256": "ff19e4d69c28a51f37d0aa394735ac44bfaaeabbc3f2d3890358ccae505046cb",
+      "size_bytes": 2336,
+      "modified_at": "2026-09-21T06:57:42+00:00",
+      "producers": [
+        "src/telco_churn/inference_smoke.py",
+        "src/telco_churn/policy_comparison.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/inference_smoke.py",
+        "src/telco_churn/policy_comparison.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "inference_smoke_misspecified",
+      "path": "reports/v4/inference_smoke_misspecified.json",
+      "role": "Same smoke run with a deliberately wrong outcome model",
+      "exists": true,
+      "sha256": "9ce682aa6b5b6e3f7bb1018ba2bfc7d72eb5d6ff93ce5d35551b95ec3a47c775",
+      "size_bytes": 2334,
+      "modified_at": "2026-09-21T01:07:13+00:00",
+      "producers": [
+        "src/telco_churn/inference_smoke.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/inference_smoke.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "assignment_audit",
+      "path": "reports/v4/assignment_audit.json",
+      "role": "Orange treatment-predictability audit and permutation null",
+      "exists": true,
+      "sha256": "a88510f89ada49c3482f2244757a1458ef9a7dc0ddef812a2c5cd511c8fc382e",
+      "size_bytes": 3584,
+      "modified_at": "2026-09-20T15:30:08+00:00",
+      "producers": [
+        "src/telco_churn/assignment_audit.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/assignment_audit.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "assignment_audit_hillstrom",
+      "path": "reports/v4/assignment_audit_hillstrom.json",
+      "role": "Hillstrom treatment-predictability audit and permutation null",
+      "exists": true,
+      "sha256": "f6ce4a833403f7fefc1d0cd809e48ec96c3fb637884dd01c4a91a50ca346f4e6",
+      "size_bytes": 3351,
+      "modified_at": "2026-09-21T07:05:44+00:00",
+      "producers": [
+        "src/telco_churn/assignment_audit.py",
+        "src/telco_churn/hillstrom_data.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/assignment_audit.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "run_report",
+      "path": "reports/v4/run_report.json",
+      "role": "Last staged run and its per-stage status",
+      "exists": true,
+      "sha256": "8eab53acfc68d3aba8af4d63ade4304d71d4271fe8e3d8d0f37eea4b554d6bcb",
+      "size_bytes": 4292,
+      "modified_at": "2026-09-21T06:56:20+00:00",
+      "producers": [
+        "src/telco_churn/research_runner.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/research_runner.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "orange_policy_decision",
+      "path": "reports/uplift/locked_policy_decision.json",
+      "role": "Locked Orange policy decision (NO_LAUNCH gate)",
+      "exists": true,
+      "sha256": "6f179d2acf9def2ea9f0b2b512aaf26ce7a7b18d2036914294b62d78186696d6",
+      "size_bytes": 802,
+      "modified_at": "2026-09-14T04:39:20+00:00",
+      "producers": [
+        "src/telco_churn/orange_benchmark.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/orange_benchmark.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "temporal_lab",
+      "path": "reports/temporal_lab/summary.json",
+      "role": "Known-counterfactual temporal lab summary",
+      "exists": true,
+      "sha256": "f0b022c67a2b654aff2926e58c50343275a384d1e7e136150b70dbd0d2820d3b",
+      "size_bytes": 1472,
+      "modified_at": "2026-09-14T04:39:49+00:00",
+      "producers": [
+        "src/telco_churn/temporal_lab.py",
+        "src/telco_churn/simulation.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/temporal_lab.py",
+        "src/telco_churn/simulation.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "predictive_benchmark",
+      "path": "reports/benchmark/BENCHMARK_REPORT.md",
+      "role": "IBM predictive benchmark report",
+      "exists": true,
+      "sha256": "d7b4c4401fd3e86fce861f94bfe27a7baea687b2ae510bfe37924e5a99e37ec5",
+      "size_bytes": 3230,
+      "modified_at": "2026-09-13T13:31:15+00:00",
+      "producers": [
+        "src/telco_churn/train.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/train.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "planner_v2_browser",
+      "path": "reports/v4/browser_smoke_v2_20261002/result.json",
+      "role": "Chrome desktop/mobile v2 preview and packet replay; automated smoke only",
+      "exists": true,
+      "sha256": "dd28b858009b6397f89b6723ad793661cba16c5b40666fad10eb7909bf4bcdd2",
+      "size_bytes": 889,
+      "modified_at": "2026-10-02T01:15:39+00:00",
+      "producers": [
+        "src/telco_churn/api.py",
+        "src/telco_churn/planner/app.js",
+        "scripts/browser_smoke.py"
+      ],
+      "producer_newer": [],
+      "stale_against_code": false
+    },
+    {
+      "key": "api_latency",
+      "path": "reports/api/latency.json",
+      "role": "API latency and parity measurements",
+      "exists": true,
+      "sha256": "d860854abab759a000185aefeab3ddcbaaeac030cd2971af9fb0b8ddcd8080ce",
+      "size_bytes": 873,
+      "modified_at": "2026-09-21T01:03:32+00:00",
+      "producers": [
+        "src/telco_churn/performance.py",
+        "src/telco_churn/api.py"
+      ],
+      "producer_newer": [
+        "src/telco_churn/api.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "deployment_smoke",
+      "path": "reports/deployment/deployment_smoke.json",
+      "role": "Acceptance checks against a running deployment",
+      "exists": true,
+      "sha256": "3ec28d91361313ef0a6fade9012dad6e6559ad0f765c354e616e4bbd76144550",
+      "size_bytes": 7000,
+      "modified_at": "2026-09-21T02:40:25+00:00",
+      "producers": [
+        "src/telco_churn/deployment_smoke.py",
+        "Dockerfile",
+        "compose.yaml"
+      ],
+      "producer_newer": [
+        "src/telco_churn/deployment_smoke.py"
+      ],
+      "stale_against_code": true
+    },
+    {
+      "key": "claim_ledger",
+      "path": "docs/CLAIM_LEDGER_V4.md",
+      "role": "Human claim ledger: observed / conditional / planned",
+      "exists": true,
+      "sha256": "4f5e51c2cd217c4435b650e1810980dd94f2cd7d8edf04c4883c4ab10ec0c927",
+      "size_bytes": 17974,
+      "modified_at": "2026-09-21T12:31:12+00:00",
+      "producers": [],
+      "producer_newer": [],
+      "stale_against_code": false
+    }
+  ]
+}

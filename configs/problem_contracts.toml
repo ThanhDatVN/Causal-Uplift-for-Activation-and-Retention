@@ -1,0 +1,444 @@
+# Problem contracts (V4-01, session 2).
+#
+# Status: every contract here is an ASSUMPTION, not a partner-confirmed process.
+# No operator has validated the eligibility rules, the action catalogue or the
+# costs.  The numbers exist so that the code has something concrete to validate
+# against and so that the assumptions are reviewable in one place.
+#
+# `revision` never overwrites history: a changed endpoint becomes a new
+# [[contract]] entry with a higher revision, and results keep pointing at the
+# revision they were produced under.
+
+[[contract]]
+contract_id = "payment_support"
+revision = 1
+population = "Accounts with at least one failed invoice payment before the snapshot, still inside the grace period at the snapshot, and contactable on a permitted channel."
+decision_unit = "account"
+randomization_unit = "account"
+bau_action = "dunning_only"
+endpoint = "Administrative cancellation recorded in the subscription status ledger within the horizon, counted from t0."
+unknown_outcome_policy = "keep_unknown"
+competing_events = [
+  "involuntary_termination_for_fraud",
+  "account_merge_into_another_household",
+]
+estimand = "ITT: E[Y(dunning_only) - Y(a)] over the eligible cohort as assigned at t0, positive means cancellation prevented."
+inference_method = "Cross-fitted doubly robust scores with paired policy contrasts; cluster-robust intervals at the randomization unit."
+cohort_definition = "as_assigned"
+is_negative_control = false
+evidence_state = "PLANNED"
+reward_unit = "net_contribution_currency_units"
+eligibility_rules = [
+  "failed_invoice_at <= t0",
+  "grace_period_end > t0",
+  "subscription_status == 'active' at t0",
+  "contact_consent granted and not withdrawn at t0",
+  "no retention contact inside the cooldown window before t0",
+]
+deployment_bounds = [
+  "Decision support only; a human approves every contact list.",
+  "Scope is the failed-payment population, not the whole customer base.",
+  "No conclusion transfers to another operator, channel or offer version.",
+]
+assumptions = [
+  "ASSUMPTION: grace period is a fixed, reproducible field in the billing ledger.",
+  "ASSUMPTION: contact cost and offer cost are posted once each, to the account.",
+  "ASSUMPTION: no partner has confirmed that a payment-support contact is operationally available.",
+]
+open_questions = [
+  "Who owns the action and can stop it?",
+  "Can assignment, delivery and outcome be distinguished in the source systems?",
+  "Is there a cost ledger with actual postings rather than allocated overhead?",
+]
+
+[contract.timing]
+time_zero_rule = "Nightly snapshot at 02:00 local time on the day an account enters the failed-payment grace period; eligibility, assignment and follow-up all start there."
+feature_cutoff_offset_days = 0.0
+assignment_offset_days = 0.0
+follow_up_start_offset_days = 0.0
+delivery_window_days = 14.0
+horizon_days = 90
+maturity_lag_days = 30
+correction_window_days = 30
+
+[contract.capacity]
+period = "week"
+slots_per_period = 500
+cooldown_days = 30
+shared_resource = "retention_agent_queue"
+
+[[contract.actions]]
+name = "dunning_only"
+version = "bau-2026.09"
+unit_cost = 0.0
+channel = "automated_email"
+is_bau = true
+requires_delivery = false
+reversible = true
+
+[[contract.actions]]
+name = "payment_support_call"
+version = "call-2026.09"
+unit_cost = 6.5
+channel = "outbound_agent_call"
+is_bau = false
+requires_delivery = true
+reversible = true
+
+[[contract.actions]]
+name = "grace_extension"
+version = "grace14-2026.09"
+unit_cost = 2.0
+channel = "automated_email"
+is_bau = false
+requires_delivery = false
+reversible = false
+
+# --- endpoints (G07) -------------------------------------------------------
+# One measured quantity per block.  The cancellation endpoint is a binary
+# adverse event counted in events; the money endpoint is currency and is
+# declared separately, because "cancellation ITT" and "net contribution" are
+# not the same measurement and cannot share a unit.
+
+[[contract.endpoints]]
+target_id = "cancellation90"
+target_kind = "binary_event"
+orientation = "adverse"
+unit = "cancellation_events"
+role = "outcome"
+window_start_offset_days = 0.0
+window_end_offset_days = 90.0
+maturity_rule = "Final at t0 + 90 days + 30 days ingest lag, i.e. day 120; corrections accepted for a further 30 days."
+description = "Administrative cancellation recorded in the subscription status ledger."
+
+[[contract.endpoints]]
+target_id = "prevented_cancellation90"
+target_kind = "binary_event"
+orientation = "beneficial"
+unit = "prevented_cancellation_events"
+role = "effect"
+window_start_offset_days = 0.0
+window_end_offset_days = 90.0
+maturity_rule = "Same maturity as cancellation90; the effect inherits the slowest arm."
+description = "ITT contrast on cancellation90, sign-flipped so that higher is better."
+
+[[contract.endpoints]]
+target_id = "net_contribution90"
+target_kind = "currency"
+orientation = "beneficial"
+unit = "net_contribution_currency_units"
+role = "reward"
+window_start_offset_days = 0.0
+window_end_offset_days = 90.0
+maturity_rule = "Invoice-level postings settle on a 45-day cycle; final at t0 + 135 days, after refunds and reversals."
+description = "Retained margin net of posted action cost. ASSUMPTION: no partner ledger has confirmed these postings."
+
+# --- declared negative controls (E19) --------------------------------------
+# These exist so the label-adjudication experiment has something to compare
+# the reference protocol against.  `promotable` is False for both: they can
+# quantify a bias, they can never produce a launch decision.
+
+[[contract]]
+contract_id = "payment_support_delivered_only"
+revision = 1
+population = "Same frame as payment_support, restricted after randomization to accounts whose contact was actually delivered."
+decision_unit = "account"
+randomization_unit = "account"
+bau_action = "dunning_only"
+endpoint = "Administrative cancellation recorded in the subscription status ledger within the horizon, counted from t0."
+unknown_outcome_policy = "keep_unknown"
+competing_events = []
+estimand = "NEGATIVE CONTROL: per-protocol-like contrast conditioned on post-assignment delivery; not an ITT effect."
+inference_method = "Same estimator as the reference protocol, applied to a deliberately broken cohort."
+cohort_definition = "delivered_only"
+is_negative_control = true
+evidence_state = "SYNTHETIC"
+reward_unit = "net_contribution_currency_units"
+eligibility_rules = [
+  "all payment_support rules",
+  "BROKEN ON PURPOSE: delivery_succeeded == true, evaluated after t0",
+]
+deployment_bounds = ["Diagnostic only. Never promotable."]
+assumptions = ["Selection on delivery is the bias being measured, not a modelling choice."]
+
+[contract.timing]
+time_zero_rule = "Same t0 as payment_support."
+feature_cutoff_offset_days = 0.0
+assignment_offset_days = 0.0
+follow_up_start_offset_days = 0.0
+delivery_window_days = 14.0
+horizon_days = 90
+maturity_lag_days = 30
+correction_window_days = 30
+
+[contract.capacity]
+period = "week"
+slots_per_period = 500
+cooldown_days = 30
+shared_resource = "retention_agent_queue"
+
+[[contract.actions]]
+name = "dunning_only"
+version = "bau-2026.09"
+unit_cost = 0.0
+channel = "automated_email"
+is_bau = true
+requires_delivery = false
+
+[[contract.actions]]
+name = "payment_support_call"
+version = "call-2026.09"
+unit_cost = 6.5
+channel = "outbound_agent_call"
+is_bau = false
+requires_delivery = true
+
+# --- endpoints (G07) -------------------------------------------------------
+# One measured quantity per block.  The cancellation endpoint is a binary
+# adverse event counted in events; the money endpoint is currency and is
+# declared separately, because "cancellation ITT" and "net contribution" are
+# not the same measurement and cannot share a unit.
+
+[[contract.endpoints]]
+target_id = "cancellation90"
+target_kind = "binary_event"
+orientation = "adverse"
+unit = "cancellation_events"
+role = "outcome"
+window_start_offset_days = 0.0
+window_end_offset_days = 90.0
+maturity_rule = "Final at t0 + 90 days + 30 days ingest lag, i.e. day 120; corrections accepted for a further 30 days."
+description = "Administrative cancellation recorded in the subscription status ledger."
+
+[[contract.endpoints]]
+target_id = "prevented_cancellation90"
+target_kind = "binary_event"
+orientation = "beneficial"
+unit = "prevented_cancellation_events"
+role = "effect"
+window_start_offset_days = 0.0
+window_end_offset_days = 90.0
+maturity_rule = "Same maturity as cancellation90; the effect inherits the slowest arm."
+description = "ITT contrast on cancellation90, sign-flipped so that higher is better."
+
+[[contract.endpoints]]
+target_id = "net_contribution90"
+target_kind = "currency"
+orientation = "beneficial"
+unit = "net_contribution_currency_units"
+role = "reward"
+window_start_offset_days = 0.0
+window_end_offset_days = 90.0
+maturity_rule = "Invoice-level postings settle on a 45-day cycle; final at t0 + 135 days, after refunds and reversals."
+description = "Retained margin net of posted action cost. ASSUMPTION: no partner ledger has confirmed these postings."
+
+[[contract]]
+contract_id = "payment_support_survivor_cohort"
+revision = 1
+population = "Same frame as payment_support, restricted to accounts still active on the day the agent reached them."
+decision_unit = "account"
+randomization_unit = "account"
+bau_action = "dunning_only"
+endpoint = "Administrative cancellation recorded in the subscription status ledger within the horizon, counted from t0."
+unknown_outcome_policy = "right_censor"
+competing_events = []
+estimand = "NEGATIVE CONTROL: contrast on a cohort that survived until contact; immortal time by construction."
+inference_method = "Same estimator as the reference protocol, applied to a deliberately broken cohort."
+cohort_definition = "survived_to_delivery"
+is_negative_control = true
+evidence_state = "SYNTHETIC"
+reward_unit = "net_contribution_currency_units"
+eligibility_rules = [
+  "all payment_support rules",
+  "BROKEN ON PURPOSE: still active at delivery_at, evaluated after t0",
+]
+deployment_bounds = ["Diagnostic only. Never promotable."]
+assumptions = ["Immortal-time selection is the bias being measured."]
+
+[contract.timing]
+time_zero_rule = "Same t0 as payment_support."
+feature_cutoff_offset_days = 0.0
+assignment_offset_days = 0.0
+follow_up_start_offset_days = 0.0
+delivery_window_days = 14.0
+horizon_days = 90
+maturity_lag_days = 30
+correction_window_days = 30
+
+[contract.capacity]
+period = "week"
+slots_per_period = 500
+cooldown_days = 30
+shared_resource = "retention_agent_queue"
+
+[[contract.actions]]
+name = "dunning_only"
+version = "bau-2026.09"
+unit_cost = 0.0
+channel = "automated_email"
+is_bau = true
+requires_delivery = false
+
+[[contract.actions]]
+name = "payment_support_call"
+version = "call-2026.09"
+unit_cost = 6.5
+channel = "outbound_agent_call"
+is_bau = false
+requires_delivery = true
+
+# --- endpoints (G07) -------------------------------------------------------
+# One measured quantity per block.  The cancellation endpoint is a binary
+# adverse event counted in events; the money endpoint is currency and is
+# declared separately, because "cancellation ITT" and "net contribution" are
+# not the same measurement and cannot share a unit.
+
+[[contract.endpoints]]
+target_id = "cancellation90"
+target_kind = "binary_event"
+orientation = "adverse"
+unit = "cancellation_events"
+role = "outcome"
+window_start_offset_days = 0.0
+window_end_offset_days = 90.0
+maturity_rule = "Final at t0 + 90 days + 30 days ingest lag, i.e. day 120; corrections accepted for a further 30 days."
+description = "Administrative cancellation recorded in the subscription status ledger."
+
+[[contract.endpoints]]
+target_id = "prevented_cancellation90"
+target_kind = "binary_event"
+orientation = "beneficial"
+unit = "prevented_cancellation_events"
+role = "effect"
+window_start_offset_days = 0.0
+window_end_offset_days = 90.0
+maturity_rule = "Same maturity as cancellation90; the effect inherits the slowest arm."
+description = "ITT contrast on cancellation90, sign-flipped so that higher is better."
+
+[[contract.endpoints]]
+target_id = "net_contribution90"
+target_kind = "currency"
+orientation = "beneficial"
+unit = "net_contribution_currency_units"
+role = "reward"
+window_start_offset_days = 0.0
+window_end_offset_days = 90.0
+maturity_rule = "Invoice-level postings settle on a 45-day cycle; final at t0 + 135 days, after refunds and reversals."
+description = "Retained margin net of posted action cost. ASSUMPTION: no partner ledger has confirmed these postings."
+
+# --- Hillstrom real-data primary (WP02/WP03) --------------------------------
+# Unlike the payment-support contract above, this one describes a campaign that
+# actually ran: a randomised three-arm e-mail test with a documented design and
+# a two-week readout. The design probability is taken from the source's own
+# description and is marked as declared, not independently verified — an
+# assignment audit has not been run on it yet.
+
+[[contract]]
+contract_id = "hillstrom_mens_email"
+revision = 1
+population = "Customers who purchased in the twelve months before the campaign and were eligible to receive marketing e-mail."
+decision_unit = "customer"
+randomization_unit = "customer"
+bau_action = "no_email"
+endpoint = "Conversion recorded within two weeks of the send, counted from t0."
+unknown_outcome_policy = "keep_unknown"
+competing_events = []
+estimand = "ITT: E[Y(mens_email) - Y(no_email)] over the eligible cohort as assigned at t0; positive means conversions gained."
+inference_method = "Cross-fitted doubly robust scores with paired policy contrasts; studentized bootstrap intervals over the customer."
+cohort_definition = "as_assigned"
+is_negative_control = false
+evidence_state = "PLANNED"
+reward_unit = "spend_currency_units"
+eligibility_rules = [
+  "purchased within the twelve months before t0",
+  "holds a deliverable e-mail address at t0",
+]
+deployment_bounds = [
+  "Method study on a public dataset; not a recommendation for any operator.",
+  "Two-week readout only; nothing here speaks to longer-horizon effects.",
+  "The third arm (womens_email) exists in the data and is not the primary contrast.",
+]
+assumptions = [
+  "ASSUMPTION: assignment was randomised as the source describes; this repository has not audited it.",
+  "ASSUMPTION: the three arms share one eligible frame, so the control arm is a valid comparator.",
+]
+open_questions = [
+  "Does an assignment audit on 8 covariates reject exchangeability the way it did for Orange?",
+  "Is spend the right reward, or is conversion the decision-relevant endpoint?",
+]
+
+[contract.timing]
+time_zero_rule = "The moment the campaign was sent; eligibility, assignment and follow-up all start there."
+feature_cutoff_offset_days = 0.0
+assignment_offset_days = 0.0
+follow_up_start_offset_days = 0.0
+delivery_window_days = 1.0
+horizon_days = 14
+maturity_lag_days = 0
+correction_window_days = 0
+
+[contract.capacity]
+period = "campaign"
+slots_per_period = 12800
+cooldown_days = 0
+shared_resource = "email_send_quota"
+
+[[contract.actions]]
+name = "no_email"
+version = "hillstrom-2008"
+unit_cost = 0.0
+channel = "none"
+is_bau = true
+requires_delivery = false
+reversible = true
+
+[[contract.actions]]
+name = "mens_email"
+version = "hillstrom-2008"
+unit_cost = 0.0
+channel = "email"
+is_bau = false
+requires_delivery = true
+reversible = false
+
+[[contract.actions]]
+name = "womens_email"
+version = "hillstrom-2008"
+unit_cost = 0.0
+channel = "email"
+is_bau = false
+requires_delivery = true
+reversible = false
+
+[[contract.endpoints]]
+target_id = "conversion14"
+target_kind = "binary_event"
+orientation = "beneficial"
+unit = "conversion_events"
+role = "outcome"
+window_start_offset_days = 0.0
+window_end_offset_days = 14.0
+maturity_rule = "Final at t0 + 14 days; the source records no later corrections."
+description = "Purchase recorded within two weeks of the send."
+
+[[contract.endpoints]]
+target_id = "visit14"
+target_kind = "binary_event"
+orientation = "beneficial"
+unit = "visit_events"
+role = "effect"
+window_start_offset_days = 0.0
+window_end_offset_days = 14.0
+maturity_rule = "Same window as conversion14."
+description = "Site visit within two weeks. An intermediate step, not the decision endpoint."
+
+[[contract.endpoints]]
+target_id = "spend14"
+target_kind = "currency"
+orientation = "beneficial"
+unit = "spend_currency_units"
+role = "reward"
+window_start_offset_days = 0.0
+window_end_offset_days = 14.0
+maturity_rule = "Same window as conversion14; the source reports no refunds or reversals."
+description = "Money spent within two weeks. Zero for the large majority of customers."

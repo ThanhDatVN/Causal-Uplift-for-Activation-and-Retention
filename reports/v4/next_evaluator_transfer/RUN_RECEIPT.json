@@ -1,0 +1,10 @@
+{
+  "command": [
+    "D:\\GitHub\\machine\\src\\telco_churn\\next_evaluator_transfer.py"
+  ],
+  "completed_at": "2026-09-30T00:51:11+00:00",
+  "runtime_seconds": 441.85,
+  "result_sha256": "23bea5221cbe767571831d92e59f9f33a866b575ccd1797c6ae43723c8f97b3a",
+  "report_sha256": "f1a97f4c6b232a336e7173e05dff951461cc22652aca82ea90cabe6c6c63f6ab",
+  "pre_run_manifest_sha256": "fddd51eae5a360115f041859cc117d2c1cf2b43dfc70111f9731e691af5e8462"
+}

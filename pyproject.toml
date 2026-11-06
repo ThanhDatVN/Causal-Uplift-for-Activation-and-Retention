@@ -1,0 +1,95 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "telcochurn-decision-system"
+version = "0.1.0"
+description = "A reproducible churn-risk and budget-constrained retention decision system."
+requires-python = ">=3.11"
+dependencies = [
+  "catboost>=1.2.8,<2",
+  "fastapi>=0.115,<1",
+  "httpx>=0.28,<1",
+  "joblib>=1.4,<2",
+  "matplotlib>=3.8,<4",
+  "mlflow>=3,<4",
+  "numpy>=1.26,<3",
+  "pandas>=2.2,<3",
+  "psycopg[binary]>=3.2,<4",
+  "pydantic>=2.9,<3",
+  "scikit-learn>=1.7,<1.8",
+  "scipy>=1.12,<2",
+  "uvicorn[standard]>=0.30,<1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "jupyterlab>=4,<5",
+  "nbconvert>=7,<8",
+  "pytest>=8,<9",
+  "pytest-cov>=5,<7",
+  "ruff>=0.6,<1",
+]
+browser = ["playwright==1.63.0"]
+
+[project.scripts]
+telco-eda = "telco_churn.eda:main"
+telco-train = "telco_churn.train:main"
+telco-batch = "telco_churn.batch:main"
+telco-api-benchmark = "telco_churn.performance:main"
+telco-orange-data = "telco_churn.orange_data:main"
+telco-uplift-benchmark = "telco_churn.orange_benchmark:main"
+telco-simulate = "telco_churn.simulation:main"
+telco-temporal-lab = "telco_churn.temporal_lab:main"
+telco-uplift-stability = "telco_churn.stability:main"
+telco-risk-tuning = "telco_churn.tuning:main"
+telco-model-tournament = "telco_churn.model_tournament:main"
+telco-component-ablation = "telco_churn.component_ablation:main"
+telco-contracts = "telco_churn.problem_contract_cli:main"
+telco-assignment-audit = "telco_churn.assignment_audit:main"
+telco-challenge-suite = "telco_churn.challenge_suite:main"
+telco-inference-smoke = "telco_churn.inference_smoke:main"
+telco-research-run = "telco_churn.research_runner:main"
+telco-evidence = "telco_churn.evidence:main"
+telco-console = "telco_churn.dashboard:main"
+telco-deployment-smoke = "telco_churn.deployment_smoke:main"
+telco-validity = "telco_churn.validity_suite:main"
+telco-hillstrom = "telco_churn.hillstrom_data:main"
+telco-screening = "telco_churn.screening:main"
+telco-environment = "telco_churn.environment:main"
+telco-v09 = "telco_churn.recruitment_validation:main"
+telco-overlap-boundary = "telco_churn.overlap_boundary:main"
+telco-figures = "telco_churn.figures:main"
+telco-asymmetry-transfer = "telco_churn.asymmetry_transfer:main"
+telco-v08 = "telco_churn.batch_validation:main"
+telco-tuning = "telco_churn.bounded_tuning:main"
+telco-factorial = "telco_churn.component_factorial:main"
+telco-selection-stress = "telco_churn.selection_stress:main"
+telco-learning-curves = "telco_churn.learning_curves:main"
+telco-sampling-economics = "telco_churn.sampling_economics:main"
+telco-temporal-replay = "telco_churn.temporal_replay:main"
+telco-lenta = "telco_churn.lenta_data:main"
+telco-replication = "telco_churn.external_replication:main"
+telco-fresh-evaluator = "telco_churn.fresh_evaluator:main"
+telco-replay = "telco_churn.replay:main"
+telco-assistant = "telco_churn.assistant:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+telco_churn = ["webui/*.html", "webui/*.css", "webui/*.js", "planner/*.html", "planner/*.css", "planner/*.js", "planner/*.svg"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+markers = ["locked_environment: checks the interpreter against the historical research lock"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+# Report text is assembled as a readable list of multi-line Markdown strings.
+ignore = ["ISC004"]
